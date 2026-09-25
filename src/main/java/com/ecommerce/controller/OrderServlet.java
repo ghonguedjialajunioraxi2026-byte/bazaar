@@ -213,7 +213,12 @@ public class OrderServlet extends HttpServlet {
         try {
             if (com.ecommerce.util.AdminAuth.requireAdmin(req, resp) <= 0) return;
             int id = Integer.parseInt(req.getParameter("id"));
-            orderService.deleteOrder(id);
+            try {
+                orderService.deleteOrder(id);
+            } catch (AppException ae) {
+                ApiResponse.fromException(resp, ae);
+                return;
+            }
             resp.getWriter().write("{\"success\":true}");
         } catch (Exception e) {
             resp.setStatus(500);

@@ -84,6 +84,16 @@ public class AdminServlet extends HttpServlet {
                 return;
             }
 
+            if ("/finance".equals(pathInfo) || "finance".equals(action)) {
+                resp.getWriter().write(JsonUtil.toJson(new com.ecommerce.service.MonetizationService().platformOverview()));
+                return;
+            }
+
+            if ("/monetization/rules".equals(pathInfo)) {
+                resp.getWriter().write(JsonUtil.toJson(new com.ecommerce.service.MonetizationService().rules()));
+                return;
+            }
+
             // Default: dashboard
             resp.getWriter().write(JsonUtil.toJson(getDashboard()));
         } catch (Exception e) {
@@ -182,8 +192,92 @@ public class AdminServlet extends HttpServlet {
                 return;
             }
 
+            if ("/monetization/rules".equals(pathInfo)) {
+                BufferedReader reader = req.getReader();
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) sb.append(line);
+                Map<String, Object> body = JsonUtil.fromJson(sb.toString(), Map.class);
+
+                int adminId = validateAndGetAdminId(req);
+                if (adminId <= 0) { resp.setStatus(401); resp.getWriter().write("{\"error\":\"Non autorisé\"}"); return; }
+
+                com.ecommerce.service.MonetizationService monetization = new com.ecommerce.service.MonetizationService();
+                int ruleId = monetization.createRule(
+                    body.get("name") == null ? null : String.valueOf(body.get("name")),
+                    body.get("commissionBps") instanceof Number ? ((Number) body.get("commissionBps")).intValue() : -1,
+                    body.get("fixedFee") instanceof Number ? ((Number) body.get("fixedFee")).intValue() : 0);
+                activityLogDAO.log(adminId, "MONETIZATION_RULE_CREATED", "monetization_rule", ruleId,
+                    "Règle créée", req.getRemoteAddr());
+                resp.setStatus(201);
+                resp.getWriter().write("{\"success\":true,\"id\":" + ruleId + "}");
+                return;
+            }
+
+            // Remboursement FINANCIER uniquement (Phase 10) : contre-passation
+            // comptable, aucun mouvement d'argent (Phase 11).
+            if ("/orders/refund".equals(pathInfo)) {
+                BufferedReader reader2 = req.getReader();
+                StringBuilder sb2 = new StringBuilder();
+                String line2;
+                while ((line2 = reader2.readLine()) != null) sb2.append(line2);
+                Map<String, Object> body2 = JsonUtil.fromJson(sb2.toString(), Map.class);
+
+                int adminId2 = validateAndGetAdminId(req);
+                if (adminId2 <= 0) { resp.setStatus(401); resp.getWriter().write("{\"error\":\"Non autorisé\"}"); return; }
+
+                int orderId = body2.get("id") instanceof Number ? ((Number) body2.get("id")).intValue() : 0;
+                if (orderId <= 0) { resp.setStatus(400); resp.getWriter().write("{\"error\":\"Commande requise\"}"); return; }
+                try {
+                    com.ecommerce.model.LedgerEntry rev =
+                        new com.ecommerce.service.MonetizationService().reverseOrder(orderId, "ADMIN_REFUND");
+                    if (rev == null) {
+                        resp.setStatus(409);
+                        resp.getWriter().write("{\"success\":false,\"message\":\"Rien à rembourser\",\"errorCode\":\"CONFLICT\"}");
+                        return;
+                    }
+                    activityLogDAO.log(adminId2, "ORDER_REFUNDED", "order", orderId,
+                        "Remboursement comptable", req.getRemoteAddr());
+                    resp.getWriter().write("{\"success\":true,\"reference\":\"" + rev.getReference() + "\"}");
+                } catch (com.ecommerce.util.AppException ae) {
+                    com.ecommerce.util.ApiResponse.fromException(resp, ae);
+                }
+                return;
+            }
+
+            if ("/finance/rebuild".equals(pathInfo)) {
+                int adminId3 = validateAndGetAdminId(req);
+                if (adminId3 <= 0) { resp.setStatus(401); resp.getWriter().write("{\"error\":\"Non autorisé\"}"); return; }
+                int n = new com.ecommerce.service.MonetizationService().rebuildBalances();
+                activityLogDAO.log(adminId3, "FINANCE_REBUILT", "supplier", 0,
+                    n + " soldes recalculés", req.getRemoteAddr());
+                resp.getWriter().write("{\"success\":true,\"rebuilt\":" + n + "}");
+                return;
+            }
+
+            if ("/monetization/rules/activate".equals(pathInfo)) {                BufferedReader reader = req.getReader();
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) sb.append(line);
+                Map<String, Object> body = JsonUtil.fromJson(sb.toString(), Map.class);
+
+                int adminId = validateAndGetAdminId(req);
+                if (adminId <= 0) { resp.setStatus(401); resp.getWriter().write("{\"error\":\"Non autorisé\"}"); return; }
+
+                int ruleId = body.get("id") instanceof Number ? ((Number) body.get("id")).intValue() : 0;
+                boolean active = Boolean.TRUE.equals(body.get("active")) || "true".equals(String.valueOf(body.get("active")));
+                if (ruleId <= 0) { resp.setStatus(400); resp.getWriter().write("{\"error\":\"Règle requise\"}"); return; }
+                new com.ecommerce.service.MonetizationService().setRuleActive(ruleId, active);
+                activityLogDAO.log(adminId, active ? "MONETIZATION_RULE_ACTIVATED" : "MONETIZATION_RULE_DEACTIVATED",
+                    "monetization_rule", ruleId, "Règle " + (active ? "activée" : "désactivée"), req.getRemoteAddr());
+                resp.getWriter().write("{\"success\":true}");
+                return;
+            }
+
             resp.setStatus(400);
             resp.getWriter().write("{\"error\":\"Action requise\"}");
+        } catch (com.ecommerce.util.AppException ae) {
+            com.ecommerce.util.ApiResponse.fromException(resp, ae);
         } catch (Exception e) {
             resp.setStatus(500);
             resp.getWriter().write("{\"error\":\"" + e.getMessage().replace("\"", "'") + "\"}");

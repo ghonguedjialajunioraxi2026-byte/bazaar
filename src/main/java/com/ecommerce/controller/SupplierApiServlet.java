@@ -153,6 +153,14 @@ public class SupplierApiServlet extends HttpServlet {
                     new com.ecommerce.dao.OfferDAO().findPendingBySupplier(supplierId)), 200);
                 return;
             }
+            // /api/supplier/ledger — écritures comptables (limite 50)
+            if (path.equals("/ledger")) {
+                int limit = 50;
+                try { limit = Integer.parseInt(req.getParameter("limit")); } catch (Exception ignored) {}
+                write(resp, ok("Grand-livre",
+                    new com.ecommerce.service.MonetizationService().entriesForSupplier(supplierId, limit)), 200);
+                return;
+            }
             // /api/supplier/profile
             if (path.equals("/profile")) {
                 write(resp, ok("Profil", safeSupplier(supplierService.getProfile(supplierId))), 200);

@@ -947,12 +947,28 @@ async function renderRevenus(){
         </div>
         <p class="text-xs text-slate-400 mt-3"><i class="bi bi-info-circle mr-1"></i>Seules les commandes livrées sont comptabilisées. Les commandes annulées (${money(r.cancelledAmount)}) sont exclues.</p>
       </div>
+      <div class="card p-6 mb-6">
+        <h3 class="font-bold text-slate-800 mb-1">Écritures comptables</h3>
+        <p class="text-xs text-slate-400 mb-3">Chaque vente livrée génère une écriture figée (taux du jour). Les annulations génèrent des contre-passations.</p>
+        <div id="ledgerTable"><div class="skeleton h-24"></div></div>
+      </div>
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div class="card p-5"><h3 class="font-semibold mb-3">Revenu net du mois</h3><canvas id="revMonth"></canvas></div>
       </div>`;
     const stats=(await api('/statistics')).data;
     new Chart(document.getElementById('revMonth'),{type:'bar',data:{labels:Object.keys(stats.monthly),datasets:[{label:'Revenus (FCFA)',data:Object.values(stats.monthly),backgroundColor:'#087443',borderRadius:6}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});
+    renderLedger();
   }catch(e){ content.innerHTML=emptyState('Erreur: '+e.message); }
+}
+async function renderLedger(){
+  const box=document.getElementById('ledgerTable');
+  if(!box) return;
+  try{
+    const list=(await api('/ledger?limit=20')).data||[];
+    if(!list.length){ box.innerHTML='<p class="text-sm text-slate-400">Aucune écriture pour le moment. Les ventes livrées apparaîtront ici.</p>'; return; }
+    box.innerHTML=`<div class="overflow-x-auto"><table class="table"><thead><tr><th>Référence</th><th>Commande</th><th>Brut</th><th>Commission</th><th>Net</th><th>Statut</th></tr></thead><tbody>`+
+      list.map(e=>`<tr><td class="font-mono text-xs">${esc(e.reference)}</td><td>#${e.orderId}</td><td>${money(e.gross)}</td><td class="text-red-600">- ${money(e.commission + (e.fixedFee||0))}</td><td class="font-semibold ${e.supplierEarnings<0?'text-red-600':'text-primary-700'}">${money(e.supplierEarnings)}</td><td>${e.status==='EARNED'?'<span class="badge bg-green-50 text-green-600">Comptabilisé</span>':'<span class="badge bg-slate-100 text-slate-500">Contre-passé</span>'}</td></tr>`).join('')+`</tbody></table></div>`;
+  }catch(e){ box.innerHTML='<p class="text-sm text-red-500">Chargement impossible.</p>'; }
 }
 
 /* ==================== STATISTIQUES ==================== */

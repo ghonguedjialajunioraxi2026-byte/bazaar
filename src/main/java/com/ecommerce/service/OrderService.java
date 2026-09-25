@@ -1,6 +1,7 @@
 package com.ecommerce.service;
 
 import com.ecommerce.dao.DeliveryZoneDAO;
+import com.ecommerce.dao.MonetizationDAO;
 import com.ecommerce.dao.OrderDAO;
 import com.ecommerce.dao.ProductDAO;
 import com.ecommerce.model.Order;
@@ -112,6 +113,28 @@ public class OrderService {
                 "Transition refusée : " + o.getStatus() + " → " + status);
         }
         orderDAO.updateStatus(id, status);
+        if ("LIVREE".equals(status)) {
+            // Comptabilisation idempotente (retry sûr en cas d'échec).
+            new MonetizationService().settleDeliveredOrder(id);
+        }
+        if ("ANNULEE".equals(status)) {
+            // Contre-passation idempotente si la commande était comptabilisée.
+            new MonetizationService().reverseOrder(id, "ADMIN_CANCEL");
+        }
+    }
+
+    public void deleteOrder(int id) throws AppException, SQLException {
+        com.ecommerce.model.Order o = orderDAO.findById(id);
+        if (o == null) {
+            throw new AppException(ErrorCodes.ORDER_NOT_FOUND, 404, "Commande introuvable");
+        }
+        // Une commande comptabilisée ne se supprime pas (CASCADE effacerait
+        // le ledger) : passer par l'annulation, qui contre-passe proprement.
+        if (new MonetizationDAO().hasEntries(id, "SALE")) {
+            throw new AppException(ErrorCodes.CONFLICT, 409,
+                "Commande comptabilisée : annulez-la au lieu de la supprimer");
+        }
+        orderDAO.delete(id);
     }
 
     public java.util.List<com.ecommerce.model.Order> getOrdersByPhone(String phone) throws AppException, SQLException {
@@ -144,10 +167,6 @@ public class OrderService {
             throw new AppException(ErrorCodes.INVALID_ORDER_STATUS, 400,
                 "Seule une commande en attente peut être annulée");
         }
-    }
-
-    public void deleteOrder(int id) throws SQLException {
-        orderDAO.delete(id);
     }
 
     public List<Order> searchOrders(String query) throws SQLException {

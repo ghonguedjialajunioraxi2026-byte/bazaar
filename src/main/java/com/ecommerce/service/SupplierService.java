@@ -226,21 +226,19 @@ public class SupplierService {
         List<Order> orders = orderDAO.findBySupplier(supplierId);
         int totalOrders = orders.size();
         int pendingOrders = 0, delivered = 0, cancelled = 0;
-        int revenueGross = 0, revenueNet = 0;
-        double commissionRate = 10.0;
-        try { commissionRate = supplierDAO.findById(supplierId).getCommissionRate(); } catch (Exception ignored) {}
-
         for (Order o : orders) {
             String st = o.getStatus() == null ? "EN_ATTENTE" : o.getStatus();
             switch (st) {
                 case "EN_ATTENTE": pendingOrders++; break;
-                case "LIVREE": delivered++; revenueGross += o.getTotal(); break;
+                case "LIVREE": delivered++; break;
                 case "ANNULEE": cancelled++; break;
                 default: break;
             }
         }
-        // ventes valides = LIVREE (et éventuellement payées)
-        revenueNet = (int) Math.round(revenueGross * (1 - commissionRate / 100.0));
+        // Revenus comptabilisés (ledger) — taux figé par commande, pas taux courant.
+        long[] settled = new com.ecommerce.dao.MonetizationDAO().supplierTotals(supplierId);
+        int revenueGross = (int) settled[0];
+        int revenueNet = (int) settled[2];
 
         Supplier s = supplierDAO.findById(supplierId);
         int unread = conversationDAO.unreadCountForSupplier(supplierId);
@@ -260,49 +258,41 @@ public class SupplierService {
         return data;
     }
 
-    // --------------------------- REVENUS ---------------------------
+    // --------------------------- REVENUS (ledger Phase 10) ---------------------------
     public Map<String, Object> getRevenue(int supplierId) throws SQLException {
         double commissionRate = 10.0;
         Supplier s = supplierDAO.findById(supplierId);
         if (s != null) commissionRate = s.getCommissionRate();
 
-        List<Order> orders = orderDAO.findBySupplier(supplierId);
-        long today = 0, week = 0, month = 0, yearCount = 0, total = 0;
-        int cancelledAmount = 0;
+        // Source comptable : ledger EARNED − REVERSED (taux figé par commande).
+        com.ecommerce.dao.MonetizationDAO mdao = new com.ecommerce.dao.MonetizationDAO();
+        long[] totals = mdao.supplierTotals(supplierId);
+        Map<String, long[]> periods = mdao.supplierPeriods(supplierId);
+        long[] today = periods.getOrDefault("today", new long[3]);
+        long[] week = periods.getOrDefault("week7", new long[3]);
+        long[] month = periods.getOrDefault("month", new long[3]);
+        long[] year = periods.getOrDefault("year", new long[3]);
 
-        java.time.LocalDate now = java.time.LocalDate.now();
+        List<Order> orders = orderDAO.findBySupplier(supplierId);
+        int cancelledAmount = 0;
         for (Order o : orders) {
-            if (o.getStatus() == null || "ANNULEE".equals(o.getStatus())) {
-                if ("ANNULEE".equals(o.getStatus())) cancelledAmount += o.getTotal();
-                continue; // annulées non comptabilisées
-            }
-            if (!"LIVREE".equals(o.getStatus())) continue; // seules livrées = ventes valides
-            java.time.LocalDate d = parseDate(o.getCreatedAt());
-            total += o.getTotal();
-            if (d != null && d.equals(now)) today += o.getTotal();
-            if (d != null && !d.isBefore(now.minusDays(now.getDayOfWeek().getValue() - 1))) week += o.getTotal();
-            if (d != null && d.getYear() == now.getYear() && d.getMonth() == now.getMonth()) month += o.getTotal();
-            if (d != null && d.getYear() == now.getYear()) yearCount += o.getTotal();
+            if ("ANNULEE".equals(o.getStatus())) cancelledAmount += o.getTotal();
         }
 
-        int grossToday = (int) today, grossWeek = (int) week, grossMonth = (int) month;
-        int grossYear = (int) yearCount, grossTotal = (int) total;
-
         Map<String, Object> data = new LinkedHashMap<>();
-        data.put("grossToday", grossToday);
-        data.put("grossWeek", grossWeek);
-        data.put("grossMonth", grossMonth);
-        data.put("grossYear", grossYear);
-        data.put("grossTotal", grossTotal);
+        data.put("grossToday", today[0]);
+        data.put("grossWeek", week[0]);
+        data.put("grossMonth", month[0]);
+        data.put("grossYear", year[0]);
+        data.put("grossTotal", totals[0]);
         data.put("commissionRate", commissionRate);
-
-        data.put("commissionTotal", (int) Math.round(grossTotal * commissionRate / 100.0));
-        int otherFees = 0;
-        data.put("otherFees", otherFees);
-        data.put("netTotal", (int) Math.round(grossTotal * (1 - commissionRate / 100.0)) - otherFees);
-        data.put("netToday", (int) Math.round(grossToday * (1 - commissionRate / 100.0)));
-        data.put("netMonth", (int) Math.round(grossMonth * (1 - commissionRate / 100.0)));
+        data.put("commissionTotal", totals[1]);
+        data.put("otherFees", 0);
+        data.put("netTotal", totals[2]);
+        data.put("netToday", today[2]);
+        data.put("netMonth", month[2]);
         data.put("cancelledAmount", cancelledAmount);
+        data.put("settledOrders", totals[3]);
         return data;
     }
 
