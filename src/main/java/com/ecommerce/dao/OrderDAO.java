@@ -60,7 +60,11 @@ public class OrderDAO {
                         psDec.setInt(1, item.getQty());
                         psDec.setInt(2, item.getProductId());
                         psDec.setInt(3, item.getQty());
-                        psDec.executeUpdate();
+                        // Sécurité anti-survente (course) : 0 ligne = stock épuisé entre-temps.
+                        int decremented = psDec.executeUpdate();
+                        if (decremented == 0) {
+                            throw new SQLException("STOCK_INSUFFISANT: stock épuisé pour l'un des produits");
+                        }
 
                         // Check low stock
                         try {

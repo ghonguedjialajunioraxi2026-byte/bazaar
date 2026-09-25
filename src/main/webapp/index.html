@@ -785,6 +785,10 @@ tailwind.config = {
     <button onclick="toggleCart()" class="w-9 h-9 rounded-full hover:bg-slate-100 flex items-center justify-center"><i class="bi bi-x-lg"></i></button>
   </div>
   <div id="cart-items" class="flex-1 overflow-y-auto p-5 space-y-4"></div>
+  <div id="cart-undo" class="hidden mx-5 mb-2 px-4 py-2.5 rounded-xl bg-dark-900 text-white text-sm flex items-center justify-between gap-3">
+    <span>Produit retiré du panier</span>
+    <button onclick="undoRemove()" class="font-bold text-amber-400 hover:text-amber-300 shrink-0">Annuler</button>
+  </div>
   <div id="cart-footer" class="border-t border-slate-100 p-5 space-y-4 hidden">
     <div class="space-y-2 text-sm">
       <div class="flex justify-between"><span class="text-slate-500">Sous-total</span><span id="cart-subtotal" class="font-semibold">0 FCFA</span></div>
@@ -794,7 +798,7 @@ tailwind.config = {
     <button onclick="goToCheckout()" class="w-full py-3.5 bg-primary-700 hover:bg-primary-800 text-white font-semibold rounded-2xl transition shadow-soft">Commander</button>
     <button onclick="toggleCart();showSection('shop')" class="w-full py-2.5 text-sm font-medium text-primary-700 hover:underline transition">Continuer mes achats</button>
     <p class="flex items-center justify-center gap-1.5 text-[11px] text-slate-400"><i class="bi bi-shield-check text-primary-600"></i> Commande sans paiement en ligne · confirmation WhatsApp</p>
-    <button onclick="clearCart()" class="w-full py-2.5 text-sm text-slate-500 hover:text-rose-600 transition">Vider le panier</button>
+    <button id="clear-cart-btn" onclick="clearCart()" class="w-full py-2.5 text-sm text-slate-500 hover:text-rose-600 transition">Vider le panier</button>
   </div>
   <div id="cart-empty" class="flex-1 flex flex-col items-center justify-center p-8 text-center">
     <div class="w-20 h-20 rounded-2xl bg-slate-100 flex items-center justify-center mb-5 text-3xl text-slate-300"><i class="bi bi-bag"></i></div>
@@ -1255,11 +1259,11 @@ function productCardHTML(p, listMode = false) {
     <div class="product-card bg-white rounded-2xl border border-slate-100 shadow-soft overflow-hidden flex gap-4 p-4 cursor-pointer" onclick="openProduct(${p.id})">
       <div class="relative w-28 h-28 flex-shrink-0 rounded-xl overflow-hidden bg-slate-50">
         ${badgeHTML(p.badge)}
-        <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover" loading="lazy">
+        <img src="${p.image}" alt="${escAttr(p.name)}" class="w-full h-full object-cover" loading="lazy">
       </div>
       <div class="flex-1 min-w-0">
-        <p class="text-[11px] font-bold uppercase tracking-wider text-primary-700">${p.brand}</p>
-        <h3 class="font-semibold text-sm line-clamp-2 mb-1">${p.name}</h3>
+        <p class="text-[11px] font-bold uppercase tracking-wider text-primary-700">${escHTML(p.brand)}</p>
+        <h3 class="font-semibold text-sm line-clamp-2 mb-1">${escHTML(p.name)}</h3>
         <div class="flex items-center gap-1 text-accent-500 text-xs mb-2">${starsHTML(p.rating)} <span class="text-slate-400">(${p.reviews})</span></div>
         <div class="flex items-baseline gap-2 flex-wrap">
           <span class="font-bold text-dark-900">${formatPrice(p.price)}</span>
@@ -1281,8 +1285,8 @@ function productCardHTML(p, listMode = false) {
       <button onclick="event.stopPropagation();toggleFavorite(${p.id})" aria-label="Favori" class="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/95 shadow-soft flex items-center justify-center z-10 ${isFav?'text-rose-500':'text-slate-400'} hover:text-rose-500 hover:scale-110 active:scale-90 transition">
         <i class="bi bi-heart${isFav?'-fill':''}"></i>
       </button>
-      <img src="${p.image}" alt="${p.name}" class="ms-pimg w-full h-full object-cover" loading="lazy">
-      <img src="${p.image}" alt="${p.name}" class="ms-pimg w-full h-full object-cover" loading="lazy">
+      <img src="${p.image}" alt="${escAttr(p.name)}" class="ms-pimg w-full h-full object-cover" loading="lazy">
+      <img src="${p.image}" alt="${escAttr(p.name)}" class="ms-pimg w-full h-full object-cover" loading="lazy">
       ${p.gallery && p.gallery[1] ? `<img src="${p.gallery[1]}" alt="" aria-hidden="true" loading="lazy" class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">` : ''}
       <div class="absolute inset-x-3 bottom-3 hidden md:flex gap-2 translate-y-[130%] opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
         <button onclick="event.stopPropagation();addToCart(${p.id})" class="flex-1 py-2.5 rounded-xl bg-dark-900/90 text-white text-xs font-semibold hover:bg-dark-900 transition">Ajouter au panier</button>
@@ -1291,10 +1295,10 @@ function productCardHTML(p, listMode = false) {
     </div>
     <div class="p-4">
       <div class="flex items-center justify-between gap-2 mb-0.5">
-        <p class="text-[11px] font-bold uppercase tracking-wider text-primary-700 truncate">${p.brand}</p>
-        ${p.supplierName ? `<p class="text-[11px] text-slate-400 truncate flex items-center gap-1 shrink-0"><i class="bi bi-patch-check text-primary-500"></i>${p.supplierName}</p>` : ''}
+        <p class="text-[11px] font-bold uppercase tracking-wider text-primary-700 truncate">${escHTML(p.brand)}</p>
+        ${p.supplierName ? `<p class="text-[11px] text-slate-400 truncate flex items-center gap-1 shrink-0"><i class="bi bi-patch-check text-primary-500"></i>${escHTML(p.supplierName)}</p>` : ''}
       </div>
-      <h3 class="font-semibold text-[15px] leading-snug line-clamp-2 mb-1.5 cursor-pointer hover:text-primary-700 transition min-h-[2.6em]" onclick="openProduct(${p.id})">${p.name}</h3>
+      <h3 class="font-semibold text-[15px] leading-snug line-clamp-2 mb-1.5 cursor-pointer hover:text-primary-700 transition min-h-[2.6em]" onclick="openProduct(${p.id})">${escHTML(p.name)}</h3>
       <div class="flex items-center gap-1 text-accent-500 text-xs mb-2">${starsHTML(p.rating)} <span class="text-slate-400 ml-1">(${p.reviews})</span></div>
       <div class="flex items-baseline gap-2 mb-1.5 flex-wrap">
         <span class="font-extrabold text-[17px] text-dark-900 tabular-nums">${formatPrice(p.price)}</span>
@@ -2182,8 +2186,8 @@ function liveSearch(q, boxId, afterPick) {
       <div onclick="openProduct(${p.id});${afterPick}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 cursor-pointer">
         <img src="${p.image}" alt="" class="w-12 h-12 rounded-lg object-cover shrink-0">
         <div class="min-w-0">
-          <p class="text-sm font-medium truncate">${p.name}</p>
-          <p class="text-xs text-slate-500">${p.brand} · ${formatPrice(p.price)}</p>
+          <p class="text-sm font-medium truncate">${escHTML(p.name)}</p>
+          <p class="text-xs text-slate-500">${escHTML(p.brand)} · ${formatPrice(p.price)}</p>
         </div>
       </div>
     `).join('');
@@ -2576,10 +2580,37 @@ function addToCart(id, qty = 1, color = null, size = null) {
 }
 
 function removeFromCart(index) {
+  const item = cart[index];
+  if (!item) return;
+  lastRemoved = { item, index };
   cart.splice(index, 1);
   saveCart();
-  showToast('Produit retiré', 'info');
+  showUndoBar('Produit retiré du panier');
 }
+
+let undoTimer = null;
+function showUndoBar(msg) {
+  const bar = document.getElementById('cart-undo');
+  if (!bar) { showToast(msg, 'info'); return; }
+  bar.querySelector('span').textContent = msg;
+  bar.classList.remove('hidden');
+  if (undoTimer) clearTimeout(undoTimer);
+  undoTimer = setTimeout(hideUndoBar, 6000);
+}
+function hideUndoBar() {
+  const bar = document.getElementById('cart-undo');
+  if (bar) bar.classList.add('hidden');
+  lastRemoved = null;
+  if (undoTimer) { clearTimeout(undoTimer); undoTimer = null; }
+}
+function undoRemove() {
+  if (!lastRemoved) return;
+  cart.splice(Math.min(lastRemoved.index, cart.length), 0, lastRemoved.item);
+  saveCart();
+  hideUndoBar();
+  showToast('Produit restauré');
+}
+let lastRemoved = null;
 
 function updateQuantity(index, delta) {
   const item = cart[index];
@@ -2589,8 +2620,27 @@ function updateQuantity(index, delta) {
 }
 
 function clearCart() {
+  if (!cart.length) return;
+  const btn = document.getElementById('clear-cart-btn');
+  if (!btn || !btn.dataset.armed) {
+    if (btn) {
+      btn.dataset.armed = '1';
+      btn.textContent = 'Confirmer la suppression ?';
+      btn.classList.add('!text-rose-600', 'font-bold');
+      setTimeout(() => {
+        delete btn.dataset.armed;
+        btn.textContent = 'Vider le panier';
+        btn.classList.remove('!text-rose-600', 'font-bold');
+      }, 3500);
+    }
+    return;
+  }
+  delete btn.dataset.armed;
+  btn.textContent = 'Vider le panier';
+  btn.classList.remove('!text-rose-600', 'font-bold');
   cart = [];
   saveCart();
+  hideUndoBar();
   showToast('Panier vidé', 'info');
 }
 
@@ -2599,6 +2649,24 @@ function calculateTotal() {
   const delivery = cart.length ? 1500 : 0;
   return { sub, delivery, total: sub + delivery };
 }
+
+// ---------- SYNCHRO MULTI-ONGLETS ----------
+window.addEventListener('storage', (e) => {
+  try {
+    if (e.key === 'camshop_cart') {
+      cart = JSON.parse(e.newValue || '[]');
+      if (!Array.isArray(cart)) cart = [];
+      updateCartUI();
+      if (!document.getElementById('section-checkout').classList.contains('hidden')) renderCheckoutSummary();
+    } else if (e.key === 'camshop_favs') {
+      favorites = JSON.parse(e.newValue || '[]');
+      if (!Array.isArray(favorites)) favorites = [];
+      updateFavUI();
+    } else if (e.key === 'ms_recent') {
+      renderRecent();
+    }
+  } catch (err) {}
+});
 
 // ---------- CART HELPERS ----------
 function groupCartBySupplier() {
@@ -2618,15 +2686,16 @@ function groupCartBySupplier() {
 function cartItemHTML(item, i) {
   return `
     <div class="flex gap-3">
-      <img src="${item.image}" alt="${item.name}" class="w-20 h-20 rounded-xl object-cover bg-slate-50">
+      <img src="${item.image}" alt="${escAttr(item.name)}" class="w-20 h-20 rounded-xl object-cover bg-slate-50">
       <div class="flex-1 min-w-0">
-        <h4 class="font-medium text-sm line-clamp-1">${item.name}</h4>
-        <p class="text-xs text-slate-500">${item.brand}${item.color ? ' · ' + item.color : ''}${item.size ? ' · ' + item.size : ''}</p>
+        <h4 class="font-medium text-sm line-clamp-1">${escHTML(item.name)}</h4>
+        <p class="text-xs text-slate-500">${escHTML(item.brand)}${item.color ? ' · ' + escHTML(item.color) : ''}${item.size ? ' · ' + escHTML(item.size) : ''}</p>
+        ${item.outOfStock ? '<p class="text-[11px] font-bold text-rose-600 mt-0.5">Rupture de stock — retirez cet article pour commander</p>' : ''}
         <p class="font-semibold text-sm mt-1">${formatPrice(item.price)}</p>
         <div class="flex items-center gap-2 mt-2">
-          <button onclick="updateQuantity(${i},-1)" class="qty-btn w-7 h-7 rounded-lg border border-slate-200 flex items-center justify-center text-sm">−</button>
-          <span class="text-sm font-medium w-6 text-center">${item.qty}</span>
-          <button onclick="updateQuantity(${i},1)" class="qty-btn w-7 h-7 rounded-lg border border-slate-200 flex items-center justify-center text-sm">+</button>
+          <button onclick="updateQuantity(${i},-1)" aria-label="Diminuer la quantité" class="qty-btn w-7 h-7 rounded-lg border border-slate-200 flex items-center justify-center text-sm">−</button>
+          <span class="text-sm font-medium w-6 text-center" aria-live="polite">${item.qty}</span>
+          <button onclick="updateQuantity(${i},1)" aria-label="Augmenter la quantité" class="qty-btn w-7 h-7 rounded-lg border border-slate-200 flex items-center justify-center text-sm">+</button>
         </div>
       </div>
       <button onclick="removeFromCart(${i})" class="text-slate-400 hover:text-rose-500 self-start"><i class="bi bi-trash"></i></button>
@@ -2662,7 +2731,7 @@ function updateCartUI() {
   itemsEl.innerHTML = groupCartBySupplier().map(g => `
     <div class="flex items-center gap-2 pb-1">
       <span class="w-6 h-6 rounded-lg bg-primary-50 text-primary-700 flex items-center justify-center text-xs shrink-0"><i class="bi bi-shop"></i></span>
-      <p class="text-xs font-bold text-slate-600 truncate">${g.name}</p>
+      <p class="text-xs font-bold text-slate-600 truncate">${escHTML(g.name)}</p>
       <span class="text-[10px] text-slate-400 shrink-0">${g.items.length} article${g.items.length > 1 ? 's' : ''}</span>
     </div>
     ${g.items.map(({ item, idx }) => cartItemHTML(item, idx)).join('')}
@@ -2687,11 +2756,48 @@ function toggleCart() {
     drawer.classList.remove('translate-x-full');
     overlay.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
+    reconcileCart();
+  }
+}
+
+// Réconciliation silencieuse avec le serveur à l'ouverture :
+// produits disparus, prix modifiés, stock insuffisant.
+// Le serveur reste la source de vérité (validé aussi à la commande).
+let reconciling = false;
+async function reconcileCart() {
+  if (!cart.length || reconciling) return;
+  reconciling = true;
+  try {
+    const res = await fetch(apiBase() + '/api/products');
+    if (!res.ok) return;
+    const list = await res.json();
+    const byId = new Map(list.map(p => [p.id, p]));
+    const notes = [];
+    cart = cart.filter(item => {
+      const p = byId.get(item.id);
+      if (!p) { notes.push(`« ${item.name} » n'est plus disponible — retiré du panier`); return false; }
+      if (p.price !== item.price) { notes.push(`Prix mis à jour : ${p.name} → ${formatPrice(p.price)}`); item.price = p.price; }
+      const stock = p.stock || 0;
+      if (stock <= 0) { item.outOfStock = true; }
+      else {
+        delete item.outOfStock;
+        if (item.qty > stock) { item.qty = stock; notes.push(`Quantité ajustée au stock disponible (${stock}) : ${p.name}`); }
+      }
+      return true;
+    });
+    saveCart();
+    if (notes.length) showToast(notes[0], 'info');
+  } catch (e) {
+    // Hors-ligne : on garde le panier local tel quel.
+  } finally {
+    reconciling = false;
   }
 }
 
 function goToCheckout() {
   if (!cart.length) { showToast('Votre panier est vide', 'warning'); return; }
+  const blocked = cart.find(i => i.outOfStock);
+  if (blocked) { showToast(`« ${blocked.name} » est en rupture — retirez-le pour continuer`, 'error'); toggleCart(); return; }
   toggleCart();
   showSection('checkout');
 }
@@ -2741,7 +2847,7 @@ function updateFavUI() {
     <div class="flex gap-3 items-center">
       <img src="${p.image}" alt="" class="w-16 h-16 rounded-xl object-cover cursor-pointer" onclick="openProduct(${p.id});toggleFavorites()">
       <div class="flex-1 min-w-0">
-        <h4 class="font-medium text-sm truncate cursor-pointer" onclick="openProduct(${p.id});toggleFavorites()">${p.name}</h4>
+        <h4 class="font-medium text-sm truncate cursor-pointer" onclick="openProduct(${p.id});toggleFavorites()">${escHTML(p.name)}</h4>
         <p class="text-sm font-semibold text-primary-600">${formatPrice(p.price)}</p>
       </div>
       <button onclick="addToCart(${p.id})" class="px-3 py-1.5 bg-primary-50 text-primary-700 text-xs font-medium rounded-xl">Ajouter</button>
@@ -2773,8 +2879,8 @@ function renderCheckoutSummary() {
     <div class="flex gap-3 text-sm">
       <img src="${item.image}" alt="" class="w-14 h-14 rounded-lg object-cover">
       <div class="flex-1 min-w-0">
-        <p class="font-medium truncate">${item.name}</p>
-        <p class="text-slate-500 text-xs">x${item.qty}${item.color ? ' · ' + item.color : ''}${item.size ? ' · ' + item.size : ''}</p>
+        <p class="font-medium truncate">${escHTML(item.name)}</p>
+        <p class="text-slate-500 text-xs">x${item.qty}${item.color ? ' · ' + escHTML(item.color) : ''}${item.size ? ' · ' + escHTML(item.size) : ''}</p>
       </div>
       <p class="font-semibold whitespace-nowrap">${formatPrice(item.price * item.qty)}</p>
     </div>`).join('')}
@@ -2863,7 +2969,16 @@ async function createInternalOrders(client, items) {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body)
     });
-    if (!res.ok) throw new Error('Commande refusée (' + res.status + ')');
+    if (!res.ok) {
+      let msg = 'Commande refusée (' + res.status + ')';
+      try {
+        const err = await res.json();
+        if (err && (err.message || err.error)) msg = err.message || err.error;
+      } catch (e) {}
+      const error = new Error(msg);
+      error.serverMessage = msg;
+      throw error;
+    }
     created.push(await res.json());
   }
   return created;
@@ -2906,7 +3021,7 @@ async function submitOrder(e) {
     internal = await createInternalOrders(client, cart);
   } catch (err) {
     console.warn('Commande interne impossible, repli WhatsApp :', err);
-    showToast('Enregistrement en ligne indisponible — envoi WhatsApp', 'info');
+    showToast(err && err.serverMessage ? err.serverMessage : 'Enregistrement en ligne indisponible — envoi WhatsApp', 'info');
   }
   if (btn) { btn.disabled = false; btn.innerHTML = btnHtml; }
 
