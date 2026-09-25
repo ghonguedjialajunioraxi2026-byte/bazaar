@@ -96,8 +96,8 @@ tailwind.config = {
 
         <!-- Desktop Nav -->
         <div class="hidden lg:flex items-center gap-0.5 shrink-0">
-          <a href="#" onclick="showSection('home')" class="nav-link-light">Accueil</a>
-          <a href="#" onclick="showSection('shop')" class="nav-link-light">Boutique</a>
+          <a href="#" id="nav-home" onclick="showSection('home')" aria-current="page" class="nav-link-light">Accueil</a>
+          <a href="#" id="nav-shop" onclick="showSection('shop')" class="nav-link-light">Boutique</a>
           <div class="relative">
             <button class="nav-link-light flex items-center gap-1">Catégories <i class="bi bi-chevron-down text-[10px] transition-transform group-hover/nav:rotate-180"></i></button>
           </div>
@@ -730,9 +730,6 @@ tailwind.config = {
         </div>
         <p class="text-sm text-slate-400 leading-relaxed mb-4">La marketplace moderne pensée pour le Cameroun, avec une qualité visuelle internationale.</p>
         <div class="flex gap-2.5">
-          <a href="#" aria-label="Facebook" class="w-9 h-9 rounded-full bg-white/10 hover:bg-primary-700 flex items-center justify-center transition"><i class="bi bi-facebook"></i></a>
-          <a href="#" aria-label="Instagram" class="w-9 h-9 rounded-full bg-white/10 hover:bg-primary-700 flex items-center justify-center transition"><i class="bi bi-instagram"></i></a>
-          <a href="#" aria-label="TikTok" class="w-9 h-9 rounded-full bg-white/10 hover:bg-primary-700 flex items-center justify-center transition"><i class="bi bi-tiktok"></i></a>
           <a href="https://wa.me/237690000000" target="_blank" aria-label="WhatsApp" class="w-9 h-9 rounded-full bg-white/10 hover:bg-green-600 flex items-center justify-center transition"><i class="bi bi-whatsapp"></i></a>
         </div>
       </div>
@@ -770,10 +767,10 @@ tailwind.config = {
 </footer>
 
 <!-- ========== MOBILE BOTTOM NAV ========== -->
-<nav class="lg:hidden fixed bottom-0 inset-x-0 z-40 ms-glass border-t border-slate-200" aria-label="Navigation principale mobile">
+<nav id="mobile-bottom-nav" class="lg:hidden fixed bottom-0 inset-x-0 z-40 ms-glass border-t border-slate-200" aria-label="Navigation principale mobile">
   <div class="grid grid-cols-5 h-16">
-    <button onclick="showSection('home')" class="flex flex-col items-center justify-center gap-0.5 text-primary-700" aria-label="Accueil"><i class="bi bi-house-door text-xl"></i><span class="text-[10px] font-semibold">Accueil</span></button>
-    <button onclick="showSection('shop')" class="flex flex-col items-center justify-center gap-0.5 text-slate-500" aria-label="Boutique"><i class="bi bi-grid text-xl"></i><span class="text-[10px] font-semibold">Boutique</span></button>
+    <button onclick="showSection('home')" data-sec="home" class="flex flex-col items-center justify-center gap-0.5 text-primary-700" aria-label="Accueil"><i class="bi bi-house-door text-xl"></i><span class="text-[10px] font-semibold">Accueil</span></button>
+    <button onclick="showSection('shop')" data-sec="shop" class="flex flex-col items-center justify-center gap-0.5 text-slate-500" aria-label="Boutique"><i class="bi bi-grid text-xl"></i><span class="text-[10px] font-semibold">Boutique</span></button>
     <button onclick="toggleSearch()" class="flex flex-col items-center justify-center gap-0.5 text-slate-500" aria-label="Recherche"><i class="bi bi-search text-xl"></i><span class="text-[10px] font-semibold">Recherche</span></button>
     <button onclick="toggleFavorites()" class="relative flex flex-col items-center justify-center gap-0.5 text-slate-500" aria-label="Favoris"><i class="bi bi-heart text-xl"></i><span class="text-[10px] font-semibold">Favoris</span><span id="fav-count-mobile" class="absolute top-1 right-1/2 translate-x-4 min-w-4 h-4 px-0.5 bg-rose-500 text-white text-[9px] font-bold rounded-full hidden items-center justify-center">0</span></button>
     <button onclick="toggleCart()" class="relative flex flex-col items-center justify-center gap-0.5 text-slate-500" aria-label="Panier"><i class="bi bi-bag text-xl"></i><span class="text-[10px] font-semibold">Panier</span><span id="cart-count-mobile" class="absolute top-1 right-1/2 translate-x-4 min-w-4 h-4 px-0.5 bg-primary-700 text-white text-[9px] font-bold rounded-full hidden items-center justify-center">0</span></button>
@@ -795,6 +792,7 @@ tailwind.config = {
       <div class="flex justify-between font-bold text-base"><span>Total</span><span id="cart-total" class="text-primary-700">0 FCFA</span></div>
     </div>
     <button onclick="goToCheckout()" class="w-full py-3.5 bg-primary-700 hover:bg-primary-800 text-white font-semibold rounded-2xl transition shadow-soft">Commander</button>
+    <button onclick="toggleCart();showSection('shop')" class="w-full py-2.5 text-sm font-medium text-primary-700 hover:underline transition">Continuer mes achats</button>
     <p class="flex items-center justify-center gap-1.5 text-[11px] text-slate-400"><i class="bi bi-shield-check text-primary-600"></i> Commande sans paiement en ligne · confirmation WhatsApp</p>
     <button onclick="clearCart()" class="w-full py-2.5 text-sm text-slate-500 hover:text-rose-600 transition">Vider le panier</button>
   </div>
@@ -1182,6 +1180,22 @@ function showSection(name) {
   document.getElementById('section-home').classList.toggle('hidden', name !== 'home');
   document.getElementById('section-shop').classList.toggle('hidden', name !== 'shop');
   document.getElementById('section-checkout').classList.toggle('hidden', name !== 'checkout');
+  // État actif : nav desktop + nav mobile basse
+  [['nav-home', 'home'], ['nav-shop', 'shop']].forEach(([id, sec]) => {
+    const a = document.getElementById(id);
+    if (a) {
+      const on = name === sec;
+      a.classList.toggle('!text-white', on);
+      a.classList.toggle('bg-white/15', on);
+      if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+    }
+  });
+  document.querySelectorAll('#mobile-bottom-nav [data-sec]').forEach(b => {
+    const on = b.dataset.sec === name;
+    b.classList.toggle('text-primary-700', on);
+    b.classList.toggle('text-slate-500', !on);
+    if (on) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
+  });
   window.scrollTo({ top: 0, behavior: 'smooth' });
   if (name === 'shop') {
     applyFilters();

@@ -568,6 +568,10 @@ function showPage(page) {
   document.querySelectorAll('.sidebar-link[data-page]').forEach(el => el.classList.remove('active'));
   const activeLink = document.querySelector(`.sidebar-link[data-page="${page}"]`);
   if (activeLink) activeLink.classList.add('active');
+  document.querySelectorAll('.sidebar-link[data-page]').forEach(el => {
+    if (el === activeLink) el.setAttribute('aria-current', 'page');
+    else el.removeAttribute('aria-current');
+  });
   const titles = { dashboard:'Tableau de bord', orders:'Commandes', notifications:'Notifications', categories:'Catégories', promotions:'Promotions', suppliers:'Fournisseurs', visitors:'Visiteurs', stats:'Statistiques', settings:'Paramètres' };
   document.getElementById('pageTitle').textContent = titles[page] || 'MBOA STYLE';
   if (page === 'dashboard') loadDashboardData();

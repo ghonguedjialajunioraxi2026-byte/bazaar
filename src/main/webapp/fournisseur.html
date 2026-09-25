@@ -523,7 +523,11 @@ function showApp() {
 
 /* ==================== NAV ==================== */
 function setActiveNav(v) {
-  document.querySelectorAll('.nav-link').forEach(n => n.classList.toggle('active', n.dataset.view===v));
+  document.querySelectorAll('.nav-link').forEach(n => {
+    const on = n.dataset.view === v;
+    n.classList.toggle('active', on);
+    if (on) n.setAttribute('aria-current', 'page'); else n.removeAttribute('aria-current');
+  });
 }
 function goView(v) {
   currentView = v;
