@@ -1,0 +1,179 @@
+/* =========================================================
+   MBOA STYLE — Design tokens officiels (Phase 0)
+   Source unique de vérité visuelle. Préfixe ms-*.
+   Utilisé avec Tailwind CDN (structure), jamais contre lui.
+   ========================================================= */
+:root {
+  /* ---------- Premium light background ---------- */
+  --ms-bg-app: #F4F6F5;
+  --ms-bg-2: #F8FAF9;
+  --ms-bg-3: #EEF2F0;
+  --ms-bg-4: #E8EEEB;
+  /* ---------- Primary (teal) ---------- */
+  --ms-primary-50: #E8F5EF;
+  --ms-primary-100: #D3F0E0;
+  --ms-primary-200: #A9E2C3;
+  --ms-primary-300: #6FCE9D;
+  --ms-primary-400: #2BB673;
+  --ms-primary-500: #0F9D5C;
+  --ms-primary-600: #087443;
+  --ms-primary-700: #065C36;
+  --ms-primary-800: #05492C;
+  --ms-primary-900: #043B24;
+  --ms-primary: var(--ms-primary-600);
+  --ms-primary-hover: var(--ms-primary-700);
+  --ms-primary-active: var(--ms-primary-800);
+
+  /* ---------- Secondary / Accent ---------- */
+  --ms-secondary: #0f172a;
+  --ms-secondary-hover: #1e293b;
+  --ms-accent-400: #fbbf24;
+  --ms-accent-500: #f59e0b;
+  --ms-accent-600: #d97706;
+  --ms-accent: var(--ms-accent-500);
+
+  /* ---------- Gold (premium / distinction — rare) ---------- */
+  --ms-gold-50: #FBF6E9;
+  --ms-gold-100: #F6EBCB;
+  --ms-gold-200: #EDDA9E;
+  --ms-gold-400: #DEB84E;
+  --ms-gold-500: #D4A72C;
+  --ms-gold-600: #B08A22;
+  --ms-gold-700: #8A6D1C;
+
+  /* ---------- Backgrounds / Surfaces ---------- */
+  --ms-bg: #ffffff;
+  --ms-bg-secondary: #f8fafc;
+  --ms-surface: #ffffff;
+  --ms-surface-elevated: #ffffff;
+  --ms-surface-glass: rgba(255, 255, 255, 0.82);
+
+  /* ---------- Text ---------- */
+  --ms-text-primary: #111827;
+  --ms-text-secondary: #667085;
+  --ms-text-muted: #98A2B3;
+  --ms-text-disabled: #cbd5e1;
+  --ms-text-on-primary: #ffffff;
+
+  /* ---------- Borders ---------- */
+  --ms-border-subtle: #f1f5f9;
+  --ms-border: rgba(15, 23, 42, 0.08);
+  --ms-border-strong: rgba(15, 23, 42, 0.16);
+
+  /* ---------- Semantic ---------- */
+  --ms-success: #059669;
+  --ms-success-bg: #ecfdf5;
+  --ms-warning: #d97706;
+  --ms-warning-bg: #fffbeb;
+  --ms-error: #dc2626;
+  --ms-error-bg: #fef2f2;
+  --ms-info: #0284c7;
+  --ms-info-bg: #f0f9ff;
+  --ms-overlay: rgba(15, 23, 42, 0.6);
+
+  /* ---------- Typography ---------- */
+  --ms-font-sans: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --ms-font-editorial: 'DM Serif Display', Georgia, serif;
+  --ms-display-size: 2.5rem;   --ms-display-weight: 800; --ms-display-lh: 1.1;  --ms-display-ls: -0.02em;
+  --ms-h1-size: 1.875rem;      --ms-h1-weight: 800;      --ms-h1-lh: 1.2;       --ms-h1-ls: -0.015em;
+  --ms-h2-size: 1.5rem;        --ms-h2-weight: 700;      --ms-h2-lh: 1.25;      --ms-h2-ls: -0.01em;
+  --ms-h3-size: 1.25rem;       --ms-h3-weight: 700;      --ms-h3-lh: 1.3;       --ms-h3-ls: 0;
+  --ms-h4-size: 1.0625rem;     --ms-h4-weight: 600;      --ms-h4-lh: 1.35;      --ms-h4-ls: 0;
+  --ms-body-lg-size: 1rem;     --ms-body-lg-lh: 1.6;
+  --ms-body-size: 0.9375rem;   --ms-body-lh: 1.6;
+  --ms-body-sm-size: 0.875rem; --ms-body-sm-lh: 1.55;
+  --ms-caption-size: 0.75rem;  --ms-caption-lh: 1.45;
+  --ms-label-size: 0.75rem;    --ms-label-weight: 600;   --ms-label-ls: 0.04em;
+  --ms-price-weight: 800;
+
+  /* ---------- Spacing (base 4px) ---------- */
+  --ms-space-1: 0.25rem;
+  --ms-space-2: 0.5rem;
+  --ms-space-3: 0.75rem;
+  --ms-space-4: 1rem;
+  --ms-space-6: 1.5rem;
+  --ms-space-8: 2rem;
+  --ms-space-12: 3rem;
+  --ms-space-16: 4rem;
+
+  /* ---------- Radius ---------- */
+  --ms-radius-sm: 0.5rem;
+  --ms-radius-md: 0.875rem;
+  --ms-radius-lg: 1.25rem;
+  --ms-radius-xl: 1.75rem;
+  --ms-radius-pill: 9999px;
+
+  /* ---------- Shadows (discrets) ---------- */
+  --ms-shadow-sm: 0 4px 16px rgba(15, 23, 42, 0.06);
+  --ms-shadow-md: 0 12px 30px rgba(15, 23, 42, 0.10);
+  --ms-shadow-lg: 0 10px 40px -12px rgba(15, 23, 42, 0.12);
+  --ms-shadow-xl: 0 20px 50px -12px rgba(6, 92, 54, 0.22);
+
+  /* ---------- Glass ---------- */
+  --ms-glass-light-bg: rgba(255, 255, 255, 0.65);
+  --ms-glass-light-blur: blur(8px);
+  --ms-glass-bg: rgba(255, 255, 255, 0.82);
+  --ms-glass-blur: blur(16px);
+  --ms-glass-strong-bg: rgba(255, 255, 255, 0.92);
+  --ms-glass-strong-blur: blur(24px);
+  --ms-glass-border: rgba(255, 255, 255, 0.6);
+
+  /* ---------- Motion ---------- */
+  --ms-motion-fast: 150ms ease-out;
+  --ms-motion-base: 250ms ease-out;
+  --ms-motion-slow: 350ms ease-out;
+
+  /* ---------- Breakpoints (rappel) ---------- */
+  --ms-bp-mobile: 390px;
+  --ms-bp-tablet: 768px;
+  --ms-bp-desktop: 1366px;
+  --ms-bp-wide: 1920px;
+
+  /* ---------- Z-index ---------- */
+  --ms-z-dropdown: 40;
+  --ms-z-sticky: 50;
+  --ms-z-modal: 60;
+  --ms-z-toast: 80;
+}
+
+/* ---------- Base ---------- */
+html, body { overflow-x: clip; }
+@media (max-width: 1023.5px) {
+  body { padding-bottom: 4rem; } /* place à la navigation basse mobile */
+}
+*, *::before, *::after { scroll-behavior: smooth; }
+body {
+  font-family: var(--ms-font-sans);
+  font-size: var(--ms-body-size);
+  line-height: var(--ms-body-lh);
+  color: var(--ms-text-primary);
+  background: var(--ms-bg);
+  text-rendering: optimizeLegibility;
+}
+::selection { background: var(--ms-primary-100); }
+a:focus-visible, button:focus-visible, input:focus-visible,
+select:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--ms-primary-600);
+  outline-offset: 2px;
+}
+.ms-eyebrow {
+  font-size: var(--ms-label-size);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ms-primary-700);
+}
+.ms-price {
+  font-weight: var(--ms-price-weight);
+  font-variant-numeric: tabular-nums;
+  color: var(--ms-text-primary);
+}
+.ms-muted { color: var(--ms-text-secondary); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

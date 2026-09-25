@@ -1,0 +1,2909 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MBOA STYLE — Boutique en ligne premium au Cameroun</title>
+<meta name="description" content="MBOA STYLE : achetez mode, électronique, chaussures, beauté et plus. Commande simple via WhatsApp. Livraison à Yaoundé, Douala et partout au Cameroun.">
+<meta name="keywords" content="e-commerce Cameroun, boutique en ligne, Yaoundé, Douala, mode, téléphones, chaussures, WhatsApp commande">
+<meta property="og:title" content="MBOA STYLE — Les produits que vous aimez, simplement à portée de clic">
+<meta property="og:description" content="Plateforme e-commerce premium pour le marché camerounais. Commandez facilement via WhatsApp.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fr_CM">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","name":"MBOA STYLE","alternateName":"MboaStyle","url":"https://mboastyle.cm/","inLanguage":"fr","description":"Marketplace camerounaise : mode, électronique, beauté et plus. Fournisseurs vérifiés, livraison Yaoundé et Douala."}
+</script>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%23065C36'/><text x='50' y='70' font-size='56' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'>M</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        primary: { 50:'#E8F5EF',100:'#D3F0E0',200:'#A9E2C3',300:'#6FCE9D',400:'#2BB673',500:'#0F9D5C',600:'#087443',700:'#065C36',800:'#05492C',900:'#043B24' },
+        accent: { 50:'#FBF6E9',100:'#F6EBCB',200:'#EDDA9E',400:'#DEB84E',500:'#D4A72C',600:'#B08A22',700:'#8A6D1C' },
+        dark: { 800:'#1e293b',900:'#0f172a' }
+      },
+      fontFamily: { sans:['Manrope','system-ui','-apple-system','sans-serif'], display:['Manrope','system-ui','sans-serif'], serif:['DM Serif Display','Georgia','serif'] },
+      boxShadow: { 'soft':'0 4px 20px -2px rgba(15,23,42,0.08)', 'card':'0 10px 40px -12px rgba(15,23,42,0.12)', 'hover':'0 20px 50px -12px rgba(6,92,54,0.22)' }
+    }
+  }
+}
+</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<style>
+  /* ===== MBOA STYLE design tokens (design uniquement) ===== */
+  *{scroll-behavior:smooth}
+  body{font-family:'Manrope',system-ui,-apple-system,sans-serif;text-rendering:optimizeLegibility}
+  .font-display{font-family:'Manrope',system-ui,sans-serif;letter-spacing:-0.02em}
+  .font-editorial{font-family:"DM Serif Display",Georgia,serif;font-weight:400;letter-spacing:0}
+  ::selection{background:#D3F0E0}
+  a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #087443;outline-offset:2px}
+  .eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#065C36}
+  .product-card{transition:transform .25s ease,box-shadow .25s ease}
+  .product-card:hover{transform:translateY(-4px);box-shadow:0 20px 50px -12px rgba(6,92,54,0.22)}
+  .product-card img{transition:transform .5s ease}
+  .product-card:hover img{transform:scale(1.04)}
+  .cart-badge{animation:bounceIn .4s ease}
+  @keyframes bounceIn{0%{transform:scale(0)}60%{transform:scale(1.2)}100%{transform:scale(1)}}
+  .line-clamp-2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .modal-overlay{background:rgba(15,23,42,0.6);backdrop-filter:blur(4px)}
+  .swiper-pagination-bullet-active{background:#087443!important}
+  input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(8,116,67,0.25)}
+  .qty-btn{transition:all .2s}
+  .qty-btn:active{transform:scale(0.9)}
+  .filter-chip{transition:all .2s}
+  .filter-chip.active{background:#0f172a;color:white;border-color:#0f172a}
+  ::-webkit-scrollbar{width:8px;height:8px}
+  ::-webkit-scrollbar-track{background:transparent}
+  ::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:8px}
+  ::-webkit-scrollbar-thumb:hover{background:#94a3b8}
+  @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body class="text-slate-800 antialiased">
+
+<!-- ========== NAVBAR ========== -->
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 group/nav">
+  <!-- Top bar -->
+  <div class="hidden md:block bg-dark-900 text-slate-300 text-[11px]">
+    <div class="w-full px-4 sm:px-6 lg:px-8 2xl:px-12 h-9 flex items-center justify-between gap-4">
+      <p class="flex items-center gap-1.5 truncate"><i class="bi bi-truck text-primary-400"></i> Livraison partout au Cameroun · Yaoundé & Douala en 24–48h</p>
+      <div class="flex items-center gap-4 shrink-0 font-medium">
+        <a href="#promotions" onclick="showSection('home');setTimeout(()=>document.getElementById('promotions').scrollIntoView({behavior:'smooth'}),100)" class="hover:text-white transition">Promotions</a>
+        <button onclick="openTracking()" class="hover:text-white transition">Suivre ma commande</button>
+        <a href="fournisseur.html?register=1" target="_blank" rel="noopener" class="hover:text-white transition">Devenir fournisseur</a>
+      </div>
+    </div>
+  </div>
+  <div class="px-2 sm:px-4 lg:px-6 2xl:px-8 mt-2 md:mt-2.5">
+    <div class="nav-shell">
+      <div class="flex items-center justify-between gap-2 sm:gap-3 h-16 lg:h-[68px] px-3 sm:px-4">
+        <!-- Logo -->
+        <a href="#" onclick="showSection('home')" class="flex items-center gap-2.5 shrink-0" aria-label="MBOA STYLE — accueil">
+          <div class="w-9 h-9 rounded-xl bg-white/15 border border-white/20 flex items-center justify-center">
+            <span class="text-white font-extrabold text-lg leading-none">M</span>
+          </div>
+          <span class="font-display text-lg font-extrabold tracking-tight text-white hidden xs:block sm:block">Mboa<span class="text-primary-200">Style</span></span>
+        </a>
+
+        <!-- Desktop Nav -->
+        <div class="hidden lg:flex items-center gap-0.5 shrink-0">
+          <a href="#" onclick="showSection('home')" class="nav-link-light">Accueil</a>
+          <a href="#" onclick="showSection('shop')" class="nav-link-light">Boutique</a>
+          <div class="relative">
+            <button class="nav-link-light flex items-center gap-1">Catégories <i class="bi bi-chevron-down text-[10px] transition-transform group-hover/nav:rotate-180"></i></button>
+          </div>
+          <a href="#promotions" onclick="showSection('home');setTimeout(()=>document.getElementById('promotions').scrollIntoView({behavior:'smooth'}),100)" class="nav-link-light">Promotions</a>
+        </div>
+
+        <!-- Center search (desktop) -->
+        <div class="hidden lg:block flex-1 max-w-2xl mx-2 xl:mx-4 relative">
+          <i class="bi bi-search absolute left-4 top-1/2 -translate-y-1/2 text-white/50 pointer-events-none"></i>
+          <input type="search" id="nav-search" placeholder="Rechercher un produit, une marque, une catégorie…" aria-label="Recherche rapide"
+            autocomplete="off" oninput="liveSearch(this.value,'nav-search-results','closeNavSearch()')" onkeydown="if(event.key==='Enter'){navSearchGo()}if(event.key==='Escape'){closeNavSearch()}"
+            class="nav-search-glow w-full pl-11 pr-10 py-2.5 rounded-full border border-white/20 bg-white/10 text-white placeholder-white/50 text-sm transition">
+          <button onclick="closeNavSearch()" aria-label="Fermer" class="absolute right-2.5 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full hover:bg-white/15 hidden items-center justify-center" id="nav-search-clear"><i class="bi bi-x-lg text-xs text-white/70"></i></button>
+          <div id="nav-search-results" class="hidden absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-card border border-slate-100 p-2 max-h-[60vh] overflow-y-auto z-50 text-left"></div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex items-center gap-0.5 sm:gap-1 ml-auto">
+          <a href="fournisseur.html?register=1" target="_blank" rel="noopener" class="btn-supplier-glow hidden xl:inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white text-primary-800 text-sm font-bold transition mr-1">
+            <i class="bi bi-shop"></i> Devenir fournisseur
+          </a>
+          <button onclick="toggleSearch()" class="nav-icon-btn" aria-label="Rechercher">
+            <i class="bi bi-search text-lg"></i>
+          </button>
+          <button onclick="toggleFavorites()" class="nav-icon-btn relative" aria-label="Favoris">
+            <i class="bi bi-heart text-lg"></i>
+            <span id="fav-count" class="absolute -top-0.5 -right-0.5 min-w-5 h-5 px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center hidden">0</span>
+          </button>
+          <button onclick="toggleCart()" class="nav-icon-btn relative" aria-label="Panier">
+            <i class="bi bi-bag text-lg"></i>
+            <span id="cart-count" class="absolute -top-0.5 -right-0.5 min-w-5 h-5 px-1 bg-amber-400 text-dark-900 text-[10px] font-bold rounded-full flex items-center justify-center cart-badge hidden">0</span>
+          </button>
+          <button onclick="toggleMobileMenu()" class="lg:hidden nav-icon-btn" aria-label="Menu">
+            <i class="bi bi-list text-2xl" id="menu-icon"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mega menu catégories (desktop) -->
+  <div class="hidden lg:block absolute inset-x-0 top-full opacity-0 invisible translate-y-1 group-hover/nav:opacity-100 group-hover/nav:visible group-hover/nav:translate-y-0 group-focus-within/nav:opacity-100 group-focus-within/nav:visible group-focus-within/nav:translate-y-0 transition-all duration-200 z-40">
+    <div class="bg-white/95 border-b border-slate-100 shadow-card" style="backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)">
+      <div class="w-full px-4 sm:px-6 lg:px-8 2xl:px-12 py-6">
+        <div id="nav-categories" class="grid grid-cols-4 2xl:grid-cols-6 gap-6 max-h-[60vh] overflow-y-auto"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div class="px-2 sm:px-4 lg:hidden">
+    <div id="mobile-menu" class="hidden bg-white rounded-2xl shadow-card border border-slate-100 max-h-[70vh] overflow-y-auto mt-2">
+    <div class="px-4 py-4 space-y-1">
+      <a href="#" onclick="showSection('home');toggleMobileMenu()" class="block px-4 py-3 rounded-xl text-sm font-medium hover:bg-primary-50">Accueil</a>
+      <a href="#" onclick="showSection('shop');toggleMobileMenu()" class="block px-4 py-3 rounded-xl text-sm font-medium hover:bg-primary-50">Boutique</a>
+      <div id="mobile-categories" class="space-y-1"></div>
+      <a href="fournisseur.html?register=1" target="_blank" rel="noopener" onclick="toggleMobileMenu()" class="block px-4 py-3 rounded-xl text-sm font-semibold text-primary-700 hover:bg-primary-50"><i class="bi bi-shop mr-2"></i>Devenir fournisseur</a>
+      <a href="#promotions" onclick="showSection('home');toggleMobileMenu()" class="block px-4 py-3 rounded-xl text-sm font-medium hover:bg-primary-50">Promotions</a>
+      <a href="#contact" onclick="showSection('home');toggleMobileMenu()" class="block px-4 py-3 rounded-xl text-sm font-medium hover:bg-primary-50">Contact</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search Overlay -->
+  <div id="search-bar" class="hidden px-2 sm:px-4">
+    <div class="ms-glass rounded-2xl shadow-card mt-2">
+      <div class="max-w-3xl mx-auto px-4 py-5">
+      <div class="relative">
+        <i class="bi bi-search absolute left-5 top-1/2 -translate-y-1/2 text-primary-600 pointer-events-none"></i>
+        <input type="text" id="search-input" placeholder="Rechercher un produit, marque, catégorie, fournisseur..." class="w-full pl-12 pr-12 py-3.5 rounded-2xl border border-slate-200 focus:border-primary-500 bg-white shadow-soft text-[15px] transition" oninput="liveSearch(this.value)">
+        <button onclick="toggleSearch()" aria-label="Fermer la recherche" class="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center"><i class="bi bi-x-lg text-slate-500"></i></button>
+      </div>
+      <div id="search-suggestions" class="mt-3 space-y-1 max-h-80 overflow-y-auto hidden"></div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ========== MAIN CONTENT ========== -->
+<main class="pt-[76px] md:pt-[116px] lg:pt-[124px]">
+
+<!-- ========== HOME SECTION ========== -->
+<section id="section-home">
+
+  <!-- HERO IMMERSIF -->
+  <div class="ms-hero-premium relative overflow-hidden">
+    <div class="hero-flow" id="hero-flow" aria-hidden="true"></div>
+    <div class="hero-calm" aria-hidden="true"></div>
+    <div class="relative max-w-4xl mx-auto px-4 sm:px-6 text-center pt-16 pb-14 lg:pt-24 lg:pb-20">
+      <div data-aos="fade-up">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-primary-100 text-primary-700 text-xs font-semibold mb-6 shadow-soft" style="backdrop-filter:blur(8px)">
+          <span class="w-2 h-2 rounded-full bg-primary-500 animate-pulse"></span>
+          La marketplace camerounaise
+        </div>
+      </div>
+      <h1 class="font-editorial text-dark-900 tracking-tight leading-[1.18] mb-4 text-[1.9rem] sm:text-5xl xl:text-[3.2rem] min-h-[3.9em] sm:min-h-[2.7em]" data-aos="fade-up" data-aos-delay="80">
+        <span id="hero-typewriter" aria-live="polite">Achetez malin, vendez grand.</span><span class="type-caret" aria-hidden="true"></span>
+      </h1>
+      <p class="text-slate-600 text-base sm:text-lg mb-7 max-w-xl mx-auto leading-relaxed" data-aos="fade-up" data-aos-delay="160">
+        Des milliers de produits vérifiés, des fournisseurs locaux de confiance et une commande suivie en deux minutes.
+      </p>
+      <form onsubmit="return heroSearch(event)" class="relative max-w-xl mx-auto mb-4" role="search" data-aos="fade-up" data-aos-delay="240">
+        <i class="bi bi-search absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 text-lg pointer-events-none"></i>
+        <input type="search" id="hero-search" placeholder="Rechercher un produit, une marque, un fournisseur…" aria-label="Rechercher sur MBOA STYLE"
+          class="w-full py-4 rounded-2xl border border-slate-200 bg-white/90 shadow-card text-[15px] focus:border-primary-500 transition" style="padding-left:3.25rem;padding-right:9rem">
+        <button type="submit" class="absolute right-2 top-1/2 -translate-y-1/2 px-5 py-2.5 bg-primary-700 hover:bg-primary-800 text-white text-sm font-semibold rounded-xl transition shadow-soft">
+          Rechercher
+        </button>
+      </form>
+      <div class="flex flex-wrap items-center justify-center gap-2 mb-8 text-xs" data-aos="fade-up" data-aos-delay="300">
+        <span class="text-slate-400 font-medium mr-1">Populaire :</span>
+        <button onclick="heroQuickSearch('Montre')" class="ms-chip">Montre</button>
+        <button onclick="heroQuickSearch('Robe')" class="ms-chip">Robe</button>
+        <button onclick="heroQuickSearch('Sneakers')" class="ms-chip">Sneakers</button>
+        <button onclick="heroQuickSearch('Téléphone')" class="ms-chip">Téléphone</button>
+      </div>
+      <div class="flex flex-wrap justify-center gap-3 mb-10" data-aos="fade-up" data-aos-delay="360">
+        <button onclick="showSection('shop')" class="px-7 py-3.5 bg-primary-700 hover:bg-primary-800 text-white font-semibold rounded-2xl shadow-soft hover:shadow-hover transition-all flex items-center gap-2">
+          Découvrir la boutique <i class="bi bi-arrow-right"></i>
+        </button>
+        <button onclick="document.getElementById('categories').scrollIntoView({behavior:'smooth'})" class="px-7 py-3.5 bg-white/85 hover:bg-white text-dark-900 font-semibold rounded-2xl border border-slate-200 shadow-soft transition-all" style="backdrop-filter:blur(8px)">
+          Explorer les catégories
+        </button>
+      </div>
+      <div class="flex justify-center mb-8" data-aos="fade-up" data-aos-delay="420">
+        <button onclick="openTracking()" class="group inline-flex items-center gap-2.5 px-5 py-3 rounded-2xl bg-white/80 border border-slate-200 shadow-soft hover:shadow-card hover:border-primary-300 transition-all" style="backdrop-filter:blur(8px)">
+          <span class="w-9 h-9 rounded-xl bg-primary-700 text-white flex items-center justify-center shrink-0 group-hover:scale-105 transition"><i class="bi bi-box-seam"></i></span>
+          <span class="text-left"><span class="block text-sm font-bold text-dark-900">Suivez votre commande</span><span class="block text-xs text-slate-500">Directement depuis MBOA STYLE</span></span>
+          <i class="bi bi-arrow-right text-primary-700 group-hover:translate-x-0.5 transition"></i>
+        </button>
+      </div>
+      <dl class="flex flex-wrap justify-center gap-x-10 gap-y-4" data-aos="fade-up" data-aos-delay="480">
+        <div><dd class="text-2xl font-extrabold text-dark-900 tabular-nums" id="hero-stat-suppliers">…</dd><dd class="text-xs text-slate-500">fournisseurs vérifiés</dd></div>
+        <div class="w-px bg-slate-300/70 hidden sm:block" aria-hidden="true"></div>
+        <div><dd class="text-2xl font-extrabold text-dark-900 tabular-nums" id="hero-stat-products">…</dd><dd class="text-xs text-slate-500">produits en ligne</dd></div>
+        <div class="w-px bg-slate-300/70 hidden sm:block" aria-hidden="true"></div>
+        <div><dd class="text-2xl font-extrabold text-dark-900 tabular-nums" id="hero-stat-rating">…</dd><dd class="text-xs text-slate-500">note moyenne clients</dd></div>
+      </dl>
+    </div>
+  </div>
+
+  <!-- CATEGORIES -->
+  <div id="categories" class="w-full px-4 sm:px-6 lg:px-8 2xl:px-12 py-16" data-aos="fade-up">
+    <div class="flex items-end justify-between mb-10">
+      <div>
+        <p class="eyebrow mb-2">Univers</p>
+        <h2 class="font-display text-2xl sm:text-3xl font-bold text-dark-900 mb-2">Explorez par catégorie</h2>
+        <p class="text-slate-500">Explorez nos univers</p>
+      </div>
+      <button onclick="showSection('shop')" class="text-primary-700 font-semibold text-sm hover:underline hidden sm:block">Voir tout →</button>
+    </div>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4" id="categories-grid"></div>
+  </div>
+
+  <!-- PRODUITS POPULAIRES -->
+  <div class="bg-white py-16">
+    <div class="w-full px-4 sm:px-6 lg:px-8 2xl:px-12">
+      <div class="flex items-end justify-between mb-10" data-aos="fade-up">
+        <div>
+          <p class="eyebrow mb-2">Sélection</p>
+          <h2 class="font-display text-2xl sm:text-3xl font-bold text-dark-900 mb-2">Produits populaires</h2>
+          <p class="text-slate-500">Les favoris de nos clients</p>
+        </div>
+        <button onclick="showSection('shop')" class="text-primary-700 font-semibold text-sm hover:underline">Voir la boutique →</button>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4 lg:gap-6" id="popular-products"></div>
+    </div>
+  </div>
+
+  <!-- MEILLEURES VENTES -->
+  <div class="w-full px-4 sm:px-6 lg:px-8 2xl:px-12 py-16">
+    <div class="flex items-end justify-between mb-10" data-aos="fade-up">
+      <div>
+        <p class="eyebrow mb-2">Top ventes</p>
+        <h2 class="font-display text-2xl sm:text-3xl font-bold text-dark-900 mb-2">Meilleures ventes</h2>
+        <p class="text-slate-500">Les produits les plus demandés, classés par avis clients</p>
+      </div>
+      <button onclick="showSection('shop')" class="text-primary-700 font-semibold text-sm hover:underline">Voir la boutique →</button>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4 lg:gap-6" id="best-products"></div>
+  </div>
+
+  <!-- PROMOTIONS -->
+  <div id="promotions" class="w-full px-4 sm:px-6 lg:px-8 2xl:px-12 py-16" data-aos="fade-up">
+    <div class="relative rounded-3xl overflow-hidden bg-dark-900 text-white">
+      <div class="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-primary-600/40 blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-32 -left-16 w-80 h-80 rounded-full bg-primary-400/20 blur-3xl pointer-events-none"></div>
+      <div class="relative grid lg:grid-cols-2 gap-8 p-8 lg:p-12 items-center">
+        <div>
+          <p class="eyebrow mb-3" style="color:#6FCE9D">Offre limitée</p>
+          <h2 class="font-display text-3xl lg:text-4xl font-bold mb-4 tracking-tight">Jusqu'à -40% sur une sélection</h2>
+          <p class="text-slate-300 mb-6 max-w-md">Nos meilleures promotions sur la mode, l'électronique et les accessoires. Sans design agressif : juste les bons prix.</p>
+          <p class="text-xs text-slate-400 mb-2 font-medium">Se termine dans</p>
+          <div class="flex gap-2.5 mb-8" id="countdown" role="timer" aria-label="Compte à rebours de l'offre">
+            <div class="bg-white/10 rounded-2xl px-4 py-3 text-center min-w-[70px]"><div class="text-2xl font-bold tabular-nums" id="cd-days">00</div><div class="text-xs text-slate-300">Jours</div></div>
+            <div class="bg-white/10 rounded-2xl px-4 py-3 text-center min-w-[70px]"><div class="text-2xl font-bold tabular-nums" id="cd-hours">00</div><div class="text-xs text-slate-300">Heures</div></div>
+            <div class="bg-white/10 rounded-2xl px-4 py-3 text-center min-w-[70px]"><div class="text-2xl font-bold tabular-nums" id="cd-mins">00</div><div class="text-xs text-slate-300">Min</div></div>
+            <div class="bg-white/10 rounded-2xl px-4 py-3 text-center min-w-[70px]"><div class="text-2xl font-bold tabular-nums" id="cd-secs">00</div><div class="text-xs text-slate-300">Sec</div></div>
+          </div>
+          <button onclick="showSection('shop');applyPromoFilter()" class="px-7 py-3.5 bg-white text-dark-900 font-bold rounded-2xl hover:bg-primary-50 transition shadow-soft">
+            Profiter de l'offre
+          </button>
+        </div>
+        <div class="hidden lg:flex justify-center">
+          <img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=500&h=400&fit=crop" alt="Promotion" class="rounded-2xl shadow-2xl object-cover max-h-80" loading="lazy">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TENDANCE (Swiper) -->
+  <div class="bg-slate-100/60 py-16 border-y border-slate-100">
+    <div class="w-full px-4 sm:px-6 lg:px-8 2xl:px-12">
+      <div class="flex items-end justify-between mb-10" data-aos="fade-up">
+        <div>
+          <p class="eyebrow mb-2">Éditorial</p>
+          <h2 class="font-display text-2xl sm:text-3xl font-bold text-dark-900 mb-2">Tendances du moment</h2>
+          <p class="text-slate-500">Ce que tout le monde regarde</p>
+        </div>
+      </div>
+      <div class="swiper trend-swiper" data-aos="fade-up">
+        <div class="swiper-wrapper" id="trend-products"></div>
+        <div class="swiper-pagination mt-8"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOUS NOS PRODUITS -->
+  <div id="all-products-section" class="bg-white py-16">
+    <div class="w-full px-4 sm:px-6 lg:px-8 2xl:px-12">
+      <div class="flex items-end justify-between mb-10" data-aos="fade-up">
+        <div>
+          <p class="eyebrow mb-2">Catalogue</p>
+          <h2 class="font-display text-2xl sm:text-3xl font-bold text-dark-900 mb-2">Tous nos produits</h2>
+          <p class="text-slate-500">Parcourez l'ensemble du catalogue · <span id="all-products-count">0</span> produits</p>
+        </div>
+        <button onclick="showSection('shop')" class="text-primary-700 font-semibold text-sm hover:underline">Voir la boutique →</button>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4 lg:gap-6" id="all-products"></div>
+      <div id="all-products-pagination" class="flex justify-center flex-wrap gap-2 mt-10"></div>
+    </div>
+  </div>
+
+  <!-- NOUVEAUTÉS -->
+  <div class="w-full px-4 sm:px-6 lg:px-8 2xl:px-12 py-16">
+    <div class="flex items-end justify-between mb-10" data-aos="fade-up">
+      <div>
+        <p class="eyebrow mb-2">Nouveautés</p>
+        <h2 class="font-display text-2xl sm:text-3xl font-bold text-dark-900 mb-2">Les derniers arrivages</h2>
+        <p class="text-slate-500">Les produits ajoutés par nos vendeurs</p>
+      </div>
+      <button onclick="showSection('shop')" class="text-primary-700 font-semibold text-sm hover:underline">Voir la boutique →</button>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4 lg:gap-6" id="new-products"></div>
+  </div>
+
+  <!-- FOURNISSEURS VÉRIFIÉS -->
+  <div class="bg-white py-16 border-y border-slate-100">
+    <div class="w-full px-4 sm:px-6 lg:px-8 2xl:px-12">
+      <div class="flex items-end justify-between mb-10" data-aos="fade-up">
+        <div>
+          <p class="eyebrow mb-2">Vendeurs</p>
+          <h2 class="font-display text-2xl sm:text-3xl font-bold text-dark-900 mb-2">Nos fournisseurs vérifiés</h2>
+          <p class="text-slate-500">Des boutiques locales de confiance</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4" id="suppliers-strip"></div>
+    </div>
+  </div>
+
+  <!-- RECOMMANDATIONS -->
+  <div class="w-full px-4 sm:px-6 lg:px-8 2xl:px-12 py-16">
+    <div class="flex items-end justify-between mb-10" data-aos="fade-up">
+      <div>
+        <p class="eyebrow mb-2">Sélection</p>
+        <h2 class="font-display text-2xl sm:text-3xl font-bold text-dark-900 mb-2">Recommandé pour vous</h2>
+        <p class="text-slate-500" id="reco-subtitle">Selon vos consultations et les tendances</p>
+      </div>
+      <button onclick="showSection('shop')" class="text-primary-700 font-semibold text-sm hover:underline">Voir la boutique →</button>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4 lg:gap-6" id="reco-products"></div>
+  </div>
+
+  <!-- RÉCEMMENT CONSULTÉS -->
+  <div id="recent-section" class="w-full px-4 sm:px-6 lg:px-8 2xl:px-12 py-16 hidden">
+    <div class="flex items-end justify-between mb-10" data-aos="fade-up">
+      <div>
+        <p class="eyebrow mb-2">Pour vous</p>
+        <h2 class="font-display text-2xl sm:text-3xl font-bold text-dark-900 mb-2">Récemment consultés</h2>
+        <p class="text-slate-500">Retrouvez les produits vus en un clic</p>
+      </div>
+      <button onclick="clearRecent()" class="text-slate-400 hover:text-rose-600 font-semibold text-sm transition">Effacer</button>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4 lg:gap-6" id="recent-products"></div>
+  </div>
+
+  <!-- POURQUOI NOUS -->
+  <div id="about" class="w-full px-4 sm:px-6 lg:px-8 2xl:px-12 py-16">
+    <div class="text-center mb-12" data-aos="fade-up">
+      <p class="eyebrow mb-2">Confiance</p>
+      <h2 class="font-display text-2xl sm:text-3xl font-bold text-dark-900 mb-3">Pourquoi choisir MBOA STYLE ?</h2>
+      <p class="text-slate-500 max-w-xl mx-auto">Une expérience d'achat simple, rapide et de confiance, conçue pour le Cameroun.</p>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="bg-white rounded-2xl border border-slate-100 p-6 shadow-soft text-center hover:shadow-card transition" data-aos="fade-up" data-aos-delay="0">
+        <div class="w-12 h-12 rounded-xl bg-primary-50 text-primary-700 flex items-center justify-center mx-auto mb-4 text-xl"><i class="bi bi-stars"></i></div>
+        <h3 class="font-bold mb-1.5">Produits sélectionnés</h3>
+        <p class="text-sm text-slate-500">Chaque article est choisi pour sa qualité et sa pertinence.</p>
+      </div>
+      <div class="bg-white rounded-2xl border border-slate-100 p-6 shadow-soft text-center hover:shadow-card transition" data-aos="fade-up" data-aos-delay="100">
+        <div class="w-12 h-12 rounded-xl bg-primary-50 text-primary-700 flex items-center justify-center mx-auto mb-4 text-xl"><i class="bi bi-lightning-charge"></i></div>
+        <h3 class="font-bold mb-1.5">Commande rapide</h3>
+        <p class="text-sm text-slate-500">Ajoutez au panier et envoyez votre commande en moins de 2 minutes.</p>
+      </div>
+      <div class="bg-white rounded-2xl border border-slate-100 p-6 shadow-soft text-center hover:shadow-card transition" data-aos="fade-up" data-aos-delay="200">
+        <div class="w-12 h-12 rounded-xl bg-primary-50 text-primary-700 flex items-center justify-center mx-auto mb-4 text-xl"><i class="bi bi-geo-alt"></i></div>
+        <h3 class="font-bold mb-1.5">Livraison suivie</h3>
+        <p class="text-sm text-slate-500">Yaoundé, Douala et principales villes. Suivi intégré.</p>
+      </div>
+      <div class="bg-white rounded-2xl border border-slate-100 p-6 shadow-soft text-center hover:shadow-card transition" data-aos="fade-up" data-aos-delay="300">
+        <div class="w-12 h-12 rounded-xl bg-primary-50 text-primary-700 flex items-center justify-center mx-auto mb-4 text-xl"><i class="bi bi-headset"></i></div>
+        <h3 class="font-bold mb-1.5">Service client</h3>
+        <p class="text-sm text-slate-500">Une équipe réactive pour répondre à vos questions.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMMENT ÇA MARCHE -->
+  <div class="bg-white py-16 border-y border-slate-100">
+    <div class="w-full px-4 sm:px-6 lg:px-8 2xl:px-12">
+      <div class="text-center mb-12" data-aos="fade-up">
+        <p class="eyebrow mb-2">Simple</p>
+        <h2 class="font-display text-2xl sm:text-3xl font-bold text-dark-900 mb-3">Comment ça marche ?</h2>
+        <p class="text-slate-500">5 étapes pour recevoir vos produits</p>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-6">
+        <div class="text-center" data-aos="fade-up" data-aos-delay="0">
+          <div class="w-12 h-12 rounded-2xl bg-dark-900 text-white font-bold text-lg flex items-center justify-center mx-auto mb-4">1</div>
+          <h3 class="font-semibold mb-1">Choisissez</h3>
+          <p class="text-sm text-slate-500">Parcourez et sélectionnez vos produits</p>
+        </div>
+        <div class="text-center" data-aos="fade-up" data-aos-delay="80">
+          <div class="w-12 h-12 rounded-2xl bg-dark-900 text-white font-bold text-lg flex items-center justify-center mx-auto mb-4">2</div>
+          <h3 class="font-semibold mb-1">Ajoutez au panier</h3>
+          <p class="text-sm text-slate-500">Modifiez quantités et options</p>
+        </div>
+        <div class="text-center" data-aos="fade-up" data-aos-delay="160">
+          <div class="w-12 h-12 rounded-2xl bg-dark-900 text-white font-bold text-lg flex items-center justify-center mx-auto mb-4">3</div>
+          <h3 class="font-semibold mb-1">Vos infos</h3>
+          <p class="text-sm text-slate-500">Nom, téléphone et adresse de livraison</p>
+        </div>
+        <div class="text-center" data-aos="fade-up" data-aos-delay="240">
+          <div class="w-12 h-12 rounded-2xl bg-dark-900 text-white font-bold text-lg flex items-center justify-center mx-auto mb-4">4</div>
+          <h3 class="font-semibold mb-1">Envoyez</h3>
+          <p class="text-sm text-slate-500">Commande envoyée via WhatsApp</p>
+        </div>
+        <div class="text-center" data-aos="fade-up" data-aos-delay="320">
+          <div class="w-12 h-12 rounded-2xl bg-primary-700 text-white font-bold text-lg flex items-center justify-center mx-auto mb-4">5</div>
+          <h3 class="font-semibold mb-1">Confirmation</h3>
+          <p class="text-sm text-slate-500">Le fournisseur vous contacte</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TÉMOIGNAGES -->
+  <div class="w-full px-4 sm:px-6 lg:px-8 2xl:px-12 py-16">
+    <div class="text-center mb-12" data-aos="fade-up">
+      <p class="eyebrow mb-2">Avis vérifiés</p>
+      <h2 class="font-display text-2xl sm:text-3xl font-bold text-dark-900 mb-3">Ce que disent nos clients</h2>
+      <p class="text-slate-500">Des avis authentiques de tout le Cameroun</p>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6" id="testimonials"></div>
+  </div>
+
+  <!-- NEWSLETTER -->
+  <div class="bg-dark-900 py-14">
+    <div class="max-w-3xl mx-auto px-4 text-center" data-aos="fade-up">
+      <p class="eyebrow mb-3" style="color:#6FCE9D">Newsletter</p>
+      <h2 class="font-display text-2xl lg:text-3xl font-bold text-white mb-3 tracking-tight">Restez informé des promotions</h2>
+      <p class="text-slate-400 mb-8">Recevez les meilleures offres directement sur WhatsApp ou par email.</p>
+      <form onsubmit="subscribeNewsletter(event)" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+        <input type="text" id="newsletter-input" placeholder="Email ou numéro WhatsApp" class="flex-1 px-5 py-3.5 rounded-2xl border-0 text-sm bg-white" required>
+        <button type="submit" class="px-6 py-3.5 bg-primary-700 hover:bg-primary-600 text-white font-semibold rounded-2xl transition">S'inscrire</button>
+      </form>
+    </div>
+  </div>
+
+</section>
+
+<!-- ========== SHOP SECTION ========== -->
+<section id="section-shop" class="hidden">
+  <div class="w-full px-4 sm:px-6 lg:px-8 2xl:px-12 py-10">
+    <div class="mb-8">
+      <nav class="flex items-center gap-1.5 text-[13px] text-slate-400 mb-3" aria-label="Fil d'Ariane" id="shop-breadcrumb">
+        <button onclick="showSection('home')" class="hover:text-primary-700 transition font-medium">Accueil</button>
+        <i class="bi bi-chevron-right text-[10px]"></i>
+        <span class="text-dark-900 font-semibold">Boutique</span>
+      </nav>
+      <p class="eyebrow mb-2">Boutique</p>
+      <h1 class="font-display text-3xl font-bold text-dark-900 mb-2 tracking-tight" id="shop-title">Tous les produits</h1>
+      <p class="text-slate-500 mb-4"><span id="results-count" class="font-semibold text-dark-900">0</span> produits trouvés</p>
+      <div id="shop-subcats" class="flex flex-wrap gap-2"></div>
+    </div>
+
+    <div class="flex flex-col gap-4">
+      <!-- Horizontal filter system -->
+      <div id="shop-filters-zone" class="hidden lg:block">
+        <!-- Root category pills -->
+        <div class="flex items-center gap-2 overflow-x-auto pb-2" id="root-pills" role="tablist" aria-label="Grandes catégories"></div>
+        <!-- Expandable sub-category panel -->
+        <div id="sub-panel" class="grid transition-all duration-300 ease-out" style="grid-template-rows:0fr">
+          <div class="overflow-hidden">
+            <div class="bg-white border border-slate-100 rounded-2xl shadow-soft p-5 mb-3">
+              <p class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3" id="sub-panel-title">Sous-catégories</p>
+              <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2" id="sub-panel-grid"></div>
+            </div>
+          </div>
+        </div>
+        <!-- Filter dropdowns -->
+        <div class="bg-white border border-slate-100 rounded-2xl shadow-soft p-3 flex items-center gap-2 flex-wrap">
+          <div class="relative flex-1 min-w-[180px]">
+            <i class="bi bi-search absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm pointer-events-none"></i>
+            <input type="text" id="shop-search" placeholder="Nom, marque, référence…" aria-label="Rechercher dans la boutique" class="w-full pl-10 pr-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white text-sm transition" oninput="applyFilters()">
+          </div>
+          <div class="relative" data-drop="price">
+            <button onclick="toggleFilterDrop('price')" id="dropbtn-price" class="filter-dropbtn">Prix <i class="bi bi-chevron-down text-[10px]"></i></button>
+            <div id="drop-price" class="hidden absolute left-0 top-full mt-2 w-64 bg-white rounded-2xl shadow-card border border-slate-100 p-4 z-40">
+              <p class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Prix (FCFA)</p>
+              <div class="flex gap-2 items-center">
+                <input type="number" id="price-min" placeholder="Min" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white text-sm transition" onchange="applyFilters()">
+                <span class="text-slate-400">-</span>
+                <input type="number" id="price-max" placeholder="Max" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white text-sm transition" onchange="applyFilters()">
+              </div>
+              <button onclick="applyFilters();closeFilterDrops()" class="mt-3 w-full py-2.5 bg-primary-700 hover:bg-primary-800 text-white text-sm font-bold rounded-xl transition">Appliquer</button>
+            </div>
+          </div>
+          <div class="relative" data-drop="brand">
+            <button onclick="toggleFilterDrop('brand')" id="dropbtn-brand" class="filter-dropbtn">Marque <i class="bi bi-chevron-down text-[10px]"></i></button>
+            <div id="drop-brand" class="hidden absolute left-0 top-full mt-2 w-64 max-h-64 overflow-y-auto bg-white rounded-2xl shadow-card border border-slate-100 p-2 z-40"></div>
+          </div>
+          <div class="relative" data-drop="supplier">
+            <button onclick="toggleFilterDrop('supplier')" id="dropbtn-supplier" class="filter-dropbtn">Vendeur <i class="bi bi-chevron-down text-[10px]"></i></button>
+            <div id="drop-supplier" class="hidden absolute left-0 top-full mt-2 w-64 max-h-64 overflow-y-auto bg-white rounded-2xl shadow-card border border-slate-100 p-2 z-40"></div>
+          </div>
+          <div class="relative" data-drop="size">
+            <button onclick="toggleFilterDrop('size')" id="dropbtn-size" class="filter-dropbtn">Taille <i class="bi bi-chevron-down text-[10px]"></i></button>
+            <div class="hidden absolute left-0 top-full mt-2 w-64 bg-white rounded-2xl shadow-card border border-slate-100 p-4 z-40" id="drop-size"><div class="flex flex-wrap gap-1.5" id="filter-sizes"></div></div>
+          </div>
+          <div class="relative" data-drop="color">
+            <button onclick="toggleFilterDrop('color')" id="dropbtn-color" class="filter-dropbtn">Couleur <i class="bi bi-chevron-down text-[10px]"></i></button>
+            <div class="hidden absolute left-0 top-full mt-2 w-64 bg-white rounded-2xl shadow-card border border-slate-100 p-4 z-40" id="drop-color"><div class="flex flex-wrap gap-1.5" id="filter-colors"></div></div>
+          </div>
+          <div class="relative" data-drop="rating">
+            <button onclick="toggleFilterDrop('rating')" id="dropbtn-rating" class="filter-dropbtn">Note <i class="bi bi-chevron-down text-[10px]"></i></button>
+            <div class="hidden absolute left-0 top-full mt-2 w-60 bg-white rounded-2xl shadow-card border border-slate-100 p-2 z-40" id="filter-ratings">
+              <button onclick="setMinRating(0)" data-rating="0" class="filter-chip active w-full text-left px-3 py-2 rounded-xl text-sm border border-slate-200 hover:border-slate-400 transition">Toutes les notes</button>
+              <button onclick="setMinRating(4)" data-rating="4" class="filter-chip w-full text-left px-3 py-2 rounded-xl text-sm border border-slate-200 hover:border-slate-400 transition"><span class="text-accent-500">★★★★</span><span class="text-slate-400"> &amp; plus</span></button>
+              <button onclick="setMinRating(3)" data-rating="3" class="filter-chip w-full text-left px-3 py-2 rounded-xl text-sm border border-slate-200 hover:border-slate-400 transition"><span class="text-accent-500">★★★</span><span class="text-slate-400"> &amp; plus</span></button>
+            </div>
+          </div>
+          <div class="relative" data-drop="promo">
+            <button onclick="toggleFilterDrop('promo')" id="dropbtn-promo" class="filter-dropbtn">Promotion <i class="bi bi-chevron-down text-[10px]"></i></button>
+            <div class="hidden absolute left-0 top-full mt-2 w-64 bg-white rounded-2xl shadow-card border border-slate-100 p-4 z-40">
+              <label class="flex items-center justify-between cursor-pointer gap-2">
+                <span class="text-sm font-medium">Promotions uniquement</span>
+                <input type="checkbox" id="filter-promo" class="ms-switch" onchange="setPromoOnly(this.checked)">
+              </label>
+            </div>
+          </div>
+          <div class="relative" data-drop="stock">
+            <button onclick="toggleFilterDrop('stock')" id="dropbtn-stock" class="filter-dropbtn">Disponibilité <i class="bi bi-chevron-down text-[10px]"></i></button>
+            <div class="hidden absolute left-0 top-full mt-2 w-60 bg-white rounded-2xl shadow-card border border-slate-100 p-2 z-40">
+              <button id="filter-stock-all" onclick="setStockFilter('all')" class="filter-chip active w-full text-left px-3 py-2 rounded-xl text-sm border border-slate-200 hover:border-slate-400 transition">Tous</button>
+              <button id="filter-stock-in" onclick="setStockFilter('in')" class="filter-chip w-full text-left px-3 py-2 rounded-xl text-sm border border-slate-200 hover:border-slate-400 transition">En stock</button>
+              <button id="filter-stock-out" onclick="setStockFilter('out')" class="filter-chip w-full text-left px-3 py-2 rounded-xl text-sm border border-slate-200 hover:border-slate-400 transition">Rupture de stock</button>
+            </div>
+          </div>
+          <button onclick="resetFilters()" class="text-xs font-bold text-slate-400 hover:text-rose-600 transition px-2">Réinitialiser</button>
+        </div>
+      </div>
+
+      <!-- Products zone -->
+      <div class="min-w-0">
+      <!-- Products grid -->
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2.5 mb-4 flex-wrap">
+          <button onclick="toggleFilters()" class="lg:hidden inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-dark-900 text-white text-sm font-semibold">
+            <i class="bi bi-funnel"></i> Filtres <span id="filters-count" class="hidden min-w-5 h-5 px-1 bg-primary-500 text-white text-[10px] font-bold rounded-full items-center justify-center">0</span>
+          </button>
+          <p class="text-sm text-slate-500 mr-auto"><span id="results-count-toolbar" class="font-bold text-dark-900">0</span> produits</p>
+          <label class="text-xs font-semibold text-slate-500 uppercase tracking-wider hidden sm:block" for="sort-select-top">Trier</label>
+          <select id="sort-select-top" class="px-3 py-2.5 rounded-xl border border-slate-200 text-sm bg-white font-medium" onchange="syncSort(this)">
+            <option value="popular">Pertinence</option>
+            <option value="newest">Nouveautés</option>
+            <option value="best-sales">Meilleures ventes</option>
+            <option value="best-rated">Meilleures notes</option>
+            <option value="price-asc">Prix croissant</option>
+            <option value="price-desc">Prix décroissant</option>
+          </select>
+          <div class="flex gap-2">
+            <button onclick="setViewMode('grid')" id="view-grid" aria-label="Vue grille" class="w-10 h-10 rounded-xl bg-primary-600 text-white flex items-center justify-center"><i class="bi bi-grid-3x3-gap"></i></button>
+            <button onclick="setViewMode('list')" id="view-list" aria-label="Vue liste" class="w-10 h-10 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center"><i class="bi bi-list-ul"></i></button>
+          </div>
+        </div>
+        <div id="active-filters" class="flex flex-wrap gap-2 mb-4"></div>
+        <div id="active-category-banner" class="hidden items-center gap-2 bg-primary-50 border border-primary-200 rounded-xl px-4 py-2 mb-4 w-fit">
+          <i class="bi bi-funnel-fill text-primary-600"></i>
+          <span id="active-category-name" class="text-sm text-primary-700 font-medium"></span>
+          <button onclick="clearCategoryFilter()" class="ml-2 text-primary-500 hover:text-primary-700"><i class="bi bi-x-lg text-xs"></i></button>
+        </div>
+        <div id="shop-products" class="grid gap-4 lg:gap-5 grid-cols-[repeat(auto-fill,minmax(min(100%,230px),1fr))]"></div>
+        <div id="pagination" class="flex justify-center gap-2 mt-10"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== CHECKOUT SECTION ========== -->
+<section id="section-checkout" class="hidden">
+  <div class="w-full px-4 sm:px-6 lg:px-8 2xl:px-12 py-10">
+    <p class="eyebrow mb-2">Commande</p>
+    <h1 class="font-display text-3xl font-bold text-dark-900 mb-3 tracking-tight">Finaliser la commande</h1>
+    <ol class="flex items-center gap-2 mb-8 text-xs font-semibold" aria-label="Étapes de commande">
+      <li class="flex items-center gap-1.5 text-primary-700"><span class="w-5 h-5 rounded-full bg-primary-700 text-white flex items-center justify-center text-[10px]">1</span> Panier</li>
+      <li class="w-6 h-px bg-slate-200"></li>
+      <li class="flex items-center gap-1.5 text-primary-700"><span class="w-5 h-5 rounded-full bg-primary-700 text-white flex items-center justify-center text-[10px]">2</span> Informations</li>
+      <li class="w-6 h-px bg-slate-200"></li>
+      <li class="flex items-center gap-1.5 text-slate-400"><span class="w-5 h-5 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-[10px]">3</span> Confirmation WhatsApp</li>
+    </ol>
+    <div class="grid lg:grid-cols-5 gap-8">
+      <div class="lg:col-span-3">
+        <form id="order-form" class="bg-white rounded-2xl shadow-soft p-6 space-y-5" onsubmit="submitOrder(event)">
+          <h2 class="font-semibold text-lg mb-2">Informations de livraison</h2>
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1.5">Nom complet *</label>
+            <input type="text" id="order-name" required class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm" placeholder="Jean Dupont">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1.5">Numéro de téléphone *</label>
+            <input type="tel" id="order-phone" required pattern="[0-9+\s]{9,15}" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm" placeholder="690 00 00 00">
+          </div>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1.5">Ville *</label>
+              <select id="order-city" required class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm">
+                <option value="">Choisir...</option>
+                <option>Yaoundé</option>
+                <option>Douala</option>
+                <option>Bafoussam</option>
+                <option>Garoua</option>
+                <option>Bamenda</option>
+                <option>Maroua</option>
+                <option>Ngaoundéré</option>
+                <option>Kribi</option>
+                <option>Autre</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1.5">Quartier *</label>
+              <input type="text" id="order-quartier" required class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm" placeholder="Bastos, Akwa...">
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1.5">Adresse / Lieu de livraison *</label>
+            <textarea id="order-address" required rows="2" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm" placeholder="Carrefour, immeuble, indications..."></textarea>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1.5">Mode de livraison</label>
+            <select id="order-delivery" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm">
+              <option value="Standard">Standard (2-4 jours)</option>
+              <option value="Express">Express (24-48h)</option>
+              <option value="Retrait">Retrait en magasin</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1.5">Commentaire (optionnel)</label>
+            <textarea id="order-comment" rows="2" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm" placeholder="Instructions particulières..."></textarea>
+          </div>
+          <button type="submit" class="w-full py-4 bg-[#16a34a] hover:bg-[#15803d] text-white font-semibold rounded-2xl transition shadow-soft flex items-center justify-center gap-2 text-base">
+            <i class="bi bi-whatsapp text-xl"></i> Envoyer ma commande via WhatsApp
+          </button>
+        </form>
+      </div>
+      <div class="lg:col-span-2">
+        <div class="bg-white rounded-2xl shadow-soft p-6 sticky top-[124px]">
+          <h2 class="font-semibold text-lg mb-4">Résumé de la commande</h2>
+          <div id="checkout-summary" class="space-y-3 mb-5 max-h-64 overflow-y-auto"></div>
+          <div class="border-t border-slate-100 pt-4 space-y-2 text-sm">
+            <div class="flex justify-between"><span class="text-slate-500">Sous-total</span><span id="checkout-subtotal">0 FCFA</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">Livraison</span><span id="checkout-delivery">1 500 FCFA</span></div>
+            <div class="flex justify-between font-bold text-base pt-2"><span>Total</span><span id="checkout-total" class="text-primary-600">0 FCFA</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+ </main>
+
+<!-- ========== CTA FOURNISSEUR ========== -->
+<div class="w-full px-4 sm:px-6 lg:px-8 2xl:px-12 pb-16" data-aos="fade-up">
+  <div class="relative rounded-3xl overflow-hidden bg-dark-900 text-white">
+    <div class="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-primary-600/30 blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-32 -right-16 w-80 h-80 rounded-full bg-amber-500/10 blur-3xl pointer-events-none"></div>
+    <div class="relative flex flex-col lg:flex-row items-start lg:items-center gap-6 p-8 lg:p-12">
+      <div class="flex-1">
+        <p class="eyebrow mb-3" style="color:#DEB84E">Espace vendeur</p>
+        <h2 class="font-display text-2xl lg:text-3xl font-bold tracking-tight mb-2">Vendez sur MBOA STYLE</h2>
+        <p class="text-slate-300 max-w-xl">Inscription gratuite, publication gratuite, commission raisonnable sur vos ventes. Rejoignez les boutiques camerounaises qui grandissent avec nous.</p>
+      </div>
+      <a href="fournisseur.html?register=1" target="_blank" rel="noopener" class="btn-supplier-glow shrink-0 inline-flex items-center gap-2 px-7 py-3.5 bg-white text-primary-800 font-bold rounded-2xl">
+        <i class="bi bi-shop"></i> Ouvrir ma boutique
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ========== FOOTER ========== -->
+<footer id="contact" class="bg-dark-900 text-slate-300 pt-16 pb-8">
+  <div class="w-full px-4 sm:px-6 lg:px-8 2xl:px-12">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+      <div>
+        <div class="flex items-center gap-2.5 mb-4">
+          <div class="w-9 h-9 rounded-xl bg-primary-700 flex items-center justify-center">
+            <span class="text-white font-extrabold text-lg leading-none">M</span>
+          </div>
+          <span class="font-display text-lg font-extrabold text-white tracking-tight">Mboa<span class="text-primary-400">Style</span></span>
+        </div>
+        <p class="text-sm text-slate-400 leading-relaxed mb-4">La marketplace moderne pensée pour le Cameroun, avec une qualité visuelle internationale.</p>
+        <div class="flex gap-2.5">
+          <a href="#" aria-label="Facebook" class="w-9 h-9 rounded-full bg-white/10 hover:bg-primary-700 flex items-center justify-center transition"><i class="bi bi-facebook"></i></a>
+          <a href="#" aria-label="Instagram" class="w-9 h-9 rounded-full bg-white/10 hover:bg-primary-700 flex items-center justify-center transition"><i class="bi bi-instagram"></i></a>
+          <a href="#" aria-label="TikTok" class="w-9 h-9 rounded-full bg-white/10 hover:bg-primary-700 flex items-center justify-center transition"><i class="bi bi-tiktok"></i></a>
+          <a href="https://wa.me/237690000000" target="_blank" aria-label="WhatsApp" class="w-9 h-9 rounded-full bg-white/10 hover:bg-green-600 flex items-center justify-center transition"><i class="bi bi-whatsapp"></i></a>
+        </div>
+      </div>
+      <div>
+        <h4 class="font-semibold text-white mb-4">Liens rapides</h4>
+        <ul class="space-y-2.5 text-sm">
+          <li><a href="#" onclick="showSection('home')" class="hover:text-primary-400 transition">Accueil</a></li>
+          <li><a href="#" onclick="showSection('shop')" class="hover:text-primary-400 transition">Boutique</a></li>
+          <li><a href="#promotions" class="hover:text-primary-400 transition">Promotions</a></li>
+          <li><button onclick="openTracking()" class="hover:text-primary-400 transition">Suivre ma commande</button></li>
+          <li><a href="#about" class="hover:text-primary-400 transition">À propos</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold text-white mb-4">Catégories</h4>
+        <ul id="footer-categories" class="space-y-2.5 text-sm">
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold text-white mb-4">Contact</h4>
+        <ul class="space-y-3 text-sm">
+          <li class="flex items-start gap-2"><i class="bi bi-telephone text-primary-400 mt-0.5"></i> +237 690 00 00 00</li>
+          <li class="flex items-start gap-2"><i class="bi bi-whatsapp text-primary-400 mt-0.5"></i> +237 690 00 00 00</li>
+          <li class="flex items-start gap-2"><i class="bi bi-envelope text-primary-400 mt-0.5"></i> contact@mboastyle.cm</li>
+          <li class="flex items-start gap-2"><i class="bi bi-geo-alt text-primary-400 mt-0.5"></i> Yaoundé & Douala, Cameroun</li>
+        </ul>
+        <p class="text-xs text-slate-500 mt-4">Villes desservies : Yaoundé, Douala, Bafoussam, Bamenda, Garoua, Kribi...</p>
+      </div>
+    </div>
+    <div class="border-t border-white/10 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-500">
+      <p>© 2026 MBOA STYLE. Tous droits réservés.</p>
+      <p>Yaoundé · Douala · Cameroun</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ========== MOBILE BOTTOM NAV ========== -->
+<nav class="lg:hidden fixed bottom-0 inset-x-0 z-40 ms-glass border-t border-slate-200" aria-label="Navigation principale mobile">
+  <div class="grid grid-cols-5 h-16">
+    <button onclick="showSection('home')" class="flex flex-col items-center justify-center gap-0.5 text-primary-700" aria-label="Accueil"><i class="bi bi-house-door text-xl"></i><span class="text-[10px] font-semibold">Accueil</span></button>
+    <button onclick="showSection('shop')" class="flex flex-col items-center justify-center gap-0.5 text-slate-500" aria-label="Boutique"><i class="bi bi-grid text-xl"></i><span class="text-[10px] font-semibold">Boutique</span></button>
+    <button onclick="toggleSearch()" class="flex flex-col items-center justify-center gap-0.5 text-slate-500" aria-label="Recherche"><i class="bi bi-search text-xl"></i><span class="text-[10px] font-semibold">Recherche</span></button>
+    <button onclick="toggleFavorites()" class="relative flex flex-col items-center justify-center gap-0.5 text-slate-500" aria-label="Favoris"><i class="bi bi-heart text-xl"></i><span class="text-[10px] font-semibold">Favoris</span><span id="fav-count-mobile" class="absolute top-1 right-1/2 translate-x-4 min-w-4 h-4 px-0.5 bg-rose-500 text-white text-[9px] font-bold rounded-full hidden items-center justify-center">0</span></button>
+    <button onclick="toggleCart()" class="relative flex flex-col items-center justify-center gap-0.5 text-slate-500" aria-label="Panier"><i class="bi bi-bag text-xl"></i><span class="text-[10px] font-semibold">Panier</span><span id="cart-count-mobile" class="absolute top-1 right-1/2 translate-x-4 min-w-4 h-4 px-0.5 bg-primary-700 text-white text-[9px] font-bold rounded-full hidden items-center justify-center">0</span></button>
+  </div>
+</nav>
+
+<!-- ========== CART DRAWER ========== -->
+<div id="cart-overlay" class="fixed inset-0 modal-overlay z-[60] hidden" onclick="toggleCart()"></div>
+<div id="cart-drawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl z-[70] transform translate-x-full transition-transform duration-300 flex flex-col">
+  <div class="flex items-center justify-between p-5 border-b border-slate-100">
+    <h2 class="font-semibold text-lg">Mon panier <span id="cart-drawer-count" class="text-slate-400 text-sm font-normal">(0)</span></h2>
+    <button onclick="toggleCart()" class="w-9 h-9 rounded-full hover:bg-slate-100 flex items-center justify-center"><i class="bi bi-x-lg"></i></button>
+  </div>
+  <div id="cart-items" class="flex-1 overflow-y-auto p-5 space-y-4"></div>
+  <div id="cart-footer" class="border-t border-slate-100 p-5 space-y-4 hidden">
+    <div class="space-y-2 text-sm">
+      <div class="flex justify-between"><span class="text-slate-500">Sous-total</span><span id="cart-subtotal" class="font-semibold">0 FCFA</span></div>
+      <div class="flex justify-between"><span class="text-slate-500">Livraison estimée</span><span id="cart-delivery">1 500 FCFA</span></div>
+      <div class="flex justify-between font-bold text-base"><span>Total</span><span id="cart-total" class="text-primary-700">0 FCFA</span></div>
+    </div>
+    <button onclick="goToCheckout()" class="w-full py-3.5 bg-primary-700 hover:bg-primary-800 text-white font-semibold rounded-2xl transition shadow-soft">Commander</button>
+    <p class="flex items-center justify-center gap-1.5 text-[11px] text-slate-400"><i class="bi bi-shield-check text-primary-600"></i> Commande sans paiement en ligne · confirmation WhatsApp</p>
+    <button onclick="clearCart()" class="w-full py-2.5 text-sm text-slate-500 hover:text-rose-600 transition">Vider le panier</button>
+  </div>
+  <div id="cart-empty" class="flex-1 flex flex-col items-center justify-center p-8 text-center">
+    <div class="w-20 h-20 rounded-2xl bg-slate-100 flex items-center justify-center mb-5 text-3xl text-slate-300"><i class="bi bi-bag"></i></div>
+    <h3 class="font-bold text-lg mb-2">Votre panier est vide</h3>
+    <p class="text-sm text-slate-500 mb-6">Ajoutez des produits pour commencer vos achats</p>
+    <button onclick="toggleCart();showSection('shop')" class="px-6 py-3 bg-dark-900 text-white font-semibold rounded-2xl hover:bg-slate-800 transition">Voir la boutique</button>
+  </div>
+</div>
+
+<!-- ========== PRODUCT MODAL ========== -->
+<div id="product-modal" class="fixed inset-0 z-[80] hidden">
+  <div class="absolute inset-0 modal-overlay" onclick="closeProductModal()"></div>
+  <div class="absolute inset-4 sm:inset-8 lg:inset-12 bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col lg:flex-row max-w-6xl mx-auto my-auto max-h-[90vh]">
+    <button onclick="closeProductModal()" class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/90 shadow flex items-center justify-center hover:bg-slate-100"><i class="bi bi-x-lg"></i></button>
+    <div class="lg:w-1/2 bg-slate-50 p-6 flex flex-col">
+      <div class="flex-1 flex items-center justify-center mb-4 relative group/gallery">
+        <img id="modal-main-img" src="" alt="" class="max-h-72 lg:max-h-96 object-contain rounded-2xl cursor-zoom-in" onclick="openLightbox()">
+        <button onclick="openLightbox()" aria-label="Plein écran" class="absolute top-2 right-2 w-9 h-9 rounded-full bg-white/90 shadow flex items-center justify-center opacity-0 group-hover/gallery:opacity-100 transition"><i class="bi bi-arrows-fullscreen text-sm"></i></button>
+      </div>
+      <div id="modal-thumbs" class="flex gap-2 justify-center overflow-x-auto"></div>
+      <div id="modal-dots" class="flex gap-1.5 justify-center mt-3 sm:hidden"></div>
+    </div>
+    <div class="lg:w-1/2 p-6 lg:p-8 overflow-y-auto">
+      <div id="modal-badge" class="mb-3"></div>
+      <p id="modal-brand" class="text-xs font-bold uppercase tracking-wider text-primary-700 mb-1"></p>
+      <h2 id="modal-name" class="font-display text-2xl font-extrabold tracking-tight text-dark-900 mb-3"></h2>
+      <div class="flex items-center gap-3 mb-4">
+        <div id="modal-stars" class="flex text-accent-500 text-sm"></div>
+        <span id="modal-reviews" class="text-sm text-slate-500"></span>
+      </div>
+      <div class="flex items-baseline gap-3 mb-5">
+        <span id="modal-price" class="text-2xl font-bold text-dark-900"></span>
+        <span id="modal-oldprice" class="text-slate-400 line-through text-sm"></span>
+        <span id="modal-discount" class="ms-badge ms-badge-discount"></span>
+      </div>
+      <p id="modal-stock" class="text-sm mb-4"></p>
+      <p id="modal-desc" class="text-sm text-slate-600 leading-relaxed mb-5"></p>
+      <div id="modal-supplier" class="mb-5"></div>
+      <div id="modal-colors" class="mb-4 hidden">
+        <p class="text-sm font-medium mb-2">Couleur</p>
+        <div class="flex gap-2" id="modal-colors-list"></div>
+      </div>
+      <div id="modal-sizes" class="mb-5 hidden">
+        <p class="text-sm font-medium mb-2">Taille</p>
+        <div class="flex flex-wrap gap-2" id="modal-sizes-list"></div>
+      </div>
+      <div class="flex items-center gap-4 mb-6">
+        <p class="text-sm font-medium">Quantité</p>
+        <div class="flex items-center border border-slate-200 rounded-xl overflow-hidden">
+          <button onclick="changeModalQty(-1)" class="qty-btn w-10 h-10 flex items-center justify-center hover:bg-slate-50">−</button>
+          <span id="modal-qty" class="w-10 text-center text-sm font-medium">1</span>
+          <button onclick="changeModalQty(1)" class="qty-btn w-10 h-10 flex items-center justify-center hover:bg-slate-50">+</button>
+        </div>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-3">
+        <button onclick="addFromModal()" class="flex-1 py-3.5 bg-primary-700 hover:bg-primary-800 text-white font-semibold rounded-2xl transition shadow-soft flex items-center justify-center gap-2">
+          <i class="bi bi-bag-plus"></i> Ajouter au panier
+        </button>
+        <button onclick="buyNowFromModal()" class="flex-1 py-3.5 bg-dark-900 hover:bg-slate-800 text-white font-semibold rounded-2xl transition">Commander maintenant</button>
+      </div>
+      <div class="flex gap-4 mt-4">
+        <button onclick="toggleFavorite(currentProductId)" class="text-sm text-slate-500 hover:text-rose-500 flex items-center gap-1.5"><i class="bi bi-heart" id="modal-fav-icon"></i> Favoris</button>
+        <button onclick="shareProduct()" class="text-sm text-slate-500 hover:text-primary-600 flex items-center gap-1.5"><i class="bi bi-share"></i> Partager</button>
+      </div>
+      <div class="lg:hidden sticky bottom-0 -mx-6 -mb-6 mt-6 px-6 py-3 bg-white/95 border-t border-slate-100 flex items-center gap-3" style="backdrop-filter:blur(12px)">
+        <div class="flex-1 min-w-0">
+          <p id="modal-price-mobile" class="font-extrabold text-lg tabular-nums leading-none"></p>
+          <p id="modal-stock-mobile" class="text-[11px] text-emerald-600 font-semibold"></p>
+        </div>
+        <button onclick="addFromModal()" class="flex-1 py-3 bg-primary-700 hover:bg-primary-800 text-white text-sm font-bold rounded-2xl transition flex items-center justify-center gap-2"><i class="bi bi-bag-plus"></i> Ajouter</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== FAVORITES DRAWER ========== -->
+<div id="fav-overlay" class="fixed inset-0 modal-overlay z-[60] hidden" onclick="toggleFavorites()"></div>
+<div id="fav-drawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl z-[70] transform translate-x-full transition-transform duration-300 flex flex-col">
+  <div class="flex items-center justify-between p-5 border-b border-slate-100">
+    <h2 class="font-semibold text-lg">Mes favoris</h2>
+    <button onclick="toggleFavorites()" class="w-9 h-9 rounded-full hover:bg-slate-100 flex items-center justify-center"><i class="bi bi-x-lg"></i></button>
+  </div>
+  <div id="fav-items" class="flex-1 overflow-y-auto p-5 space-y-4"></div>
+  <div id="fav-empty" class="flex-1 flex flex-col items-center justify-center p-8 text-center">
+    <div class="w-20 h-20 rounded-full bg-slate-100 flex items-center justify-center mb-4 text-3xl text-slate-300"><i class="bi bi-heart"></i></div>
+    <p class="text-slate-500 text-sm">Aucun favori pour le moment</p>
+  </div>
+</div>
+
+<!-- ========== LIGHTBOX ========== -->
+<div id="lightbox" class="fixed inset-0 z-[100] hidden">
+  <div class="absolute inset-0 bg-dark-900/95" onclick="closeLightbox()"></div>
+  <button onclick="closeLightbox()" aria-label="Fermer" class="absolute top-4 right-4 z-10 w-11 h-11 rounded-full bg-white/10 text-white hover:bg-white/20 flex items-center justify-center"><i class="bi bi-x-lg text-lg"></i></button>
+  <button onclick="lightboxNav(-1)" aria-label="Précédent" class="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white/10 text-white hover:bg-white/20 flex items-center justify-center"><i class="bi bi-chevron-left text-lg"></i></button>
+  <button onclick="lightboxNav(1)" aria-label="Suivant" class="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white/10 text-white hover:bg-white/20 flex items-center justify-center"><i class="bi bi-chevron-right text-lg"></i></button>
+  <div class="absolute inset-0 flex items-center justify-center p-4 sm:p-12 pointer-events-none">
+    <img id="lightbox-img" src="" alt="" class="max-w-full max-h-full object-contain rounded-xl shadow-2xl">
+  </div>
+  <p id="lightbox-count" class="absolute bottom-5 left-1/2 -translate-x-1/2 text-white/70 text-sm tabular-nums"></p>
+</div>
+
+<!-- ========== TRACKING MODAL ========== -->
+<div id="tracking-modal" class="fixed inset-0 z-[90] hidden">
+  <div class="absolute inset-0 modal-overlay" onclick="closeTracking()"></div>
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white rounded-3xl shadow-2xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto">
+    <div class="flex items-center justify-between mb-1">
+      <h2 class="font-display text-xl font-bold">Suivre ma commande</h2>
+      <button onclick="closeTracking()" aria-label="Fermer" class="w-9 h-9 rounded-full hover:bg-slate-100 flex items-center justify-center"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <p class="text-sm text-slate-500 mb-5">Saisissez votre numéro de commande (ex. CMD-2026-000002).</p>
+    <form onsubmit="return submitTracking(event)" class="flex gap-2 mb-5">
+      <input type="text" id="tracking-number" placeholder="N° de commande" class="flex-1 px-4 py-3 rounded-xl border border-slate-200 text-sm min-w-0" required>
+      <button type="submit" class="px-5 py-3 bg-primary-700 hover:bg-primary-800 text-white text-sm font-semibold rounded-xl transition shrink-0">Suivre</button>
+    </form>
+    <div id="tracking-result"></div>
+  </div>
+</div>
+
+<!-- ========== CONFIRMATION MODAL ========== -->
+<div id="confirm-modal" class="fixed inset-0 z-[90] hidden">
+  <div class="absolute inset-0 modal-overlay"></div>
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white rounded-3xl shadow-2xl p-8 text-center">
+    <div class="w-16 h-16 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center mx-auto mb-5 text-3xl"><i class="bi bi-check-lg"></i></div>
+    <h2 class="font-display text-2xl font-bold mb-2">Commande enregistrée !</h2>
+    <p class="text-slate-500 text-sm mb-6">Votre commande est enregistrée sur MBOA STYLE. Confirmez-la en un clic via WhatsApp : le fournisseur vous répondra pour la livraison.</p>
+    <div class="bg-slate-50 rounded-2xl p-4 mb-6 text-left text-sm space-y-1">
+      <p><span class="text-slate-500">N° commande :</span> <strong id="confirm-order-id"></strong></p>
+      <p><span class="text-slate-500">Total :</span> <strong id="confirm-total" class="text-primary-600"></strong></p>
+      <div id="confirm-internal" class="pt-1"></div>
+    </div>
+    <a id="confirm-wa-link" href="#" target="_blank" class="block w-full py-3.5 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-2xl transition mb-3">
+      <i class="bi bi-whatsapp"></i> Ouvrir WhatsApp
+    </a>
+    <button onclick="closeConfirmModal()" class="text-sm text-slate-500 hover:text-slate-700">Fermer</button>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+/* ============================================================
+   MBOA STYLE — Frontend E-commerce Complet
+   ============================================================ */
+
+// ---------- DATA ----------
+let PRODUCTS = [];
+let CATEGORIES = [];
+
+// Catalogue de secours : affiché sur l'accueil quand l'API est injoignable
+// (fichier ouvert en direct, backend éteint, base vide...). L'accueil n'est
+// ainsi JAMAIS vide. Dès que /api/products répond, les vraies données l'écrasent.
+const FALLBACK_PRODUCTS = [
+  {id:1,name:'Nike Air Max 90',slug:'nike-air-max-90',reference:'NK-AM90-BLK',category:'Chaussures',brand:'Nike',price:45000,oldPrice:55000,discount:18,rating:4.7,reviews:128,image:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&h=500&fit=crop',gallery:['https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&h=500&fit=crop'],description:'Sneakers iconiques Nike Air Max 90. Confort exceptionnel et style streetwear.',stock:15,badge:'Populaire',colors:['Noir','Blanc'],sizes:['40','41','42','43','44'],supplierId:1,supplierName:'SneakerHub CM',supplierWhatsapp:'237690000001'},
+  {id:2,name:'Samsung Galaxy A54 5G',slug:'samsung-galaxy-a54',reference:'SG-A54-128',category:'Téléphones & Tablettes',brand:'Samsung',price:185000,oldPrice:210000,discount:12,rating:4.5,reviews:89,image:'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500&h=500&fit=crop',gallery:['https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500&h=500&fit=crop'],description:'Smartphone Samsung Galaxy A54 5G. Écran Super AMOLED 6.4", 128 Go.',stock:8,badge:'Promo',colors:['Noir','Violet'],sizes:[],supplierId:2,supplierName:'TechStore Douala',supplierWhatsapp:'237690000002'},
+  {id:3,name:'Casque Sony WH-1000XM4',slug:'sony-wh-1000xm4',reference:'SN-WH1000',category:'Électronique & High-Tech',brand:'Sony',price:125000,oldPrice:160000,discount:22,rating:4.9,reviews:210,image:'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&h=500&fit=crop',gallery:['https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&h=500&fit=crop'],description:'Casque Bluetooth à réduction de bruit active. Autonomie 30h.',stock:12,badge:'Nouveau',colors:['Noir'],sizes:[],supplierId:2,supplierName:'TechStore Douala',supplierWhatsapp:'237690000002'},
+  {id:4,name:'Robe wax élégante',slug:'robe-wax-elegante',reference:'AF-WAX-ELG',category:'Mode & Vêtements',brand:'AfroChic',price:18000,oldPrice:25000,discount:28,rating:4.6,reviews:67,image:'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500&h=500&fit=crop',gallery:['https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500&h=500&fit=crop'],description:'Robe en tissu wax authentique, coupe moderne et élégante.',stock:20,badge:'Promo',colors:['Multicolore'],sizes:['S','M','L','XL'],supplierId:3,supplierName:'Mode Africaine Yaoundé',supplierWhatsapp:'237690000003'},
+  {id:5,name:'Montre Fossil Grant',slug:'montre-fossil-grant',reference:'FG-GRANT-SV',category:'Montres',brand:'Fossil',price:65000,oldPrice:80000,discount:19,rating:4.4,reviews:45,image:'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&h=500&fit=crop',gallery:['https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&h=500&fit=crop'],description:'Montre chronographe Fossil Grant en acier inoxydable.',stock:10,badge:'Populaire',colors:['Argent'],sizes:[],supplierId:1,supplierName:'SneakerHub CM',supplierWhatsapp:'237690000001'},
+  {id:6,name:'iPhone 13 128 Go',slug:'iphone-13-128',reference:'AP-IP13-128',category:'Téléphones & Tablettes',brand:'Apple',price:320000,oldPrice:380000,discount:16,rating:4.8,reviews:156,image:'https://images.unsplash.com/photo-1591337676887-a217a6970a8a?w=500&h=500&fit=crop',gallery:['https://images.unsplash.com/photo-1591337676887-a217a6970a8a?w=500&h=500&fit=crop'],description:'iPhone 13 reconditionné grade A. Écran Super Retina XDR.',stock:5,badge:'Promo',colors:['Minuit','Bleu'],sizes:[],supplierId:2,supplierName:'TechStore Douala',supplierWhatsapp:'237690000002'},
+  {id:7,name:'Sac à main cuir premium',slug:'sac-main-cuir',reference:'LX-SAC-CUI',category:'Sacs & Maroquinerie',brand:'LuxeCM',price:28000,oldPrice:35000,discount:20,rating:4.3,reviews:38,image:'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500&h=500&fit=crop',gallery:['https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500&h=500&fit=crop'],description:'Sac à main en cuir véritable, finitions soignées.',stock:14,badge:'Nouveau',colors:['Noir','Marron'],sizes:[],supplierId:3,supplierName:'Mode Africaine Yaoundé',supplierWhatsapp:'237690000003'},
+  {id:8,name:'Crème hydratante Nivea',slug:'nivea-soft-creme',reference:'NV-SOFT-200',category:'Beauté & Santé',brand:'Nivea',price:3500,oldPrice:4500,discount:22,rating:4.5,reviews:92,image:'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=500&h=500&fit=crop',gallery:['https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=500&h=500&fit=crop'],description:'Crème hydratante Nivea Soft. Texture légère, absorption rapide.',stock:50,badge:'Populaire',colors:[],sizes:[],supplierId:4,supplierName:'BeautyBox CM',supplierWhatsapp:'237690000004'},
+  {id:9,name:'Adidas Ultraboost 22',slug:'adidas-ultraboost-22',reference:'AD-UB22-BLK',category:'Chaussures',brand:'Adidas',price:52000,oldPrice:65000,discount:20,rating:4.7,reviews:74,image:'https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=500&h=500&fit=crop',gallery:['https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=500&h=500&fit=crop'],description:'Running Adidas Ultraboost. Semelle Boost ultra-confortable.',stock:11,badge:'Promo',colors:['Noir','Blanc'],sizes:['40','41','42','43','44'],supplierId:1,supplierName:'SneakerHub CM',supplierWhatsapp:'237690000001'},
+  {id:10,name:'Parfum Dior Sauvage 100ml',slug:'dior-sauvage-100ml',reference:'DR-SAV-100',category:'Beauté & Santé',brand:'Dior',price:75000,oldPrice:95000,discount:21,rating:4.9,reviews:134,image:'https://images.unsplash.com/photo-1541643600914-78b084683601?w=500&h=500&fit=crop',gallery:['https://images.unsplash.com/photo-1541643600914-78b084683601?w=500&h=500&fit=crop'],description:'Eau de toilette Dior Sauvage. Notes fraîches et boisées.',stock:7,badge:'Populaire',colors:[],sizes:['100ml'],supplierId:4,supplierName:'BeautyBox CM',supplierWhatsapp:'237690000004'},
+  {id:11,name:'Enceinte JBL Flip 6',slug:'jbl-flip-6',reference:'JB-FLIP6-BK',category:'Électronique & High-Tech',brand:'JBL',price:45000,oldPrice:55000,discount:18,rating:4.6,reviews:88,image:'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=500&h=500&fit=crop',gallery:['https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=500&h=500&fit=crop'],description:'Enceinte Bluetooth portable JBL Flip 6. Étanche IP67.',stock:18,badge:'Nouveau',colors:['Noir','Bleu'],sizes:[],supplierId:2,supplierName:'TechStore Douala',supplierWhatsapp:'237690000002'},
+  {id:12,name:'Polo Lacoste classique',slug:'polo-lacoste',reference:'LC-POLO-CL',category:'Mode & Vêtements',brand:'Lacoste',price:22000,oldPrice:28000,discount:21,rating:4.4,reviews:56,image:'https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?w=500&h=500&fit=crop',gallery:['https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?w=500&h=500&fit=crop'],description:'Polo Lacoste classique en coton piqué.',stock:25,badge:'',colors:['Blanc','Noir','Bleu marine'],sizes:['S','M','L','XL','XXL'],supplierId:3,supplierName:'Mode Africaine Yaoundé',supplierWhatsapp:'237690000003'}
+];
+
+// Image de secours quand un fichier uploadé a été perdu (ex. redeploy ayant
+// effacé le dossier webapp) : les futurs uploads sont persistants (UploadServlet).
+const IMG_FALLBACK = 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=500&h=500&fit=crop';
+// Filet global : toute image produit en erreur bascule sur le visuel de secours.
+document.addEventListener('error', function (e) {
+  const t = e.target;
+  if (t && t.tagName === 'IMG' && !t.dataset.fbk) { t.dataset.fbk = '1'; t.src = IMG_FALLBACK; }
+}, true);
+
+function mapProduct(p) {
+  const images = p.images || [];
+  return {
+    id: p.id,
+    name: p.name,
+    slug: p.slug || '',
+    reference: p.reference || '',
+    category: p.categoryName || '',
+    brand: p.brand || '',
+    price: p.price,
+    oldPrice: p.oldPrice || null,
+    discount: p.discount || 0,
+    rating: p.rating || 0,
+    reviews: p.reviews || 0,
+    image: images[0] || IMG_FALLBACK,
+    gallery: images,
+    description: p.description || '',
+    stock: p.stock || 0,
+    badge: p.badge || '',
+    colors: p.colors || [],
+    sizes: p.sizes || [],
+    supplierId: p.supplierId || 0,
+    supplierName: p.supplierName || '',
+    supplierWhatsapp: p.supplierWhatsapp || '',
+    promoStart: p.promoStart || null,
+    promoEnd: p.promoEnd || null
+  };
+}
+
+async function loadProducts() {
+  // Accueil = TOUT le catalogue, toutes catégories : on tente plusieurs URLs
+  // pour marcher aussi bien en ROOT (/) qu'en contexte (/mboa-style).
+  const candidates = ['/api/products', 'api/products', './api/products'];
+  const base = window.location.pathname.includes('/mboa-style') ? '/mboa-style' : '';
+  if (base) candidates.unshift(base + '/api/products');
+  for (const url of candidates) {
+    try {
+      const res = await fetch(url);
+      if (res.ok) {
+        const data = await res.json();
+        const list = (Array.isArray(data) ? data : []).map(mapProduct);
+        if (list.length) { PRODUCTS = list; return; }
+      }
+    } catch(e) { /* essai URL suivante */ }
+  }
+  try {
+    const res = await fetch('/api/products');
+    if (res.ok) {
+      const list = (await res.json()).map(mapProduct);
+      if (list.length) { PRODUCTS = list; return; }
+    }
+  } catch(e) { console.error('Erreur chargement produits', e); }
+  // Secours : catalogue intégré pour que l'accueil ne soit JAMAIS vide
+  if (!PRODUCTS.length) {
+    console.warn('API produits injoignable ou vide -> catalogue de secours affiché');
+    PRODUCTS = FALLBACK_PRODUCTS.slice();
+  }
+}
+
+async function loadCategories() {
+  const base = window.location.pathname.includes('/mboa-style') ? '/mboa-style' : '';
+  const candidates = [(base ? base : '') + '/api/categories/tree?activeOnly=true', 'api/categories/tree?activeOnly=true'];
+  for (const url of candidates) {
+    try {
+      const res = await fetch(url);
+      if (res.ok) {
+        CAT_TREE = await res.json();
+        CATEGORIES = flattenCatTree(CAT_TREE);
+        renderDynamicMenus();
+        return;
+      }
+    } catch(e) { /* suivante */ }
+  }
+  try {
+    const res = await fetch('/api/categories/tree?activeOnly=true');
+    if (res.ok) {
+      CAT_TREE = await res.json();
+      CATEGORIES = flattenCatTree(CAT_TREE);
+    }
+  } catch(e) { console.error('Erreur chargement catégories', e); }
+  renderDynamicMenus();
+}
+
+const TESTIMONIALS = [
+  {name:"Amina",city:"Yaoundé",text:"Commande reçue en 2 jours. Qualité au top et le vendeur très pro sur WhatsApp. Je recommande !",stars:5,avatar:"https://i.pravatar.cc/100?u=amina"},
+  {name:"Jean-Paul",city:"Douala",text:"Enfin une boutique sérieuse. J'ai commandé un téléphone, tout s'est bien passé. Merci MBOA STYLE.",stars:5,avatar:"https://i.pravatar.cc/100?u=jp"},
+  {name:"Fatou",city:"Bafoussam",text:"Les robes wax sont magnifiques. Prix corrects et livraison rapide. Je reviendrai.",stars:4,avatar:"https://i.pravatar.cc/100?u=fatou"}
+];
+
+// ---------- STATE ----------
+let cart = JSON.parse(localStorage.getItem('camshop_cart') || '[]');
+let favorites = JSON.parse(localStorage.getItem('camshop_favs') || '[]');
+let currentProductId = null;
+let modalQty = 1;
+let selectedColor = null;
+let selectedSize = null;
+let viewMode = 'grid';
+let currentPage = 1;
+const PER_PAGE = 12;
+let homePage = 1;
+const HOME_PER_PAGE = 12;
+let filteredProducts = [...PRODUCTS];
+let activeCategory = null;
+let activeBrand = null;
+let activeSupplier = null;
+let activeStock = 'all';
+let activeMinRating = 0;
+let activePromoOnly = false;
+let activeSizes = [];
+let activeColors = [];
+let CAT_TREE = [];
+let SUPPLIERS = [];
+let productsLoaded = false;
+
+// ---------- UTILS ----------
+function skeletonCards(n) {
+  let h = '';
+  for (let i = 0; i < (n || 8); i++) {
+    h += `<div class="ms-skeleton-card" aria-hidden="true"><div class="ms-skeleton aspect-[4/5]"></div><div class="p-4 space-y-2"><div class="ms-skeleton h-3 w-2/3"></div><div class="ms-skeleton h-4 w-full"></div><div class="ms-skeleton h-4 w-1/2"></div></div></div>`;
+  }
+  return h;
+}
+
+// ---------- UTILS ----------
+function formatPrice(n) {
+  return new Intl.NumberFormat('fr-FR').format(n) + ' FCFA';
+}
+
+function starsHTML(rating) {
+  let h = '';
+  for (let i = 1; i <= 5; i++) {
+    if (i <= Math.floor(rating)) h += '<i class="bi bi-star-fill"></i>';
+    else if (i - 0.5 <= rating) h += '<i class="bi bi-star-half"></i>';
+    else h += '<i class="bi bi-star"></i>';
+  }
+  return h;
+}
+
+function badgeHTML(badge) {
+  if (!badge) return '';
+  const cls = badge === 'Nouveau' ? 'ms-badge-new' : badge === 'Promo' ? 'ms-badge-promo' : 'ms-badge-popular';
+  return `<span class="ms-badge ${cls} absolute top-3 left-3 z-10 shadow-soft">${badge}</span>`;
+}
+
+function stockHTML(p) {
+  if (p.stock == null) return '';
+  if (p.stock <= 0) return `<span class="ms-badge ms-badge-out">Épuisé</span>`;
+  if (p.stock <= 5) return `<span class="ms-badge ms-badge-low">Plus que ${p.stock}</span>`;
+  return `<span class="text-[11px] text-green-600 font-semibold flex items-center gap-1"><i class="bi bi-check-circle-fill"></i>En stock</span>`;
+}
+
+function saveCart() {
+  localStorage.setItem('camshop_cart', JSON.stringify(cart));
+  updateCartUI();
+}
+
+function saveFavs() {
+  localStorage.setItem('camshop_favs', JSON.stringify(favorites));
+  updateFavUI();
+}
+
+function showToast(msg, icon = 'success') {
+  Swal.fire({
+    toast: true,
+    position: 'top-end',
+    icon,
+    title: msg,
+    showConfirmButton: false,
+    timer: 2200,
+    timerProgressBar: true
+  });
+}
+
+// ---------- NAVBAR : état compact au scroll ----------
+(function initNavbarScroll() {
+  const nav = document.getElementById('navbar');
+  if (!nav) return;
+  let ticking = false;
+  function update() {
+    nav.classList.toggle('is-scrolled', window.scrollY > 40);
+    ticking = false;
+  }
+  window.addEventListener('scroll', () => {
+    if (!ticking) { ticking = true; requestAnimationFrame(update); }
+  }, { passive: true });
+  update();
+})();
+
+// ---------- NAVIGATION ----------
+function heroSearch(e) {
+  if (e) e.preventDefault();
+  const q = (document.getElementById('hero-search').value || '').trim();
+  saveSearch(q);
+  const shopInput = document.getElementById('shop-search');
+  if (shopInput) shopInput.value = q;
+  showSection('shop');
+  return false;
+}
+function heroQuickSearch(q) {
+  const input = document.getElementById('hero-search');
+  if (input) input.value = q;
+  heroSearch();
+}
+function showSection(name) {
+  document.getElementById('section-home').classList.toggle('hidden', name !== 'home');
+  document.getElementById('section-shop').classList.toggle('hidden', name !== 'shop');
+  document.getElementById('section-checkout').classList.toggle('hidden', name !== 'checkout');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (name === 'shop') {
+    applyFilters();
+  }
+  if (name === 'checkout') {
+    renderCheckoutSummary();
+  }
+  document.getElementById('mobile-menu').classList.add('hidden');
+}
+
+function toggleMobileMenu() {
+  const m = document.getElementById('mobile-menu');
+  m.classList.toggle('hidden');
+  document.getElementById('menu-icon').className = m.classList.contains('hidden') ? 'bi bi-list text-2xl' : 'bi bi-x-lg text-2xl';
+}
+
+function toggleSearch() {
+  document.getElementById('search-bar').classList.toggle('hidden');
+  if (!document.getElementById('search-bar').classList.contains('hidden')) {
+    document.getElementById('search-input').focus();
+  }
+}
+
+// ---------- PRODUCT CARD ----------
+function productCardHTML(p, listMode = false) {
+  const isFav = favorites.includes(p.id);
+  if (listMode) {
+    return `
+    <div class="product-card bg-white rounded-2xl border border-slate-100 shadow-soft overflow-hidden flex gap-4 p-4 cursor-pointer" onclick="openProduct(${p.id})">
+      <div class="relative w-28 h-28 flex-shrink-0 rounded-xl overflow-hidden bg-slate-50">
+        ${badgeHTML(p.badge)}
+        <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover" loading="lazy">
+      </div>
+      <div class="flex-1 min-w-0">
+        <p class="text-[11px] font-bold uppercase tracking-wider text-primary-700">${p.brand}</p>
+        <h3 class="font-semibold text-sm line-clamp-2 mb-1">${p.name}</h3>
+        <div class="flex items-center gap-1 text-accent-500 text-xs mb-2">${starsHTML(p.rating)} <span class="text-slate-400">(${p.reviews})</span></div>
+        <div class="flex items-baseline gap-2 flex-wrap">
+          <span class="font-bold text-dark-900">${formatPrice(p.price)}</span>
+          ${p.oldPrice ? `<span class="text-xs text-slate-400 line-through">${formatPrice(p.oldPrice)}</span>` : ''}
+          ${p.discount ? `<span class="ms-badge ms-badge-discount">-${p.discount}%</span>` : ''}
+        </div>
+      </div>
+      <div class="flex flex-col justify-between items-end gap-2">
+        <button onclick="event.stopPropagation();toggleFavorite(${p.id})" aria-label="Favori" class="w-8 h-8 rounded-full hover:bg-rose-50 flex items-center justify-center ${isFav?'text-rose-500':'text-slate-400'}"><i class="bi bi-heart${isFav?'-fill':''}"></i></button>
+        <button onclick="event.stopPropagation();addToCart(${p.id})" class="px-3 py-1.5 bg-dark-900 text-white text-xs font-semibold rounded-xl hover:bg-slate-700 transition">Ajouter</button>
+      </div>
+    </div>`;
+  }
+  return `
+  <div class="ms-product-card group" data-aos="fade-up">
+    <div class="relative aspect-[4/5] overflow-hidden bg-slate-50 cursor-pointer" onclick="openProduct(${p.id})">
+      ${badgeHTML(p.badge)}
+      ${p.sponsored ? `<span class="ms-badge ms-badge-sponsored absolute bottom-3 left-3 z-10 shadow-soft">Sponsorisé</span>` : ''}
+      <button onclick="event.stopPropagation();toggleFavorite(${p.id})" aria-label="Favori" class="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/95 shadow-soft flex items-center justify-center z-10 ${isFav?'text-rose-500':'text-slate-400'} hover:text-rose-500 hover:scale-110 active:scale-90 transition">
+        <i class="bi bi-heart${isFav?'-fill':''}"></i>
+      </button>
+      <img src="${p.image}" alt="${p.name}" class="ms-pimg w-full h-full object-cover" loading="lazy">
+      <img src="${p.image}" alt="${p.name}" class="ms-pimg w-full h-full object-cover" loading="lazy">
+      ${p.gallery && p.gallery[1] ? `<img src="${p.gallery[1]}" alt="" aria-hidden="true" loading="lazy" class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">` : ''}
+      <div class="absolute inset-x-3 bottom-3 hidden md:flex gap-2 translate-y-[130%] opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+        <button onclick="event.stopPropagation();addToCart(${p.id})" class="flex-1 py-2.5 rounded-xl bg-dark-900/90 text-white text-xs font-semibold hover:bg-dark-900 transition">Ajouter au panier</button>
+        <button onclick="event.stopPropagation();openProduct(${p.id})" aria-label="Aperçu rapide" title="Aperçu rapide" class="w-10 rounded-xl bg-white/95 text-dark-900 hover:bg-white transition flex items-center justify-center"><i class="bi bi-eye"></i></button>
+      </div>
+    </div>
+    <div class="p-4">
+      <div class="flex items-center justify-between gap-2 mb-0.5">
+        <p class="text-[11px] font-bold uppercase tracking-wider text-primary-700 truncate">${p.brand}</p>
+        ${p.supplierName ? `<p class="text-[11px] text-slate-400 truncate flex items-center gap-1 shrink-0"><i class="bi bi-patch-check text-primary-500"></i>${p.supplierName}</p>` : ''}
+      </div>
+      <h3 class="font-semibold text-[15px] leading-snug line-clamp-2 mb-1.5 cursor-pointer hover:text-primary-700 transition min-h-[2.6em]" onclick="openProduct(${p.id})">${p.name}</h3>
+      <div class="flex items-center gap-1 text-accent-500 text-xs mb-2">${starsHTML(p.rating)} <span class="text-slate-400 ml-1">(${p.reviews})</span></div>
+      <div class="flex items-baseline gap-2 mb-1.5 flex-wrap">
+        <span class="font-extrabold text-[17px] text-dark-900 tabular-nums">${formatPrice(p.price)}</span>
+        ${p.oldPrice ? `<span class="text-xs text-slate-400 line-through">${formatPrice(p.oldPrice)}</span>` : ''}
+        ${p.discount ? `<span class="ms-badge ms-badge-discount">-${p.discount}%</span>` : ''}
+      </div>
+      <div class="flex items-center justify-between gap-2 mb-3">
+        ${stockHTML(p)}
+        <span class="flex items-center gap-1 text-[11px] text-slate-400"><i class="bi bi-truck"></i> 24–48h</span>
+      </div>
+      <button onclick="addToCart(${p.id})" class="w-full py-2.5 bg-primary-50 hover:bg-primary-700 text-primary-700 hover:text-white text-sm font-semibold rounded-xl transition-all flex items-center justify-center gap-1.5">
+        <i class="bi bi-bag-plus"></i> Ajouter au panier
+      </button>
+    </div>
+  </div>`;
+}
+
+// ---------- ARBORESCENCE CATÉGORIES (API) ----------
+function flattenCatTree(nodes, depth, parentName, out) {
+  out = out || [];
+  (nodes || []).forEach(n => {
+    out.push({ id: n.id, name: n.name, slug: n.slug, icon: n.icon, image: n.image,
+      parentId: n.parentId != null ? n.parentId : null, parentName: parentName || null,
+      depth: depth || 0, displayOrder: n.displayOrder || 0,
+      count: n.count || 0, totalProductCount: n.totalProductCount || 0 });
+    if (n.children && n.children.length) flattenCatTree(n.children, (depth || 0) + 1, n.name, out);
+  });
+  return out;
+}
+
+function subtreeNames(name) {
+  const node = CATEGORIES.find(c => c.name === name);
+  const names = new Set([name]);
+  if (!node) return names;
+  CATEGORIES.filter(c => c.parentId === node.id)
+    .forEach(k => subtreeNames(k.name).forEach(x => names.add(x)));
+  return names;
+}
+
+function catPathNames(name) {
+  const path = [];
+  let node = CATEGORIES.find(c => c.name === name);
+  let guard = 0;
+  while (node && guard++ < 20) {
+    path.unshift(node.name);
+    node = node.parentId != null ? CATEGORIES.find(c => c.id === node.parentId) : null;
+  }
+  return path;
+}
+
+function escAttr(s) {
+  return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function escHTML(s) {
+  return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+// Clic sur une catégorie dynamique (menus) — data-catlink, sans inline onclick
+document.addEventListener('click', e => {
+  const a = e.target.closest('[data-catlink]');
+  if (!a) return;
+  e.preventDefault();
+  filterByCategory(a.getAttribute('data-catlink'));
+});
+
+function renderDynamicMenus() {
+  const nav = document.getElementById('nav-categories');
+  if (nav) {
+    nav.innerHTML = CAT_TREE.slice(0, 12).map(r => {
+      const kids = (r.children || []).slice(0, 6);
+      const more = (r.children || []).length - kids.length;
+      return `<div class="min-w-0">
+        <a href="#" data-catlink="${escAttr(r.name)}" class="flex items-center gap-2 font-bold text-sm text-dark-900 mb-2.5 hover:text-primary-700 transition"><i class="bi ${r.icon || 'bi-tag'} text-primary-600"></i><span class="truncate">${escHTML(r.name)}</span></a>
+        <div class="space-y-0.5">
+          ${kids.map(k => `<a href="#" data-catlink="${escAttr(k.name)}" class="block text-[13px] text-slate-500 hover:text-primary-700 hover:translate-x-0.5 transition-all py-1 truncate">${escHTML(k.name)}</a>`).join('')}
+          ${more > 0 ? `<a href="#" data-catlink="${escAttr(r.name)}" class="block text-[13px] font-semibold text-primary-600 hover:text-primary-700 py-1">Voir tout (+${more})</a>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+  }
+  const mob = document.getElementById('mobile-categories');
+  if (mob) {
+    mob.innerHTML = CAT_TREE.slice(0, 8).map(r =>
+      `<a href="#" data-catlink="${escAttr(r.name)}" class="block px-4 py-3 rounded-xl text-sm font-medium hover:bg-primary-50">${escAttr(r.name)}</a>`
+    ).join('');
+  }
+  const foot = document.getElementById('footer-categories');
+  if (foot) {
+    foot.innerHTML = CAT_TREE.slice(0, 6).map(r =>
+      `<li><a href="#" data-catlink="${escAttr(r.name)}" class="hover:text-primary-400 transition">${escAttr(r.name)}</a></li>`
+    ).join('');
+  }
+}
+
+// ---------- RENDER HOME ----------
+function renderCategories() {
+  const roots = CATEGORIES.filter(c => c.parentId == null);
+  const grid = document.getElementById('categories-grid');
+  const list = roots.length ? roots : CATEGORIES;
+  grid.innerHTML = list.map((c) => {
+    const names = subtreeNames(c.name);
+    const count = PRODUCTS.filter(p => names.has(p.category)).length;
+    const kids = CATEGORIES.filter(k => k.parentId === c.id).slice(0, 3).map(k => k.name).join(' · ');
+    return `
+    <div data-name="${escAttr(c.name)}" class="cat-card group relative rounded-2xl overflow-hidden cursor-pointer bg-dark-900 shadow-soft hover:shadow-card transition-all duration-300 hover:-translate-y-1 hover:ring-2 hover:ring-primary-200 aspect-[4/3]" role="button" tabindex="0" aria-label="Voir ${escAttr(c.name)}">
+      ${c.image
+        ? `<img src="${c.image}" alt="" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy">`
+        : `<div class="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-gradient-to-br from-primary-700 to-primary-900 text-white"><i class="bi ${c.icon || 'bi-tag'} text-4xl"></i></div>`}
+      <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent"></div>
+      <div class="absolute bottom-0 left-0 right-0 p-4 text-white flex items-end justify-between gap-2">
+        <div>
+          <h3 class="font-bold text-[17px] leading-tight">${escHTML(c.name)}</h3>
+          <p class="text-xs text-white/75">${count} produit${count > 1 ? 's' : ''}${kids ? ' · ' + escHTML(kids) : ''}</p>
+        </div>
+        <span class="w-9 h-9 shrink-0 rounded-full ms-glass-strong flex items-center justify-center opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-dark-900"><i class="bi bi-arrow-up-right"></i></span>
+      </div>
+    </div>
+  `;
+  }).join('');
+  grid.querySelectorAll('.cat-card').forEach(card => {
+    card.addEventListener('click', () => filterByCategory(card.dataset.name));
+  });
+}
+
+function renderPopular() {
+  const el = document.getElementById('popular-products');
+  if (!el) return;
+  if (!productsLoaded) { el.innerHTML = skeletonCards(8); return; }
+  const popular = [...PRODUCTS].sort((a,b) => b.reviews - a.reviews).slice(0, 10);
+  el.innerHTML = popular.length ? popular.map(p => productCardHTML(p)).join('') : '<div class="col-span-full ms-empty"><p class="font-semibold mb-1">Aucun produit pour le moment</p><p class="text-sm">Les nouveautés arrivent bientôt.</p></div>';
+}
+
+function renderBestSellers() {
+  const el = document.getElementById('best-products');
+  if (!el) return;
+  if (!productsLoaded) { el.innerHTML = skeletonCards(10); return; }
+  const top = [...PRODUCTS].sort((a, b) => (b.reviews || 0) - (a.reviews || 0)).slice(0, 10);
+  el.innerHTML = top.length ? top.map((p, i) => `
+    <div class="relative">
+      <span class="absolute -top-2 -left-2 z-10 w-9 h-9 rounded-xl bg-dark-900 text-amber-400 font-extrabold text-sm flex items-center justify-center shadow-card">${i + 1}</span>
+      ${productCardHTML(p)}
+    </div>`).join('')
+    : '<div class="col-span-full ms-empty"><p class="font-semibold mb-1">Aucune vente pour le moment</p></div>';
+}
+
+function renderRecommendations() {
+  const el = document.getElementById('reco-products');
+  if (!el) return;
+  if (!productsLoaded) { el.innerHTML = skeletonCards(10); return; }
+  const recentIds = getRecent();
+  const recentCats = [...new Set(recentIds
+    .map(id => PRODUCTS.find(p => p.id === id))
+    .filter(Boolean)
+    .map(p => p.category))];
+  let recos = PRODUCTS.filter(p => !recentIds.includes(p.id) && recentCats.includes(p.category));
+  if (recos.length < 5) {
+    const popular = [...PRODUCTS].sort((a, b) => (b.rating || 0) - (a.rating || 0));
+    for (const p of popular) {
+      if (recos.length >= 10) break;
+      if (!recentIds.includes(p.id) && !recos.includes(p)) recos.push(p);
+    }
+  }
+  recos = recos.slice(0, 10);
+  const sub = document.getElementById('reco-subtitle');
+  if (sub && recentCats.length) sub.textContent = `Basé sur vos consultations : ${recentCats.slice(0, 3).join(' · ')}`;
+  el.innerHTML = recos.length ? recos.map(p => productCardHTML(p)).join('')
+    : '<div class="col-span-full ms-empty"><p class="font-semibold mb-1">Consultez des produits pour recevoir des recommandations</p></div>';
+}
+
+function renderNew() {  const el = document.getElementById('new-products');
+  if (!el) return;
+  if (!productsLoaded) { el.innerHTML = skeletonCards(10); return; }
+  let news = PRODUCTS.filter(p => p.badge === 'Nouveau');
+  if (!news.length) news = PRODUCTS.slice(0, 10);
+  el.innerHTML = news.length ? news.slice(0, 10).map(p => productCardHTML(p)).join('') : '<div class="col-span-full ms-empty"><p class="font-semibold mb-1">Aucune nouveauté</p></div>';
+}
+
+async function loadSuppliers() {
+  const candidates = ['/api/suppliers', 'api/suppliers'];
+  for (const url of candidates) {
+    try {
+      const res = await fetch(url);
+      if (res.ok) { const d = await res.json(); if (Array.isArray(d) && d.length) { SUPPLIERS = d; return; } }
+    } catch(e) {}
+  }
+}
+
+function renderSuppliers() {
+  const el = document.getElementById('suppliers-strip');
+  if (!el) return;
+  if (!SUPPLIERS.length) {
+    el.innerHTML = '<div class="col-span-full ms-empty"><p class="font-semibold mb-1">Devenez notre premier vendeur vedette</p><a href="fournisseur.html?register=1" target="_blank" rel="noopener" class="text-primary-700 font-semibold text-sm hover:underline">Ouvrir votre boutique →</a></div>';
+    return;
+  }
+  el.innerHTML = SUPPLIERS.slice(0, 10).map(s => {
+    const count = PRODUCTS.filter(p => p.supplierId === s.id).length;
+    const initial = ((s.name || '?').trim().charAt(0) || '?').toUpperCase();
+    return `<div class="bg-slate-50/70 border border-slate-100 rounded-2xl p-5 text-center hover:shadow-card hover:-translate-y-1 transition-all duration-300">
+      ${s.logo ? `<img src="${s.logo}" alt="${escAttr(s.name)}" class="w-14 h-14 rounded-2xl object-cover mx-auto mb-3">`
+        : `<div class="w-14 h-14 rounded-2xl bg-primary-700 text-white flex items-center justify-center mx-auto mb-3 text-xl font-extrabold">${escHTML(initial)}</div>`}
+      <p class="font-bold text-sm truncate flex items-center justify-center gap-1">${escHTML(s.name)} <i class="bi bi-patch-check-fill text-primary-600 text-xs"></i></p>
+      <p class="text-xs text-slate-500 mb-1">${escHTML(s.city || 'Cameroun')} · ${count} produit${count > 1 ? 's' : ''}</p>
+      <button onclick="shopBySupplier('${escAttr(s.name)}')" class="text-xs font-bold text-primary-700 hover:underline">Voir les produits →</button>
+    </div>`;
+  }).join('');
+}
+
+function shopBySupplier(name) {
+  const input = document.getElementById('shop-search');
+  if (input) input.value = '';
+  activeBrand = null;
+  showSection('shop');
+  const box = document.getElementById('shop-search');
+  if (box) box.value = name;
+  applyFilters();
+}
+
+function getRecent() {
+  try { return JSON.parse(localStorage.getItem('ms_recent') || '[]'); } catch(e) { return []; }
+}
+function trackRecent(id) {
+  try {
+    let r = getRecent().filter(x => x !== id);
+    r.unshift(id);
+    localStorage.setItem('ms_recent', JSON.stringify(r.slice(0, 10)));
+  } catch(e) {}
+}
+function clearRecent() {
+  try { localStorage.removeItem('ms_recent'); } catch(e) {}
+  renderRecent();
+}
+function renderRecent() {
+  const sec = document.getElementById('recent-section');
+  const el = document.getElementById('recent-products');
+  if (!sec || !el) return;
+  const items = getRecent().map(id => PRODUCTS.find(p => p.id === id)).filter(Boolean).slice(0, 5);
+  if (!items.length) { sec.classList.add('hidden'); return; }
+  sec.classList.remove('hidden');
+  el.innerHTML = items.map(p => productCardHTML(p)).join('');
+}
+
+function renderTrends() {
+  const wrap = document.getElementById('trend-products');
+  if (!wrap) return;
+  if (!productsLoaded) { wrap.innerHTML = `<div class="swiper-slide">${skeletonCards(1)}</div>`.repeat(4); return; }
+  let trends = PRODUCTS.filter(p => p.badge === 'Populaire' || p.badge === 'Nouveau').slice(0, 8);
+  if (!trends.length) trends = PRODUCTS.slice(0, 8); // secours : jamais vide si catalogue présent
+  wrap.innerHTML = trends.map(p => `
+    <div class="swiper-slide">${productCardHTML(p)}</div>
+  `).join('');
+  try {
+  new Swiper('.trend-swiper', {
+    slidesPerView: 1.3,
+    spaceBetween: 16,
+    pagination: { el: '.swiper-pagination', clickable: true },
+    breakpoints: {
+      640: { slidesPerView: 2.2 },
+      768: { slidesPerView: 3 },
+      1024: { slidesPerView: 4 }
+    }
+  });
+  } catch(e) { console.warn('Swiper indisponible', e); }
+}
+
+// ---------- TOUS NOS PRODUITS (accueil + pagination) ----------
+function renderAllProducts() {
+  const container = document.getElementById('all-products');
+  const pag = document.getElementById('all-products-pagination');
+  if (!container) return;
+  const total = PRODUCTS.length;
+  const countEl = document.getElementById('all-products-count');
+  if (countEl) countEl.textContent = total;
+  if (!productsLoaded) {
+    container.innerHTML = skeletonCards(10);
+    if (pag) pag.innerHTML = '';
+    return;
+  }
+  if (!total) {
+    container.innerHTML = '<div class="col-span-full text-center py-16"><p class="text-slate-500 mb-4">Aucun produit chargé. Vérifiez que l\'API <code>/api/products</code> répond et que la base contient des produits.</p><button onclick="location.reload()" class="px-6 py-3 bg-primary-600 text-white text-sm font-semibold rounded-2xl hover:bg-primary-700">Recharger</button></div>';
+    if (pag) pag.innerHTML = '';
+    return;
+  }
+  const totalPages = Math.max(1, Math.ceil(total / HOME_PER_PAGE));
+  if (homePage > totalPages) homePage = totalPages;
+  if (homePage < 1) homePage = 1;
+  const start = (homePage - 1) * HOME_PER_PAGE;
+  container.innerHTML = PRODUCTS.slice(start, start + HOME_PER_PAGE).map(p => productCardHTML(p)).join('');
+  if (!pag) return;
+  if (totalPages <= 1) { pag.innerHTML = ''; return; }
+  let html = `<button onclick="homePage=${Math.max(1, homePage - 1)};renderAllProducts();document.getElementById('all-products-section').scrollIntoView({behavior:'smooth'})" ${homePage===1?'disabled':''} class="px-3 h-10 rounded-xl text-sm font-medium ${homePage===1?'bg-slate-100 text-slate-300':'bg-white text-slate-600 hover:bg-slate-100'} shadow-soft">‹</button>`;
+  for (let i = 1; i <= totalPages; i++) {
+    html += `<button onclick="homePage=${i};renderAllProducts();document.getElementById('all-products-section').scrollIntoView({behavior:'smooth'})" class="w-10 h-10 rounded-xl text-sm font-medium ${i===homePage?'bg-primary-600 text-white':'bg-white text-slate-600 hover:bg-slate-100'} shadow-soft">${i}</button>`;
+  }
+  html += `<button onclick="homePage=${Math.min(totalPages, homePage + 1)};renderAllProducts();document.getElementById('all-products-section').scrollIntoView({behavior:'smooth'})" ${homePage===totalPages?'disabled':''} class="px-3 h-10 rounded-xl text-sm font-medium ${homePage===totalPages?'bg-slate-100 text-slate-300':'bg-white text-slate-600 hover:bg-slate-100'} shadow-soft">›</button>`;
+  pag.innerHTML = html;
+}
+
+function renderTestimonials() {
+  document.getElementById('testimonials').innerHTML = TESTIMONIALS.map(t => `
+    <div class="bg-white rounded-2xl p-6 shadow-soft" data-aos="fade-up">
+      <div class="flex text-accent-500 text-sm mb-3">${starsHTML(t.stars)}</div>
+      <p class="text-sm text-slate-600 leading-relaxed mb-5">"${t.text}"</p>
+      <div class="flex items-center gap-3">
+        <img src="${t.avatar}" alt="${t.name}" class="w-10 h-10 rounded-full object-cover">
+        <div>
+          <p class="font-semibold text-sm">${t.name}</p>
+          <p class="text-xs text-slate-400">${t.city}</p>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ---------- SHOP / FILTERS ----------
+function filterByCategory(cat) {
+  activeCategory = cat;
+  expandedRoot = rootOfCategory(cat);
+  activeBrand = null;
+  showSection('shop');
+  document.getElementById('shop-search').value = '';
+  updateCategoryBanner();
+  applyFilters();
+}
+
+function clearCategoryFilter() {
+  activeCategory = null;
+  expandedRoot = null;
+  updateCategoryBanner();
+  applyFilters();
+}
+
+function toggleShopCategory(name) {
+  activeCategory = activeCategory === name ? null : name;
+  expandedRoot = rootOfCategory(activeCategory);
+  activeBrand = null;
+  updateCategoryBanner();
+  applyFilters();
+  renderFilterOptions();
+}
+
+function toggleShopBrand(brand) {  activeBrand = activeBrand === brand ? null : brand;
+  applyFilters();
+  renderFilterOptions();
+}
+
+function toggleSupplier(id) {
+  activeSupplier = activeSupplier === id ? null : id;
+  applyFilters();
+  renderFilterOptions();
+}
+
+function setStockFilter(val) {
+  activeStock = val;
+  document.getElementById('filter-stock-all').classList.toggle('active', val === 'all');
+  document.getElementById('filter-stock-in').classList.toggle('active', val === 'in');
+  document.getElementById('filter-stock-out').classList.toggle('active', val === 'out');
+  applyFilters();
+}
+
+function updateCategoryBanner() {
+  const banner = document.getElementById('active-category-banner');
+  const nameEl = document.getElementById('active-category-name');
+  if (banner && nameEl) {
+    if (activeCategory) {
+      const path = catPathNames(activeCategory);
+      nameEl.innerHTML = ['Accueil'].concat(path).map((p, i, arr) =>
+        i === arr.length - 1 ? `<strong>${escHTML(p)}</strong>` : `<span class="opacity-70">${escHTML(p)}</span>`
+      ).join(' <span class="opacity-50 mx-1">/</span> ');
+      banner.classList.remove('hidden');
+      banner.classList.add('flex');
+    } else {
+      banner.classList.add('hidden');
+      banner.classList.remove('flex');
+    }
+  }
+  // Fil d'Ariane + titre + sous-catégories de la PLP
+  const crumb = document.getElementById('shop-breadcrumb');
+  const title = document.getElementById('shop-title');
+  const subs = document.getElementById('shop-subcats');
+  if (activeCategory) {
+    const path = catPathNames(activeCategory);
+    if (crumb) crumb.innerHTML = `<button onclick="showSection('home')" class="hover:text-primary-700 transition font-medium">Accueil</button>
+      <i class="bi bi-chevron-right text-[10px]"></i>
+      <button onclick="resetFilters()" class="hover:text-primary-700 transition font-medium">Boutique</button>
+      ${path.map((p, i) => `<i class="bi bi-chevron-right text-[10px]"></i><span class="${i === path.length - 1 ? 'text-dark-900 font-semibold' : ''}">${escHTML(p)}</span>`).join('')}`;
+    if (title) title.textContent = activeCategory;
+    const node = CATEGORIES.find(c => c.name === activeCategory);
+    const kids = node ? CATEGORIES.filter(c => c.parentId === node.id) : [];
+    if (subs) subs.innerHTML = kids.map(k =>
+      `<button onclick="filterByCategory('${escAttr(k.name)}')" class="px-4 py-2 rounded-full border border-slate-200 bg-white text-[13px] font-medium hover:border-primary-500 hover:text-primary-700 transition">${escHTML(k.name)}</button>`
+    ).join('');
+  } else {
+    if (crumb) crumb.innerHTML = `<button onclick="showSection('home')" class="hover:text-primary-700 transition font-medium">Accueil</button>
+      <i class="bi bi-chevron-right text-[10px]"></i><span class="text-dark-900 font-semibold">Boutique</span>`;
+    if (title) title.textContent = 'Tous les produits';
+    const roots = CATEGORIES.filter(c => c.parentId == null).slice(0, 10);
+    if (subs) subs.innerHTML = roots.map(k =>
+      `<button onclick="filterByCategory('${escAttr(k.name)}')" class="px-4 py-2 rounded-full border border-slate-200 bg-white text-[13px] font-medium hover:border-primary-500 hover:text-primary-700 transition">${escHTML(k.name)}</button>`
+    ).join('');
+  }
+}
+
+function applyPromoFilter() {
+  activeCategory = null;
+  updateCategoryBanner();
+  document.getElementById('shop-search').value = '';
+  filteredProducts = PRODUCTS.filter(p => p.discount >= 15);
+  currentPage = 1;
+  renderShopProducts();
+}
+
+function syncSort(el) {
+  ['sort-select', 'sort-select-top'].forEach(id => {
+    const s = document.getElementById(id);
+    if (s) s.value = el.value;
+  });
+  applyFilters();
+}
+
+function toggleFilters() {
+  const z = document.getElementById('shop-filters-zone');
+  if (z) z.classList.toggle('hidden');
+}
+
+function clearPriceFilter() {
+  document.getElementById('price-min').value = '';
+  document.getElementById('price-max').value = '';
+  applyFilters();
+}
+
+function clearSearchFilter() {
+  document.getElementById('shop-search').value = '';
+  applyFilters();
+}
+
+function filterChip(label, fn) {
+  return `<button onclick="${fn}" class="ms-chip !py-1.5">${escHTML(label)} <i class="bi bi-x-lg text-[10px]"></i></button>`;
+}
+
+function clearRatingFilter() { setMinRating(0); }
+function clearPromoFilter() {
+  activePromoOnly = false;
+  const promo = document.getElementById('filter-promo');
+  if (promo) promo.checked = false;
+  applyFilters();
+}
+function clearSizeColorFilters() {
+  activeSizes = [];
+  activeColors = [];
+  applyFilters();
+}
+
+function renderActiveFilters() {
+  const box = document.getElementById('active-filters');
+  if (!box) return;
+  const q = (document.getElementById('shop-search')?.value || '').trim();
+  const minP = document.getElementById('price-min')?.value || '';
+  const maxP = document.getElementById('price-max')?.value || '';
+  const chips = [];
+  if (activeCategory) chips.push(filterChip(activeCategory, 'toggleShopCategory(activeCategory)'));
+  if (activeBrand) chips.push(filterChip(activeBrand, 'toggleShopBrand(activeBrand)'));
+  if (activeSupplier) {
+    const sp = PRODUCTS.find(p => p.supplierId === activeSupplier);
+    chips.push(filterChip(sp ? sp.supplierName : 'Vendeur', 'toggleSupplier(activeSupplier)'));
+  }
+  if (activeStock !== 'all') chips.push(filterChip(activeStock === 'in' ? 'En stock' : 'Rupture de stock', "setStockFilter('all')"));
+  if (activeMinRating > 0) chips.push(filterChip(`${activeMinRating}★ & plus`, 'clearRatingFilter()'));
+  if (activePromoOnly) chips.push(filterChip('Promotions', 'clearPromoFilter()'));
+  activeSizes.forEach(s => chips.push(filterChip(`Taille ${s}`, 'clearSizeColorFilters()')));
+  activeColors.forEach(c => chips.push(filterChip(c, 'clearSizeColorFilters()')));
+  if (minP || maxP) chips.push(filterChip(`${minP || '0'} – ${maxP || '∞'} FCFA`, 'clearPriceFilter()'));
+  if (q) chips.push(filterChip(`« ${q} »`, 'clearSearchFilter()'));
+  if (chips.length) chips.push(`<button onclick="resetFilters()" class="text-xs font-bold text-rose-600 hover:underline px-1">Effacer tout</button>`);
+  box.innerHTML = chips.join('');
+  const n = chips.length ? chips.length - 1 : 0;
+  const badge = document.getElementById('filters-count');
+  if (badge) {
+    badge.textContent = n;
+    badge.classList.toggle('hidden', !n);
+    badge.classList.toggle('inline-flex', !!n);
+  }
+  const toolbarCount = document.getElementById('results-count-toolbar');
+  if (toolbarCount) toolbarCount.textContent = new Intl.NumberFormat('fr-FR').format(filteredProducts.length);
+}
+
+function setMinRating(v) {
+  activeMinRating = v;
+  document.querySelectorAll('#filter-ratings .filter-chip').forEach(b =>
+    b.classList.toggle('active', parseInt(b.dataset.rating) === v));
+  applyFilters();
+}
+
+function setPromoOnly(v) {
+  activePromoOnly = !!v;
+  applyFilters();
+}
+
+function toggleSize(val) {
+  const i = activeSizes.indexOf(val);
+  if (i >= 0) activeSizes.splice(i, 1); else activeSizes.push(val);
+  applyFilters();
+}
+
+function toggleColor(val) {
+  const i = activeColors.indexOf(val);
+  if (i >= 0) activeColors.splice(i, 1); else activeColors.push(val);
+  applyFilters();
+}
+
+function applyFilters() {
+  const q = (document.getElementById('shop-search')?.value || '').toLowerCase().trim();
+  const minP = parseInt(document.getElementById('price-min')?.value) || 0;
+  const maxP = parseInt(document.getElementById('price-max')?.value) || Infinity;
+  const sort = document.getElementById('sort-select')?.value || 'popular';
+  updateCategoryBanner();
+
+  filteredProducts = PRODUCTS.filter(p => {
+    if (activeCategory && !subtreeNames(activeCategory).has(p.category)) return false;
+    if (activeBrand && p.brand !== activeBrand) return false;
+    if (activeSupplier && p.supplierId !== activeSupplier) return false;
+    if (p.price < minP || p.price > maxP) return false;
+    if (activeStock === 'in' && p.stock <= 0) return false;
+    if (activeStock === 'out' && p.stock > 0) return false;
+    if (activeMinRating > 0 && (p.rating || 0) < activeMinRating) return false;
+    if (activePromoOnly && !(p.discount > 0 || p.badge === 'Promo')) return false;
+    if (activeSizes.length && !activeSizes.some(s => (p.sizes || []).includes(s))) return false;
+    if (activeColors.length && !activeColors.some(c => (p.colors || []).includes(c))) return false;
+    if (q) {
+      const searchStr = `${p.name} ${p.brand} ${p.category} ${p.description} ${p.reference} ${p.slug}`.toLowerCase();
+      if (!searchStr.includes(q)) return false;
+    }
+    return true;
+  });
+
+  if (sort === 'price-asc') filteredProducts.sort((a,b) => a.price - b.price);
+  else if (sort === 'price-desc') filteredProducts.sort((a,b) => b.price - a.price);
+  else if (sort === 'best-sales') filteredProducts.sort((a,b) => b.reviews - a.reviews);
+  else if (sort === 'best-rated') filteredProducts.sort((a,b) => b.rating - a.rating);
+  else if (sort === 'newest') filteredProducts.sort((a,b) => (b.badge === 'Nouveau' ? 1 : 0) - (a.badge === 'Nouveau' ? 1 : 0));
+  else filteredProducts.sort((a,b) => b.reviews - a.reviews);
+
+  currentPage = 1;
+  renderShopProducts();
+  renderFilterOptions();
+  renderActiveFilters();
+}
+
+function resetFilters() {
+  activeCategory = null;
+  activeBrand = null;
+  activeSupplier = null;
+  activeMinRating = 0;
+  activePromoOnly = false;
+  activeSizes = [];
+  activeColors = [];
+  document.getElementById('shop-search').value = '';
+  document.getElementById('price-min').value = '';
+  document.getElementById('price-max').value = '';
+  ['sort-select', 'sort-select-top'].forEach(id => {
+    const s = document.getElementById(id);
+    if (s) s.value = 'popular';
+  });
+  const promo = document.getElementById('filter-promo');
+  if (promo) promo.checked = false;
+  document.querySelectorAll('#filter-ratings .filter-chip').forEach(b =>
+    b.classList.toggle('active', b.dataset.rating === '0'));
+  applyFilters();
+}
+
+let expandedRoot = null;
+
+function rootOfCategory(name) {
+  if (!name) return null;
+  for (const r of CAT_TREE) {
+    if (r.name === name) return r.name;
+    const names = new Set();
+    const collect = (n) => { (n.children || []).forEach(k => { names.add(k.name); collect(k); }); };
+    collect(r);
+    if (names.has(name)) return r.name;
+  }
+  const node = CATEGORIES.find(c => c.name === name);
+  if (!node) return null;
+  if (node.parentId == null) return node.name;
+  const parent = CATEGORIES.find(c => c.id === node.parentId);
+  return parent ? rootOfCategory(parent.name) : null;
+}
+
+function selectRoot(name) {
+  if (activeCategory === name && expandedRoot === name) {
+    clearRootFilter();
+    return;
+  }
+  expandedRoot = name;
+  activeCategory = name;
+  currentPage = 1;
+  applyFilters();
+  renderFilterBar();
+}
+
+function renderFilterBar() {
+  const pills = document.getElementById('root-pills');
+  if (pills) {
+    const roots = CAT_TREE.length ? CAT_TREE.map(r => r.name) : [...new Set(PRODUCTS.map(p => p.category))];
+    const activeRoot = rootOfCategory(activeCategory);
+    pills.innerHTML = `<button onclick="clearRootFilter()" class="shrink-0 px-5 py-2.5 rounded-full text-sm font-bold border transition ${!activeCategory ? 'bg-dark-900 text-white border-dark-900' : 'bg-white border-slate-200 hover:border-slate-400'}">Toutes</button>` +
+      roots.map(r => `<button onclick="selectRoot('${escAttr(r)}')" class="shrink-0 px-5 py-2.5 rounded-full text-sm font-semibold border transition ${activeRoot === r ? 'bg-primary-700 text-white border-primary-700 shadow-soft' : 'bg-white border-slate-200 hover:border-primary-400 hover:text-primary-700'}">${escHTML(r)}</button>`).join('');
+  }
+  renderSubPanel();
+  refreshDropButtons();
+}
+
+function clearRootFilter() {
+  expandedRoot = null;
+  activeCategory = null;
+  currentPage = 1;
+  applyFilters();
+}
+
+function renderSubPanel() {
+  const panel = document.getElementById('sub-panel');
+  const grid = document.getElementById('sub-panel-grid');
+  const title = document.getElementById('sub-panel-title');
+  if (!panel || !grid) return;
+  const rootName = expandedRoot || rootOfCategory(activeCategory);
+  let kids = [];
+  if (rootName) {
+    const inTree = CAT_TREE.find(r => r.name === rootName);
+    if (inTree && inTree.children) {
+      const collect = (nodes, out) => { (nodes || []).forEach(k => { out.push(k); collect(k.children, out); }); };
+      collect(inTree.children, kids);
+    } else {
+      const node = CATEGORIES.find(c => c.name === rootName);
+      if (node) kids = CATEGORIES.filter(c => c.parentId === node.id);
+    }
+  }
+  if (title) title.textContent = rootName ? `Sous-catégories — ${rootName}` : 'Sous-catégories';
+  grid.innerHTML = kids.map(k => `
+    <button onclick="filterByCategory('${escAttr(k.name)}')" class="text-left px-4 py-2.5 rounded-xl border text-sm transition ${activeCategory === k.name ? 'bg-primary-700 text-white border-primary-700 font-semibold' : 'bg-slate-50/60 border-slate-200 hover:border-primary-400 hover:text-primary-700'}">${escHTML(k.name)}</button>
+  `).join('') || '<p class="text-sm text-slate-400 col-span-full">Sélectionnez une grande catégorie pour voir ses sous-catégories.</p>';
+  const open = !!(rootName && (expandedRoot || activeCategory));
+  panel.style.gridTemplateRows = open ? '1fr' : '0fr';
+}
+
+function toggleFilterDrop(name) {
+  const panel = document.getElementById('drop-' + name);
+  if (!panel) return;
+  const wasHidden = panel.classList.contains('hidden');
+  closeFilterDrops();
+  if (wasHidden) panel.classList.remove('hidden');
+}
+function closeFilterDrops() {
+  ['price', 'brand', 'supplier', 'size', 'color', 'rating', 'promo', 'stock'].forEach(k => {
+    const d = document.getElementById('drop-' + k);
+    if (d) d.classList.add('hidden');
+  });
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('[data-drop]')) closeFilterDrops();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeFilterDrops(); closeNavSearch(); }
+});
+
+function refreshDropButtons() {
+  const map = {
+    'brand': !!activeBrand, 'supplier': !!activeSupplier, 'size': activeSizes.length > 0,
+    'color': activeColors.length > 0, 'rating': activeMinRating > 0,
+    'promo': activePromoOnly, 'stock': activeStock !== 'all', 'price': !!((document.getElementById('price-min') || {}).value || (document.getElementById('price-max') || {}).value)
+  };
+  Object.entries(map).forEach(([k, on]) => {
+    const b = document.getElementById('dropbtn-' + k);
+    if (b) {
+      b.classList.toggle('!border-primary-600', on);
+      b.classList.toggle('!text-primary-700', on);
+      b.classList.toggle('bg-primary-50', on);
+    }
+  });
+}
+
+function renderFilterOptions() {
+  renderFilterBar();
+  const brandBox = document.getElementById('filter-brands');
+  if (brandBox) {
+    const brands = [...new Set(PRODUCTS.map(p => p.brand))].sort();
+    brandBox.innerHTML = brands.map(b => {
+      const n = PRODUCTS.filter(p => p.brand === b).length;
+      return `<button data-brand="${escAttr(b)}" class="w-full text-left px-3 py-2 rounded-xl text-sm hover:bg-slate-50 transition ${activeBrand===b?'text-primary-700 font-bold':'text-slate-600'}"><span class="flex items-center justify-between gap-2">${escHTML(b)}<span class="text-[11px] text-slate-400 font-semibold">${n}</span></span></button>`;
+    }).join('');
+    brandBox.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => { toggleShopBrand(btn.dataset.brand); closeFilterDrops(); });
+    });
+  }
+
+  const supBox = document.getElementById('filter-suppliers');
+  if (supBox) {
+    const sellers = [...new Map(PRODUCTS.filter(p => p.supplierId).map(p => [p.supplierId, p.supplierName || ('Vendeur ' + p.supplierId)]))]
+      .map(([id, name]) => ({ id, name, n: PRODUCTS.filter(p => p.supplierId === id).length }))
+      .sort((a, b) => b.n - a.n);
+    const block = document.getElementById('filter-suppliers-block');
+    if (block) block.style.display = sellers.length ? '' : 'none';
+    supBox.innerHTML = sellers.map(s => `
+      <button data-supplier="${s.id}" class="w-full text-left px-3 py-2 rounded-xl text-sm hover:bg-slate-50 transition ${activeSupplier===s.id?'text-primary-700 font-bold':'text-slate-600'}"><span class="flex items-center justify-between gap-2"><span class="truncate">${escHTML(s.name)}</span><span class="text-[11px] text-slate-400 font-semibold shrink-0">${s.n}</span></span></button>
+    `).join('');
+    supBox.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => { toggleSupplier(parseInt(btn.dataset.supplier)); closeFilterDrops(); });
+    });
+  }
+
+  const sizeBox = document.getElementById('filter-sizes');
+  if (sizeBox) {
+    const sizes = [...new Set(PRODUCTS.flatMap(p => p.sizes || []))].slice(0, 14);
+    sizeBox.innerHTML = sizes.map(s => `
+      <button data-size="${escAttr(s)}" class="px-3 py-1.5 rounded-xl border text-[13px] font-medium transition ${activeSizes.includes(s) ? 'bg-primary-700 text-white border-primary-700' : 'border-slate-200 hover:border-primary-300'}">${escHTML(s)}</button>
+    `).join('');
+    sizeBox.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => toggleSize(btn.dataset.size));
+    });
+  }
+
+  const colorBox = document.getElementById('filter-colors');
+  if (colorBox) {
+    const colors = [...new Set(PRODUCTS.flatMap(p => p.colors || []))].slice(0, 14);
+    colorBox.innerHTML = colors.map(c => `
+      <button data-color="${escAttr(c)}" title="${escAttr(c)}" class="px-3 py-1.5 rounded-full border text-[13px] font-medium transition ${activeColors.includes(c) ? 'bg-dark-900 text-white border-dark-900' : 'border-slate-200 hover:border-slate-400'}">${escHTML(c)}</button>
+    `).join('');
+    colorBox.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => toggleColor(btn.dataset.color));
+    });
+  }
+}
+
+function renderShopProducts() {
+  const start = (currentPage - 1) * PER_PAGE;
+  const pageItems = filteredProducts.slice(start, start + PER_PAGE);
+  const container = document.getElementById('shop-products');
+  container.className = viewMode === 'grid' ? 'grid gap-4 lg:gap-5 grid-cols-[repeat(auto-fill,minmax(min(100%,230px),1fr))]' : 'flex flex-col gap-4';
+  container.innerHTML = pageItems.length ? pageItems.map(p => productCardHTML(p, viewMode === 'list')).join('') : '<div class="col-span-full ms-empty"><div class="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-4 text-2xl text-slate-300"><i class="bi bi-search"></i></div><p class="font-bold mb-1">Aucun produit trouvé</p><p class="text-sm mb-4">Essayez de modifier vos filtres.</p><button onclick="resetFilters()" class="px-6 py-2.5 bg-primary-700 hover:bg-primary-800 text-white text-sm font-semibold rounded-xl transition">Effacer les filtres</button></div>';
+  document.getElementById('results-count').textContent = new Intl.NumberFormat('fr-FR').format(filteredProducts.length);
+
+  const totalPages = Math.ceil(filteredProducts.length / PER_PAGE);
+  const pag = document.getElementById('pagination');
+  if (totalPages <= 1) { pag.innerHTML = ''; return; }
+  let html = '';
+  for (let i = 1; i <= totalPages; i++) {
+    html += `<button onclick="currentPage=${i};renderShopProducts();window.scrollTo({top:0,behavior:'smooth'})" class="w-10 h-10 rounded-xl text-sm font-medium ${i===currentPage?'bg-primary-600 text-white':'bg-white text-slate-600 hover:bg-slate-100'} shadow-soft">${i}</button>`;
+  }
+  pag.innerHTML = html;
+}
+
+function setViewMode(mode) {
+  viewMode = mode;
+  document.getElementById('view-grid').className = `w-10 h-10 rounded-xl flex items-center justify-center ${mode==='grid'?'bg-primary-600 text-white':'bg-slate-100 text-slate-600'}`;
+  document.getElementById('view-list').className = `w-10 h-10 rounded-xl flex items-center justify-center ${mode==='list'?'bg-primary-600 text-white':'bg-slate-100 text-slate-600'}`;
+  renderShopProducts();
+}
+
+// ---------- SEARCH ----------
+function getRecentSearches() {
+  try { return JSON.parse(localStorage.getItem('ms_searches') || '[]'); } catch(e) { return []; }
+}
+function saveSearch(q) {
+  q = (q || '').trim();
+  if (q.length < 2) return;
+  try {
+    const r = [q, ...getRecentSearches().filter(x => x.toLowerCase() !== q.toLowerCase())].slice(0, 6);
+    localStorage.setItem('ms_searches', JSON.stringify(r));
+  } catch(e) {}
+}
+
+function liveSearch(q, boxId, afterPick) {
+  boxId = boxId || 'search-suggestions';
+  afterPick = afterPick || 'toggleSearch()';
+  const box = document.getElementById(boxId);
+  if (!box) return;
+  if (!q.trim()) {
+    const recents = getRecentSearches();
+    if (recents.length && (boxId === 'nav-search-results')) {
+      box.innerHTML = `<p class="px-3 pt-2 pb-1 text-[11px] font-bold uppercase tracking-wider text-slate-400">Récentes</p>` + recents.map(r => `
+        <div onclick="document.getElementById('nav-search').value='${escAttr(r)}';navSearchGo()" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-50 cursor-pointer">
+          <i class="bi bi-clock-history text-slate-400"></i>
+          <p class="text-sm truncate">${escHTML(r)}</p>
+        </div>`).join('');
+      box.classList.remove('hidden');
+    } else {
+      box.classList.add('hidden');
+    }
+    navSearchClearVisibility();
+    return;
+  }
+  const ql = q.toLowerCase();
+  const results = PRODUCTS.filter(p => {
+    const s = `${p.name} ${p.brand} ${p.category} ${p.description}`.toLowerCase();
+    return s.includes(ql);
+  }).slice(0, 5);
+  const cats = CATEGORIES.filter(c => c.name.toLowerCase().includes(ql)).slice(0, 3);
+  const brands = [...new Set(PRODUCTS.map(p => p.brand).filter(b => b && b.toLowerCase().includes(ql)))].slice(0, 3);
+  let html = '';
+  if (results.length) {
+    html += `<p class="px-3 pt-2 pb-1 text-[11px] font-bold uppercase tracking-wider text-slate-400">Produits</p>` + results.map(p => `
+      <div onclick="openProduct(${p.id});${afterPick}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 cursor-pointer">
+        <img src="${p.image}" alt="" class="w-12 h-12 rounded-lg object-cover shrink-0">
+        <div class="min-w-0">
+          <p class="text-sm font-medium truncate">${p.name}</p>
+          <p class="text-xs text-slate-500">${p.brand} · ${formatPrice(p.price)}</p>
+        </div>
+      </div>
+    `).join('');
+  }
+  if (cats.length) {
+    html += `<p class="px-3 pt-2 pb-1 text-[11px] font-bold uppercase tracking-wider text-slate-400">Catégories</p>` + cats.map(c => `
+      <div onclick="filterByCategory('${escAttr(c.name)}');${afterPick}" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-50 cursor-pointer">
+        <span class="w-9 h-9 rounded-lg bg-primary-50 text-primary-700 flex items-center justify-center shrink-0"><i class="bi ${c.icon || 'bi-tag'}"></i></span>
+        <p class="text-sm font-medium truncate">${escHTML(c.name)}</p>
+      </div>
+    `).join('');
+  }
+  if (brands.length) {
+    html += `<p class="px-3 pt-2 pb-1 text-[11px] font-bold uppercase tracking-wider text-slate-400">Marques</p>` + brands.map(b => `
+      <div onclick="pickSearchBrand('${escAttr(b)}');${afterPick}" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-50 cursor-pointer">
+        <span class="w-9 h-9 rounded-lg bg-amber-50 text-accent-600 flex items-center justify-center shrink-0 font-bold text-sm">${escHTML(b.charAt(0).toUpperCase())}</span>
+        <p class="text-sm font-medium truncate">${escHTML(b)}</p>
+      </div>
+    `).join('');
+  }
+  const sups = (typeof SUPPLIERS !== 'undefined' ? SUPPLIERS : []).filter(s => s.name && s.name.toLowerCase().includes(ql)).slice(0, 2);
+  if (sups.length) {
+    html += `<p class="px-3 pt-2 pb-1 text-[11px] font-bold uppercase tracking-wider text-slate-400">Fournisseurs</p>` + sups.map(s => `
+      <div onclick="shopBySupplier('${escAttr(s.name)}');${afterPick}" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-50 cursor-pointer">
+        <span class="w-9 h-9 rounded-lg bg-primary-50 text-primary-700 flex items-center justify-center shrink-0"><i class="bi bi-shop"></i></span>
+        <div class="min-w-0"><p class="text-sm font-medium truncate">${escHTML(s.name)}</p>
+        <p class="text-xs text-slate-500">${escHTML(s.city || 'Cameroun')}</p></div>
+      </div>
+    `).join('');
+  }
+  if (!html) {
+    box.innerHTML = '<p class="text-sm text-slate-500 px-3 py-2">Aucun résultat — appuyez sur Entrée pour chercher dans la boutique</p>';
+  } else {
+    box.innerHTML = html;
+  }
+  box.classList.remove('hidden');
+  navSearchClearVisibility();
+}
+
+function pickSearchBrand(b) {
+  saveSearch(b);
+  const input = document.getElementById('shop-search');
+  if (input) input.value = b;
+  activeBrand = null;
+  showSection('shop');
+}
+
+function navSearchGo() {
+  const input = document.getElementById('nav-search');
+  const q = (input.value || '').trim();
+  saveSearch(q);
+  const shopInput = document.getElementById('shop-search');
+  if (shopInput) shopInput.value = q;
+  closeNavSearch();
+  showSection('shop');
+}
+
+function closeNavSearch() {
+  const box = document.getElementById('nav-search-results');
+  if (box) box.classList.add('hidden');
+  navSearchClearVisibility();
+}
+
+function navSearchClearVisibility() {
+  const input = document.getElementById('nav-search');
+  const btn = document.getElementById('nav-search-clear');
+  if (!input || !btn) return;
+  const show = !!input.value && !document.getElementById('nav-search-results').classList.contains('hidden');
+  btn.classList.toggle('hidden', !show);
+  btn.classList.toggle('flex', show);
+}
+
+// ---------- PRODUCT MODAL ----------
+function openProduct(id) {
+  const p = PRODUCTS.find(x => x.id === id);
+  if (!p) return;
+  trackRecent(id);
+  renderRecent();
+  currentProductId = id;
+  modalQty = 1;
+  selectedColor = p.colors[0] || null;
+  selectedSize = p.sizes[0] || null;
+
+  document.getElementById('modal-main-img').src = p.image;
+  document.getElementById('modal-main-img').alt = p.name;
+  document.getElementById('modal-brand').textContent = p.brand;
+  document.getElementById('modal-name').textContent = p.name;
+  document.getElementById('modal-stars').innerHTML = starsHTML(p.rating);
+  document.getElementById('modal-reviews').textContent = `${p.reviews} avis`;
+  document.getElementById('modal-price').textContent = formatPrice(p.price);
+  document.getElementById('modal-oldprice').textContent = p.oldPrice ? formatPrice(p.oldPrice) : '';
+  document.getElementById('modal-discount').textContent = p.discount ? `-${p.discount}%` : '';
+  document.getElementById('modal-discount').classList.toggle('hidden', !p.discount);
+  document.getElementById('modal-stock').innerHTML = p.stock > 0 ? `<span class="text-green-600"><i class="bi bi-check-circle"></i> Disponible (${p.stock})</span>` : `<span class="text-green-600"><i class="bi bi-check-circle"></i> Disponible</span>`;
+  document.getElementById('modal-desc').textContent = p.description;
+  document.getElementById('modal-qty').textContent = '1';
+  const supBox = document.getElementById('modal-supplier');
+  if (p.supplierName) {
+    const waNum = (p.supplierWhatsapp || '').replace(/\D/g, '');
+    const negoText = encodeURIComponent(`Bonjour ${p.supplierName} ! Je suis intéressé par « ${p.name} » affiché à ${formatPrice(p.price)} sur MBOA STYLE. Est-il possible de discuter du prix ?`);
+    const helloText = encodeURIComponent(`Bonjour ${p.supplierName} ! J'ai une question à propos de « ${p.name} » vu sur MBOA STYLE.`);
+    supBox.innerHTML = `
+      <div class="rounded-2xl border border-slate-100 bg-slate-50/70 p-4 space-y-2.5">
+        <div class="flex items-center gap-2.5">
+          <span class="w-9 h-9 rounded-xl bg-primary-700 text-white flex items-center justify-center font-bold text-sm shrink-0">${escHTML((p.supplierName || 'M').trim().charAt(0).toUpperCase())}</span>
+          <div class="min-w-0">
+            <p class="text-sm font-bold text-dark-900 truncate flex items-center gap-1.5">${escHTML(p.supplierName)} <i class="bi bi-patch-check-fill text-primary-600 text-xs" title="Fournisseur vérifié"></i></p>
+            <p class="text-xs text-slate-500 flex items-center gap-1"><i class="bi bi-truck"></i> Expédition depuis le Cameroun · 24–48h</p>
+          </div>
+        </div>
+        ${waNum ? `<div class="flex flex-col sm:flex-row gap-2">
+          <a href="https://wa.me/${waNum}?text=${negoText}" target="_blank" rel="noopener" class="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl border border-dashed border-primary-300 bg-white text-primary-700 text-sm font-semibold hover:bg-primary-50 transition"><i class="bi bi-chat-dots"></i> Négocier le prix</a>
+          <a href="https://wa.me/${waNum}?text=${helloText}" target="_blank" rel="noopener" class="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-600 text-sm font-semibold hover:border-primary-300 hover:text-primary-700 transition"><i class="bi bi-whatsapp"></i> Contacter le vendeur</a>
+        </div>` : ''}
+      </div>`;
+  } else supBox.innerHTML = '';
+  document.getElementById('modal-badge').innerHTML = badgeHTML(p.badge);
+  document.getElementById('modal-fav-icon').className = favorites.includes(id) ? 'bi bi-heart-fill text-rose-500' : 'bi bi-heart';
+
+  document.getElementById('modal-thumbs').innerHTML = p.gallery.map((img,i) => `
+    <img src="${img}" alt="" class="w-16 h-16 rounded-xl object-cover cursor-pointer border-2 ${i===0?'border-primary-500':'border-transparent'} hover:border-primary-300" onclick="document.getElementById('modal-main-img').src='${img}';this.parentElement.querySelectorAll('img').forEach(x=>x.classList.remove('border-primary-500'));this.classList.add('border-primary-500');syncModalDots('${img}')">
+  `).join('');
+  const dotsEl = document.getElementById('modal-dots');
+  if (dotsEl) {
+    dotsEl.innerHTML = p.gallery.map((img) => `
+      <button onclick="document.getElementById('modal-main-img').src='${img}';syncModalDots('${img}')" aria-label="Voir l'image" class="h-1.5 rounded-full transition-all modal-dot" data-img="${img}"></button>
+    `).join('');
+    syncModalDots(p.gallery[0]);
+  }
+
+  const colorsEl = document.getElementById('modal-colors');
+  if (p.colors.length) {
+    colorsEl.classList.remove('hidden');
+    document.getElementById('modal-colors-list').innerHTML = p.colors.map(c => `
+      <button onclick="selectedColor='${c}';document.querySelectorAll('#modal-colors-list button').forEach(b=>b.classList.remove('ring-2','ring-primary-500'));this.classList.add('ring-2','ring-primary-500')" class="px-3 py-1.5 rounded-xl border border-slate-200 text-sm hover:border-primary-400 ${c===selectedColor?'ring-2 ring-primary-500':''}">${c}</button>
+    `).join('');
+  } else colorsEl.classList.add('hidden');
+
+  const sizesEl = document.getElementById('modal-sizes');
+  if (p.sizes.length) {
+    sizesEl.classList.remove('hidden');
+    document.getElementById('modal-sizes-list').innerHTML = p.sizes.map(s => `
+      <button onclick="selectedSize='${s}';document.querySelectorAll('#modal-sizes-list button').forEach(b=>b.classList.remove('bg-primary-600','text-white'));this.classList.add('bg-primary-600','text-white')" class="w-11 h-11 rounded-xl border border-slate-200 text-sm font-medium hover:border-primary-400 ${s===selectedSize?'bg-primary-600 text-white':''}">${s}</button>
+    `).join('');
+  } else sizesEl.classList.add('hidden');
+
+  document.getElementById('product-modal').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeProductModal() {
+  document.getElementById('product-modal').classList.add('hidden');
+  document.body.style.overflow = '';
+}
+
+// ---------- LIGHTBOX PLEIN ÉCRAN ----------
+let lightboxIdx = 0;
+function lightboxImages() {
+  const p = PRODUCTS.find(x => x.id === currentProductId);
+  return (p && p.gallery && p.gallery.length ? p.gallery : (p ? [p.image] : [])).filter(Boolean);
+}
+function openLightbox() {
+  const imgs = lightboxImages();
+  if (!imgs.length) return;
+  const cur = document.getElementById('modal-main-img').src;
+  lightboxIdx = Math.max(0, imgs.indexOf(cur));
+  renderLightbox();
+  document.getElementById('lightbox').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.add('hidden');
+  if (document.getElementById('product-modal').classList.contains('hidden')) document.body.style.overflow = '';
+}
+function lightboxNav(d) {
+  const imgs = lightboxImages();
+  if (!imgs.length) return;
+  lightboxIdx = (lightboxIdx + d + imgs.length) % imgs.length;
+  renderLightbox();
+}
+function renderLightbox() {
+  const imgs = lightboxImages();
+  document.getElementById('lightbox-img').src = imgs[lightboxIdx] || '';
+  document.getElementById('lightbox-count').textContent = imgs.length > 1 ? `${lightboxIdx + 1} / ${imgs.length}` : '';
+}
+document.addEventListener('keydown', e => {
+  const lb = document.getElementById('lightbox');
+  if (!lb || lb.classList.contains('hidden')) return;
+  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'ArrowRight') lightboxNav(1);
+  if (e.key === 'ArrowLeft') lightboxNav(-1);
+});
+
+function syncModalDots(activeImg) {
+  document.querySelectorAll('#modal-dots .modal-dot').forEach(d => {
+    const on = d.dataset.img === activeImg;
+    d.className = `h-1.5 rounded-full transition-all modal-dot ${on ? 'w-6 bg-primary-600' : 'w-1.5 bg-slate-300'}`;
+  });
+}
+
+function changeModalQty(d) {
+  modalQty = Math.max(1, Math.min(10, modalQty + d));
+  document.getElementById('modal-qty').textContent = modalQty;
+}
+
+function addFromModal() {
+  addToCart(currentProductId, modalQty, selectedColor, selectedSize);
+  closeProductModal();
+}
+
+function buyNowFromModal() {
+  addToCart(currentProductId, modalQty, selectedColor, selectedSize);
+  closeProductModal();
+  goToCheckout();
+}
+
+function shareProduct() {
+  const p = PRODUCTS.find(x => x.id === currentProductId);
+  if (navigator.share) {
+    navigator.share({ title: p.name, text: p.description, url: window.location.href });
+  } else {
+    navigator.clipboard.writeText(window.location.href);
+    showToast('Lien copié !');
+  }
+}
+
+// ---------- CART (sans blocage stock : ajout toujours possible) ----------
+function addToCart(id, qty = 1, color = null, size = null) {
+  const p = PRODUCTS.find(x => x.id === id);
+  if (!p) { showToast('Produit introuvable', 'error'); return; }
+  const existing = cart.find(c => c.id === id && c.color === color && c.size === size);
+  if (existing) {
+    existing.qty = existing.qty + qty;
+  } else {
+    cart.push({ id, qty, color, size, name: p.name, price: p.price, image: p.image, brand: p.brand, supplierId: p.supplierId, supplierName: p.supplierName, supplierWhatsapp: p.supplierWhatsapp, slug: p.slug });
+  }
+  saveCart();
+  showToast('Produit ajouté au panier');
+  // Animate badge
+  const badge = document.getElementById('cart-count');
+  badge.classList.remove('cart-badge');
+  void badge.offsetWidth;
+  badge.classList.add('cart-badge');
+}
+
+function removeFromCart(index) {
+  cart.splice(index, 1);
+  saveCart();
+  showToast('Produit retiré', 'info');
+}
+
+function updateQuantity(index, delta) {
+  const item = cart[index];
+  if (!item) return;
+  item.qty = Math.max(1, Math.min(99, item.qty + delta));
+  saveCart();
+}
+
+function clearCart() {
+  cart = [];
+  saveCart();
+  showToast('Panier vidé', 'info');
+}
+
+function calculateTotal() {
+  const sub = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const delivery = cart.length ? 1500 : 0;
+  return { sub, delivery, total: sub + delivery };
+}
+
+// ---------- CART HELPERS ----------
+function groupCartBySupplier() {
+  const groups = [];
+  const map = {};
+  cart.forEach((item, idx) => {
+    const key = item.supplierId || 0;
+    if (!map[key]) {
+      map[key] = { name: item.supplierName || 'MBOA STYLE', items: [] };
+      groups.push(map[key]);
+    }
+    map[key].items.push({ item, idx });
+  });
+  return groups;
+}
+
+function cartItemHTML(item, i) {
+  return `
+    <div class="flex gap-3">
+      <img src="${item.image}" alt="${item.name}" class="w-20 h-20 rounded-xl object-cover bg-slate-50">
+      <div class="flex-1 min-w-0">
+        <h4 class="font-medium text-sm line-clamp-1">${item.name}</h4>
+        <p class="text-xs text-slate-500">${item.brand}${item.color ? ' · ' + item.color : ''}${item.size ? ' · ' + item.size : ''}</p>
+        <p class="font-semibold text-sm mt-1">${formatPrice(item.price)}</p>
+        <div class="flex items-center gap-2 mt-2">
+          <button onclick="updateQuantity(${i},-1)" class="qty-btn w-7 h-7 rounded-lg border border-slate-200 flex items-center justify-center text-sm">−</button>
+          <span class="text-sm font-medium w-6 text-center">${item.qty}</span>
+          <button onclick="updateQuantity(${i},1)" class="qty-btn w-7 h-7 rounded-lg border border-slate-200 flex items-center justify-center text-sm">+</button>
+        </div>
+      </div>
+      <button onclick="removeFromCart(${i})" class="text-slate-400 hover:text-rose-500 self-start"><i class="bi bi-trash"></i></button>
+    </div>`;
+}
+
+function updateCartUI() {
+  const count = cart.reduce((s, i) => s + i.qty, 0);
+  const badge = document.getElementById('cart-count');
+  badge.textContent = count;
+  badge.classList.toggle('hidden', count === 0);
+  document.getElementById('cart-drawer-count').textContent = `(${count})`;
+  const badgeM = document.getElementById('cart-count-mobile');
+  if (badgeM) {
+    badgeM.textContent = count;
+    badgeM.classList.toggle('hidden', count === 0);
+    badgeM.classList.toggle('flex', count > 0);
+  }
+
+  const itemsEl = document.getElementById('cart-items');
+  const footer = document.getElementById('cart-footer');
+  const empty = document.getElementById('cart-empty');
+
+  if (!cart.length) {
+    itemsEl.innerHTML = '';
+    footer.classList.add('hidden');
+    empty.classList.remove('hidden');
+    return;
+  }
+  empty.classList.add('hidden');
+  footer.classList.remove('hidden');
+
+  itemsEl.innerHTML = groupCartBySupplier().map(g => `
+    <div class="flex items-center gap-2 pb-1">
+      <span class="w-6 h-6 rounded-lg bg-primary-50 text-primary-700 flex items-center justify-center text-xs shrink-0"><i class="bi bi-shop"></i></span>
+      <p class="text-xs font-bold text-slate-600 truncate">${g.name}</p>
+      <span class="text-[10px] text-slate-400 shrink-0">${g.items.length} article${g.items.length > 1 ? 's' : ''}</span>
+    </div>
+    ${g.items.map(({ item, idx }) => cartItemHTML(item, idx)).join('')}
+  `).join('<div class="border-t border-dashed border-slate-100 my-1"></div>');
+
+  const { sub, delivery, total } = calculateTotal();
+  document.getElementById('cart-subtotal').textContent = formatPrice(sub);
+  document.getElementById('cart-delivery').textContent = formatPrice(delivery);
+  document.getElementById('cart-total').textContent = formatPrice(total);
+}
+
+function toggleCart() {
+  const drawer = document.getElementById('cart-drawer');
+  const overlay = document.getElementById('cart-overlay');
+  const isOpen = !drawer.classList.contains('translate-x-full');
+  if (isOpen) {
+    drawer.classList.add('translate-x-full');
+    overlay.classList.add('hidden');
+    document.body.style.overflow = '';
+  } else {
+    updateCartUI();
+    drawer.classList.remove('translate-x-full');
+    overlay.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function goToCheckout() {
+  if (!cart.length) { showToast('Votre panier est vide', 'warning'); return; }
+  toggleCart();
+  showSection('checkout');
+}
+
+// ---------- FAVORITES ----------
+function toggleFavorite(id) {
+  const idx = favorites.indexOf(id);
+  if (idx >= 0) {
+    favorites.splice(idx, 1);
+    showToast('Retiré des favoris', 'info');
+  } else {
+    favorites.push(id);
+    showToast('Ajouté aux favoris');
+  }
+  saveFavs();
+  // Re-render if needed
+  if (!document.getElementById('section-shop').classList.contains('hidden')) renderShopProducts();
+  if (!document.getElementById('section-home').classList.contains('hidden')) { renderPopular(); renderBestSellers(); renderNew(); renderRecommendations(); renderAllProducts(); }
+  if (currentProductId === id) {
+    document.getElementById('modal-fav-icon').className = favorites.includes(id) ? 'bi bi-heart-fill text-rose-500' : 'bi bi-heart';
+  }
+}
+
+function updateFavUI() {
+  const badge = document.getElementById('fav-count');
+  badge.textContent = favorites.length;
+  badge.classList.toggle('hidden', favorites.length === 0);
+  const badgeM = document.getElementById('fav-count-mobile');
+  if (badgeM) {
+    badgeM.textContent = favorites.length;
+    badgeM.classList.toggle('hidden', favorites.length === 0);
+    badgeM.classList.toggle('flex', favorites.length > 0);
+  }
+
+  const items = document.getElementById('fav-items');
+  const empty = document.getElementById('fav-empty');
+  if (!favorites.length) {
+    items.innerHTML = '';
+    empty.classList.remove('hidden');
+    return;
+  }
+  empty.classList.add('hidden');
+  items.innerHTML = favorites.map(id => {
+    const p = PRODUCTS.find(x => x.id === id);
+    if (!p) return '';
+    return `
+    <div class="flex gap-3 items-center">
+      <img src="${p.image}" alt="" class="w-16 h-16 rounded-xl object-cover cursor-pointer" onclick="openProduct(${p.id});toggleFavorites()">
+      <div class="flex-1 min-w-0">
+        <h4 class="font-medium text-sm truncate cursor-pointer" onclick="openProduct(${p.id});toggleFavorites()">${p.name}</h4>
+        <p class="text-sm font-semibold text-primary-600">${formatPrice(p.price)}</p>
+      </div>
+      <button onclick="addToCart(${p.id})" class="px-3 py-1.5 bg-primary-50 text-primary-700 text-xs font-medium rounded-xl">Ajouter</button>
+      <button onclick="toggleFavorite(${p.id})" class="text-rose-500"><i class="bi bi-heart-fill"></i></button>
+    </div>`;
+  }).join('');
+}
+
+function toggleFavorites() {
+  const drawer = document.getElementById('fav-drawer');
+  const overlay = document.getElementById('fav-overlay');
+  const isOpen = !drawer.classList.contains('translate-x-full');
+  if (isOpen) {
+    drawer.classList.add('translate-x-full');
+    overlay.classList.add('hidden');
+  } else {
+    updateFavUI();
+    drawer.classList.remove('translate-x-full');
+    overlay.classList.remove('hidden');
+  }
+}
+
+// ---------- CHECKOUT & WHATSAPP ----------
+function renderCheckoutSummary() {
+  const el = document.getElementById('checkout-summary');
+  el.innerHTML = groupCartBySupplier().map(g => `
+    <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400 pt-1">${g.name}</p>
+    ${g.items.map(({ item }) => `
+    <div class="flex gap-3 text-sm">
+      <img src="${item.image}" alt="" class="w-14 h-14 rounded-lg object-cover">
+      <div class="flex-1 min-w-0">
+        <p class="font-medium truncate">${item.name}</p>
+        <p class="text-slate-500 text-xs">x${item.qty}${item.color ? ' · ' + item.color : ''}${item.size ? ' · ' + item.size : ''}</p>
+      </div>
+      <p class="font-semibold whitespace-nowrap">${formatPrice(item.price * item.qty)}</p>
+    </div>`).join('')}
+  `).join('');
+  const { sub, delivery, total } = calculateTotal();
+  document.getElementById('checkout-subtotal').textContent = formatPrice(sub);
+  document.getElementById('checkout-delivery').textContent = formatPrice(delivery);
+  document.getElementById('checkout-total').textContent = formatPrice(total);
+}
+
+function generateOrderId() {
+  const now = new Date();
+  const y = now.getFullYear();
+  const rand = String(Math.floor(Math.random() * 90000) + 10000);
+  return `CMD-${y}-${rand}`;
+}
+
+function generateWhatsAppMessage(orderId, client, items, total) {
+  // Group by supplier
+  const bySupplier = {};
+  items.forEach(item => {
+    const key = item.supplierWhatsapp || '237690000000';
+    if (!bySupplier[key]) {
+      bySupplier[key] = { name: item.supplierName || 'MBOA STYLE', whatsapp: key, items: [] };
+    }
+    bySupplier[key].items.push(item);
+  });
+
+  const messages = [];
+  Object.values(bySupplier).forEach(sup => {
+    let msg = `*NOUVELLE COMMANDE*\n`;
+    msg += `Commande : ${orderId}\n\n`;
+    msg += `*CLIENT*\n`;
+    msg += `Nom : ${client.name}\n`;
+    msg += `Téléphone : ${client.phone}\n\n`;
+    msg += `*LIVRAISON*\n`;
+    msg += `Ville : ${client.city}\n`;
+    msg += `Quartier : ${client.quartier}\n`;
+    msg += `Adresse : ${client.address}\n`;
+    msg += `Mode : ${client.delivery}\n`;
+    if (client.comment) msg += `Commentaire : ${client.comment}\n`;
+    msg += `\n*PRODUITS*\n`;
+    let subTotal = 0;
+    sup.items.forEach((item, i) => {
+      const lineTotal = item.price * item.qty;
+      subTotal += lineTotal;
+      msg += `\n${i + 1}. ${item.name}\n`;
+      msg += `   Quantité : ${item.qty}\n`;
+      if (item.color) msg += `   Couleur : ${item.color}\n`;
+      if (item.size) msg += `   Taille : ${item.size}\n`;
+      msg += `   Prix : ${formatPrice(lineTotal)}\n`;
+      msg += `   Lien : https://mboastyle.cm/produit/${item.slug}\n`;
+    });
+    msg += `\n*TOTAL : ${formatPrice(subTotal + 1500)}*\n`;
+    msg += `(dont 1 500 FCFA de livraison estimée)\n`;
+    msg += `\n_Commande via MBOA STYLE_`;
+    messages.push({ whatsapp: sup.whatsapp, text: msg });
+  });
+  return messages;
+}
+
+function apiBase() {
+  return window.location.pathname.includes('/mboa-style') ? '/mboa-style' : '';
+}
+
+// Crée UNE commande interne par fournisseur (stock décrémenté côté serveur).
+// N'échoue jamais brutalement : en cas d'erreur réseau, la commande
+// WhatsApp reste disponible et l'utilisateur est informé.
+async function createInternalOrders(client, items) {
+  const groups = {};
+  items.forEach(it => {
+    const sid = it.supplierId || 0;
+    (groups[sid] = groups[sid] || []).push(it);
+  });
+  const created = [];
+  for (const sid of Object.keys(groups)) {
+    const list = groups[sid];
+    const body = {
+      fullname: client.name, phone: client.phone, city: client.city,
+      district: client.quartier, address: client.address, comment: client.comment,
+      deliveryMode: client.delivery, paymentMethod: 'WHATSAPP',
+      supplierId: parseInt(sid) || null,
+      items: list.map(it => ({ productId: it.id, size: it.size, color: it.color, qty: it.qty, unitPrice: it.price }))
+    };
+    const res = await fetch(apiBase() + '/api/orders', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    if (!res.ok) throw new Error('Commande refusée (' + res.status + ')');
+    created.push(await res.json());
+  }
+  return created;
+}
+
+async function submitOrder(e) {
+  e.preventDefault();
+  const name = document.getElementById('order-name').value.trim();
+  const phone = document.getElementById('order-phone').value.trim();
+  const city = document.getElementById('order-city').value;
+  const quartier = document.getElementById('order-quartier').value.trim();
+  const address = document.getElementById('order-address').value.trim();
+  const delivery = document.getElementById('order-delivery').value;
+  const comment = document.getElementById('order-comment').value.trim();
+
+  if (!name || !phone || !city || !quartier || !address) {
+    showToast('Veuillez remplir tous les champs obligatoires', 'error');
+    return;
+  }
+  if (phone.replace(/\D/g, '').length < 9) {
+    showToast('Numéro de téléphone invalide', 'error');
+    return;
+  }
+  if (!cart.length) {
+    showToast('Votre panier est vide', 'error');
+    return;
+  }
+
+  const btn = e.target.querySelector('button[type="submit"]');
+  const btnHtml = btn ? btn.innerHTML : '';
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="ms-spinner !border-white/30 !border-t-white"></span> Enregistrement…'; }
+
+  const orderId = generateOrderId();
+  const client = { name, phone, city, quartier, address, delivery, comment };
+  const { total } = calculateTotal();
+
+  // 1) Commande interne (suivi + stock). Best-effort : jamais bloquant.
+  let internal = [];
+  try {
+    internal = await createInternalOrders(client, cart);
+  } catch (err) {
+    console.warn('Commande interne impossible, repli WhatsApp :', err);
+    showToast('Enregistrement en ligne indisponible — envoi WhatsApp', 'info');
+  }
+  if (btn) { btn.disabled = false; btn.innerHTML = btnHtml; }
+
+  const messages = generateWhatsAppMessage(orderId, client, cart, total);
+
+  // Show confirmation
+  const refNumbers = internal.map(o => o.orderNumber).filter(Boolean);
+  document.getElementById('confirm-order-id').textContent = refNumbers[0] || orderId;
+  document.getElementById('confirm-total').textContent = formatPrice(total);
+  const internalBox = document.getElementById('confirm-internal');
+  if (internalBox) {
+    internalBox.innerHTML = refNumbers.length
+      ? `<p><span class="text-slate-500">Enregistrée sous :</span> <strong>${refNumbers.map(escHTML).join(' · ')}</strong></p>
+         <p class="text-xs text-slate-400">Suivez-la via « Suivre ma commande » dans le menu.</p>`
+      : `<p class="text-xs text-slate-400">Confirmation directe avec le vendeur via WhatsApp.</p>`;
+  }
+
+  // Primary WhatsApp link (first supplier or combined)
+  const primary = messages[0];
+  const waUrl = `https://wa.me/${primary.whatsapp}?text=${encodeURIComponent(primary.text)}`;
+  document.getElementById('confirm-wa-link').href = waUrl;
+
+  // If multiple suppliers, open all after a short delay or let user handle
+  if (messages.length > 1) {
+    document.getElementById('confirm-wa-link').onclick = function(ev) {
+      // Open all supplier chats
+      messages.forEach((m, i) => {
+        setTimeout(() => {
+          window.open(`https://wa.me/${m.whatsapp}?text=${encodeURIComponent(m.text)}`, '_blank');
+        }, i * 600);
+      });
+    };
+  }
+
+  document.getElementById('confirm-modal').classList.remove('hidden');
+  // Clear cart after successful order prep
+  cart = [];
+  saveCart();
+}
+
+function closeConfirmModal() {
+  document.getElementById('confirm-modal').classList.add('hidden');
+  showSection('home');
+}
+
+// ---------- SUIVI COMMANDE ----------
+const ORDER_FLOW = ['EN_ATTENTE', 'CONFIRMEE', 'EN_PREPARATION', 'EN_LIVRAISON', 'LIVREE'];
+const ORDER_LABELS = { EN_ATTENTE: 'Créée', CONFIRMEE: 'Confirmée', EN_PREPARATION: 'En préparation', EN_LIVRAISON: 'Expédiée', LIVREE: 'Livrée', ANNULEE: 'Annulée' };
+
+function openTracking() {
+  document.getElementById('tracking-modal').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => document.getElementById('tracking-number').focus(), 50);
+}
+function closeTracking() {
+  document.getElementById('tracking-modal').classList.add('hidden');
+  document.body.style.overflow = '';
+}
+async function submitTracking(e) {
+  e.preventDefault();
+  const num = document.getElementById('tracking-number').value.trim();
+  const box = document.getElementById('tracking-result');
+  if (!num) return false;
+  box.innerHTML = '<div class="flex justify-center py-6"><span class="ms-spinner"></span></div>';
+  try {
+    const res = await fetch('api/orders?action=search&q=' + encodeURIComponent(num));
+    const list = res.ok ? await res.json() : [];
+    const order = (Array.isArray(list) ? list : []).find(o =>
+      (o.orderNumber || '').toLowerCase() === num.toLowerCase()) || (Array.isArray(list) ? list[0] : null);
+    if (!order) {
+      box.innerHTML = '<div class="ms-alert ms-alert-error">Commande introuvable. Vérifiez le numéro.</div>';
+      return false;
+    }
+    const status = order.status || 'EN_ATTENTE';
+    let steps;
+    if (status === 'ANNULEE') {
+      steps = `<div class="ms-alert ms-alert-error mb-4">Cette commande a été annulée.</div>`;
+    } else {
+      const idx = ORDER_FLOW.indexOf(status);
+      steps = `<ol class="space-y-0 mb-4">` + ORDER_FLOW.map((s, i) => `
+        <li class="flex gap-3">
+          <div class="flex flex-col items-center">
+            <span class="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold ${i <= idx ? 'bg-primary-700 text-white' : 'bg-slate-100 text-slate-400'}">${i <= idx ? '<i class="bi bi-check"></i>' : (i + 1)}</span>
+            ${i < ORDER_FLOW.length - 1 ? `<span class="w-0.5 flex-1 ${i < idx ? 'bg-primary-500' : 'bg-slate-100'}"></span>` : ''}
+          </div>
+          <div class="pb-5">
+            <p class="text-sm font-semibold ${i <= idx ? 'text-dark-900' : 'text-slate-400'}">${ORDER_LABELS[s]}</p>
+            ${i === idx ? '<p class="text-xs text-primary-700 font-medium">Étape actuelle</p>' : ''}
+          </div>
+        </li>`).join('') + `</ol>`;
+    }
+    box.innerHTML = `
+      <div class="rounded-2xl border border-slate-100 bg-slate-50/70 p-4 mb-4 text-sm space-y-1">
+        <p><span class="text-slate-500">N° :</span> <strong>${escHTML(order.orderNumber || ('#' + order.id))}</strong></p>
+        <p><span class="text-slate-500">Total :</span> <strong class="text-primary-700">${formatPrice(order.total)}</strong></p>
+        ${order.createdAt ? `<p><span class="text-slate-500">Date :</span> ${escHTML(order.createdAt)}</p>` : ''}
+      </div>${steps}`;
+  } catch (err) {
+    box.innerHTML = '<div class="ms-alert ms-alert-error">Service momentanément indisponible. Réessayez.</div>';
+  }
+  return false;
+}
+
+// ---------- NEWSLETTER ----------
+function subscribeNewsletter(e) {
+  e.preventDefault();
+  const val = document.getElementById('newsletter-input').value.trim();
+  if (!val) return;
+  showToast('Merci ! Vous serez informé des prochaines promotions.');
+  document.getElementById('newsletter-input').value = '';
+}
+
+// ---------- COUNTDOWN ----------
+function startCountdown() {
+  // Promo ends in 3 days from now
+  const end = new Date();
+  end.setDate(end.getDate() + 3);
+  end.setHours(23, 59, 59);
+  setInterval(() => {
+    const now = new Date();
+    const diff = Math.max(0, end - now);
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    document.getElementById('cd-days').textContent = String(d).padStart(2, '0');
+    document.getElementById('cd-hours').textContent = String(h).padStart(2, '0');
+    document.getElementById('cd-mins').textContent = String(m).padStart(2, '0');
+    document.getElementById('cd-secs').textContent = String(s).padStart(2, '0');
+  }, 1000);
+}
+
+// ---------- NAVBAR SCROLL ----------
+window.addEventListener('scroll', () => {
+});
+
+// ---------- INIT ----------
+// ---------- HERO IMMERSIF : typewriter + flow d'images ----------
+const HERO_MESSAGES = [
+  "MBOA STYLE connecte les talents, les boutiques et les acheteurs africains autour d'une nouvelle manière de faire du commerce.",
+  "Découvrez des produits sélectionnés auprès de vendeurs africains et trouvez exactement ce que vous recherchez, au même endroit.",
+  "Comparez, échangez, négociez et commandez directement depuis MBOA STYLE, sans quitter votre expérience d'achat.",
+  'Le commerce africain mérite une plateforme moderne, simple, intelligente et pensée pour les réalités de ses utilisateurs.',
+  'Des boutiques locales aux grandes marques, MBOA STYLE rapproche les vendeurs et les acheteurs partout où ils se trouvent.',
+  "Vous avez trouvé le produit qui vous plaît ? Découvrez son vendeur, échangez avec lui et construisez votre achat en toute simplicité.",
+  'Une nouvelle génération de marketplace arrive : plus humaine, plus interactive et conçue pour connecter toute une communauté.',
+  'Explorez les tendances, découvrez de nouvelles boutiques et laissez MBOA STYLE vous aider à trouver ce qui correspond à vos envies.',
+  'Chaque produit raconte une histoire. Chaque vendeur construit son activité. MBOA STYLE réunit les deux.',
+  'Votre prochaine découverte commence ici.'
+];
+
+let heroTypeTimer = null;
+function heroTypeSchedule(fn, ms) {
+  if (heroTypeTimer) clearTimeout(heroTypeTimer);
+  heroTypeTimer = setTimeout(() => { heroTypeTimer = null; fn(); }, ms);
+}
+function initTypewriter() {
+  const el = document.getElementById('hero-typewriter');
+  if (!el) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    el.textContent = HERO_MESSAGES[0];
+    return;
+  }
+  const TYPE_MS = 95, ERASE_MS = 45;
+  const holdFor = msg => Math.min(3000, Math.max(1800, 1800 + msg.length * 14));
+  let mi = 0, ci = HERO_MESSAGES[0].length, deleting = true;
+  el.textContent = HERO_MESSAGES[0];
+  function tick() {
+    const msg = HERO_MESSAGES[mi];
+    if (!deleting) {
+      ci++;
+      el.textContent = msg.slice(0, ci);
+      if (ci >= msg.length) { deleting = true; heroTypeSchedule(tick, holdFor(msg)); return; }
+      heroTypeSchedule(tick, TYPE_MS);
+    } else {
+      ci--;
+      el.textContent = msg.slice(0, ci);
+      if (ci <= 0) {
+        deleting = false;
+        mi = (mi + 1) % HERO_MESSAGES.length;
+        heroTypeSchedule(tick, 450);
+        return;
+      }
+      heroTypeSchedule(tick, ERASE_MS);
+    }
+  }
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      if (heroTypeTimer) { clearTimeout(heroTypeTimer); heroTypeTimer = null; }
+    } else if (!heroTypeTimer) {
+      tick();
+    }
+  });
+  heroTypeSchedule(tick, holdFor(HERO_MESSAGES[0]));
+}
+
+function renderHeroFlow() {
+  const flow = document.getElementById('hero-flow');
+  if (!flow || flow.dataset.built) return;
+  const pool = [];
+  const seen = new Set();
+  (CATEGORIES || []).forEach(c => {
+    if (c.image && !seen.has(c.image)) { seen.add(c.image); pool.push(c.image); }
+  });
+  (PRODUCTS || []).forEach(p => {
+    (p.gallery || []).slice(0, 2).forEach(img => {
+      if (img && !seen.has(img) && pool.length < 30) { seen.add(img); pool.push(img); }
+    });
+  });
+  if (pool.length < 6) return; // pas assez d'images : hero sobre, sans flow
+  const rows = [
+    { cls: 'hero-row-1', tilt: '-3deg', dur: '70s', hide: '', imgs: pool.filter((_, i) => i % 3 === 0) },
+    { cls: 'hero-row-2', tilt: '2deg', dur: '95s', hide: 'hidden sm:flex', imgs: pool.filter((_, i) => i % 3 === 1) },
+    { cls: 'hero-row-3', tilt: '-2deg', dur: '120s', hide: 'hidden lg:flex', imgs: pool.filter((_, i) => i % 3 === 2) }
+  ];
+  flow.innerHTML = rows.map(r => {
+    const list = (r.imgs.length >= 3 ? r.imgs : pool).slice(0, 10);
+    const doubled = list.concat(list);
+    return `<div class="hero-flow-row ${r.cls} ${r.hide}" style="--tilt:${r.tilt};--dur:${r.dur}" role="presentation">` +
+      doubled.map(src => `<img src="${src}" alt="" loading="lazy" decoding="async" draggable="false">`).join('') +
+      `</div>`;
+  }).join('');
+  // Espacement vertical des rangées
+  flow.classList.add('flex', 'flex-col', 'justify-center', 'gap-8');
+  flow.dataset.built = '1';
+}
+
+function renderHeroStats() {
+  const sup = document.getElementById('hero-stat-suppliers');
+  const prod = document.getElementById('hero-stat-products');
+  const rate = document.getElementById('hero-stat-rating');
+  if (sup) sup.textContent = (typeof SUPPLIERS !== 'undefined' && SUPPLIERS.length) ? SUPPLIERS.length + '+' : (PRODUCTS.length ? '✓' : '…');
+  if (prod) prod.textContent = PRODUCTS.length ? PRODUCTS.length + '+' : '…';
+  if (rate) {
+    const rated = PRODUCTS.filter(p => p.rating > 0);
+    rate.textContent = rated.length
+      ? (rated.reduce((s, p) => s + p.rating, 0) / rated.length).toFixed(1).replace('.', ',') + '/5'
+      : '…';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  try { AOS.init({ duration: 600, once: true, offset: 40 }); } catch(e) {}
+  initTypewriter();
+  renderPopular(); renderBestSellers(); renderNew(); renderTrends(); renderAllProducts(); renderRecommendations();
+  try { await Promise.all([loadProducts(), loadCategories(), loadSuppliers()]); } catch(e) { console.error(e); }
+  // Secours ultime : si l'API n'a rien donné, catalogue intégré
+  if (!PRODUCTS.length && typeof FALLBACK_PRODUCTS !== 'undefined') PRODUCTS = FALLBACK_PRODUCTS.slice();
+  productsLoaded = true;
+  renderHeroFlow();
+  renderHeroStats();
+  renderCategories();
+  renderPopular();
+  renderBestSellers();
+  renderNew();
+  renderSuppliers();
+  renderRecent();
+  renderRecommendations();
+  renderTrends();
+  homePage = 1;
+  renderAllProducts();
+  renderTestimonials();
+  renderFilterOptions();
+  updateCartUI();
+  updateFavUI();
+  startCountdown();
+});
+</script>
+</body>
+</html>
