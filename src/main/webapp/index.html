@@ -733,9 +733,32 @@ tailwind.config = {
             <label class="block text-sm font-medium text-slate-700 mb-1.5">Commentaire (optionnel)</label>
             <textarea id="order-comment" rows="2" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm" placeholder="Instructions particulières..."></textarea>
           </div>
-          <button type="submit" class="w-full py-4 bg-[#16a34a] hover:bg-[#15803d] text-white font-semibold rounded-2xl transition shadow-soft flex items-center justify-center gap-2 text-base">
-            <i class="bi bi-whatsapp text-xl"></i> Envoyer ma commande via WhatsApp
+          <div>
+            <span class="block text-sm font-medium text-slate-700 mb-2">Moyen de paiement *</span>
+            <div class="space-y-2" role="radiogroup" aria-label="Moyen de paiement">
+              <label class="flex items-start gap-3 p-3.5 rounded-2xl border border-slate-200 cursor-pointer hover:border-primary-400 transition has-[:checked]:border-primary-600 has-[:checked]:bg-primary-50/50">
+                <input type="radio" name="pay-method" onchange="document.getElementById('momo-box').classList.toggle('hidden', this.value==='PAIEMENT_LIVRAISON')" value="PAIEMENT_LIVRAISON" checked class="mt-1 accent-primary-700">
+                <span><span class="block text-sm font-bold">Paiement à la livraison</span><span class="block text-xs text-slate-500">Payez en espèces à la réception. Confirmation à la livraison.</span></span>
+              </label>
+              <label class="flex items-start gap-3 p-3.5 rounded-2xl border border-slate-200 cursor-pointer hover:border-primary-400 transition has-[:checked]:border-primary-600 has-[:checked]:bg-primary-50/50">
+                <input type="radio" name="pay-method" onchange="document.getElementById('momo-box').classList.toggle('hidden', this.value==='PAIEMENT_LIVRAISON')" value="MOBILE_MONEY_MTN" class="mt-1 accent-primary-700">
+                <span><span class="block text-sm font-bold">MTN Mobile Money</span><span class="block text-xs text-slate-500">Envoyez au numéro marchand, puis saisissez la référence.</span></span>
+              </label>
+              <label class="flex items-start gap-3 p-3.5 rounded-2xl border border-slate-200 cursor-pointer hover:border-primary-400 transition has-[:checked]:border-primary-600 has-[:checked]:bg-primary-50/50">
+                <input type="radio" name="pay-method" onchange="document.getElementById('momo-box').classList.toggle('hidden', this.value==='PAIEMENT_LIVRAISON')" value="MOBILE_MONEY_ORANGE" class="mt-1 accent-primary-700">
+                <span><span class="block text-sm font-bold">Orange Money</span><span class="block text-xs text-slate-500">Envoyez au numéro marchand, puis saisissez la référence.</span></span>
+              </label>
+            </div>
+            <div id="momo-box" class="hidden mt-3 rounded-2xl bg-amber-50/70 border border-amber-200 p-4 text-sm space-y-2">
+              <p class="font-bold text-sm">Paiement Mobile Money manuel</p>
+              <p class="text-xs text-slate-600">1. Envoyez le montant exact au numéro marchand qui vous sera communiqué.<br>2. Saisissez ci-dessous la référence de transaction reçue par SMS.<br>3. Un administrateur vérifiera et confirmera votre commande.</p>
+              <input type="text" id="order-momo-ref" maxlength="30" placeholder="Référence (ex. MP240915.1234)" aria-label="Référence de transaction" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm bg-white">
+            </div>
+          </div>
+          <button type="submit" class="w-full py-4 bg-primary-700 hover:bg-primary-800 text-white font-semibold rounded-2xl transition shadow-soft flex items-center justify-center gap-2 text-base">
+            <i class="bi bi-lock-fill"></i> Confirmer la commande
           </button>
+          <p class="flex items-center justify-center gap-1.5 text-[11px] text-slate-400"><i class="bi bi-shield-check text-primary-600"></i> Montant calculé et vérifié par MBOA STYLE</p>
         </form>
       </div>
       <div class="lg:col-span-2">
@@ -3083,14 +3106,15 @@ async function createInternalOrders(client, items) {
     (groups[sid] = groups[sid] || []).push(it);
   });
   const created = [];
+  const payMethod = client.payMethod || 'PAIEMENT_LIVRAISON';
   for (const sid of Object.keys(groups)) {
     const list = groups[sid];
     const body = {
       fullname: client.name, phone: client.phone, city: client.city,
       district: client.quartier, address: client.address, comment: client.comment,
-      deliveryMode: client.delivery, paymentMethod: 'WHATSAPP',
+      deliveryMode: client.delivery, paymentMethod: payMethod,
       supplierId: parseInt(sid) || null,
-      items: list.map(it => ({ productId: it.id, size: it.size, color: it.color, qty: it.qty, unitPrice: it.price }))
+      items: list.map(it => ({ productId: it.id, size: it.size, color: it.color, qty: it.qty, unitPrice: it.price, offerId: it.offerId || null }))
     };
     const res = await fetch(apiBase() + '/api/orders', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -3139,7 +3163,9 @@ async function submitOrder(e) {
   if (btn) { btn.disabled = true; btn.innerHTML = '<span class="ms-spinner !border-white/30 !border-t-white"></span> Enregistrement…'; }
 
   const orderId = generateOrderId();
-  const client = { name, phone, city, quartier, address, delivery, comment };
+  const payMethod = (document.querySelector('input[name="pay-method"]:checked') || {}).value || 'PAIEMENT_LIVRAISON';
+  const momoRef = (document.getElementById('order-momo-ref') || {}).value || '';
+  const client = { name, phone, city, quartier, address, delivery, comment, payMethod, momoRef: momoRef.trim() };
   const { total } = calculateTotal();
 
   // 1) Commande interne (suivi + stock). Best-effort : jamais bloquant.
@@ -3153,6 +3179,18 @@ async function submitOrder(e) {
     return;
   }
   if (btn) { btn.disabled = false; btn.innerHTML = btnHtml; }
+
+  // 1b) Référence MoMo transmise si fournie (vérification admin ultérieure).
+  if (client.momoRef && internal.length) {
+    for (const o of internal) {
+      try {
+        await fetch(apiBase() + '/api/payments', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'submit-reference', orderNumber: o.orderNumber, phone, transactionRef: client.momoRef })
+        });
+      } catch (e) {}
+    }
+  }
 
   const messages = generateWhatsAppMessage(orderId, client, cart, total);
   try { localStorage.setItem('ms_phone', phone); } catch (e) {}
@@ -3324,13 +3362,68 @@ function renderOrderDetail(o, phone) {
       <p><span class="text-slate-500">Total :</span> <strong class="text-primary-700">${formatPrice(o.total)}</strong></p>
       ${o.createdAt ? `<p><span class="text-slate-500">Date :</span> ${escHTML(o.createdAt)}</p>` : ''}
       ${o.city ? `<p><span class="text-slate-500">Livraison :</span> ${escHTML(o.city)}${o.district ? ' · ' + escHTML(o.district) : ''}</p>` : ''}
-    </div>${steps}
+    </div>
+    <div id="order-payment-block" class="mb-4"><div class="flex justify-center py-3"><span class="ms-spinner"></span></div></div>${steps}
     <p class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Articles</p>
     <div class="mb-4">${items || '<p class="text-sm text-slate-400">—</p>'}</div>
     <div class="flex flex-wrap gap-2">
       ${status === 'EN_ATTENTE' ? `<button onclick="cancelOrder('${escAttr(o.orderNumber)}','${escAttr(phone || '')}')" class="px-4 py-2.5 border border-rose-200 text-rose-600 text-sm font-bold rounded-xl hover:bg-rose-50 transition">Annuler la commande</button>` : ''}
       <button onclick="document.getElementById('history-phone').value='${escAttr(phone || '')}';submitHistory(event)" class="px-4 py-2.5 border border-slate-200 text-sm font-bold rounded-xl hover:border-slate-400 transition">Mes commandes</button>
     </div>`;
+  renderOrderPayment(o, phone);
+}
+
+const PAY_METHOD_LABELS = { PAIEMENT_LIVRAISON: 'Paiement à la livraison', MOBILE_MONEY_MTN: 'MTN Mobile Money', MOBILE_MONEY_ORANGE: 'Orange Money', WHATSAPP: 'WhatsApp', CART_BANCAIRE: 'Carte bancaire' };
+const PAY_STATUS_LABELS = { EN_ATTENTE: 'En attente', REUSSIE: 'Confirmé', ECHOUEE: 'Échoué', ANNULEE: 'Annulé' };
+
+async function renderOrderPayment(o, phone) {
+  const box = document.getElementById('order-payment-block');
+  if (!box) return;
+  try {
+    const res = await fetch(apiBase() + '/api/payments?action=status&orderNumber=' + encodeURIComponent(o.orderNumber) + '&phone=' + encodeURIComponent(phone || ''));
+    if (!res.ok) { box.innerHTML = ''; return; }
+    const p = await res.json();
+    const methodLabel = PAY_METHOD_LABELS[p.method] || p.method || '—';
+    const statusLabel = PAY_STATUS_LABELS[p.status] || p.status;
+    const badge = p.status === 'REUSSIE'
+      ? '<span class="ms-badge ms-badge-verified">Payé</span>'
+      : p.status === 'EN_ATTENTE'
+        ? '<span class="ms-badge ms-badge-deal">Paiement en attente</span>'
+        : '<span class="ms-badge ms-badge-out">' + escHTML(statusLabel) + '</span>';
+    const needsRef = p.status === 'EN_ATTENTE' && (p.method === 'MOBILE_MONEY_MTN' || p.method === 'MOBILE_MONEY_ORANGE');
+    box.innerHTML = `
+      <div class="rounded-2xl border border-slate-100 bg-white p-4 text-sm space-y-2">
+        <div class="flex items-center justify-between gap-2">
+          <p class="font-bold">Paiement · ${escHTML(methodLabel)}</p>${badge}
+        </div>
+        <p><span class="text-slate-500">Montant :</span> <strong class="tabular-nums">${formatPrice(p.amount)}</strong> <span class="text-slate-400">(${escHTML(p.currency || 'FCFA')})</span></p>
+        ${p.transactionRef ? `<p><span class="text-slate-500">Référence :</span> <strong>${escHTML(p.transactionRef)}</strong></p>` : ''}
+        ${needsRef ? `<form onsubmit="return submitPaymentRef(event,'${escAttr(o.orderNumber)}','${escAttr(phone || '')}')" class="flex gap-2 pt-1">
+          <input type="text" id="pay-ref-input" maxlength="30" required placeholder="Référence MoMo reçue par SMS" aria-label="Référence de transaction" class="flex-1 px-3 py-2.5 rounded-xl border border-slate-200 text-sm min-w-0">
+          <button class="px-4 py-2.5 bg-dark-900 hover:bg-slate-700 text-white text-sm font-bold rounded-xl transition shrink-0">Envoyer</button>
+        </form><p class="text-xs text-slate-400">Un administrateur vérifiera votre paiement.</p>` : ''}
+        ${p.method === 'PAIEMENT_LIVRAISON' && p.status === 'EN_ATTENTE' ? '<p class="text-xs text-slate-400">À régler en espèces à la réception.</p>' : ''}
+      </div>`;
+  } catch (e) { box.innerHTML = ''; }
+}
+
+async function submitPaymentRef(e, orderNumber, phone) {
+  e.preventDefault();
+  const ref = document.getElementById('pay-ref-input').value.trim();
+  if (!ref) return false;
+  try {
+    const res = await fetch(apiBase() + '/api/payments', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'submit-reference', orderNumber, phone, transactionRef: ref })
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error((data && (data.message || data.error)) || 'Erreur');
+    showToast('Référence envoyée pour vérification');
+    openOrderDetail(orderNumber, phone);
+  } catch (err) {
+    showToast(err.message || 'Envoi impossible', 'error');
+  }
+  return false;
 }
 
 async function cancelOrder(number, phone) {

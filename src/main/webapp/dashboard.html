@@ -1164,6 +1164,7 @@ function renderOrders() {
 async function viewOrder(id) {
   const o = orders.find(x => x.id === id);
   if (!o) return;
+  window._currentOrderId = id;
   openModal(`
     <div class="p-6">
       <div class="flex justify-between items-start mb-4"><h3 class="text-lg font-bold">Commande ${o.orderNumber || ''}</h3><button onclick="closeModal()" class="text-slate-400 hover:text-slate-600"><i class="bi bi-x-lg"></i></button></div>
@@ -1172,15 +1173,50 @@ async function viewOrder(id) {
         <div class="grid grid-cols-2 gap-3"><div><p class="text-slate-400 text-xs">Ville</p><p class="font-medium">${o.city || '—'}</p></div><div><p class="text-slate-400 text-xs">Quartier</p><p class="font-medium">${o.district || '—'}</p></div></div>
         <div><p class="text-slate-400 text-xs">Adresse</p><p class="font-medium">${o.address || '—'}</p></div>
         <div class="grid grid-cols-2 gap-3"><div><p class="text-slate-400 text-xs">Total</p><p class="font-bold text-lg">${formatMoney(o.total)}</p></div><div><p class="text-slate-400 text-xs">Paiement</p><p class="font-medium">${paymentLabel(o.paymentMethod)}</p></div></div>
+        <div id="adminPayBox"><div class="text-xs text-slate-400">Chargement du paiement…</div></div>
         <div class="grid grid-cols-2 gap-3"><div><p class="text-slate-400 text-xs">Statut</p><span class="px-2 py-1 rounded-full text-xs font-medium ${statusClass(o.status)}">${statusLabel(o.status)}</span></div><div><p class="text-slate-400 text-xs">Date</p><p class="font-medium">${formatDate(o.createdAt)}</p></div></div>
         ${o.items && o.items.length > 0 ? `<div><p class="text-slate-400 text-xs mb-1">Articles</p><div class="space-y-1">${o.items.map(i => `<div class="flex justify-between bg-slate-50 rounded-lg px-3 py-2"><span>${i.name || 'Produit #' + i.productId} × ${i.qty}</span><span class="font-medium">${formatMoney(i.unitPrice || i.price)}</span></div>`).join('')}</div></div>` : ''}
         ${o.comment ? `<div><p class="text-slate-400 text-xs">Commentaire</p><p class="bg-slate-50 rounded-lg px-3 py-2">${o.comment}</p></div>` : ''}
       </div>
     </div>`);
+  loadAdminPayment(o.id);
 }
 
-async function advanceOrder(id) {
-  const o = orders.find(x => x.id === id);
+async function loadAdminPayment(orderId) {
+  const box = document.getElementById('adminPayBox');
+  if (!box) return;
+  try {
+    const p = await api('/api/payments?action=find&orderId=' + orderId);
+    if (!p) { box.innerHTML = '<p class="text-xs text-slate-400">Aucune ligne de paiement.</p>'; return; }
+    const badge = p.status === 'REUSSIE'
+      ? '<span class="text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">Confirmé</span>'
+      : p.status === 'EN_ATTENTE'
+        ? '<span class="text-xs font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full">En attente</span>'
+        : `<span class="text-xs font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">${p.status}</span>`;
+    box.innerHTML = `<div class="rounded-xl border border-slate-100 p-3 space-y-1.5">
+      <div class="flex items-center justify-between gap-2"><p class="text-xs font-bold uppercase tracking-wider text-slate-400">Paiement ${formatMoney(p.amount)}</p>${badge}</div>
+      ${p.transactionRef ? `<p class="text-xs">Référence : <strong>${p.transactionRef}</strong></p>` : '<p class="text-xs text-slate-400">Aucune référence transmise.</p>'}
+      ${p.status === 'EN_ATTENTE' ? `<div class="flex gap-2 pt-1">
+        <button onclick="verifyPayment(${p.id})" class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-xs font-bold rounded-lg transition">Vérifier</button>
+        <button onclick="failPayment(${p.id})" class="px-3 py-1.5 border border-slate-200 hover:border-red-300 hover:text-red-600 text-xs font-bold rounded-lg transition">Rejeter</button>
+      </div>` : ''}
+    </div>`;
+  } catch (e) { box.innerHTML = '<p class="text-xs text-red-500">Paiement illisible.</p>'; }
+}
+async function verifyPayment(id) {
+  try { await api('/api/payments', { method: 'POST', body: JSON.stringify({ action: 'verify', id }) }); notifyMsg('Paiement confirmé'); viewOrder(currentOrderId()); }
+  catch (e) { notifyMsg('Erreur: ' + e.message); }
+}
+async function failPayment(id) {
+  const reason = prompt('Motif du rejet :') || '';
+  try { await api('/api/payments', { method: 'POST', body: JSON.stringify({ action: 'fail', id, reason }) }); notifyMsg('Paiement rejeté', 'info'); viewOrder(currentOrderId()); }
+  catch (e) { notifyMsg('Erreur: ' + e.message); }
+}
+function currentOrderId() {
+  return window._currentOrderId || 0;
+}
+
+async function advanceOrder(id) {  const o = orders.find(x => x.id === id);
   const next = { EN_ATTENTE:'CONFIRMEE', CONFIRMEE:'EN_PREPARATION', EN_PREPARATION:'EN_LIVRAISON', EN_LIVRAISON:'LIVREE' };
   if (o && next[o.status]) {
     await api('/api/orders', { method: 'PUT', body: JSON.stringify({ id: o.id, status: next[o.status] }) });

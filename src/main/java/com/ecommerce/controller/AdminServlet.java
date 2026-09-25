@@ -236,6 +236,10 @@ public class AdminServlet extends HttpServlet {
                         resp.getWriter().write("{\"success\":false,\"message\":\"Rien à rembourser\",\"errorCode\":\"CONFLICT\"}");
                         return;
                     }
+                    // Le remboursement PSP reste manuel (documenté) ; le statut suit ici.
+                    try {
+                        new com.ecommerce.service.PaymentService().markRefunded(orderId, true);
+                    } catch (Exception ignored) {}
                     activityLogDAO.log(adminId2, "ORDER_REFUNDED", "order", orderId,
                         "Remboursement comptable", req.getRemoteAddr());
                     resp.getWriter().write("{\"success\":true,\"reference\":\"" + rev.getReference() + "\"}");

@@ -7,6 +7,10 @@ public class Payment {
     private int amount;
     private String currency;
     private String transactionRef;
+    private String idempotenceKey;
+    private String provider;
+    private String failureReason;
+    private Integer verifiedBy;
     private String status;
     private String paidAt;
     private String createdAt;
@@ -30,6 +34,18 @@ public class Payment {
 
     public String getTransactionRef() { return transactionRef; }
     public void setTransactionRef(String transactionRef) { this.transactionRef = transactionRef; }
+
+    public String getIdempotenceKey() { return idempotenceKey; }
+    public void setIdempotenceKey(String idempotenceKey) { this.idempotenceKey = idempotenceKey; }
+
+    public String getProvider() { return provider; }
+    public void setProvider(String provider) { this.provider = provider; }
+
+    public String getFailureReason() { return failureReason; }
+    public void setFailureReason(String failureReason) { this.failureReason = failureReason; }
+
+    public Integer getVerifiedBy() { return verifiedBy; }
+    public void setVerifiedBy(Integer verifiedBy) { this.verifiedBy = verifiedBy; }
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }

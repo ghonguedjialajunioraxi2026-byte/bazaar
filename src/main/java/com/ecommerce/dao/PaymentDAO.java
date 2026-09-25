@@ -107,6 +107,95 @@ public class PaymentDAO {
         p.setStatus(rs.getString("status"));
         try { p.setPaidAt(rs.getString("paid_at")); } catch (SQLException e) { p.setPaidAt(null); }
         p.setCreatedAt(rs.getString("created_at"));
+        try { p.setProvider(rs.getString("provider")); } catch (SQLException ignored) {}
+        try { p.setIdempotenceKey(rs.getString("idempotence_key")); } catch (SQLException ignored) {}
+        try { p.setFailureReason(rs.getString("failure_reason")); } catch (SQLException ignored) {}
+        try {
+            int vb = rs.getInt("verified_by");
+            p.setVerifiedBy(rs.wasNull() ? null : vb);
+        } catch (SQLException ignored) {}
         return p;
+    }
+
+    public Payment findByIdempotenceKey(String key) throws SQLException {
+        String sql = "SELECT * FROM payments WHERE idempotence_key = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, key);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return mapRow(rs);
+            }
+        }
+        return null;
+    }
+
+    public int createFull(Payment p) throws SQLException {
+        String sql = "INSERT INTO payments (order_id, method, provider, amount, currency, transaction_ref, idempotence_key, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setInt(1, p.getOrderId());
+            ps.setString(2, p.getMethod());
+            ps.setString(3, p.getProvider());
+            ps.setInt(4, p.getAmount());
+            ps.setString(5, p.getCurrency() != null ? p.getCurrency() : "FCFA");
+            ps.setString(6, p.getTransactionRef());
+            ps.setString(7, p.getIdempotenceKey());
+            ps.setString(8, p.getStatus() != null ? p.getStatus() : "EN_ATTENTE");
+            ps.executeUpdate();
+            try (ResultSet keys = ps.getGeneratedKeys()) {
+                if (keys.next()) return keys.getInt(1);
+            }
+            return 0;
+        }
+    }
+
+    public void updateReference(int id, String transactionRef) throws SQLException {
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(
+                 "UPDATE payments SET transaction_ref = ? WHERE id = ? AND status = 'EN_ATTENTE'")) {
+            ps.setString(1, transactionRef);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        }
+    }
+
+    public void markVerified(int id, int adminId) throws SQLException {
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(
+                 "UPDATE payments SET status = 'REUSSIE', verified_by = ?, verified_at = NOW(), paid_at = NOW(), failure_reason = NULL WHERE id = ? AND status = 'EN_ATTENTE'")) {
+            ps.setInt(1, adminId);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        }
+    }
+
+    public void markFailed(int id, String reason) throws SQLException {
+        String safe = reason == null ? null : reason.substring(0, Math.min(255, reason.length()));
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(
+                 "UPDATE payments SET status = 'ECHOUEE', failure_reason = ? WHERE id = ? AND status = 'EN_ATTENTE'")) {
+            ps.setString(1, safe);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        }
+    }
+
+    public void markCancelled(int id) throws SQLException {
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(
+                 "UPDATE payments SET status = 'ANNULEE' WHERE id = ? AND status = 'EN_ATTENTE'")) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        }
+    }
+
+    /** Rouvre une tentative après échec (nouvelle référence à fournir). */
+    public void reopen(int id) throws SQLException {
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(
+                 "UPDATE payments SET status = 'EN_ATTENTE' WHERE id = ? AND status = 'ECHOUEE'")) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        }
     }
 }

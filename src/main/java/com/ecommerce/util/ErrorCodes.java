@@ -29,4 +29,8 @@ public final class ErrorCodes {
     public static final String OFFER_INVALID = "OFFER_INVALID";
     public static final String OFFER_ACCESS_DENIED = "OFFER_ACCESS_DENIED";
     public static final String OFFER_NOT_AVAILABLE = "OFFER_NOT_AVAILABLE";
+    public static final String PAYMENT_REQUIRED = "PAYMENT_REQUIRED";
+    public static final String PAYMENT_NOT_FOUND = "PAYMENT_NOT_FOUND";
+    public static final String PAYMENT_INVALID = "PAYMENT_INVALID";
+    public static final String PROVIDER_UNAVAILABLE = "PROVIDER_UNAVAILABLE";
 }

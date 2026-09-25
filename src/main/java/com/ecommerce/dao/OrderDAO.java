@@ -81,6 +81,20 @@ public class OrderDAO {
                     psItem.executeBatch();
                 }
 
+                // Ligne paiement EN_ATTENTE, atomique avec la commande (Phase 11).
+                // Montant = total serveur ; méthode validée côté service.
+                try (PreparedStatement psPay = conn.prepareStatement(
+                        "INSERT INTO payments (order_id, method, provider, amount, currency, idempotence_key, status) VALUES (?, ?, ?, ?, 'FCFA', ?, 'EN_ATTENTE')")) {
+                    psPay.setInt(1, orderId);
+                    psPay.setString(2, order.getPaymentMethod() != null ? order.getPaymentMethod() : "PAIEMENT_LIVRAISON");
+                    String method = order.getPaymentMethod() != null ? order.getPaymentMethod() : "PAIEMENT_LIVRAISON";
+                    psPay.setString(3, "PAIEMENT_LIVRAISON".equals(method) ? "COD"
+                        : ("MOBILE_MONEY_MTN".equals(method) || "MOBILE_MONEY_ORANGE".equals(method) ? "MANUAL_MOMO" : "LEGACY"));
+                    psPay.setInt(4, order.getTotal());
+                    psPay.setString(5, "PAY-" + orderId);
+                    psPay.executeUpdate();
+                }
+
                 conn.commit();
 
                 // Send notifications (after commit)
@@ -126,7 +140,7 @@ public class OrderDAO {
 
     public Order findById(int id) throws SQLException {
         Order order = null;
-        String sqlOrder = "SELECT * FROM orders WHERE id = ?";
+        String sqlOrder = "SELECT o.*, py.status AS payment_status FROM orders o LEFT JOIN payments py ON py.order_id = o.id WHERE o.id = ?";
         // product_name snapshot prioritaire, nom actuel en repli (lignes pré-migration)
         String sqlItems = "SELECT oi.*, p.name AS current_name FROM order_items oi LEFT JOIN products p ON p.id = oi.product_id WHERE oi.order_id = ?";
 
@@ -162,7 +176,7 @@ public class OrderDAO {
     /** Commandes d'un invité identifié par son téléphone (secret partagé, documenté). */
     public List<Order> findByPhone(String phone) throws SQLException {
         List<Order> list = new ArrayList<>();
-        String sql = "SELECT * FROM orders WHERE phone = ? ORDER BY created_at DESC";
+        String sql = "SELECT o.*, py.status AS payment_status FROM orders o LEFT JOIN payments py ON py.order_id = o.id WHERE o.phone = ? ORDER BY o.created_at DESC";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, phone);
@@ -179,7 +193,7 @@ public class OrderDAO {
 
     /** Détail invité : numéro + téléphone requis (pas d'IDOR par ID seul). */
     public Order findByNumberAndPhone(String number, String phone) throws SQLException {
-        String sql = "SELECT * FROM orders WHERE order_number = ? AND phone = ?";
+        String sql = "SELECT o.*, py.status AS payment_status FROM orders o LEFT JOIN payments py ON py.order_id = o.id WHERE o.order_number = ? AND o.phone = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, number);
@@ -333,7 +347,7 @@ public class OrderDAO {
 
     public List<Order> findBySupplier(int supplierId) throws SQLException {
         List<Order> list = new ArrayList<>();
-        String sql = "SELECT * FROM orders WHERE supplier_id = ? ORDER BY created_at DESC";
+        String sql = "SELECT o.*, py.status AS payment_status FROM orders o LEFT JOIN payments py ON py.order_id = o.id WHERE o.supplier_id = ? ORDER BY o.created_at DESC";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, supplierId);
@@ -356,6 +370,7 @@ public class OrderDAO {
         o.setComment(rs.getString("comment"));
         o.setDeliveryMode(rs.getString("delivery_mode"));
         try { o.setPaymentMethod(rs.getString("payment_method")); } catch (SQLException e) { o.setPaymentMethod("WHATSAPP"); }
+        try { o.setPaymentStatus(rs.getString("payment_status")); } catch (SQLException ignored) {}
         o.setTotal(rs.getInt("total"));
         o.setSupplierId(rs.getInt("supplier_id"));
         o.setStatus(rs.getString("status"));

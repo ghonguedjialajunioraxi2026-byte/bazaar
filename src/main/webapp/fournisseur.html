@@ -904,7 +904,7 @@ async function openOrderModal(id){
       <div class="grid grid-cols-2 gap-3 mb-4 text-sm">
         <div class="bg-slate-50 p-3 rounded-lg"><p class="text-xs text-slate-400">Client</p><p class="font-semibold">${esc(o.fullname)}</p><p>${esc(o.phone)}</p></div>
         <div class="bg-slate-50 p-3 rounded-lg"><p class="text-xs text-slate-400">Adresse</p><p>${esc(o.city)}${o.district?', '+esc(o.district):''}</p><p>${esc(o.address||'')}</p></div>
-        <div class="bg-slate-50 p-3 rounded-lg"><p class="text-xs text-slate-400">Paiement</p><p class="font-semibold">${esc(o.paymentMethod||'WHATSAPP')}</p></div>
+        <div class="bg-slate-50 p-3 rounded-lg"><p class="text-xs text-slate-400">Paiement</p><p class="font-semibold">${esc(o.paymentMethod||'WHATSAPP')}</p><p class="text-xs mt-1">${o.paymentStatus==='REUSSIE'?'<span class="badge bg-green-50 text-green-600">Payé</span>':o.paymentStatus==='EN_ATTENTE'?'<span class="badge bg-amber-50 text-amber-700">En attente</span>':o.paymentStatus?`<span class="badge bg-slate-100 text-slate-500">${esc(o.paymentStatus)}</span>`:''}</p></div>
         <div class="bg-slate-50 p-3 rounded-lg"><p class="text-xs text-slate-400">Date</p><p>${fmtDate(o.createdAt)}</p></div>
       </div>
       <table class="table mb-3"><thead><tr><th>Produit</th><th>Qté</th><th>Prix</th></tr></thead><tbody>

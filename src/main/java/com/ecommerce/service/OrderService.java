@@ -27,6 +27,13 @@ public class OrderService {
         if (order.getItems() == null || order.getItems().isEmpty()) {
             throw new AppException(ErrorCodes.VALIDATION_ERROR, 400, "Panier vide");
         }
+        // Méthode de paiement proposée uniquement (Phase 11) ; WHATSAPP = historique.
+        String pm = order.getPaymentMethod();
+        if (pm == null || pm.trim().isEmpty()) {
+            order.setPaymentMethod("PAIEMENT_LIVRAISON");
+        } else if (!PaymentProviders.offeredMethods().contains(pm) && !"WHATSAPP".equals(pm)) {
+            throw new AppException(ErrorCodes.PROVIDER_UNAVAILABLE, 400, "Moyen de paiement indisponible");
+        }
         int itemsTotal = 0;
         java.util.List<com.ecommerce.model.Offer> consumedOffers = new java.util.ArrayList<>();
         for (OrderItem item : order.getItems()) {
@@ -112,10 +119,34 @@ public class OrderService {
             throw new AppException(ErrorCodes.INVALID_ORDER_STATUS, 400,
                 "Transition refusée : " + o.getStatus() + " → " + status);
         }
+        if ("CONFIRMEE".equals(status)) {
+            // Phase 11 : pas de confirmation sans paiement vérifié,
+            // sauf paiement à la livraison (soldé à la livraison).
+            // Commandes historiques sans ligne (méthode WHATSAPP) : tolérées.
+            com.ecommerce.model.Payment pay;
+            try {
+                pay = new com.ecommerce.dao.PaymentDAO().findByOrderId(id);
+            } catch (SQLException e) {
+                throw new AppException(ErrorCodes.DATABASE_ERROR, 500, "Impossible de traiter votre demande.", e);
+            }
+            boolean cod = "PAIEMENT_LIVRAISON".equals(o.getPaymentMethod());
+            boolean legacy = pay == null && "WHATSAPP".equals(o.getPaymentMethod());
+            boolean paid = pay != null && "REUSSIE".equals(pay.getStatus());
+            if (!cod && !paid && !legacy) {
+                throw new AppException(ErrorCodes.PAYMENT_REQUIRED, 400,
+                    "Paiement vérifié requis avant confirmation");
+            }
+        }
         orderDAO.updateStatus(id, status);
         if ("LIVREE".equals(status)) {
             // Comptabilisation idempotente (retry sûr en cas d'échec).
             new MonetizationService().settleDeliveredOrder(id);
+            // COD : la livraison vaut preuve de paiement.
+            try {
+                new PaymentService().confirmOnDelivery(id);
+            } catch (SQLException e) {
+                throw new AppException(ErrorCodes.DATABASE_ERROR, 500, "Impossible de traiter votre demande.", e);
+            }
         }
         if ("ANNULEE".equals(status)) {
             // Contre-passation idempotente si la commande était comptabilisée.

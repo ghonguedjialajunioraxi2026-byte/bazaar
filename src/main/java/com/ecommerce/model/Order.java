@@ -13,6 +13,8 @@ public class Order {
     private String comment;
     private String deliveryMode;
     private String paymentMethod;
+    /** Statut du paiement lié (transient, jointure) — jamais saisi. */
+    private String paymentStatus;
     private int total;
     private int supplierId;
     private String status;
@@ -50,6 +52,9 @@ public class Order {
 
     public String getPaymentMethod() { return paymentMethod; }
     public void setPaymentMethod(String paymentMethod) { this.paymentMethod = paymentMethod; }
+
+    public String getPaymentStatus() { return paymentStatus; }
+    public void setPaymentStatus(String paymentStatus) { this.paymentStatus = paymentStatus; }
 
     public int getTotal() { return total; }
     public void setTotal(int total) { this.total = total; }

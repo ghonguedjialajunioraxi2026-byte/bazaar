@@ -28,6 +28,24 @@ public class PaymentServlet extends HttpServlet {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
         try {
+            String pubAction = req.getParameter("action");
+            // Statut invité : numéro + téléphone (propriété vérifiée serveur).
+            if ("status".equals(pubAction)) {
+                try {
+                    resp.getWriter().write(JsonUtil.toJson(
+                        new com.ecommerce.service.PaymentService().getStatus(
+                            req.getParameter("orderNumber"), req.getParameter("phone"))));
+                } catch (com.ecommerce.util.AppException ae) {
+                    com.ecommerce.util.ApiResponse.fromException(resp, ae);
+                }
+                return;
+            }
+            // Méthodes proposées (publiques, sans secret).
+            if ("methods".equals(pubAction)) {
+                resp.getWriter().write(JsonUtil.toJson(
+                    com.ecommerce.service.PaymentProviders.offeredMethods()));
+                return;
+            }
             if (com.ecommerce.util.AdminAuth.requireAdmin(req, resp) <= 0) return;
             String action = req.getParameter("action");
             if ("find".equals(action)) {
@@ -52,40 +70,65 @@ public class PaymentServlet extends HttpServlet {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
         try {
-            if (com.ecommerce.util.AdminAuth.requireAdmin(req, resp) <= 0) return;
             BufferedReader reader = req.getReader();
             StringBuilder sb = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) sb.append(line);
             Map<String, Object> body = JsonUtil.fromJson(sb.toString(), Map.class);
+            String action = body.get("action") == null ? null : String.valueOf(body.get("action"));
+            com.ecommerce.service.PaymentService paymentService = new com.ecommerce.service.PaymentService();
 
-            Payment p = new Payment();
-            p.setOrderId(((Number) body.get("orderId")).intValue());
-            p.setMethod((String) body.get("method"));
-            p.setAmount(((Number) body.get("amount")).intValue());
-            p.setTransactionRef((String) body.get("transactionRef"));
-
-            // For WhatsApp / Cash on delivery, auto-mark as EN_ATTENTE
-            if ("WHATSAPP".equals(p.getMethod()) || "PAIEMENT_LIVRAISON".equals(p.getMethod())) {
-                p.setStatus("EN_ATTENTE");
-            } else {
-                // Mobile Money / Card: mark as pending, would need real integration later
-                p.setStatus("EN_ATTENTE");
+            // Actions invité (propriété numéro + téléphone vérifiée serveur).
+            if ("init".equals(action)) {
+                try {
+                    com.ecommerce.model.Payment p = paymentService.initPayment(
+                        str(body.get("orderNumber")), str(body.get("phone")), str(body.get("method")));
+                    resp.setStatus(201);
+                    resp.getWriter().write(JsonUtil.toJson(p));
+                } catch (com.ecommerce.util.AppException ae) {
+                    com.ecommerce.util.ApiResponse.fromException(resp, ae);
+                }
+                return;
+            }
+            if ("submit-reference".equals(action)) {
+                try {
+                    com.ecommerce.model.Payment p = paymentService.submitReference(
+                        str(body.get("orderNumber")), str(body.get("phone")), str(body.get("transactionRef")));
+                    resp.getWriter().write(JsonUtil.toJson(p));
+                } catch (com.ecommerce.util.AppException ae) {
+                    com.ecommerce.util.ApiResponse.fromException(resp, ae);
+                }
+                return;
             }
 
-            int id = paymentDAO.create(p);
-
-            // Notification
-            Order order = orderDAO.findById(p.getOrderId());
-            if (order != null) {
-                notificationDAO.notifyPayment(order.getOrderNumber(), p.getAmount(), p.getStatus());
+            // Actions admin : vérification / échec (montants jamais saisis).
+            int adminId = com.ecommerce.util.AdminAuth.requireAdmin(req, resp);
+            if (adminId <= 0) return;
+            String adminAction = action;
+            try {
+                if ("verify".equals(adminAction)) {
+                    paymentService.verifyPayment(num(body.get("id")), adminId);
+                } else if ("fail".equals(adminAction)) {
+                    paymentService.failPayment(num(body.get("id")), adminId, str(body.get("reason")));
+                } else {
+                    resp.setStatus(400);
+                    resp.getWriter().write("{\"error\":\"Action requise\"}");
+                    return;
+                }
+                resp.getWriter().write("{\"success\":true}");
+            } catch (com.ecommerce.util.AppException ae) {
+                com.ecommerce.util.ApiResponse.fromException(resp, ae);
             }
-
-            resp.getWriter().write("{\"id\":" + id + ",\"status\":\"" + p.getStatus() + "\",\"success\":true}");
         } catch (Exception e) {
             resp.setStatus(500);
             resp.getWriter().write("{\"error\":\"" + e.getMessage().replace("\"", "'") + "\"}");
         }
+    }
+
+    private String str(Object o) { return o == null ? null : String.valueOf(o); }
+    private int num(Object o) {
+        if (o instanceof Number) return ((Number) o).intValue();
+        try { return Integer.parseInt(String.valueOf(o)); } catch (Exception e) { return 0; }
     }
 
     @Override
@@ -104,7 +147,22 @@ public class PaymentServlet extends HttpServlet {
             String status = (String) body.get("status");
             String transactionRef = (String) body.get("transactionRef");
 
-            paymentDAO.updateStatus(id, status, transactionRef);
+            // Plus de statut arbitraire : verify / fail uniquement.
+            com.ecommerce.service.PaymentService paymentService = new com.ecommerce.service.PaymentService();
+            try {
+                if ("REUSSIE".equals(status)) {
+                    paymentService.verifyPayment(id, com.ecommerce.util.AdminAuth.requireAdmin(req, resp));
+                } else if ("ECHOUEE".equals(status)) {
+                    paymentService.failPayment(id, com.ecommerce.util.AdminAuth.requireAdmin(req, resp), transactionRef);
+                } else {
+                    resp.setStatus(400);
+                    resp.getWriter().write("{\"error\":\"Statut non supporté (REUSSIE / ECHOUEE)\"}");
+                    return;
+                }
+            } catch (com.ecommerce.util.AppException ae) {
+                com.ecommerce.util.ApiResponse.fromException(resp, ae);
+                return;
+            }
 
             Payment p = paymentDAO.findById(id);
             if (p != null) {
