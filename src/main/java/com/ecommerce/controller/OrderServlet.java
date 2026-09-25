@@ -44,6 +44,22 @@ public class OrderServlet extends HttpServlet {
             } else if ("search".equals(action)) {
                 String query = req.getParameter("q");
                 resp.getWriter().write(JsonUtil.toJson(orderService.searchOrders(query)));
+            } else if ("myorders".equals(action)) {
+                // Historique invité : téléphone requis (facteur d'appartenance).
+                try {
+                    resp.getWriter().write(JsonUtil.toJson(
+                        orderService.getOrdersByPhone(req.getParameter("phone"))));
+                } catch (AppException ae) {
+                    ApiResponse.fromException(resp, ae);
+                }
+            } else if ("track".equals(action)) {
+                // Détail invité : numéro + téléphone requis (anti-IDOR).
+                try {
+                    resp.getWriter().write(JsonUtil.toJson(orderService.trackOrder(
+                        req.getParameter("number"), req.getParameter("phone"))));
+                } catch (AppException ae) {
+                    ApiResponse.fromException(resp, ae);
+                }
             } else if ("status".equals(action)) {
                 String status = req.getParameter("status");
                 resp.getWriter().write(JsonUtil.toJson(orderService.getOrdersByStatus(status)));
@@ -74,6 +90,19 @@ public class OrderServlet extends HttpServlet {
             String line;
             while ((line = reader.readLine()) != null) sb.append(line);
             Map<String, Object> body = JsonUtil.fromJson(sb.toString(), Map.class);
+
+            // Annulation invitée (numéro + téléphone, EN_ATTENTE uniquement).
+            if ("cancel".equals(body.get("action"))) {
+                try {
+                    orderService.cancelGuestOrder(
+                        body.get("orderNumber") == null ? null : String.valueOf(body.get("orderNumber")),
+                        body.get("phone") == null ? null : String.valueOf(body.get("phone")));
+                    resp.getWriter().write("{\"success\":true,\"status\":\"ANNULEE\"}");
+                } catch (AppException ae) {
+                    ApiResponse.fromException(resp, ae);
+                }
+                return;
+            }
 
             // Validation serveur (le frontend valide aussi, sans être une frontière).
             String fullname = RequestValidator.required(body, "fullname", "Nom complet");
@@ -160,7 +189,12 @@ public class OrderServlet extends HttpServlet {
 
             int id = ((Number) body.get("id")).intValue();
             String status = (String) body.get("status");
-            orderService.updateStatus(id, status);
+            try {
+                orderService.updateStatus(id, status);
+            } catch (AppException ae) {
+                ApiResponse.fromException(resp, ae);
+                return;
+            }
             resp.getWriter().write("{\"success\":true}");
         } catch (Exception e) {
             resp.setStatus(500);

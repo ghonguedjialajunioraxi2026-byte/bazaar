@@ -467,7 +467,13 @@ public class SupplierApiServlet extends HttpServlet {
                 while ((line = reader.readLine()) != null) sb.append(line);
                 Map<String, Object> body = JsonUtil.fromJson(sb.toString(), Map.class);
                 String status = str(body.get("status"));
-                boolean ok = supplierService.updateOrderStatusForSupplier(supplierId, oid, status);
+                boolean ok;
+                try {
+                    ok = supplierService.updateOrderStatusForSupplier(supplierId, oid, status);
+                } catch (com.ecommerce.util.AppException ae) {
+                    write(resp, err(ae.getMessage()), ae.getHttpStatus());
+                    return;
+                }
                 if (!ok) { write(resp, err("Commande introuvable"), 404); return; }
                 write(resp, ok("Statut de la commande mis à jour", null), 200);
                 return;

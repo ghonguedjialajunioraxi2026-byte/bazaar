@@ -740,6 +740,7 @@ tailwind.config = {
           <li><a href="#" onclick="showSection('shop')" class="hover:text-primary-400 transition">Boutique</a></li>
           <li><a href="#promotions" class="hover:text-primary-400 transition">Promotions</a></li>
           <li><button onclick="openTracking()" class="hover:text-primary-400 transition">Suivre ma commande</button></li>
+          <li><button onclick="openTracking();submitHistoryPrefill()" class="hover:text-primary-400 transition">Mes commandes</button></li>
           <li><a href="#about" class="hover:text-primary-400 transition">À propos</a></li>
         </ul>
       </div>
@@ -928,38 +929,46 @@ tailwind.config = {
   <p id="lightbox-count" class="absolute bottom-5 left-1/2 -translate-x-1/2 text-white/70 text-sm tabular-nums"></p>
 </div>
 
-<!-- ========== TRACKING MODAL ========== -->
+<!-- ========== TRACKING MODAL (suivi + historique + détail) ========== -->
 <div id="tracking-modal" class="fixed inset-0 z-[90] hidden">
   <div class="absolute inset-0 modal-overlay" onclick="closeTracking()"></div>
   <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white rounded-3xl shadow-2xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto">
     <div class="flex items-center justify-between mb-1">
-      <h2 class="font-display text-xl font-bold">Suivre ma commande</h2>
+      <h2 class="font-display text-xl font-bold" id="tracking-title">Suivre ma commande</h2>
       <button onclick="closeTracking()" aria-label="Fermer" class="w-9 h-9 rounded-full hover:bg-slate-100 flex items-center justify-center"><i class="bi bi-x-lg"></i></button>
     </div>
-    <p class="text-sm text-slate-500 mb-5">Saisissez votre numéro de commande (ex. CMD-2026-000002).</p>
-    <form onsubmit="return submitTracking(event)" class="flex gap-2 mb-5">
-      <input type="text" id="tracking-number" placeholder="N° de commande" class="flex-1 px-4 py-3 rounded-xl border border-slate-200 text-sm min-w-0" required>
-      <button type="submit" class="px-5 py-3 bg-primary-700 hover:bg-primary-800 text-white text-sm font-semibold rounded-xl transition shrink-0">Suivre</button>
-    </form>
+    <div id="tracking-home">
+      <p class="text-sm text-slate-500 mb-4">Suivez une commande avec son numéro, ou retrouvez vos commandes avec votre téléphone.</p>
+      <form onsubmit="return submitTracking(event)" class="flex gap-2 mb-3">
+        <input type="text" id="tracking-number" placeholder="N° de commande (ex. CMD-2026-…)" aria-label="Numéro de commande" class="flex-1 px-4 py-3 rounded-xl border border-slate-200 text-sm min-w-0" required>
+        <button type="submit" class="px-5 py-3 bg-primary-700 hover:bg-primary-800 text-white text-sm font-semibold rounded-xl transition shrink-0">Suivre</button>
+      </form>
+      <form onsubmit="return submitHistory(event)" class="flex gap-2 mb-5">
+        <input type="tel" id="history-phone" placeholder="Votre téléphone" aria-label="Votre téléphone" class="flex-1 px-4 py-3 rounded-xl border border-slate-200 text-sm min-w-0">
+        <button type="submit" class="px-5 py-3 bg-dark-900 hover:bg-slate-700 text-white text-sm font-semibold rounded-xl transition shrink-0">Mes commandes</button>
+      </form>
+    </div>
     <div id="tracking-result"></div>
   </div>
 </div>
 
-<!-- ========== CONFIRMATION MODAL ========== -->
+<!-- ========== CONFIRMATION MODAL (interne) ========== -->
 <div id="confirm-modal" class="fixed inset-0 z-[90] hidden">
   <div class="absolute inset-0 modal-overlay"></div>
-  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white rounded-3xl shadow-2xl p-8 text-center">
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white rounded-3xl shadow-2xl p-8 text-center max-h-[90vh] overflow-y-auto">
     <div class="w-16 h-16 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center mx-auto mb-5 text-3xl"><i class="bi bi-check-lg"></i></div>
-    <h2 class="font-display text-2xl font-bold mb-2">Commande enregistrée !</h2>
-    <p class="text-slate-500 text-sm mb-6">Votre commande est enregistrée sur MBOA STYLE. Confirmez-la en un clic via WhatsApp : le fournisseur vous répondra pour la livraison.</p>
-    <div class="bg-slate-50 rounded-2xl p-4 mb-6 text-left text-sm space-y-1">
+    <h2 class="font-display text-2xl font-bold mb-2">Commande confirmée !</h2>
+    <p class="text-slate-500 text-sm mb-6">Merci pour votre commande. Suivez son avancement directement sur MBOA STYLE.</p>
+    <div class="bg-slate-50 rounded-2xl p-4 mb-5 text-left text-sm space-y-1">
       <p><span class="text-slate-500">N° commande :</span> <strong id="confirm-order-id"></strong></p>
       <p><span class="text-slate-500">Total :</span> <strong id="confirm-total" class="text-primary-600"></strong></p>
       <div id="confirm-internal" class="pt-1"></div>
     </div>
-    <a id="confirm-wa-link" href="#" target="_blank" class="block w-full py-3.5 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-2xl transition mb-3">
-      <i class="bi bi-whatsapp"></i> Ouvrir WhatsApp
-    </a>
+    <div id="confirm-actions" class="space-y-2.5 mb-3"></div>
+    <details class="mb-4 text-left text-sm">
+      <summary class="cursor-pointer text-slate-500 hover:text-primary-700 font-medium">Contacter le vendeur (optionnel)</summary>
+      <div id="confirm-contacts" class="mt-2 space-y-2"></div>
+    </details>
     <button onclick="closeConfirmModal()" class="text-sm text-slate-500 hover:text-slate-700">Fermer</button>
   </div>
 </div>
@@ -1883,6 +1892,15 @@ window.addEventListener('hashchange', () => {
   if (h.startsWith('#/produit/')) {
     const id = parseInt(h.split('/')[2]);
     if (id > 0 && id !== currentProductId) openProduct(id);
+    return;
+  }
+  if (h.startsWith('#/commande/')) {
+    openTracking();
+    const num = decodeURIComponent(h.split('/')[2] || '');
+    if (num) {
+      document.getElementById('tracking-number').value = num;
+      openOrderDetail(num, rememberedPhone());
+    }
   }
 });
 
@@ -3020,14 +3038,17 @@ async function submitOrder(e) {
   try {
     internal = await createInternalOrders(client, cart);
   } catch (err) {
-    console.warn('Commande interne impossible, repli WhatsApp :', err);
-    showToast(err && err.serverMessage ? err.serverMessage : 'Enregistrement en ligne indisponible — envoi WhatsApp', 'info');
+    console.warn('Commande interne impossible :', err);
+    if (btn) { btn.disabled = false; btn.innerHTML = btnHtml; }
+    showToast(err && err.serverMessage ? err.serverMessage : 'Commande non enregistrée, réessayez', 'error');
+    return;
   }
   if (btn) { btn.disabled = false; btn.innerHTML = btnHtml; }
 
   const messages = generateWhatsAppMessage(orderId, client, cart, total);
+  try { localStorage.setItem('ms_phone', phone); } catch (e) {}
 
-  // Show confirmation
+  // Confirmation interne : numéros, suivi, actions. WhatsApp = contact optionnel.
   const refNumbers = internal.map(o => o.orderNumber).filter(Boolean);
   document.getElementById('confirm-order-id').textContent = refNumbers[0] || orderId;
   document.getElementById('confirm-total').textContent = formatPrice(total);
@@ -3035,25 +3056,22 @@ async function submitOrder(e) {
   if (internalBox) {
     internalBox.innerHTML = refNumbers.length
       ? `<p><span class="text-slate-500">Enregistrée sous :</span> <strong>${refNumbers.map(escHTML).join(' · ')}</strong></p>
-         <p class="text-xs text-slate-400">Suivez-la via « Suivre ma commande » dans le menu.</p>`
-      : `<p class="text-xs text-slate-400">Confirmation directe avec le vendeur via WhatsApp.</p>`;
+         <p class="text-xs text-slate-400">Retrouvez-la via « Suivre ma commande ».</p>`
+      : `<p class="text-xs text-slate-400">Enregistrement en ligne indisponible : finalisez avec le vendeur ci-dessous.</p>`;
   }
-
-  // Primary WhatsApp link (first supplier or combined)
-  const primary = messages[0];
-  const waUrl = `https://wa.me/${primary.whatsapp}?text=${encodeURIComponent(primary.text)}`;
-  document.getElementById('confirm-wa-link').href = waUrl;
-
-  // If multiple suppliers, open all after a short delay or let user handle
-  if (messages.length > 1) {
-    document.getElementById('confirm-wa-link').onclick = function(ev) {
-      // Open all supplier chats
-      messages.forEach((m, i) => {
-        setTimeout(() => {
-          window.open(`https://wa.me/${m.whatsapp}?text=${encodeURIComponent(m.text)}`, '_blank');
-        }, i * 600);
-      });
-    };
+  const actions = document.getElementById('confirm-actions');
+  if (actions) {
+    const firstNum = refNumbers[0] || orderId;
+    actions.innerHTML = `
+      ${refNumbers.length ? `<button onclick="closeConfirmModal();openOrderDetail('${escAttr(firstNum)}','${escAttr(phone)}')" class="block w-full py-3.5 bg-primary-700 hover:bg-primary-800 text-white font-semibold rounded-2xl transition">Voir ma commande</button>` : ''}
+      <button onclick="closeConfirmModal();showSection('shop')" class="block w-full py-3 border border-slate-200 hover:border-slate-400 text-sm font-semibold rounded-2xl transition">Continuer mes achats</button>`;
+  }
+  const contacts = document.getElementById('confirm-contacts');
+  if (contacts) {
+    contacts.innerHTML = messages.map(m => `
+      <a href="https://wa.me/${m.whatsapp}?text=${encodeURIComponent(m.text)}" target="_blank" rel="noopener" class="flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold hover:border-green-500 hover:text-green-700 transition">
+        <i class="bi bi-whatsapp"></i> Contacter le vendeur
+      </a>`).join('');
   }
 
   document.getElementById('confirm-modal').classList.remove('hidden');
@@ -3074,55 +3092,156 @@ const ORDER_LABELS = { EN_ATTENTE: 'Créée', CONFIRMEE: 'Confirmée', EN_PREPAR
 function openTracking() {
   document.getElementById('tracking-modal').classList.remove('hidden');
   document.body.style.overflow = 'hidden';
+  const hp = document.getElementById('history-phone');
+  if (hp && !hp.value) hp.value = rememberedPhone();
   setTimeout(() => document.getElementById('tracking-number').focus(), 50);
+}
+function submitHistoryPrefill() {
+  const hp = document.getElementById('history-phone');
+  if (hp && !hp.value) hp.value = rememberedPhone();
+  if (hp && hp.value) submitHistory({ preventDefault() {} });
 }
 function closeTracking() {
   document.getElementById('tracking-modal').classList.add('hidden');
   document.body.style.overflow = '';
 }
+function rememberedPhone() {
+  try { return localStorage.getItem('ms_phone') || ''; } catch (e) { return ''; }
+}
+
 async function submitTracking(e) {
   e.preventDefault();
   const num = document.getElementById('tracking-number').value.trim();
   const box = document.getElementById('tracking-result');
   if (!num) return false;
+  let phone = rememberedPhone();
+  if (!phone) {
+    phone = (prompt('Numéro de téléphone utilisé pour la commande :') || '').trim();
+    if (!phone) return false;
+    try { localStorage.setItem('ms_phone', phone); } catch (err) {}
+  }
+  await openOrderDetail(num, phone);
+  return false;
+}
+
+async function submitHistory(e) {
+  e.preventDefault();
+  const phoneInput = document.getElementById('history-phone');
+  const phone = (phoneInput.value || rememberedPhone()).trim();
+  const box = document.getElementById('tracking-result');
+  if (!phone) {
+    box.innerHTML = '<div class="ms-alert ms-alert-error">Saisissez votre numéro de téléphone.</div>';
+    return false;
+  }
+  try { localStorage.setItem('ms_phone', phone); } catch (err) {}
   box.innerHTML = '<div class="flex justify-center py-6"><span class="ms-spinner"></span></div>';
   try {
-    const res = await fetch('api/orders?action=search&q=' + encodeURIComponent(num));
-    const list = res.ok ? await res.json() : [];
-    const order = (Array.isArray(list) ? list : []).find(o =>
-      (o.orderNumber || '').toLowerCase() === num.toLowerCase()) || (Array.isArray(list) ? list[0] : null);
-    if (!order) {
-      box.innerHTML = '<div class="ms-alert ms-alert-error">Commande introuvable. Vérifiez le numéro.</div>';
+    const res = await fetch(apiBase() + '/api/orders?action=myorders&phone=' + encodeURIComponent(phone));
+    if (!res.ok) throw new Error('refusé');
+    const list = await res.json();
+    if (!list.length) {
+      box.innerHTML = '<div class="ms-empty !p-6"><p class="font-bold mb-1">Aucune commande</p><p class="text-sm mb-4">Aucune commande liée à ce numéro.</p><button onclick="closeTracking();showSection(\'shop\')" class="px-5 py-2.5 bg-primary-700 text-white text-sm font-bold rounded-xl">Découvrir la boutique</button></div>';
       return false;
     }
-    const status = order.status || 'EN_ATTENTE';
-    let steps;
-    if (status === 'ANNULEE') {
-      steps = `<div class="ms-alert ms-alert-error mb-4">Cette commande a été annulée.</div>`;
-    } else {
-      const idx = ORDER_FLOW.indexOf(status);
-      steps = `<ol class="space-y-0 mb-4">` + ORDER_FLOW.map((s, i) => `
-        <li class="flex gap-3">
-          <div class="flex flex-col items-center">
-            <span class="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold ${i <= idx ? 'bg-primary-700 text-white' : 'bg-slate-100 text-slate-400'}">${i <= idx ? '<i class="bi bi-check"></i>' : (i + 1)}</span>
-            ${i < ORDER_FLOW.length - 1 ? `<span class="w-0.5 flex-1 ${i < idx ? 'bg-primary-500' : 'bg-slate-100'}"></span>` : ''}
+    box.innerHTML = '<p class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Mes commandes</p><div class="space-y-2">' +
+      list.map(o => `
+        <button onclick="openOrderDetail('${escAttr(o.orderNumber)}','${escAttr(phone)}')" class="w-full text-left bg-slate-50/70 border border-slate-100 rounded-2xl p-3.5 hover:border-primary-300 transition">
+          <div class="flex items-center justify-between gap-2">
+            <p class="text-sm font-bold">${escHTML(o.orderNumber || ('#' + o.id))}</p>
+            <span class="ms-badge ${o.status === 'ANNULEE' ? 'ms-badge-out' : o.status === 'LIVREE' ? 'ms-badge-verified' : 'ms-badge-deal'}">${escHTML(orderStatusLabel(o.status))}</span>
           </div>
-          <div class="pb-5">
-            <p class="text-sm font-semibold ${i <= idx ? 'text-dark-900' : 'text-slate-400'}">${ORDER_LABELS[s]}</p>
-            ${i === idx ? '<p class="text-xs text-primary-700 font-medium">Étape actuelle</p>' : ''}
-          </div>
-        </li>`).join('') + `</ol>`;
-    }
-    box.innerHTML = `
-      <div class="rounded-2xl border border-slate-100 bg-slate-50/70 p-4 mb-4 text-sm space-y-1">
-        <p><span class="text-slate-500">N° :</span> <strong>${escHTML(order.orderNumber || ('#' + order.id))}</strong></p>
-        <p><span class="text-slate-500">Total :</span> <strong class="text-primary-700">${formatPrice(order.total)}</strong></p>
-        ${order.createdAt ? `<p><span class="text-slate-500">Date :</span> ${escHTML(order.createdAt)}</p>` : ''}
-      </div>${steps}`;
+          <p class="text-xs text-slate-500 mt-0.5">${escHTML(o.createdAt || '')} · <strong class="text-dark-900">${formatPrice(o.total)}</strong></p>
+        </button>`).join('') + '</div>';
   } catch (err) {
     box.innerHTML = '<div class="ms-alert ms-alert-error">Service momentanément indisponible. Réessayez.</div>';
   }
   return false;
+}
+
+function orderStatusLabel(s) {
+  return (typeof ORDER_LABELS !== 'undefined' && ORDER_LABELS[s]) || s || '—';
+}
+
+async function openOrderDetail(number, phone) {
+  openTracking();
+  const box = document.getElementById('tracking-result');
+  box.innerHTML = '<div class="flex justify-center py-6"><span class="ms-spinner"></span></div>';
+  try {
+    const res = await fetch(apiBase() + '/api/orders?action=track&number=' + encodeURIComponent(number) + '&phone=' + encodeURIComponent(phone || ''));
+    if (res.status === 404) {
+      box.innerHTML = '<div class="ms-alert ms-alert-error">Cette commande n\'existe pas ou n\'est plus accessible.</div>';
+      return;
+    }
+    if (!res.ok) throw new Error('refusé');
+    const o = await res.json();
+    renderOrderDetail(o, phone);
+    try { history.replaceState(null, '', '#/commande/' + encodeURIComponent(o.orderNumber)); } catch (e) {}
+  } catch (err) {
+    box.innerHTML = '<div class="ms-alert ms-alert-error">Service momentanément indisponible. Réessayez.</div>';
+  }
+}
+
+function renderOrderDetail(o, phone) {
+  const box = document.getElementById('tracking-result');
+  const status = o.status || 'EN_ATTENTE';
+  let steps;
+  if (status === 'ANNULEE') {
+    steps = `<div class="ms-alert ms-alert-error mb-4">Cette commande a été annulée.</div>`;
+  } else {
+    const idx = ORDER_FLOW.indexOf(status);
+    steps = `<ol class="space-y-0 mb-4">` + ORDER_FLOW.map((s, i) => `
+      <li class="flex gap-3">
+        <div class="flex flex-col items-center">
+          <span class="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold ${i <= idx ? 'bg-primary-700 text-white' : 'bg-slate-100 text-slate-400'}">${i <= idx ? '<i class="bi bi-check"></i>' : (i + 1)}</span>
+          ${i < ORDER_FLOW.length - 1 ? `<span class="w-0.5 flex-1 ${i < idx ? 'bg-primary-500' : 'bg-slate-100'}"></span>` : ''}
+        </div>
+        <div class="pb-5">
+          <p class="text-sm font-semibold ${i <= idx ? 'text-dark-900' : 'text-slate-400'}">${ORDER_LABELS[s]}</p>
+          ${i === idx ? '<p class="text-xs text-primary-700 font-medium">Étape actuelle</p>' : ''}
+        </div>
+      </li>`).join('') + `</ol>`;
+  }
+  const items = (o.items || []).map(it => `
+    <div class="flex gap-3 items-center py-2 border-t border-slate-100 first:border-0">
+      <div class="flex-1 min-w-0">
+        <p class="text-sm font-bold truncate">${escHTML(it.productName || ('Produit #' + it.productId))}</p>
+        <p class="text-xs text-slate-500">x${it.qty}${it.color ? ' · ' + escHTML(it.color) : ''}${it.size ? ' · ' + escHTML(it.size) : ''}</p>
+      </div>
+      <p class="text-sm font-bold tabular-nums whitespace-nowrap">${formatPrice(it.unitPrice * it.qty)}</p>
+    </div>`).join('');
+  box.innerHTML = `
+    <div class="rounded-2xl border border-slate-100 bg-slate-50/70 p-4 mb-4 text-sm space-y-1">
+      <p><span class="text-slate-500">N° :</span> <strong>${escHTML(o.orderNumber || ('#' + o.id))}</strong></p>
+      <p><span class="text-slate-500">Total :</span> <strong class="text-primary-700">${formatPrice(o.total)}</strong></p>
+      ${o.createdAt ? `<p><span class="text-slate-500">Date :</span> ${escHTML(o.createdAt)}</p>` : ''}
+      ${o.city ? `<p><span class="text-slate-500">Livraison :</span> ${escHTML(o.city)}${o.district ? ' · ' + escHTML(o.district) : ''}</p>` : ''}
+    </div>${steps}
+    <p class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Articles</p>
+    <div class="mb-4">${items || '<p class="text-sm text-slate-400">—</p>'}</div>
+    <div class="flex flex-wrap gap-2">
+      ${status === 'EN_ATTENTE' ? `<button onclick="cancelOrder('${escAttr(o.orderNumber)}','${escAttr(phone || '')}')" class="px-4 py-2.5 border border-rose-200 text-rose-600 text-sm font-bold rounded-xl hover:bg-rose-50 transition">Annuler la commande</button>` : ''}
+      <button onclick="document.getElementById('history-phone').value='${escAttr(phone || '')}';submitHistory(event)" class="px-4 py-2.5 border border-slate-200 text-sm font-bold rounded-xl hover:border-slate-400 transition">Mes commandes</button>
+    </div>`;
+}
+
+async function cancelOrder(number, phone) {
+  if (!phone) { showToast('Téléphone requis pour annuler', 'error'); return; }
+  const box = document.getElementById('tracking-result');
+  try {
+    const res = await fetch(apiBase() + '/api/orders', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'cancel', orderNumber: number, phone })
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      showToast(err.message || 'Annulation impossible', 'error');
+      return;
+    }
+    showToast('Commande annulée, stock restauré');
+    openOrderDetail(number, phone);
+  } catch (e) {
+    showToast('Annulation impossible pour le moment', 'error');
+  }
 }
 
 // ---------- NEWSLETTER ----------
@@ -3295,6 +3414,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   if ((location.hash || '').startsWith('#/produit/')) {
     const pid = parseInt(location.hash.split('/')[2]);
     if (pid > 0) openProduct(pid);
+  }
+  // Accès direct commande partageable (#/commande/NUMERO)
+  if ((location.hash || '').startsWith('#/commande/')) {
+    const num = decodeURIComponent(location.hash.split('/')[2] || '');
+    if (num) {
+      openTracking();
+      document.getElementById('tracking-number').value = num;
+      openOrderDetail(num, rememberedPhone());
+    }
   }
   updateCartUI();
   updateFavUI();

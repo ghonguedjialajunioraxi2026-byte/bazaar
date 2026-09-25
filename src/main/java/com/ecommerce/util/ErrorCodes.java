@@ -18,4 +18,7 @@ public final class ErrorCodes {
     public static final String INVALID_REQUEST = "INVALID_REQUEST";
     public static final String DATABASE_ERROR  = "DATABASE_ERROR";
     public static final String INTERNAL_ERROR  = "INTERNAL_ERROR";
+    public static final String INVALID_ORDER_STATUS = "INVALID_ORDER_STATUS";
+    public static final String ORDER_NOT_FOUND = "ORDER_NOT_FOUND";
+    public static final String ORDER_ACCESS_DENIED = "ORDER_ACCESS_DENIED";
 }

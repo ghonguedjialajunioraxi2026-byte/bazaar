@@ -12,7 +12,7 @@ public class OrderDAO {
 
     public int create(Order order) throws SQLException {
         String sqlOrder = "INSERT INTO orders (order_number, fullname, phone, city, district, address, comment, delivery_mode, payment_method, total, supplier_id, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'EN_ATTENTE')";
-        String sqlItem = "INSERT INTO order_items (order_id, product_id, size, color, qty, unit_price) VALUES (?, ?, ?, ?, ?, ?)";
+        String sqlItem = "INSERT INTO order_items (order_id, product_id, product_name, size, color, qty, unit_price) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DBConnection.getConnection()) {
             conn.setAutoCommit(false);
@@ -51,10 +51,11 @@ public class OrderDAO {
                     for (OrderItem item : order.getItems()) {
                         psItem.setInt(1, orderId);
                         psItem.setInt(2, item.getProductId());
-                        psItem.setString(3, item.getSize());
-                        psItem.setString(4, item.getColor());
-                        psItem.setInt(5, item.getQty());
-                        psItem.setInt(6, item.getUnitPrice());
+                        psItem.setString(3, item.getProductName());
+                        psItem.setString(4, item.getSize());
+                        psItem.setString(5, item.getColor());
+                        psItem.setInt(6, item.getQty());
+                        psItem.setInt(7, item.getUnitPrice());
                         psItem.addBatch();
 
                         psDec.setInt(1, item.getQty());
@@ -124,7 +125,8 @@ public class OrderDAO {
     public Order findById(int id) throws SQLException {
         Order order = null;
         String sqlOrder = "SELECT * FROM orders WHERE id = ?";
-        String sqlItems = "SELECT * FROM order_items WHERE order_id = ?";
+        // product_name snapshot prioritaire, nom actuel en repli (lignes pré-migration)
+        String sqlItems = "SELECT oi.*, p.name AS current_name FROM order_items oi LEFT JOIN products p ON p.id = oi.product_id WHERE oi.order_id = ?";
 
         try (Connection conn = DBConnection.getConnection()) {
             PreparedStatement ps = conn.prepareStatement(sqlOrder);
@@ -141,6 +143,8 @@ public class OrderDAO {
                     item.setId(rsItems.getInt("id"));
                     item.setOrderId(rsItems.getInt("order_id"));
                     item.setProductId(rsItems.getInt("product_id"));
+                    String snap = rsItems.getString("product_name");
+                    item.setProductName(snap != null ? snap : rsItems.getString("current_name"));
                     item.setSize(rsItems.getString("size"));
                     item.setColor(rsItems.getString("color"));
                     item.setQty(rsItems.getInt("qty"));
@@ -151,6 +155,102 @@ public class OrderDAO {
             }
         }
         return order;
+    }
+
+    /** Commandes d'un invité identifié par son téléphone (secret partagé, documenté). */
+    public List<Order> findByPhone(String phone) throws SQLException {
+        List<Order> list = new ArrayList<>();
+        String sql = "SELECT * FROM orders WHERE phone = ? ORDER BY created_at DESC";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, phone);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Order o = mapRow(rs);
+                    o.setItems(itemsOf(conn, o.getId()));
+                    list.add(o);
+                }
+            }
+        }
+        return list;
+    }
+
+    /** Détail invité : numéro + téléphone requis (pas d'IDOR par ID seul). */
+    public Order findByNumberAndPhone(String number, String phone) throws SQLException {
+        String sql = "SELECT * FROM orders WHERE order_number = ? AND phone = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, number);
+            ps.setString(2, phone);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Order o = mapRow(rs);
+                    o.setItems(itemsOf(conn, o.getId()));
+                    return o;
+                }
+            }
+        }
+        return null;
+    }
+
+    private List<OrderItem> itemsOf(Connection conn, int orderId) throws SQLException {
+        List<OrderItem> items = new ArrayList<>();
+        String sql = "SELECT oi.*, p.name AS current_name FROM order_items oi LEFT JOIN products p ON p.id = oi.product_id WHERE oi.order_id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, orderId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    OrderItem item = new OrderItem();
+                    item.setId(rs.getInt("id"));
+                    item.setOrderId(rs.getInt("order_id"));
+                    item.setProductId(rs.getInt("product_id"));
+                    String snap = rs.getString("product_name");
+                    item.setProductName(snap != null ? snap : rs.getString("current_name"));
+                    item.setSize(rs.getString("size"));
+                    item.setColor(rs.getString("color"));
+                    item.setQty(rs.getInt("qty"));
+                    item.setUnitPrice(rs.getInt("unit_price"));
+                    items.add(item);
+                }
+            }
+        }
+        return items;
+    }
+
+    /**
+     * Annulation invitée : EN_ATTENTE uniquement, stock restauré, atomique.
+     * @return true si annulée, false si introuvable / déjà traitée.
+     */
+    public boolean cancelGuestOrder(int orderId) throws SQLException {
+        String lock = "SELECT status FROM orders WHERE id = ? FOR UPDATE";
+        try (Connection conn = DBConnection.getConnection()) {
+            conn.setAutoCommit(false);
+            try {
+                String status;
+                try (PreparedStatement ps = conn.prepareStatement(lock)) {
+                    ps.setInt(1, orderId);
+                    try (ResultSet rs = ps.executeQuery()) {
+                        if (!rs.next()) { conn.rollback(); return false; }
+                        status = rs.getString("status");
+                    }
+                }
+                if (!"EN_ATTENTE".equals(status)) { conn.rollback(); return false; }
+                try (PreparedStatement ps = conn.prepareStatement(
+                        "UPDATE products p JOIN order_items oi ON oi.product_id = p.id SET p.stock = p.stock + oi.qty WHERE oi.order_id = ?")) {
+                    ps.setInt(1, orderId);
+                    ps.executeUpdate();
+                }
+                try (PreparedStatement ps = conn.prepareStatement("UPDATE orders SET status = 'ANNULEE' WHERE id = ?")) {
+                    ps.setInt(1, orderId);
+                    ps.executeUpdate();
+                }
+                conn.commit();
+                return true;
+            } catch (SQLException e) {
+                conn.rollback();
+                throw e;
+            }
+        }
     }
 
     public void updateStatus(int id, String status) throws SQLException {
@@ -196,16 +296,19 @@ public class OrderDAO {
         }
     }
 
+    /**
+     * Recherche publique : numéro de commande UNIQUEMENT (Phase 7).
+     * Ne jamais exposer nom/téléphone en recherche libre (données personnelles).
+     * L'administration filtre côté dashboard sur la liste complète (authentifiée).
+     */
     public List<Order> search(String query) throws SQLException {
         List<Order> list = new ArrayList<>();
-        String sql = "SELECT * FROM orders WHERE order_number LIKE ? OR fullname LIKE ? OR phone LIKE ? "
+        String sql = "SELECT * FROM orders WHERE order_number LIKE ? "
             + "ORDER BY created_at DESC";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             String q = "%" + query + "%";
             ps.setString(1, q);
-            ps.setString(2, q);
-            ps.setString(3, q);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) list.add(mapRow(rs));
             }

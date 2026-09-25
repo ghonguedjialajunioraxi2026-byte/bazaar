@@ -167,9 +167,16 @@ public class SupplierService {
         return o;
     }
 
-    public boolean updateOrderStatusForSupplier(int supplierId, int orderId, String status) throws SQLException {
+    public boolean updateOrderStatusForSupplier(int supplierId, int orderId, String status) throws SQLException, com.ecommerce.util.AppException {
+        if (!com.ecommerce.util.OrderStatus.isKnown(status)) {
+            throw new com.ecommerce.util.AppException(com.ecommerce.util.ErrorCodes.INVALID_ORDER_STATUS, 400, "Statut inconnu");
+        }
         Order o = orderDAO.findById(orderId);
         if (o == null || o.getSupplierId() != supplierId) return false;
+        if (!com.ecommerce.util.OrderStatus.canTransition(o.getStatus(), status)) {
+            throw new com.ecommerce.util.AppException(com.ecommerce.util.ErrorCodes.INVALID_ORDER_STATUS, 400,
+                "Transition refusée : " + o.getStatus() + " → " + status);
+        }
         orderDAO.updateStatus(orderId, status);
         return true;
     }

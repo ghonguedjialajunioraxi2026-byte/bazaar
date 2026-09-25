@@ -50,6 +50,8 @@ public class OrderService {
                     "Stock insuffisant pour « " + p.getName() + " » (disponible : " + Math.max(0, p.getStock()) + ")");
             }
             // Prix serveur imposé : toute valeur envoyée par le navigateur est ignorée.
+            // Snapshot : le nom est figé dans la ligne (§8 Phase 7).
+            item.setProductName(p.getName());
             item.setUnitPrice(p.getPrice());
             itemsTotal += p.getPrice() * item.getQty();
         }
@@ -79,8 +81,51 @@ public class OrderService {
         return orderDAO.findById(id);
     }
 
-    public void updateStatus(int id, String status) throws SQLException {
+    public void updateStatus(int id, String status) throws AppException, SQLException {
+        if (!com.ecommerce.util.OrderStatus.isKnown(status)) {
+            throw new AppException(ErrorCodes.INVALID_ORDER_STATUS, 400, "Statut inconnu");
+        }
+        com.ecommerce.model.Order o = orderDAO.findById(id);
+        if (o == null) {
+            throw new AppException(ErrorCodes.ORDER_NOT_FOUND, 404, "Commande introuvable");
+        }
+        if (!com.ecommerce.util.OrderStatus.canTransition(o.getStatus(), status)) {
+            throw new AppException(ErrorCodes.INVALID_ORDER_STATUS, 400,
+                "Transition refusée : " + o.getStatus() + " → " + status);
+        }
         orderDAO.updateStatus(id, status);
+    }
+
+    public java.util.List<com.ecommerce.model.Order> getOrdersByPhone(String phone) throws AppException, SQLException {
+        if (phone == null || phone.replaceAll("\\D", "").length() < 9) {
+            throw new AppException(ErrorCodes.VALIDATION_ERROR, 400, "Numéro de téléphone invalide");
+        }
+        return orderDAO.findByPhone(phone.trim());
+    }
+
+    public com.ecommerce.model.Order trackOrder(String number, String phone) throws AppException, SQLException {
+        if (number == null || number.trim().isEmpty() || phone == null || phone.trim().isEmpty()) {
+            throw new AppException(ErrorCodes.VALIDATION_ERROR, 400, "Numéro de commande et téléphone requis");
+        }
+        com.ecommerce.model.Order o = orderDAO.findByNumberAndPhone(number.trim(), phone.trim());
+        if (o == null) {
+            throw new AppException(ErrorCodes.ORDER_NOT_FOUND, 404, "Commande introuvable");
+        }
+        return o;
+    }
+
+    public void cancelGuestOrder(String number, String phone) throws AppException, SQLException {
+        com.ecommerce.model.Order o = trackOrder(number, phone);
+        boolean ok;
+        try {
+            ok = orderDAO.cancelGuestOrder(o.getId());
+        } catch (SQLException e) {
+            throw new AppException(ErrorCodes.DATABASE_ERROR, 500, "Impossible de traiter votre demande.", e);
+        }
+        if (!ok) {
+            throw new AppException(ErrorCodes.INVALID_ORDER_STATUS, 400,
+                "Seule une commande en attente peut être annulée");
+        }
     }
 
     public void deleteOrder(int id) throws SQLException {

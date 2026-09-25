@@ -4,6 +4,8 @@ public class OrderItem {
     private int id;
     private int orderId;
     private int productId;
+    /** Snapshot du nom au moment de l'achat (l'historique ne suit pas les renommages). */
+    private String productName;
     private String size;
     private String color;
     private int qty;
@@ -19,6 +21,9 @@ public class OrderItem {
 
     public int getProductId() { return productId; }
     public void setProductId(int productId) { this.productId = productId; }
+
+    public String getProductName() { return productName; }
+    public void setProductName(String productName) { this.productName = productName; }
 
     public String getSize() { return size; }
     public void setSize(String size) { this.size = size; }
