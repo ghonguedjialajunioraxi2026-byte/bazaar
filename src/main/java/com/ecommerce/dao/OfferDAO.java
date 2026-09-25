@@ -91,8 +91,24 @@ public class OfferDAO {
         }
     }
 
-    public int countToday(int conversationId) throws SQLException {
-        String sql = "SELECT COUNT(*) FROM offers WHERE conversation_id = ? AND created_at >= NOW() - INTERVAL 1 DAY";
+    /** Offres PENDING des conversations d'un fournisseur (vue Négociations). */
+    public List<Offer> findPendingBySupplier(int supplierId) throws SQLException {
+        List<Offer> list = new ArrayList<>();
+        String sql = "SELECT o.*, p.name AS product_name FROM offers o "
+            + "JOIN conversations c ON c.id = o.conversation_id "
+            + "LEFT JOIN products p ON p.id = o.product_id "
+            + "WHERE c.supplier_id = ? AND o.status = 'PENDING' ORDER BY o.id DESC";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, supplierId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) list.add(mapRow(rs));
+            }
+        }
+        return list;
+    }
+
+    public int countToday(int conversationId) throws SQLException {        String sql = "SELECT COUNT(*) FROM offers WHERE conversation_id = ? AND created_at >= NOW() - INTERVAL 1 DAY";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, conversationId);

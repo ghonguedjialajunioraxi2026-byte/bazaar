@@ -656,6 +656,22 @@ tailwind.config = {
   </div>
 </section>
 
+<!-- ========== SUPPLIER SHOP SECTION ========== -->
+<section id="section-supplier" class="hidden">
+  <div class="w-full px-4 sm:px-6 lg:px-8 2xl:px-12 py-10">
+    <nav class="flex items-center gap-1.5 text-[13px] text-slate-400 mb-6" aria-label="Fil d'Ariane">
+      <button onclick="showSection('home')" class="hover:text-primary-700 transition font-medium">Accueil</button>
+      <i class="bi bi-chevron-right text-[10px]"></i><span class="text-dark-900 font-semibold">Boutique vendeur</span>
+    </nav>
+    <div id="supplier-shop-header"></div>
+    <div class="flex items-end justify-between mt-8 mb-6">
+      <h2 class="font-display text-xl sm:text-2xl font-bold">Produits de la boutique</h2>
+      <p class="text-sm text-slate-500"><span id="supplier-products-count" class="font-bold text-dark-900">0</span> produits</p>
+    </div>
+    <div id="supplier-products" class="grid gap-4 lg:gap-5 grid-cols-[repeat(auto-fill,minmax(min(100%,230px),1fr))]"></div>
+  </div>
+</section>
+
 <!-- ========== CHECKOUT SECTION ========== -->
 <section id="section-checkout" class="hidden">
   <div class="w-full px-4 sm:px-6 lg:px-8 2xl:px-12 py-10">
@@ -1259,7 +1275,7 @@ function heroQuickSearch(q) {
   heroSearch();
 }
 function showSection(name) {
-  ['home', 'shop', 'checkout', 'messages'].forEach(n =>
+  ['home', 'shop', 'checkout', 'messages', 'supplier'].forEach(n =>
     document.getElementById('section-' + n).classList.toggle('hidden', name !== n));
   // État actif : nav desktop + nav mobile basse
   [['nav-home', 'home'], ['nav-shop', 'shop']].forEach(([id, sec]) => {
@@ -1562,7 +1578,7 @@ function renderSuppliers() {
         : `<div class="w-14 h-14 rounded-2xl bg-primary-700 text-white flex items-center justify-center mx-auto mb-3 text-xl font-extrabold">${escHTML(initial)}</div>`}
       <p class="font-bold text-sm truncate flex items-center justify-center gap-1">${escHTML(s.name)} <i class="bi bi-patch-check-fill text-primary-600 text-xs"></i></p>
       <p class="text-xs text-slate-500 mb-1">${escHTML(s.city || 'Cameroun')} · ${count} produit${count > 1 ? 's' : ''}</p>
-      <button onclick="shopBySupplier('${escAttr(s.name)}')" class="text-xs font-bold text-primary-700 hover:underline">Voir les produits →</button>
+      <button onclick="openSupplierShop(${s.id})" class="text-xs font-bold text-primary-700 hover:underline">Voir la boutique →</button>
     </div>`;
   }).join('');
 }
@@ -1575,6 +1591,47 @@ function shopBySupplier(name) {
   const box = document.getElementById('shop-search');
   if (box) box.value = name;
   applyFilters();
+}
+
+// ---------- BOUTIQUE PUBLIQUE VENDEUR (#/boutique/{id}) ----------
+async function openSupplierShop(id) {
+  showSection('supplier');
+  const header = document.getElementById('supplier-shop-header');
+  const grid = document.getElementById('supplier-products');
+  header.innerHTML = '<div class="flex gap-2"><div class="ms-skeleton h-20 w-20 rounded-2xl"></div><div class="flex-1 space-y-2"><div class="ms-skeleton h-5 w-48"></div><div class="ms-skeleton h-4 w-32"></div></div></div>';
+  grid.innerHTML = skeletonCards(5);
+  try { history.replaceState(null, '', '#/boutique/' + id); } catch (e) {}
+  try {
+    const res = await fetch(apiBase() + '/api/suppliers?action=find&id=' + id);
+    if (!res.ok) throw new Error('introuvable');
+    const s = await res.json();
+    const prods = PRODUCTS.filter(p => p.supplierId === id);
+    const ratings = prods.filter(p => p.rating > 0);
+    const avg = ratings.length ? (ratings.reduce((a, p) => a + p.rating, 0) / ratings.length).toFixed(1).replace('.', ',') : '—';
+    const initial = ((s.name || '?').trim().charAt(0) || '?').toUpperCase();
+    header.innerHTML = `
+      <div class="bg-white border border-slate-100 rounded-3xl shadow-soft p-6 sm:p-8 flex flex-col sm:flex-row gap-5 items-start">
+        ${s.logo ? `<img src="${s.logo}" alt="${escAttr(s.name)}" class="w-20 h-20 rounded-2xl object-cover shrink-0">`
+          : `<div class="w-20 h-20 rounded-2xl bg-primary-700 text-white flex items-center justify-center text-3xl font-extrabold shrink-0">${escHTML(initial)}</div>`}
+        <div class="min-w-0 flex-1">
+          <p class="font-bold text-xl sm:text-2xl flex items-center gap-2 flex-wrap">${escHTML(s.name)} <i class="bi bi-patch-check-fill text-primary-600" title="Vendeur vérifié"></i></p>
+          <p class="text-sm text-slate-500 mb-2">${escHTML(s.city || 'Cameroun')}${s.address ? ' · ' + escHTML(s.address) : ''}</p>
+          ${s.description ? `<p class="text-sm text-slate-600 leading-relaxed mb-3">${escHTML(s.description)}</p>` : ''}
+          <div class="flex flex-wrap gap-4 text-sm">
+            <span><strong class="tabular-nums">${prods.length}</strong> <span class="text-slate-500">produits</span></span>
+            <span><strong class="tabular-nums">${avg}</strong> <span class="text-slate-500">note moyenne</span></span>
+          </div>
+        </div>
+        <button onclick="showSection('shop')" class="shrink-0 px-5 py-2.5 border border-slate-200 hover:border-slate-400 text-sm font-bold rounded-xl transition">← Boutique</button>
+      </div>`;
+    document.getElementById('supplier-products-count').textContent = new Intl.NumberFormat('fr-FR').format(prods.length);
+    grid.innerHTML = prods.length ? prods.map(p => productCardHTML(p)).join('')
+      : '<div class="col-span-full ms-empty"><p class="font-bold mb-1">Aucun produit pour le moment</p></div>';
+  } catch (e) {
+    header.innerHTML = '';
+    grid.innerHTML = '<div class="col-span-full ms-empty"><p class="font-bold mb-1">Boutique introuvable</p><button onclick="showSection(\'shop\')" class="text-primary-700 font-bold text-sm hover:underline">Voir la boutique →</button></div>';
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function getRecent() {
@@ -1931,6 +1988,11 @@ function readCatalogHash() {
 }
 window.addEventListener('hashchange', () => {
   const h = location.hash || '';
+  if (h.startsWith('#/boutique/')) {
+    const sid = parseInt(h.split('/')[2]);
+    if (sid > 0) openSupplierShop(sid);
+    return;
+  }
   if (h.startsWith('#/boutique')) { readCatalogHash(); return; }
   if (h.startsWith('#/produit/')) {
     const id = parseInt(h.split('/')[2]);
@@ -2379,7 +2441,7 @@ function openProduct(id) {
         <div class="flex items-center gap-2.5">
           <span class="w-9 h-9 rounded-xl bg-primary-700 text-white flex items-center justify-center font-bold text-sm shrink-0">${escHTML((p.supplierName || 'M').trim().charAt(0).toUpperCase())}</span>
           <div class="min-w-0">
-            <p class="text-sm font-bold text-dark-900 truncate flex items-center gap-1.5">${escHTML(p.supplierName)} <i class="bi bi-patch-check-fill text-primary-600 text-xs" title="Fournisseur vérifié"></i></p>
+            <p class="text-sm font-bold text-dark-900 truncate flex items-center gap-1.5">${p.supplierId ? `<button onclick="openSupplierShop(${p.supplierId})" class="hover:text-primary-700 hover:underline text-left truncate">${escHTML(p.supplierName)}</button>` : escHTML(p.supplierName)} <i class="bi bi-patch-check-fill text-primary-600 text-xs" title="Fournisseur vérifié"></i></p>
             <p class="text-xs text-slate-500 flex items-center gap-1"><i class="bi bi-truck"></i> Expédition depuis le Cameroun · 24–48h</p>
           </div>
         </div>
@@ -3714,6 +3776,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   if ((location.hash || '').startsWith('#/produit/')) {
     const pid = parseInt(location.hash.split('/')[2]);
     if (pid > 0) openProduct(pid);
+  }
+  // Accès direct boutique vendeur (#/boutique/ID)
+  if ((location.hash || '').startsWith('#/boutique/')) {
+    const sid = parseInt(location.hash.split('/')[2]);
+    if (sid > 0) openSupplierShop(sid);
   }
   // Accès direct commande partageable (#/commande/NUMERO)
   if ((location.hash || '').startsWith('#/commande/')) {

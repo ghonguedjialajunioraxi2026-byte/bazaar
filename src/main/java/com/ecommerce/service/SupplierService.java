@@ -44,7 +44,21 @@ public class SupplierService {
     // --------------------------- PROFIL ---------------------------
     public Supplier getProfile(int id) throws SQLException { return supplierDAO.findById(id); }
 
-    public void updateProfile(int id, Supplier data) throws SQLException {
+    public void updateProfile(int id, Supplier data) throws SQLException, com.ecommerce.util.AppException {
+        if (data.getName() == null || data.getName().trim().isEmpty()) {
+            throw new com.ecommerce.util.AppException(com.ecommerce.util.ErrorCodes.VALIDATION_ERROR, 400, "Nom de boutique obligatoire");
+        }
+        com.ecommerce.util.RequestValidator.maxLen(data.getName().trim(), 120, "Nom de boutique");
+        if (data.getEmail() != null && !data.getEmail().trim().isEmpty()) {
+            com.ecommerce.util.RequestValidator.email(data.getEmail().trim(), "Email");
+        }
+        if (data.getPhone() != null && !data.getPhone().trim().isEmpty()) {
+            com.ecommerce.util.RequestValidator.phone(data.getPhone().trim(), "Téléphone");
+        }
+        com.ecommerce.util.RequestValidator.maxLen(data.getCity(), 60, "Ville");
+        com.ecommerce.util.RequestValidator.maxLen(data.getAddress(), 255, "Adresse");
+        com.ecommerce.util.RequestValidator.maxLen(data.getDescription(), 2000, "Description");
+        com.ecommerce.util.RequestValidator.maxLen(data.getContactName(), 120, "Contact");
         data.setId(id);
         supplierDAO.updateProfile(id, data);
     }
@@ -53,7 +67,10 @@ public class SupplierService {
         supplierDAO.updateLogo(id, logo);
     }
 
-    public boolean changePassword(int id, String current, String newPassword) throws SQLException {
+    public boolean changePassword(int id, String current, String newPassword) throws SQLException, com.ecommerce.util.AppException {
+        if (newPassword == null || newPassword.length() < 6) {
+            throw new com.ecommerce.util.AppException(com.ecommerce.util.ErrorCodes.VALIDATION_ERROR, 400, "Mot de passe trop court (min 6)");
+        }
         Supplier s = supplierDAO.findById(id);
         if (s == null || s.getPasswordHash() == null) return false;
         if (!com.ecommerce.util.PasswordUtil.verify(current, s.getPasswordHash())) return false;
@@ -75,7 +92,19 @@ public class SupplierService {
         return productDAO.findById(productId);
     }
 
-    public int createProductForSupplier(int supplierId, Product p) throws SQLException {
+    public int createProductForSupplier(int supplierId, Product p) throws SQLException, com.ecommerce.util.AppException {
+        if (p.getName() == null || p.getName().trim().isEmpty()) {
+            throw new com.ecommerce.util.AppException(com.ecommerce.util.ErrorCodes.VALIDATION_ERROR, 400, "Nom du produit obligatoire");
+        }
+        if (p.getPrice() <= 0) {
+            throw new com.ecommerce.util.AppException(com.ecommerce.util.ErrorCodes.VALIDATION_ERROR, 400, "Prix invalide");
+        }
+        if (p.getStock() < 0) {
+            throw new com.ecommerce.util.AppException(com.ecommerce.util.ErrorCodes.VALIDATION_ERROR, 400, "Stock invalide");
+        }
+        if (new com.ecommerce.dao.CategoryDAO().findById(p.getCategoryId()) == null) {
+            throw new com.ecommerce.util.AppException(com.ecommerce.util.ErrorCodes.VALIDATION_ERROR, 400, "Catégorie introuvable");
+        }
         p.setSupplierId(supplierId);
         int id = productDAO.createSupplierProduct(p);
         if (id > 0) {

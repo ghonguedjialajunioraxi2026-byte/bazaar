@@ -232,6 +232,7 @@ tailwind.config = { theme: { extend: {
         <a class="nav-link" data-view="statistiques"><i class="bi bi-graph-up-arrow"></i>Statistiques</a>
         <a class="nav-link" data-view="paiements"><i class="bi bi-wallet2"></i>Paiements</a>
         <a class="nav-link" data-view="messages"><i class="bi bi-chat-dots"></i>Messages<span id="badgeMsgs" class="ml-auto bg-red-500 text-white text-[10px] rounded-full px-2 py-0.5 hidden">0</span></a>
+        <a class="nav-link" data-view="negociations"><i class="bi bi-tag"></i>Négociations<span id="badgeNegos" class="ml-auto bg-amber-500 text-white text-[10px] rounded-full px-2 py-0.5 hidden">0</span></a>
         <a class="nav-link" data-view="notifications"><i class="bi bi-bell"></i>Notifications<span id="badgeNotifs" class="ml-auto bg-red-500 text-white text-[10px] rounded-full px-2 py-0.5 hidden">0</span></a>
         <a class="nav-link" data-view="profil"><i class="bi bi-person-circle"></i>Mon profil</a>
       </nav>
@@ -532,7 +533,7 @@ function setActiveNav(v) {
 function goView(v) {
   currentView = v;
   setActiveNav(v);
-  const titles = {dashboard:'Tableau de bord',produits:'Produits',commandes:'Commandes',revenus:'Revenus',statistiques:'Statistiques',paiements:'Paiements',messages:'Messagerie',notifications:'Notifications',profil:'Mon profil'};
+  const titles = {dashboard:'Tableau de bord',produits:'Produits',commandes:'Commandes',revenus:'Revenus',statistiques:'Statistiques',paiements:'Paiements',messages:'Messagerie',negociations:'Négociations',notifications:'Notifications',profil:'Mon profil'};
   document.getElementById('pageTitle').textContent = titles[v]||'';
   document.getElementById('sidebar').classList.remove('open');
   loadView(v);
@@ -548,6 +549,7 @@ function loadView(v) {
   else if (v==='statistiques') renderStatistiques();
   else if (v==='paiements') renderPaiements();
   else if (v==='messages') renderMessages();
+  else if (v==='negociations') renderNegociations();
   else if (v==='notifications') renderNotifications();
   else if (v==='profil') renderProfil();
 }
@@ -561,6 +563,12 @@ async function refreshBadges() {
     document.getElementById('badgeMsgs').classList.toggle('hidden', nm<=0);
     document.getElementById('badgeNotifs').textContent = nn;
     document.getElementById('badgeNotifs').classList.toggle('hidden', nn<=0);
+  } catch(e){}
+  try {
+    const o = await api('/offers');
+    const n = ((o||{}).data||[]).length;
+    const b = document.getElementById('badgeNegos');
+    if (b) { b.textContent = n; b.classList.toggle('hidden', n<=0); }
   } catch(e){}
 }
 setInterval(refreshBadges, 30000);
@@ -1120,6 +1128,40 @@ async function sendMessage(){
   try{ await api('/conversations/'+currentConvo.id+'/messages',{method:'POST',body:JSON.stringify({body})}); input.value=''; openConvo(currentConvo.id); }catch(e){ toast(e.message,'error'); }
 }
 document.addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKey&&currentView==='messages'&&document.getElementById('chatInput')===document.activeElement){ e.preventDefault(); sendMessage(); }});
+
+/* ==================== NÉGOCIATIONS ==================== */
+async function renderNegociations(){
+  const content=document.getElementById('mainContent');
+  content.innerHTML='<div class="skeleton h-40"></div>';
+  try{
+    const list=(await api('/offers')).data||[];
+    if(!list.length){
+      content.innerHTML=`<h3 class="font-bold mb-4">Négociations en attente</h3>`+emptyState('Aucune offre en attente. Les propositions de vos clients apparaîtront ici.');
+      return;
+    }
+    content.innerHTML=`<h3 class="font-bold mb-1">Négociations en attente <span class="badge bg-amber-500 text-white ml-1">${list.length}</span></h3>
+    <p class="text-sm text-slate-500 mb-4">Répondez depuis la conversation pour garder tout l'historique.</p>
+    <div class="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">`+list.map(o=>`
+      <div class="card p-4">
+        <div class="flex items-center justify-between gap-2 mb-2">
+          <p class="text-[11px] font-bold uppercase tracking-wider text-amber-700">Offre client</p>
+          <span class="badge bg-amber-50 text-amber-700">En attente</span>
+        </div>
+        <p class="font-bold text-sm truncate">${esc(o.productName||('Produit #'+o.productId))}</p>
+        <p class="font-extrabold text-lg tabular-nums my-1">${fmt(o.unitPrice)} <span class="text-xs font-medium text-slate-500">/ unité × ${o.qty} = ${fmt(o.unitPrice*o.qty)}</span></p>
+        <p class="text-xs text-slate-400 mb-3">Catalogue : ${fmt(o.catalogPrice)} · ${fmtDate(o.createdAt)}</p>
+        <div class="flex flex-wrap gap-2">
+          <button class="btn btn-primary text-xs !py-2" onclick="negoDecide(${o.id},${o.conversationId},true)">Accepter</button>
+          <button class="btn btn-outline text-xs !py-2" onclick="negoDecide(${o.id},${o.conversationId},false)">Refuser</button>
+          <button class="btn btn-outline text-xs !py-2" onclick="goConvo(${o.conversationId})"><i class="bi bi-chat-dots"></i> Discussion</button>
+        </div>
+      </div>`).join('')+`</div>`;
+  }catch(e){ content.innerHTML=emptyState('Erreur: '+e.message); }
+}
+async function negoDecide(id, convId, accept){
+  try{ await api('/offers/'+id+(accept?'/accept':'/reject'),{method:'PATCH'}); toast(accept?'Offre acceptée':'Offre refusée', accept?'success':'info'); renderNegociations(); refreshBadges(); }catch(e){ toast(e.message,'error'); }
+}
+function goConvo(id){ goView('messages'); setTimeout(()=>openConvo(id), 150); }
 
 /* ==================== NOTIFICATIONS ==================== */
 async function renderNotifications(){

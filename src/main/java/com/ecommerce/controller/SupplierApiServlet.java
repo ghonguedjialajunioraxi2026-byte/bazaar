@@ -147,6 +147,12 @@ public class SupplierApiServlet extends HttpServlet {
                 write(resp, ok("Paiements", supplierService.getPayments(supplierId)), 200);
                 return;
             }
+            // /api/supplier/offers — négociations en attente (toutes conversations)
+            if (path.equals("/offers")) {
+                write(resp, ok("Offres en attente",
+                    new com.ecommerce.dao.OfferDAO().findPendingBySupplier(supplierId)), 200);
+                return;
+            }
             // /api/supplier/profile
             if (path.equals("/profile")) {
                 write(resp, ok("Profil", safeSupplier(supplierService.getProfile(supplierId))), 200);
@@ -269,6 +275,8 @@ public class SupplierApiServlet extends HttpServlet {
             }
 
             write(resp, err("Route inconnue"), 404);
+        } catch (com.ecommerce.util.AppException ae) {
+            write(resp, err(ae.getMessage()), ae.getHttpStatus());
         } catch (Exception e) {
             write(resp, err(e.getMessage()), 500);
         }
@@ -404,6 +412,8 @@ public class SupplierApiServlet extends HttpServlet {
             }
 
             write(resp, err("Route inconnue"), 404);
+        } catch (com.ecommerce.util.AppException ae) {
+            write(resp, err(ae.getMessage()), ae.getHttpStatus());
         } catch (Exception e) {
             write(resp, err(e.getMessage()), 500);
         }
