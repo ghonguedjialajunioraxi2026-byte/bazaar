@@ -818,6 +818,7 @@ tailwind.config = {
       <div id="modal-dots" class="flex gap-1.5 justify-center mt-3 sm:hidden"></div>
     </div>
     <div class="lg:w-1/2 p-6 lg:p-8 overflow-y-auto">
+      <nav class="flex items-center gap-1.5 text-xs text-slate-400 mb-3" aria-label="Fil d'Ariane produit" id="modal-crumb"></nav>
       <div id="modal-badge" class="mb-3"></div>
       <p id="modal-brand" class="text-xs font-bold uppercase tracking-wider text-primary-700 mb-1"></p>
       <h2 id="modal-name" class="font-display text-2xl font-extrabold tracking-tight text-dark-900 mb-3"></h2>
@@ -832,6 +833,7 @@ tailwind.config = {
       </div>
       <p id="modal-stock" class="text-sm mb-4"></p>
       <p id="modal-desc" class="text-sm text-slate-600 leading-relaxed mb-5"></p>
+      <div id="modal-specs" class="mb-5"></div>
       <div id="modal-supplier" class="mb-5"></div>
       <div id="modal-colors" class="mb-4 hidden">
         <p class="text-sm font-medium mb-2">Couleur</p>
@@ -858,6 +860,32 @@ tailwind.config = {
       <div class="flex gap-4 mt-4">
         <button onclick="toggleFavorite(currentProductId)" class="text-sm text-slate-500 hover:text-rose-500 flex items-center gap-1.5"><i class="bi bi-heart" id="modal-fav-icon"></i> Favoris</button>
         <button onclick="shareProduct()" class="text-sm text-slate-500 hover:text-primary-600 flex items-center gap-1.5"><i class="bi bi-share"></i> Partager</button>
+      </div>
+      <div class="mt-8 pt-6 border-t border-slate-100">
+        <h3 class="font-bold text-base mb-1">Avis clients</h3>
+        <div id="modal-reviews-list" class="space-y-3 mb-5"></div>
+        <form onsubmit="return submitReview(event)" class="bg-slate-50/70 border border-slate-100 rounded-2xl p-4 space-y-3">
+          <p class="text-sm font-bold">Donnez votre avis</p>
+          <div class="grid sm:grid-cols-2 gap-3">
+            <input type="text" id="review-name" required maxlength="100" placeholder="Votre nom" aria-label="Votre nom" class="px-4 py-2.5 rounded-xl border border-slate-200 text-sm bg-white">
+            <select id="review-rating" aria-label="Note" class="px-4 py-2.5 rounded-xl border border-slate-200 text-sm bg-white">
+              <option value="5">★★★★★ (5/5)</option>
+              <option value="4">★★★★ (4/5)</option>
+              <option value="3">★★★ (3/5)</option>
+              <option value="2">★★ (2/5)</option>
+              <option value="1">★ (1/5)</option>
+            </select>
+          </div>
+          <textarea id="review-comment" rows="2" maxlength="2000" placeholder="Votre avis sur ce produit…" aria-label="Votre avis" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm bg-white"></textarea>
+          <button type="submit" class="px-5 py-2.5 bg-dark-900 hover:bg-slate-700 text-white text-sm font-bold rounded-xl transition">Publier (modéré)</button>
+        </form>
+      </div>
+      <div class="mt-8">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="font-bold text-base">Produits similaires</h3>
+          <button onclick="closeProductModal();showSection('shop')" class="text-xs font-bold text-primary-700 hover:underline">Tout voir →</button>
+        </div>
+        <div id="modal-similar" class="grid grid-cols-2 gap-3"></div>
       </div>
       <div class="lg:hidden sticky bottom-0 -mx-6 -mb-6 mt-6 px-6 py-3 bg-white/95 border-t border-slate-100 flex items-center gap-3" style="backdrop-filter:blur(12px)">
         <div class="flex-1 min-w-0">
@@ -1846,7 +1874,12 @@ function readCatalogHash() {
   }
 }
 window.addEventListener('hashchange', () => {
-  if ((location.hash || '').startsWith('#/boutique')) readCatalogHash();
+  const h = location.hash || '';
+  if (h.startsWith('#/boutique')) { readCatalogHash(); return; }
+  if (h.startsWith('#/produit/')) {
+    const id = parseInt(h.split('/')[2]);
+    if (id > 0 && id !== currentProductId) openProduct(id);
+  }
 });
 
 function applyFilters() {
@@ -2226,13 +2259,24 @@ function navSearchClearVisibility() {
 // ---------- PRODUCT MODAL ----------
 function openProduct(id) {
   const p = PRODUCTS.find(x => x.id === id);
-  if (!p) return;
+  if (!p) { showToast('Produit introuvable', 'error'); return; }
   trackRecent(id);
   renderRecent();
   currentProductId = id;
   modalQty = 1;
   selectedColor = p.colors[0] || null;
   selectedSize = p.sizes[0] || null;
+
+  // Breadcrumb (navigation Phase 3)
+  const crumb = document.getElementById('modal-crumb');
+  if (crumb) {
+    const path = (typeof catPathNames === 'function' && p.category) ? catPathNames(p.category) : [];
+    crumb.innerHTML = `<button onclick="closeProductModal();showSection('home')" class="hover:text-primary-700 transition font-medium">Accueil</button>
+      <i class="bi bi-chevron-right text-[10px]"></i>
+      <button onclick="closeProductModal();showSection('shop')" class="hover:text-primary-700 transition font-medium">Boutique</button>
+      ${path.map(n => `<i class="bi bi-chevron-right text-[10px]"></i><button onclick="closeProductModal();filterByCategory('${escAttr(n)}')" class="hover:text-primary-700 transition font-medium">${escHTML(n)}</button>`).join('')}
+      <i class="bi bi-chevron-right text-[10px]"></i><span class="text-dark-900 font-semibold truncate max-w-[140px]">${escHTML(p.name)}</span>`;
+  }
 
   document.getElementById('modal-main-img').src = p.image;
   document.getElementById('modal-main-img').alt = p.name;
@@ -2245,8 +2289,21 @@ function openProduct(id) {
   document.getElementById('modal-discount').textContent = p.discount ? `-${p.discount}%` : '';
   document.getElementById('modal-discount').classList.toggle('hidden', !p.discount);
   document.getElementById('modal-stock').innerHTML = p.stock > 0 ? `<span class="text-green-600"><i class="bi bi-check-circle"></i> Disponible (${p.stock})</span>` : `<span class="text-green-600"><i class="bi bi-check-circle"></i> Disponible</span>`;
-  document.getElementById('modal-desc').textContent = p.description;
+  document.getElementById('modal-desc').textContent = p.description || 'Aucune description disponible pour ce produit.';
   document.getElementById('modal-qty').textContent = '1';
+  // Caractéristiques : uniquement les champs réels du modèle
+  const specsBox = document.getElementById('modal-specs');
+  if (specsBox) {
+    const rows = [
+      ['Marque', p.brand],
+      ['Référence', p.reference],
+      ['Catégorie', p.category],
+      ['Vendeur', p.supplierName]
+    ].filter(([, v]) => v != null && String(v).trim() !== '');
+    specsBox.innerHTML = rows.length ? `<div class="rounded-2xl border border-slate-100 overflow-hidden">
+      ${rows.map(([k, v], i) => `<div class="flex justify-between gap-4 px-4 py-2.5 text-sm ${i % 2 ? 'bg-white' : 'bg-slate-50/70'}"><span class="text-slate-500">${k}</span><span class="font-semibold text-right">${escHTML(v)}</span></div>`).join('')}
+    </div>` : '';
+  }
   const supBox = document.getElementById('modal-supplier');
   if (p.supplierName) {
     const waNum = (p.supplierWhatsapp || '').replace(/\D/g, '');
@@ -2270,42 +2327,155 @@ function openProduct(id) {
   document.getElementById('modal-badge').innerHTML = badgeHTML(p.badge);
   document.getElementById('modal-fav-icon').className = favorites.includes(id) ? 'bi bi-heart-fill text-rose-500' : 'bi bi-heart';
 
-  document.getElementById('modal-thumbs').innerHTML = p.gallery.map((img,i) => `
-    <img src="${img}" alt="" class="w-16 h-16 rounded-xl object-cover cursor-pointer border-2 ${i===0?'border-primary-500':'border-transparent'} hover:border-primary-300" onclick="document.getElementById('modal-main-img').src='${img}';this.parentElement.querySelectorAll('img').forEach(x=>x.classList.remove('border-primary-500'));this.classList.add('border-primary-500');syncModalDots('${img}')">
+  // Miniatures accessibles au clavier (boutons + data-img, sans interpolation)
+  const thumbsBox = document.getElementById('modal-thumbs');
+  thumbsBox.innerHTML = p.gallery.map((img, i) => `
+    <button data-img="${escAttr(img)}" aria-label="Voir l'image ${i + 1} de ${escAttr(p.name)}" class="modal-thumb w-16 h-16 rounded-xl overflow-hidden border-2 ${i === 0 ? 'border-primary-500' : 'border-transparent'} hover:border-primary-300 shrink-0">
+      <img src="${img}" alt="${escAttr(p.name)} — vue ${i + 1}" class="w-full h-full object-cover" loading="lazy">
+    </button>
   `).join('');
+  thumbsBox.querySelectorAll('.modal-thumb').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.getElementById('modal-main-img').src = btn.dataset.img;
+      thumbsBox.querySelectorAll('.modal-thumb').forEach(x => x.classList.remove('border-primary-500'));
+      btn.classList.add('border-primary-500');
+      syncModalDots(btn.dataset.img);
+    });
+  });
   const dotsEl = document.getElementById('modal-dots');
   if (dotsEl) {
     dotsEl.innerHTML = p.gallery.map((img) => `
-      <button onclick="document.getElementById('modal-main-img').src='${img}';syncModalDots('${img}')" aria-label="Voir l'image" class="h-1.5 rounded-full transition-all modal-dot" data-img="${img}"></button>
+      <button aria-label="Voir l'image" class="h-1.5 rounded-full transition-all modal-dot" data-img="${escAttr(img)}"></button>
     `).join('');
+    dotsEl.querySelectorAll('.modal-dot').forEach(d => {
+      d.addEventListener('click', () => {
+        document.getElementById('modal-main-img').src = d.dataset.img;
+        syncModalDots(d.dataset.img);
+      });
+    });
     syncModalDots(p.gallery[0]);
   }
 
   const colorsEl = document.getElementById('modal-colors');
   if (p.colors.length) {
     colorsEl.classList.remove('hidden');
-    document.getElementById('modal-colors-list').innerHTML = p.colors.map(c => `
-      <button onclick="selectedColor='${c}';document.querySelectorAll('#modal-colors-list button').forEach(b=>b.classList.remove('ring-2','ring-primary-500'));this.classList.add('ring-2','ring-primary-500')" class="px-3 py-1.5 rounded-xl border border-slate-200 text-sm hover:border-primary-400 ${c===selectedColor?'ring-2 ring-primary-500':''}">${c}</button>
+    const colorBox = document.getElementById('modal-colors-list');
+    colorBox.innerHTML = p.colors.map(c => `
+      <button data-val="${escAttr(c)}" aria-pressed="${c === selectedColor}" class="modal-color px-3 py-1.5 rounded-xl border border-slate-200 text-sm hover:border-primary-400 ${c === selectedColor ? 'ring-2 ring-primary-500' : ''}">${escHTML(c)}</button>
     `).join('');
+    colorBox.querySelectorAll('.modal-color').forEach(b => {
+      b.addEventListener('click', () => {
+        selectedColor = b.dataset.val;
+        colorBox.querySelectorAll('.modal-color').forEach(x => {
+          const on = x === b;
+          x.classList.toggle('ring-2', on);
+          x.classList.toggle('ring-primary-500', on);
+          x.setAttribute('aria-pressed', on);
+        });
+      });
+    });
   } else colorsEl.classList.add('hidden');
 
   const sizesEl = document.getElementById('modal-sizes');
   if (p.sizes.length) {
     sizesEl.classList.remove('hidden');
-    document.getElementById('modal-sizes-list').innerHTML = p.sizes.map(s => `
-      <button onclick="selectedSize='${s}';document.querySelectorAll('#modal-sizes-list button').forEach(b=>b.classList.remove('bg-primary-600','text-white'));this.classList.add('bg-primary-600','text-white')" class="w-11 h-11 rounded-xl border border-slate-200 text-sm font-medium hover:border-primary-400 ${s===selectedSize?'bg-primary-600 text-white':''}">${s}</button>
+    const sizeBox = document.getElementById('modal-sizes-list');
+    sizeBox.innerHTML = p.sizes.map(s => `
+      <button data-val="${escAttr(s)}" aria-pressed="${s === selectedSize}" class="modal-size w-11 h-11 rounded-xl border border-slate-200 text-sm font-medium hover:border-primary-400 ${s === selectedSize ? 'bg-primary-600 text-white' : ''}">${escHTML(s)}</button>
     `).join('');
+    sizeBox.querySelectorAll('.modal-size').forEach(b => {
+      b.addEventListener('click', () => {
+        selectedSize = b.dataset.val;
+        sizeBox.querySelectorAll('.modal-size').forEach(x => {
+          const on = x === b;
+          x.classList.toggle('bg-primary-600', on);
+          x.classList.toggle('text-white', on);
+          x.setAttribute('aria-pressed', on);
+        });
+      });
+    });
   } else sizesEl.classList.add('hidden');
 
   document.getElementById('product-modal').classList.remove('hidden');
   document.body.style.overflow = 'hidden';
   document.title = p.name + ' — MBOA STYLE';
+  try { history.replaceState(null, '', '#/produit/' + p.id); } catch (e) {}
+  loadModalReviews(p.id);
+  renderModalSimilar(p);
 }
 
 function closeProductModal() {
   document.getElementById('product-modal').classList.add('hidden');
   document.body.style.overflow = '';
   document.title = 'MBOA STYLE — Boutique en ligne premium au Cameroun';
+  try {
+    if ((location.hash || '').startsWith('#/produit/')) history.replaceState(null, '', '#/');
+  } catch (e) {}
+}
+
+// ---------- AVIS PRODUIT (données réelles, modération serveur) ----------
+async function loadModalReviews(productId) {
+  const box = document.getElementById('modal-reviews-list');
+  if (!box) return;
+  box.innerHTML = '<div class="flex justify-center py-4"><span class="ms-spinner"></span></div>';
+  try {
+    const res = await fetch('api/reviews?action=product&productId=' + productId);
+    const list = res.ok ? await res.json() : [];
+    if (!list.length) {
+      box.innerHTML = '<div class="ms-empty !p-6"><p class="font-semibold text-sm mb-1">Aucun avis pour le moment.</p><p class="text-xs">Soyez le premier à donner votre avis ci-dessous.</p></div>';
+      return;
+    }
+    box.innerHTML = list.slice(0, 5).map(r => `
+      <div class="border border-slate-100 rounded-2xl p-3.5">
+        <div class="flex items-center justify-between gap-2 mb-1">
+          <p class="text-sm font-bold truncate">${escHTML(r.fullname || r.author || 'Client')}</p>
+          <span class="text-accent-500 text-xs shrink-0">${starsHTML(r.rating)}</span>
+        </div>
+        ${r.createdAt ? `<p class="text-[11px] text-slate-400 mb-1">${escHTML(r.createdAt)}</p>` : ''}
+        <p class="text-sm text-slate-600 leading-relaxed">${escHTML(r.comment || '')}</p>
+      </div>`).join('');
+  } catch (e) {
+    box.innerHTML = '<div class="ms-alert ms-alert-error">Avis indisponibles pour le moment.</div>';
+  }
+}
+
+async function submitReview(e) {
+  e.preventDefault();
+  const name = document.getElementById('review-name').value.trim();
+  const rating = parseInt(document.getElementById('review-rating').value) || 5;
+  const comment = document.getElementById('review-comment').value.trim();
+  if (!name || !comment) { showToast('Nom et avis requis', 'error'); return false; }
+  try {
+    const res = await fetch('api/reviews', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ productId: currentProductId, fullname: name, rating, comment })
+    });
+    if (!res.ok) throw new Error('refusé');
+    document.getElementById('review-name').value = '';
+    document.getElementById('review-comment').value = '';
+    showToast('Avis envoyé, en attente de modération');
+    loadModalReviews(currentProductId);
+  } catch (err) {
+    showToast('Envoi impossible pour le moment', 'error');
+  }
+  return false;
+}
+
+// ---------- PRODUITS SIMILAIRES (même catégorie, données réelles) ----------
+function renderModalSimilar(p) {
+  const box = document.getElementById('modal-similar');
+  if (!box) return;
+  const items = PRODUCTS.filter(x => x.id !== p.id && p.category && x.category === p.category).slice(0, 4);
+  if (!items.length) {
+    box.innerHTML = '<p class="col-span-2 text-sm text-slate-400">Aucun produit similaire pour le moment.</p>';
+    return;
+  }
+  box.innerHTML = items.map(x => `
+    <button onclick="openProduct(${x.id})" class="text-left bg-slate-50/70 border border-slate-100 rounded-2xl p-3 hover:shadow-card hover:-translate-y-0.5 transition-all">
+      <img src="${x.image}" alt="${escAttr(x.name)}" class="w-full aspect-square rounded-xl object-cover mb-2" loading="lazy">
+      <p class="text-[13px] font-bold truncate">${escHTML(x.name)}</p>
+      <p class="text-[13px] font-extrabold tabular-nums">${formatPrice(x.price)}</p>
+    </button>`).join('');
 }
 
 // ---------- LIGHTBOX PLEIN ÉCRAN ----------
@@ -2354,7 +2524,14 @@ function syncModalDots(activeImg) {
 }
 
 function changeModalQty(d) {
-  modalQty = Math.max(1, Math.min(10, modalQty + d));
+  // Borné au stock réel (règle métier : seuil serveur source de vérité)
+  const p = PRODUCTS.find(x => x.id === currentProductId);
+  const max = Math.max(1, Math.min(10, p && p.stock > 0 ? p.stock : 10));
+  const next = Math.max(1, Math.min(max, modalQty + d));
+  if (next === modalQty && d > 0 && p && p.stock > 0 && modalQty >= max) {
+    showToast(`Stock limité à ${max} exemplaire${max > 1 ? 's' : ''}`, 'info');
+  }
+  modalQty = next;
   document.getElementById('modal-qty').textContent = modalQty;
 }
 
@@ -2998,6 +3175,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderShopProducts();
     renderFilterOptions();
     renderActiveFilters();
+  }
+  // Accès direct produit partageable (#/produit/ID)
+  if ((location.hash || '').startsWith('#/produit/')) {
+    const pid = parseInt(location.hash.split('/')[2]);
+    if (pid > 0) openProduct(pid);
   }
   updateCartUI();
   updateFavUI();
