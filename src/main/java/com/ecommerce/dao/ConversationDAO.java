@@ -130,6 +130,92 @@ public class ConversationDAO {
         }
     }
 
+    /** Conversations d'un invité (téléphone + clé navigateur), avec résumé. */
+    public List<Conversation> findByGuest(String phone, String cid) throws SQLException {
+        List<Conversation> list = new ArrayList<>();
+        String sql = "SELECT c.*, "
+                + "(SELECT COUNT(*) FROM messages m WHERE m.conversation_id = c.id AND m.sender='SUPPLIER' AND m.is_read=0) AS unread_count, "
+                + "(SELECT m.body FROM messages m WHERE m.conversation_id = c.id ORDER BY m.id DESC LIMIT 1) AS last_message, "
+                + "(SELECT m.created_at FROM messages m WHERE m.conversation_id = c.id ORDER BY m.id DESC LIMIT 1) AS last_message_at "
+                + "FROM conversations c WHERE c.client_phone = ? AND c.client_identifier = ? ORDER BY c.updated_at DESC";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, phone);
+            ps.setString(2, cid);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) list.add(mapRow(rs, true));
+            }
+        }
+        return list;
+    }
+
+    /** Conversation strictement limitée à son propriétaire invité (anti-IDOR). */
+    public Conversation findByIdGuest(int id, String phone, String cid) throws SQLException {
+        String sql = "SELECT * FROM conversations WHERE id = ? AND client_phone = ? AND client_identifier = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.setString(2, phone);
+            ps.setString(3, cid);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return mapRow(rs, false);
+            }
+        }
+        return null;
+    }
+
+    public int unreadCountForGuest(String phone, String cid) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM messages m "
+                + "JOIN conversations c ON c.id = m.conversation_id "
+                + "WHERE c.client_phone = ? AND c.client_identifier = ? AND m.sender='SUPPLIER' AND m.is_read=0";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, phone);
+            ps.setString(2, cid);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return rs.getInt(1);
+            }
+        }
+        return 0;
+    }
+
+    public void markGuestRead(int conversationId) throws SQLException {
+        String sql = "UPDATE messages SET is_read=1 WHERE conversation_id = ? AND sender='SUPPLIER'";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, conversationId);
+            ps.executeUpdate();
+        }
+    }
+
+    /** Téléphone propriétaire d'une conversation (vérification offre). */
+    public String findClientPhone(int conversationId) throws SQLException {
+        String sql = "SELECT client_phone FROM conversations WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, conversationId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return rs.getString(1);
+            }
+        }
+        return null;
+    }
+
+    /** Nombre de messages d'un expéditeur depuis N minutes (anti-spam). */
+    public int countRecentFrom(int conversationId, String sender, int minutes) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM messages WHERE conversation_id = ? AND sender = ? AND created_at >= NOW() - INTERVAL ? MINUTE";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, conversationId);
+            ps.setString(2, sender);
+            ps.setInt(3, minutes);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return rs.getInt(1);
+            }
+        }
+        return 0;
+    }
+
     private Conversation mapRow(ResultSet rs, boolean withSummary) throws SQLException {
         Conversation c = new Conversation();
         c.setId(rs.getInt("id"));

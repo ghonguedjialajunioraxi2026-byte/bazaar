@@ -12,7 +12,7 @@ public class OrderDAO {
 
     public int create(Order order) throws SQLException {
         String sqlOrder = "INSERT INTO orders (order_number, fullname, phone, city, district, address, comment, delivery_mode, payment_method, total, supplier_id, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'EN_ATTENTE')";
-        String sqlItem = "INSERT INTO order_items (order_id, product_id, product_name, size, color, qty, unit_price) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sqlItem = "INSERT INTO order_items (order_id, product_id, product_name, size, color, qty, unit_price, offer_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DBConnection.getConnection()) {
             conn.setAutoCommit(false);
@@ -56,6 +56,8 @@ public class OrderDAO {
                         psItem.setString(5, item.getColor());
                         psItem.setInt(6, item.getQty());
                         psItem.setInt(7, item.getUnitPrice());
+                        if (item.getOfferId() != null) psItem.setInt(8, item.getOfferId());
+                        else psItem.setNull(8, Types.INTEGER);
                         psItem.addBatch();
 
                         psDec.setInt(1, item.getQty());

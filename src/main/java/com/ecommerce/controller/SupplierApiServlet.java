@@ -126,6 +126,11 @@ public class SupplierApiServlet extends HttpServlet {
                 Map<String, Object> data = new LinkedHashMap<>();
                 data.put("conversation", c);
                 data.put("messages", supplierService.getMessagesForSupplier(supplierId, cid));
+                try {
+                    data.put("offers", new com.ecommerce.service.OfferService().listForConversation(cid));
+                } catch (Exception ignored) {
+                    data.put("offers", new java.util.ArrayList<>());
+                }
                 write(resp, ok("Conversation", data), 200);
                 return;
             }

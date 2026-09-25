@@ -10,6 +10,8 @@ public class OrderItem {
     private String color;
     private int qty;
     private int unitPrice;
+    /** Offre négociée consommée (nullable, traçabilité Phase 8). */
+    private Integer offerId;
 
     public OrderItem() {}
 
@@ -36,4 +38,7 @@ public class OrderItem {
 
     public int getUnitPrice() { return unitPrice; }
     public void setUnitPrice(int unitPrice) { this.unitPrice = unitPrice; }
+
+    public Integer getOfferId() { return offerId; }
+    public void setOfferId(Integer offerId) { this.offerId = offerId; }
 }

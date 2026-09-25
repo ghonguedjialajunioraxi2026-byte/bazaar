@@ -21,4 +21,12 @@ public final class ErrorCodes {
     public static final String INVALID_ORDER_STATUS = "INVALID_ORDER_STATUS";
     public static final String ORDER_NOT_FOUND = "ORDER_NOT_FOUND";
     public static final String ORDER_ACCESS_DENIED = "ORDER_ACCESS_DENIED";
+    public static final String CONVERSATION_NOT_FOUND = "CONVERSATION_NOT_FOUND";
+    public static final String CONVERSATION_ACCESS_DENIED = "CONVERSATION_ACCESS_DENIED";
+    public static final String MESSAGE_EMPTY = "MESSAGE_EMPTY";
+    public static final String MESSAGE_TOO_LONG = "MESSAGE_TOO_LONG";
+    public static final String RATE_LIMITED = "RATE_LIMITED";
+    public static final String OFFER_INVALID = "OFFER_INVALID";
+    public static final String OFFER_ACCESS_DENIED = "OFFER_ACCESS_DENIED";
+    public static final String OFFER_NOT_AVAILABLE = "OFFER_NOT_AVAILABLE";
 }

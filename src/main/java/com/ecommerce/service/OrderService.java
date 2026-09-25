@@ -27,6 +27,7 @@ public class OrderService {
             throw new AppException(ErrorCodes.VALIDATION_ERROR, 400, "Panier vide");
         }
         int itemsTotal = 0;
+        java.util.List<com.ecommerce.model.Offer> consumedOffers = new java.util.ArrayList<>();
         for (OrderItem item : order.getItems()) {
             if (item.getQty() <= 0 || item.getQty() > 99) {
                 throw new AppException(ErrorCodes.VALIDATION_ERROR, 400, "Quantité invalide");
@@ -49,11 +50,28 @@ public class OrderService {
                 throw new AppException(ErrorCodes.VALIDATION_ERROR, 400,
                     "Stock insuffisant pour « " + p.getName() + " » (disponible : " + Math.max(0, p.getStock()) + ")");
             }
-            // Prix serveur imposé : toute valeur envoyée par le navigateur est ignorée.
-            // Snapshot : le nom est figé dans la ligne (§8 Phase 7).
-            item.setProductName(p.getName());
-            item.setUnitPrice(p.getPrice());
-            itemsTotal += p.getPrice() * item.getQty();
+            if (item.getOfferId() != null && item.getOfferId() > 0) {
+                // Ligne au prix négocié : offre ACCEPTED du même téléphone, mêmes variantes.
+                com.ecommerce.model.Offer off;
+                try {
+                    off = new OfferService().consumeForOrder(item.getOfferId(), order.getPhone(),
+                        item.getQty(), item.getSize(), item.getColor());
+                } catch (SQLException e) {
+                    throw new AppException(ErrorCodes.DATABASE_ERROR, 500, "Impossible de traiter votre demande.", e);
+                }
+                if (off.getProductId() != item.getProductId()) {
+                    throw new AppException(ErrorCodes.OFFER_INVALID, 400, "Offre d'un autre produit");
+                }
+                item.setProductName(p.getName());
+                item.setUnitPrice(off.getUnitPrice());
+                consumedOffers.add(off);
+            } else {
+                // Prix serveur imposé : toute valeur envoyée par le navigateur est ignorée.
+                // Snapshot : le nom est figé dans la ligne (§8 Phase 7).
+                item.setProductName(p.getName());
+                item.setUnitPrice(p.getPrice());
+            }
+            itemsTotal += item.getUnitPrice() * item.getQty();
         }
         int deliveryFee = 0;
         try {

@@ -1061,9 +1061,53 @@ async function openConvo(id){
     document.getElementById('chatHeader').innerHTML=`<div class="w-9 h-9 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center"><i class="bi bi-person-fill"></i></div><div><p class="font-semibold">${esc(currentConvo.clientName||'Client')}</p><p class="text-xs text-slate-400">${esc(currentConvo.clientPhone||'')}${currentConvo.orderId?' · Commande #'+currentConvo.orderId:''}</p></div>`;
     document.getElementById('chatInputWrap').style.opacity='1';
     renderMessagesList(d.messages);
+    renderSupplierOffers(d.offers||[], d.conversation);
     document.getElementById('chatInput').disabled=false;
     document.getElementById('chatInputWrap').style.opacity='1';
     loadConvos();
+  }catch(e){ toast(e.message,'error'); }
+}
+function offerBadgeSup(s){
+  const m={PENDING:['bg-amber-50 text-amber-700','En attente'],ACCEPTED:['bg-green-50 text-green-600','Acceptée'],REJECTED:['bg-slate-100 text-slate-500','Refusée'],COUNTERED:['bg-slate-100 text-slate-500','Contre-offrée'],CONSUMED:['bg-primary-50 text-primary-700','Commandée'],CANCELLED:['bg-slate-100 text-slate-400','Annulée']};
+  const v=m[s]||m.PENDING; return `<span class="badge ${v[0]}">${v[1]}</span>`;
+}
+function renderSupplierOffers(offers, conv){
+  let box=document.getElementById('supplierOffers');
+  if(!box){
+    const panel=document.getElementById('chatPanel');
+    box=document.createElement('div');
+    box.id='supplierOffers';
+    box.className='px-4 py-2 space-y-2 max-h-64 overflow-y-auto border-t bg-amber-50/40';
+    panel.insertBefore(box, document.getElementById('chatInputWrap'));
+  }
+  if(!offers.length){ box.innerHTML=''; box.style.display='none'; return; }
+  box.style.display='';
+  box.innerHTML='<p class="text-[11px] font-bold uppercase tracking-wider text-amber-700">Négociations</p>'+offers.map(o=>{
+    const mine=o.createdBy==='SUPPLIER';
+    const pending=o.status==='PENDING'&&!mine;
+    return `<div class="bg-white border ${o.status==='ACCEPTED'?'border-green-300':'border-amber-200'} rounded-xl p-3">
+      <div class="flex items-center justify-between gap-2 mb-1">
+        <p class="text-[11px] font-bold uppercase tracking-wider text-amber-700">Offre ${mine?'vendeur':'client'}</p>${offerBadgeSup(o.status)}
+      </div>
+      <p class="font-extrabold tabular-nums">${fmt(o.unitPrice)} <span class="text-xs font-medium text-slate-500">/ unité × ${o.qty} = ${fmt(o.unitPrice*o.qty)}</span></p>
+      <div class="flex flex-wrap gap-2 mt-2">
+        ${pending?`<button class="btn btn-primary text-xs !py-1.5" onclick="supplierOfferDecide(${o.id},true)">Accepter</button>
+        <button class="btn btn-outline text-xs !py-1.5" onclick="supplierOfferDecide(${o.id},false)">Refuser</button>
+        <span class="flex gap-1 items-center"><input type="number" min="1" id="counter-${o.id}" placeholder="Contre-offre" class="input !py-1.5 !w-32"><button class="btn btn-outline text-xs !py-1.5" onclick="supplierCounter(${o.id})">Envoyer</button></span>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+async function supplierOfferDecide(id, accept){
+  try{ await api('/offers/'+id+(accept?'/accept':'/reject'),{method:'PATCH'}); toast(accept?'Offre acceptée':'Offre refusée', accept?'success':'info'); openConvo(currentConvo.id); }catch(e){ toast(e.message,'error'); }
+}
+async function supplierCounter(id){
+  const input=document.getElementById('counter-'+id);
+  const price=parseInt(input.value)||0;
+  if(price<=0){ toast('Prix invalide','error'); return; }
+  try{
+    await api('/offers',{method:'POST',body:JSON.stringify({conversationId:currentConvo.id,productId:currentConvo.productId,qty:1,unitPrice:price})});
+    toast('Contre-offre envoyée'); openConvo(currentConvo.id);
   }catch(e){ toast(e.message,'error'); }
 }
 function renderMessagesList(msgs){

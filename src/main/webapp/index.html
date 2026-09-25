@@ -126,6 +126,10 @@ tailwind.config = {
             <i class="bi bi-heart text-lg"></i>
             <span id="fav-count" class="absolute -top-0.5 -right-0.5 min-w-5 h-5 px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center hidden">0</span>
           </button>
+          <button onclick="showSection('messages')" class="nav-icon-btn relative" aria-label="Messages">
+            <i class="bi bi-chat-dots text-lg"></i>
+            <span id="msg-count" class="absolute -top-0.5 -right-0.5 min-w-5 h-5 px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center hidden">0</span>
+          </button>
           <button onclick="toggleCart()" class="nav-icon-btn relative" aria-label="Panier">
             <i class="bi bi-bag text-lg"></i>
             <span id="cart-count" class="absolute -top-0.5 -right-0.5 min-w-5 h-5 px-1 bg-amber-400 text-dark-900 text-[10px] font-bold rounded-full flex items-center justify-center cart-badge hidden">0</span>
@@ -153,6 +157,7 @@ tailwind.config = {
     <div class="px-4 py-4 space-y-1">
       <a href="#" onclick="showSection('home');toggleMobileMenu()" class="block px-4 py-3 rounded-xl text-sm font-medium hover:bg-primary-50">Accueil</a>
       <a href="#" onclick="showSection('shop');toggleMobileMenu()" class="block px-4 py-3 rounded-xl text-sm font-medium hover:bg-primary-50">Boutique</a>
+      <a href="#" onclick="showSection('messages');toggleMobileMenu()" class="block px-4 py-3 rounded-xl text-sm font-medium hover:bg-primary-50">Messages</a>
       <div id="mobile-categories" class="space-y-1"></div>
       <a href="fournisseur.html?register=1" target="_blank" rel="noopener" onclick="toggleMobileMenu()" class="block px-4 py-3 rounded-xl text-sm font-semibold text-primary-700 hover:bg-primary-50"><i class="bi bi-shop mr-2"></i>Devenir fournisseur</a>
       <a href="#promotions" onclick="showSection('home');toggleMobileMenu()" class="block px-4 py-3 rounded-xl text-sm font-medium hover:bg-primary-50">Promotions</a>
@@ -616,6 +621,41 @@ tailwind.config = {
   </div>
 </section>
 
+<!-- ========== MESSAGES SECTION ========== -->
+<section id="section-messages" class="hidden">
+  <div class="w-full px-4 sm:px-6 lg:px-8 2xl:px-12 py-10">
+    <nav class="flex items-center gap-1.5 text-[13px] text-slate-400 mb-3" aria-label="Fil d'Ariane">
+      <button onclick="showSection('home')" class="hover:text-primary-700 transition font-medium">Accueil</button>
+      <i class="bi bi-chevron-right text-[10px]"></i><span class="text-dark-900 font-semibold">Messages</span>
+    </nav>
+    <p class="eyebrow mb-2">Messagerie</p>
+    <h1 class="font-display text-3xl font-bold text-dark-900 mb-2 tracking-tight">Mes conversations</h1>
+    <p class="text-slate-500 mb-6">Discutez et négociez directement avec vos vendeurs.</p>
+    <div class="bg-white rounded-3xl border border-slate-100 shadow-soft overflow-hidden flex flex-col md:flex-row min-h-[60vh]">
+      <div class="md:w-80 shrink-0 border-b md:border-b-0 md:border-r border-slate-100 flex flex-col">
+        <div id="client-convos" class="flex-1 overflow-y-auto p-3 space-y-1 max-h-[30vh] md:max-h-none"></div>
+      </div>
+      <div class="flex-1 flex flex-col min-w-0">
+        <div id="client-chat-header" class="px-5 py-3.5 border-b border-slate-100"><p class="text-slate-400 text-sm">Sélectionnez une conversation</p></div>
+        <div id="client-chat-product"></div>
+        <div id="client-chat-messages" class="flex-1 overflow-y-auto p-4 sm:p-5 space-y-2.5 bg-slate-50/60 min-h-[30vh] max-h-[50vh] md:max-h-[55vh]" aria-live="polite"></div>
+        <div id="client-chat-offers" class="px-4 sm:px-5 py-2 space-y-2 max-h-56 overflow-y-auto"></div>
+        <div class="p-3 sm:p-4 border-t border-slate-100 space-y-2" id="client-chat-form" style="display:none">
+          <div class="flex gap-2">
+            <input type="number" id="offer-price" min="1" placeholder="Votre offre (FCFA)" aria-label="Votre offre en FCFA" class="w-40 px-3 py-2.5 rounded-xl border border-slate-200 text-sm">
+            <input type="number" id="offer-qty" min="1" max="99" value="1" aria-label="Quantité" class="w-20 px-3 py-2.5 rounded-xl border border-slate-200 text-sm">
+            <button onclick="sendOffer()" class="px-4 py-2.5 rounded-xl border border-dashed border-primary-300 text-primary-700 text-sm font-bold hover:bg-primary-50 transition whitespace-nowrap">Proposer</button>
+          </div>
+          <div class="flex gap-2">
+            <input type="text" id="client-chat-input" placeholder="Écrire un message…" aria-label="Écrire un message" maxlength="2000" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 text-sm min-w-0">
+            <button onclick="sendClientMessage()" aria-label="Envoyer" class="w-11 h-11 rounded-xl bg-primary-700 hover:bg-primary-800 text-white flex items-center justify-center shrink-0"><i class="bi bi-send"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ========== CHECKOUT SECTION ========== -->
 <section id="section-checkout" class="hidden">
   <div class="w-full px-4 sm:px-6 lg:px-8 2xl:px-12 py-10">
@@ -740,6 +780,7 @@ tailwind.config = {
           <li><a href="#" onclick="showSection('shop')" class="hover:text-primary-400 transition">Boutique</a></li>
           <li><a href="#promotions" class="hover:text-primary-400 transition">Promotions</a></li>
           <li><button onclick="openTracking()" class="hover:text-primary-400 transition">Suivre ma commande</button></li>
+          <li><button onclick="showSection('messages')" class="hover:text-primary-400 transition">Mes messages</button></li>
           <li><button onclick="openTracking();submitHistoryPrefill()" class="hover:text-primary-400 transition">Mes commandes</button></li>
           <li><a href="#about" class="hover:text-primary-400 transition">À propos</a></li>
         </ul>
@@ -1218,9 +1259,8 @@ function heroQuickSearch(q) {
   heroSearch();
 }
 function showSection(name) {
-  document.getElementById('section-home').classList.toggle('hidden', name !== 'home');
-  document.getElementById('section-shop').classList.toggle('hidden', name !== 'shop');
-  document.getElementById('section-checkout').classList.toggle('hidden', name !== 'checkout');
+  ['home', 'shop', 'checkout', 'messages'].forEach(n =>
+    document.getElementById('section-' + n).classList.toggle('hidden', name !== n));
   // État actif : nav desktop + nav mobile basse
   [['nav-home', 'home'], ['nav-shop', 'shop']].forEach(([id, sec]) => {
     const a = document.getElementById(id);
@@ -1243,6 +1283,9 @@ function showSection(name) {
   }
   if (name === 'checkout') {
     renderCheckoutSummary();
+  }
+  if (name === 'messages') {
+    renderClientMessages();
   }
   document.getElementById('mobile-menu').classList.add('hidden');
 }
@@ -2341,8 +2384,8 @@ function openProduct(id) {
           </div>
         </div>
         ${waNum ? `<div class="flex flex-col sm:flex-row gap-2">
-          <a href="https://wa.me/${waNum}?text=${negoText}" target="_blank" rel="noopener" class="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl border border-dashed border-primary-300 bg-white text-primary-700 text-sm font-semibold hover:bg-primary-50 transition"><i class="bi bi-chat-dots"></i> Négocier le prix</a>
-          <a href="https://wa.me/${waNum}?text=${helloText}" target="_blank" rel="noopener" class="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-600 text-sm font-semibold hover:border-primary-300 hover:text-primary-700 transition"><i class="bi bi-whatsapp"></i> Contacter le vendeur</a>
+          <button onclick="openClientChatForProduct(true)" class="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl border border-dashed border-primary-300 bg-white text-primary-700 text-sm font-semibold hover:bg-primary-50 transition"><i class="bi bi-chat-dots"></i> Négocier le prix</button>
+          <button onclick="openClientChatForProduct(false)" class="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-600 text-sm font-semibold hover:border-primary-300 hover:text-primary-700 transition"><i class="bi bi-chat-text"></i> Contacter le vendeur</button>
         </div>` : ''}
       </div>`;
   } else supBox.innerHTML = '';
@@ -2579,14 +2622,16 @@ function shareProduct() {
 }
 
 // ---------- CART (sans blocage stock : ajout toujours possible) ----------
-function addToCart(id, qty = 1, color = null, size = null) {
+function addToCart(id, qty = 1, color = null, size = null, negotiated = null) {
   const p = PRODUCTS.find(x => x.id === id);
   if (!p) { showToast('Produit introuvable', 'error'); return; }
-  const existing = cart.find(c => c.id === id && c.color === color && c.size === size);
+  const offerId = negotiated && negotiated.offerId ? negotiated.offerId : null;
+  const price = negotiated && negotiated.price > 0 ? negotiated.price : p.price;
+  const existing = cart.find(c => c.id === id && c.color === color && c.size === size && (c.offerId || null) === offerId);
   if (existing) {
     existing.qty = existing.qty + qty;
   } else {
-    cart.push({ id, qty, color, size, name: p.name, price: p.price, image: p.image, brand: p.brand, supplierId: p.supplierId, supplierName: p.supplierName, supplierWhatsapp: p.supplierWhatsapp, slug: p.slug });
+    cart.push({ id, qty, color, size, name: p.name, price, image: p.image, brand: p.brand, supplierId: p.supplierId, supplierName: p.supplierName, supplierWhatsapp: p.supplierWhatsapp, slug: p.slug, offerId, negotiated: !!offerId });
   }
   saveCart();
   showToast('Produit ajouté au panier');
@@ -2708,6 +2753,7 @@ function cartItemHTML(item, i) {
       <div class="flex-1 min-w-0">
         <h4 class="font-medium text-sm line-clamp-1">${escHTML(item.name)}</h4>
         <p class="text-xs text-slate-500">${escHTML(item.brand)}${item.color ? ' · ' + escHTML(item.color) : ''}${item.size ? ' · ' + escHTML(item.size) : ''}</p>
+        ${item.negotiated ? '<p class="inline-block mt-0.5 text-[10px] font-bold text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded-md">Prix négocié</p>' : ''}
         ${item.outOfStock ? '<p class="text-[11px] font-bold text-rose-600 mt-0.5">Rupture de stock — retirez cet article pour commander</p>' : ''}
         <p class="font-semibold text-sm mt-1">${formatPrice(item.price)}</p>
         <div class="flex items-center gap-2 mt-2">
@@ -2794,6 +2840,7 @@ async function reconcileCart() {
     cart = cart.filter(item => {
       const p = byId.get(item.id);
       if (!p) { notes.push(`« ${item.name} » n'est plus disponible — retiré du panier`); return false; }
+      if (item.offerId) return true; // prix négocié : validé serveur à la commande
       if (p.price !== item.price) { notes.push(`Prix mis à jour : ${p.name} → ${formatPrice(p.price)}`); item.price = p.price; }
       const stock = p.stock || 0;
       if (stock <= 0) { item.outOfStock = true; }
@@ -3244,6 +3291,259 @@ async function cancelOrder(number, phone) {
   }
 }
 
+// ---------- MESSAGERIE CLIENT (interne, Phase 8) ----------
+let clientConvos = [];
+let currentClientConvo = null;
+let msgPollTimer = null;
+
+function msgIdentity() {
+  let cid = null, phone = '';
+  try {
+    cid = localStorage.getItem('ms_cid');
+    if (!cid) {
+      cid = 'c' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+      localStorage.setItem('ms_cid', cid);
+    }
+    phone = localStorage.getItem('ms_phone') || '';
+  } catch (e) {}
+  return { phone, cid };
+}
+function ensureMsgIdentity() {
+  const id = msgIdentity();
+  if (!id.phone || id.phone.replace(/\D/g, '').length < 9) {
+    const phone = (prompt('Votre numéro de téléphone (pour retrouver vos conversations) :') || '').trim();
+    if (!phone || phone.replace(/\D/g, '').length < 9) { showToast('Numéro requis', 'error'); return null; }
+    try { localStorage.setItem('ms_phone', phone); } catch (e) {}
+    id.phone = phone;
+  }
+  return id;
+}
+function msgHeaders() { return { 'Content-Type': 'application/json' }; }
+
+async function openClientChatForProduct(focusOffer) {
+  const p = PRODUCTS.find(x => x.id === currentProductId);
+  if (!p || !p.supplierId) { showToast('Vendeur indisponible', 'error'); return; }
+  const id = ensureMsgIdentity();
+  if (!id) return;
+  try {
+    const res = await fetch(apiBase() + '/api/conversations', {
+      method: 'POST', headers: msgHeaders(),
+      body: JSON.stringify({ supplierId: p.supplierId, productId: p.id, phone: id.phone, cid: id.cid })
+    });
+    const data = await res.json();
+    if (!res.ok || !data.success) throw new Error((data && (data.message || data.error)) || 'Erreur');
+    closeProductModal();
+    showSection('messages');
+    await openClientConvo(data.data.id, focusOffer);
+  } catch (e) {
+    showToast(e.message || 'Conversation impossible', 'error');
+  }
+}
+
+async function renderClientMessages() {
+  const box = document.getElementById('client-convos');
+  if (!box) return;
+  const id = msgIdentity();
+  if (!id.phone) {
+    box.innerHTML = '<div class="p-4 text-sm text-slate-500">Indiquez votre numéro pour retrouver vos conversations.</div>';
+    updateMsgBadge(0);
+    return;
+  }
+  try {
+    const res = await fetch(apiBase() + '/api/conversations?phone=' + encodeURIComponent(id.phone) + '&cid=' + encodeURIComponent(id.cid));
+    const data = await res.json();
+    clientConvos = (res.ok && data.success ? data.data : []);
+  } catch (e) { clientConvos = []; }
+  let unread = 0;
+  box.innerHTML = clientConvos.length ? clientConvos.map(c => {
+    unread += c.unreadCount || 0;
+    return `<button onclick="openClientConvo(${c.id})" class="w-full text-left flex gap-3 p-3 rounded-2xl hover:bg-slate-50 transition ${currentClientConvo && currentClientConvo.id === c.id ? 'bg-primary-50/60' : ''}">
+      <span class="w-10 h-10 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center shrink-0 font-bold">${escHTML((c.clientName || c.supplierName || '?').trim().charAt(0).toUpperCase())}</span>
+      <span class="min-w-0 flex-1">
+        <span class="flex items-center justify-between gap-2">
+          <span class="text-sm font-bold truncate">${escHTML(c.subject || 'Discussion')}</span>
+          ${(c.unreadCount || 0) > 0 ? `<span class="min-w-5 h-5 px-1.5 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center shrink-0">${c.unreadCount}</span>` : ''}
+        </span>
+        <span class="block text-xs text-slate-500 truncate">${escHTML(c.lastMessage || '')}</span>
+      </span>
+    </button>`;
+  }).join('') : '<p class="text-sm text-slate-400 p-4 text-center">Aucune conversation.<br>Ouvrez une fiche produit puis « Contacter le vendeur ».</p>';
+  updateMsgBadge(unread);
+}
+
+function updateMsgBadge(n) {
+  const b = document.getElementById('msg-count');
+  if (!b) return;
+  b.textContent = n;
+  b.classList.toggle('hidden', !n);
+}
+
+async function openClientConvo(id, focusOffer) {
+  const idn = msgIdentity();
+  try {
+    const res = await fetch(apiBase() + '/api/conversations/' + id + '?phone=' + encodeURIComponent(idn.phone) + '&cid=' + encodeURIComponent(idn.cid));
+    const data = await res.json();
+    if (!res.ok || !data.success) throw new Error((data && (data.message || data.error)) || 'Erreur');
+    currentClientConvo = data.data.conversation;
+    renderClientChat(data.data);
+    renderClientMessages();
+    if (focusOffer) setTimeout(() => document.getElementById('offer-price').focus(), 100);
+  } catch (e) {
+    showToast(e.message || 'Conversation inaccessible', 'error');
+  }
+}
+
+function offerStatusBadge(o) {
+  const map = { PENDING: ['bg-amber-50 text-amber-700', 'En attente'], ACCEPTED: ['bg-green-50 text-green-600', 'Acceptée'], REJECTED: ['bg-slate-100 text-slate-500', 'Refusée'], COUNTERED: ['bg-slate-100 text-slate-500', 'Contre-offrée'], CONSUMED: ['bg-primary-50 text-primary-700', 'Commandée'], CANCELLED: ['bg-slate-100 text-slate-400', 'Annulée'] };
+  const [cls, label] = map[o.status] || map.PENDING;
+  return `<span class="ms-badge ${cls}">${label}</span>`;
+}
+
+function offerCardHTML(o, mine) {
+  const isMine = (o.createdBy === 'CLIENT') === mine;
+  const otherPending = o.status === 'PENDING' && !isMine;
+  return `<div class="rounded-2xl border ${o.status === 'ACCEPTED' ? 'border-green-300 bg-green-50/60' : 'border-amber-200 bg-amber-50/60'} p-3.5">
+    <div class="flex items-center justify-between gap-2 mb-1.5">
+      <p class="text-[11px] font-bold uppercase tracking-wider text-amber-700"><i class="bi bi-tag"></i> Proposition ${o.createdBy === 'CLIENT' ? 'client' : 'vendeur'}</p>
+      ${offerStatusBadge(o)}
+    </div>
+    <p class="text-lg font-extrabold tabular-nums">${formatPrice(o.unitPrice)} <span class="text-xs font-medium text-slate-500">/ unité × ${o.qty}</span></p>
+    <p class="text-xs text-slate-500 mb-2.5">Total proposé : <strong class="text-dark-900">${formatPrice(o.unitPrice * o.qty)}</strong> <span class="text-slate-400">(catalogue : ${formatPrice(o.catalogPrice)})</span></p>
+    <div class="flex flex-wrap gap-2">
+      ${otherPending ? `<button onclick="clientOfferDecide(${o.id},true)" class="px-3.5 py-2 bg-green-600 hover:bg-green-700 text-white text-xs font-bold rounded-xl transition">Accepter</button>
+      <button onclick="clientOfferDecide(${o.id},false)" class="px-3.5 py-2 border border-slate-200 hover:border-slate-400 text-xs font-bold rounded-xl transition">Refuser</button>` : ''}
+      ${o.status === 'PENDING' && isMine ? `<button onclick="clientOfferCancel(${o.id})" class="px-3.5 py-2 text-xs font-semibold text-slate-400 hover:text-rose-600 transition">Annuler mon offre</button>` : ''}
+      ${o.status === 'ACCEPTED' ? `<button onclick="buyNegotiated(${o.id},${o.unitPrice})" class="px-3.5 py-2 bg-primary-700 hover:bg-primary-800 text-white text-xs font-bold rounded-xl transition"><i class="bi bi-bag-plus"></i> Ajouter au panier (prix négocié)</button>` : ''}
+    </div>
+  </div>`;
+}
+
+function renderClientChat(d) {
+  const c = d.conversation;
+  document.getElementById('client-chat-header').innerHTML = `
+    <p class="font-bold text-sm truncate">${escHTML(c.subject || 'Discussion')}</p>
+    <p class="text-xs text-slate-500">Conversation n° ${c.id}</p>`;
+  const prod = (typeof PRODUCTS !== 'undefined' ? PRODUCTS : []).find(x => x.id === c.productId);
+  document.getElementById('client-chat-product').innerHTML = prod ? `
+    <button onclick="openProduct(${prod.id})" class="w-full flex items-center gap-3 px-4 sm:px-5 py-2.5 bg-primary-50/60 border-b border-primary-100 text-left hover:bg-primary-50 transition">
+      <img src="${prod.image}" alt="${escAttr(prod.name)}" class="w-10 h-10 rounded-lg object-cover shrink-0">
+      <span class="min-w-0 flex-1">
+        <span class="block text-[13px] font-bold truncate">${escHTML(prod.name)}</span>
+        <span class="block text-xs text-slate-500">${formatPrice(prod.price)}</span>
+      </span>
+      <i class="bi bi-chevron-right text-primary-600 shrink-0"></i>
+    </button>` : '';
+  const msgs = d.messages || [];
+  document.getElementById('client-chat-messages').innerHTML = msgs.length ? msgs.map(m => `
+    <div class="max-w-[80%] px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed ${m.sender === 'CLIENT' ? 'ml-auto bg-primary-700 text-white rounded-br-md' : 'bg-white border border-slate-100 rounded-bl-md'}">
+      <p style="white-space:pre-wrap;word-break:break-word">${escHTML(m.body)}</p>
+      <p class="text-[10px] mt-1 ${m.sender === 'CLIENT' ? 'text-white/60' : 'text-slate-400'}">${escHTML(m.createdAt || '')}</p>
+    </div>`).join('')
+    : '<p class="text-sm text-slate-400 text-center py-8">Commencez la conversation.</p>';
+  const offers = d.offers || [];
+  document.getElementById('client-chat-offers').innerHTML = offers.map(o => offerCardHTML(o, true)).join('');
+  document.getElementById('client-chat-form').style.display = '';
+  const box = document.getElementById('client-chat-messages');
+  box.scrollTop = box.scrollHeight;
+}
+
+async function sendClientMessage() {
+  const input = document.getElementById('client-chat-input');
+  const body = (input.value || '').trim();
+  if (!body || !currentClientConvo) return;
+  const id = msgIdentity();
+  try {
+    const res = await fetch(apiBase() + '/api/conversations/' + currentClientConvo.id + '/messages', {
+      method: 'POST', headers: msgHeaders(),
+      body: JSON.stringify({ phone: id.phone, cid: id.cid, body })
+    });
+    const data = await res.json();
+    if (!res.ok || !data.success) throw new Error((data && (data.message || data.error)) || 'Erreur');
+    input.value = '';
+    openClientConvo(currentClientConvo.id);
+  } catch (e) {
+    showToast(e.message || 'Envoi impossible', 'error');
+  }
+}
+
+async function sendOffer() {
+  if (!currentClientConvo) return;
+  const id = msgIdentity();
+  const unitPrice = parseInt(document.getElementById('offer-price').value) || 0;
+  const qty = Math.max(1, Math.min(99, parseInt(document.getElementById('offer-qty').value) || 1));
+  const p = PRODUCTS.find(x => x.id === currentClientConvo.productId);
+  try {
+    const res = await fetch(apiBase() + '/api/offers', {
+      method: 'POST', headers: msgHeaders(),
+      body: JSON.stringify({ conversationId: currentClientConvo.id, productId: currentClientConvo.productId, qty, unitPrice, phone: id.phone, cid: id.cid })
+    });
+    const data = await res.json();
+    if (!res.ok || !data.success) throw new Error((data && (data.message || data.error)) || 'Erreur');
+    document.getElementById('offer-price').value = '';
+    showToast('Offre envoyée au vendeur');
+    openClientConvo(currentClientConvo.id);
+  } catch (e) {
+    showToast(e.message || 'Offre impossible', 'error');
+  }
+}
+
+async function clientOfferDecide(offerId, accept) {
+  const id = msgIdentity();
+  try {
+    const res = await fetch(apiBase() + '/api/offers/' + offerId + (accept ? '/accept' : '/reject'), {
+      method: 'PATCH', headers: msgHeaders(),
+      body: JSON.stringify({ phone: id.phone, cid: id.cid })
+    });
+    const data = await res.json();
+    if (!res.ok || !data.success) throw new Error((data && (data.message || data.error)) || 'Erreur');
+    showToast(accept ? 'Offre acceptée ! Ajoutez-la au panier.' : 'Offre refusée', accept ? 'success' : 'info');
+    openClientConvo(currentClientConvo.id);
+  } catch (e) {
+    showToast(e.message || 'Action impossible', 'error');
+  }
+}
+
+async function clientOfferCancel(offerId) {
+  const id = msgIdentity();
+  try {
+    const res = await fetch(apiBase() + '/api/offers/' + offerId + '/cancel', {
+      method: 'PATCH', headers: msgHeaders(),
+      body: JSON.stringify({ phone: id.phone, cid: id.cid })
+    });
+    const data = await res.json();
+    if (!res.ok || !data.success) throw new Error((data && (data.message || data.error)) || 'Erreur');
+    openClientConvo(currentClientConvo.id);
+  } catch (e) {
+    showToast(e.message || 'Action impossible', 'error');
+  }
+}
+
+function buyNegotiated(offerId, unitPrice) {
+  const p = PRODUCTS.find(x => x.id === currentClientConvo.productId);
+  if (!p) return;
+  // Prix affiché fourni ; le serveur revalidera l'offre et imposera son prix.
+  addToCart(p.id, 1, null, null, { offerId, price: unitPrice > 0 ? unitPrice : p.price });
+  showSection('home');
+  toggleCart();
+}
+
+function startMsgPoll() {
+  if (msgPollTimer) return;
+  msgPollTimer = setInterval(async () => {
+    if (document.hidden) return;
+    const id = msgIdentity();
+    if (!id.phone) return;
+    try {
+      const res = await fetch(apiBase() + '/api/conversations/unread?phone=' + encodeURIComponent(id.phone) + '&cid=' + encodeURIComponent(id.cid));
+      const data = await res.json();
+      if (res.ok && data.success) updateMsgBadge(data.data.unread || 0);
+    } catch (e) {}
+    if (!document.getElementById('section-messages').classList.contains('hidden') && currentClientConvo) {
+      openClientConvo(currentClientConvo.id);
+    }
+  }, 20000);
+}
+
 // ---------- NEWSLETTER ----------
 function subscribeNewsletter(e) {
   e.preventDefault();
@@ -3427,6 +3727,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   updateCartUI();
   updateFavUI();
   startCountdown();
+  startMsgPoll();
 });
 </script>
 </body>

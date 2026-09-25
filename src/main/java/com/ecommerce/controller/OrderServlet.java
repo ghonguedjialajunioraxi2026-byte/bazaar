@@ -146,6 +146,10 @@ public class OrderServlet extends HttpServlet {
                 if (item.getQty() > 99) {
                     throw new AppException(ErrorCodes.VALIDATION_ERROR, 400, "Quantité invalide (max 99)");
                 }
+                Object oid = ci.get("offerId");
+                if (oid instanceof Number && ((Number) oid).intValue() > 0) {
+                    item.setOfferId(((Number) oid).intValue());
+                }
                 Object up = ci.get("unitPrice");
                 int unitPrice = (up instanceof Number) ? ((Number) up).intValue() : -1;
                 if (unitPrice < 0) {
