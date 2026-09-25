@@ -524,7 +524,7 @@ tailwind.config = {
             <input type="text" id="shop-search" placeholder="Nom, marque, référence…" aria-label="Rechercher dans la boutique" class="w-full pl-10 pr-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white text-sm transition" oninput="applyFilters()">
           </div>
           <div class="relative" data-drop="price">
-            <button onclick="toggleFilterDrop('price')" id="dropbtn-price" class="filter-dropbtn">Prix <i class="bi bi-chevron-down text-[10px]"></i></button>
+            <button onclick="toggleFilterDrop('price')" id="dropbtn-price" aria-expanded="false" aria-haspopup="true" class="filter-dropbtn">Prix <i class="bi bi-chevron-down text-[10px]"></i></button>
             <div id="drop-price" class="hidden absolute left-0 top-full mt-2 w-64 bg-white rounded-2xl shadow-card border border-slate-100 p-4 z-40">
               <p class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Prix (FCFA)</p>
               <div class="flex gap-2 items-center">
@@ -536,23 +536,23 @@ tailwind.config = {
             </div>
           </div>
           <div class="relative" data-drop="brand">
-            <button onclick="toggleFilterDrop('brand')" id="dropbtn-brand" class="filter-dropbtn">Marque <i class="bi bi-chevron-down text-[10px]"></i></button>
+            <button onclick="toggleFilterDrop('brand')" id="dropbtn-brand" aria-expanded="false" aria-haspopup="true" class="filter-dropbtn">Marque <i class="bi bi-chevron-down text-[10px]"></i></button>
             <div id="drop-brand" class="hidden absolute left-0 top-full mt-2 w-64 max-h-64 overflow-y-auto bg-white rounded-2xl shadow-card border border-slate-100 p-2 z-40"></div>
           </div>
           <div class="relative" data-drop="supplier">
-            <button onclick="toggleFilterDrop('supplier')" id="dropbtn-supplier" class="filter-dropbtn">Vendeur <i class="bi bi-chevron-down text-[10px]"></i></button>
+            <button onclick="toggleFilterDrop('supplier')" id="dropbtn-supplier" aria-expanded="false" aria-haspopup="true" class="filter-dropbtn">Vendeur <i class="bi bi-chevron-down text-[10px]"></i></button>
             <div id="drop-supplier" class="hidden absolute left-0 top-full mt-2 w-64 max-h-64 overflow-y-auto bg-white rounded-2xl shadow-card border border-slate-100 p-2 z-40"></div>
           </div>
           <div class="relative" data-drop="size">
-            <button onclick="toggleFilterDrop('size')" id="dropbtn-size" class="filter-dropbtn">Taille <i class="bi bi-chevron-down text-[10px]"></i></button>
+            <button onclick="toggleFilterDrop('size')" id="dropbtn-size" aria-expanded="false" aria-haspopup="true" class="filter-dropbtn">Taille <i class="bi bi-chevron-down text-[10px]"></i></button>
             <div class="hidden absolute left-0 top-full mt-2 w-64 bg-white rounded-2xl shadow-card border border-slate-100 p-4 z-40" id="drop-size"><div class="flex flex-wrap gap-1.5" id="filter-sizes"></div></div>
           </div>
           <div class="relative" data-drop="color">
-            <button onclick="toggleFilterDrop('color')" id="dropbtn-color" class="filter-dropbtn">Couleur <i class="bi bi-chevron-down text-[10px]"></i></button>
+            <button onclick="toggleFilterDrop('color')" id="dropbtn-color" aria-expanded="false" aria-haspopup="true" class="filter-dropbtn">Couleur <i class="bi bi-chevron-down text-[10px]"></i></button>
             <div class="hidden absolute left-0 top-full mt-2 w-64 bg-white rounded-2xl shadow-card border border-slate-100 p-4 z-40" id="drop-color"><div class="flex flex-wrap gap-1.5" id="filter-colors"></div></div>
           </div>
           <div class="relative" data-drop="rating">
-            <button onclick="toggleFilterDrop('rating')" id="dropbtn-rating" class="filter-dropbtn">Note <i class="bi bi-chevron-down text-[10px]"></i></button>
+            <button onclick="toggleFilterDrop('rating')" id="dropbtn-rating" aria-expanded="false" aria-haspopup="true" class="filter-dropbtn">Note <i class="bi bi-chevron-down text-[10px]"></i></button>
             <div class="hidden absolute left-0 top-full mt-2 w-60 bg-white rounded-2xl shadow-card border border-slate-100 p-2 z-40" id="filter-ratings">
               <button onclick="setMinRating(0)" data-rating="0" class="filter-chip active w-full text-left px-3 py-2 rounded-xl text-sm border border-slate-200 hover:border-slate-400 transition">Toutes les notes</button>
               <button onclick="setMinRating(4)" data-rating="4" class="filter-chip w-full text-left px-3 py-2 rounded-xl text-sm border border-slate-200 hover:border-slate-400 transition"><span class="text-accent-500">★★★★</span><span class="text-slate-400"> &amp; plus</span></button>
@@ -560,7 +560,7 @@ tailwind.config = {
             </div>
           </div>
           <div class="relative" data-drop="promo">
-            <button onclick="toggleFilterDrop('promo')" id="dropbtn-promo" class="filter-dropbtn">Promotion <i class="bi bi-chevron-down text-[10px]"></i></button>
+            <button onclick="toggleFilterDrop('promo')" id="dropbtn-promo" aria-expanded="false" aria-haspopup="true" class="filter-dropbtn">Promotion <i class="bi bi-chevron-down text-[10px]"></i></button>
             <div class="hidden absolute left-0 top-full mt-2 w-64 bg-white rounded-2xl shadow-card border border-slate-100 p-4 z-40">
               <label class="flex items-center justify-between cursor-pointer gap-2">
                 <span class="text-sm font-medium">Promotions uniquement</span>
@@ -569,7 +569,7 @@ tailwind.config = {
             </div>
           </div>
           <div class="relative" data-drop="stock">
-            <button onclick="toggleFilterDrop('stock')" id="dropbtn-stock" class="filter-dropbtn">Disponibilité <i class="bi bi-chevron-down text-[10px]"></i></button>
+            <button onclick="toggleFilterDrop('stock')" id="dropbtn-stock" aria-expanded="false" aria-haspopup="true" class="filter-dropbtn">Disponibilité <i class="bi bi-chevron-down text-[10px]"></i></button>
             <div class="hidden absolute left-0 top-full mt-2 w-60 bg-white rounded-2xl shadow-card border border-slate-100 p-2 z-40">
               <button id="filter-stock-all" onclick="setStockFilter('all')" class="filter-chip active w-full text-left px-3 py-2 rounded-xl text-sm border border-slate-200 hover:border-slate-400 transition">Tous</button>
               <button id="filter-stock-in" onclick="setStockFilter('in')" class="filter-chip w-full text-left px-3 py-2 rounded-xl text-sm border border-slate-200 hover:border-slate-400 transition">En stock</button>
@@ -1327,6 +1327,12 @@ function escHTML(s) {
     .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
+// Normalisation insensible aux accents/casse pour la recherche et les filtres
+function normStr(s) {
+  return String(s == null ? '' : s).toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
 // Clic sur une catégorie dynamique (menus) — data-catlink, sans inline onclick
 document.addEventListener('click', e => {
   const a = e.target.closest('[data-catlink]');
@@ -1779,8 +1785,72 @@ function toggleColor(val) {
   applyFilters();
 }
 
+// ---------- ÉTAT CATALOGUE DANS L'URL (partageable, retour navigateur) ----------
+let suppressHashWrite = false;
+function writeCatalogHash() {
+  if (suppressHashWrite) return;
+  try {
+    const p = new URLSearchParams();
+    if (activeCategory) p.set('cat', activeCategory);
+    const q = (document.getElementById('shop-search') || {}).value || '';
+    if (q.trim()) p.set('q', q.trim());
+    if (activeBrand) p.set('brand', activeBrand);
+    if (activeSupplier) p.set('sup', String(activeSupplier));
+    if (activeStock && activeStock !== 'all') p.set('stock', activeStock);
+    const minP = (document.getElementById('price-min') || {}).value || '';
+    const maxP = (document.getElementById('price-max') || {}).value || '';
+    if (minP) p.set('min', minP);
+    if (maxP) p.set('max', maxP);
+    const sort = (document.getElementById('sort-select-top') || {}).value || 'popular';
+    if (sort !== 'popular') p.set('sort', sort);
+    if (activeMinRating > 0) p.set('rate', String(activeMinRating));
+    if (activePromoOnly) p.set('promo', '1');
+    if (activeSizes.length) p.set('sizes', activeSizes.join(','));
+    if (activeColors.length) p.set('colors', activeColors.join(','));
+    if (currentPage > 1) p.set('page', String(currentPage));
+    const s = p.toString();
+    history.replaceState(null, '', s ? '#/boutique?' + s : '#/boutique');
+  } catch (e) {}
+}
+function readCatalogHash() {
+  try {
+    const h = location.hash || '';
+    if (h !== '#/boutique' && !h.startsWith('#/boutique?')) return false;
+    const p = new URLSearchParams(h.includes('?') ? h.split('?')[1] : '');
+    suppressHashWrite = true;
+    activeCategory = p.get('cat') || null;
+    expandedRoot = rootOfCategory(activeCategory);
+    activeBrand = p.get('brand') || null;
+    activeSupplier = p.get('sup') ? parseInt(p.get('sup')) : null;
+    activeStock = p.get('stock') || 'all';
+    activeMinRating = p.get('rate') ? parseInt(p.get('rate')) : 0;
+    activePromoOnly = p.get('promo') === '1';
+    activeSizes = p.get('sizes') ? p.get('sizes').split(',') : [];
+    activeColors = p.get('colors') ? p.get('colors').split(',') : [];
+    const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v || ''; };
+    setVal('shop-search', p.get('q'));
+    setVal('price-min', p.get('min'));
+    setVal('price-max', p.get('max'));
+    setVal('sort-select', p.get('sort') || 'popular');
+    setVal('sort-select-top', p.get('sort') || 'popular');
+    const promo = document.getElementById('filter-promo');
+    if (promo) promo.checked = activePromoOnly;
+    currentPage = Math.max(1, parseInt(p.get('page')) || 1);
+    showSection('shop');
+    applyFilters();
+    suppressHashWrite = false;
+    return true;
+  } catch (e) {
+    suppressHashWrite = false;
+    return false;
+  }
+}
+window.addEventListener('hashchange', () => {
+  if ((location.hash || '').startsWith('#/boutique')) readCatalogHash();
+});
+
 function applyFilters() {
-  const q = (document.getElementById('shop-search')?.value || '').toLowerCase().trim();
+  const q = normStr((document.getElementById('shop-search')?.value || '').trim());
   const minP = parseInt(document.getElementById('price-min')?.value) || 0;
   const maxP = parseInt(document.getElementById('price-max')?.value) || Infinity;
   const sort = document.getElementById('sort-select')?.value || 'popular';
@@ -1798,7 +1868,7 @@ function applyFilters() {
     if (activeSizes.length && !activeSizes.some(s => (p.sizes || []).includes(s))) return false;
     if (activeColors.length && !activeColors.some(c => (p.colors || []).includes(c))) return false;
     if (q) {
-      const searchStr = `${p.name} ${p.brand} ${p.category} ${p.description} ${p.reference} ${p.slug}`.toLowerCase();
+      const searchStr = normStr(`${p.name} ${p.brand} ${p.category} ${p.description} ${p.reference} ${p.slug}`);
       if (!searchStr.includes(q)) return false;
     }
     return true;
@@ -1874,8 +1944,8 @@ function renderFilterBar() {
   if (pills) {
     const roots = CAT_TREE.length ? CAT_TREE.map(r => r.name) : [...new Set(PRODUCTS.map(p => p.category))];
     const activeRoot = rootOfCategory(activeCategory);
-    pills.innerHTML = `<button onclick="clearRootFilter()" class="shrink-0 px-5 py-2.5 rounded-full text-sm font-bold border transition ${!activeCategory ? 'bg-dark-900 text-white border-dark-900' : 'bg-white border-slate-200 hover:border-slate-400'}">Toutes</button>` +
-      roots.map(r => `<button onclick="selectRoot('${escAttr(r)}')" class="shrink-0 px-5 py-2.5 rounded-full text-sm font-semibold border transition ${activeRoot === r ? 'bg-primary-700 text-white border-primary-700 shadow-soft' : 'bg-white border-slate-200 hover:border-primary-400 hover:text-primary-700'}">${escHTML(r)}</button>`).join('');
+    pills.innerHTML = `<button onclick="clearRootFilter()" aria-pressed="${!activeCategory}" class="shrink-0 px-5 py-2.5 rounded-full text-sm font-bold border transition ${!activeCategory ? 'bg-dark-900 text-white border-dark-900' : 'bg-white border-slate-200 hover:border-slate-400'}">Toutes</button>` +
+      roots.map(r => `<button onclick="selectRoot('${escAttr(r)}')" aria-pressed="${activeRoot === r}" class="shrink-0 px-5 py-2.5 rounded-full text-sm font-semibold border transition ${activeRoot === r ? 'bg-primary-700 text-white border-primary-700 shadow-soft' : 'bg-white border-slate-200 hover:border-primary-400 hover:text-primary-700'}">${escHTML(r)}</button>`).join('');
   }
   renderSubPanel();
   refreshDropButtons();
@@ -1915,15 +1985,21 @@ function renderSubPanel() {
 
 function toggleFilterDrop(name) {
   const panel = document.getElementById('drop-' + name);
+  const btn = document.getElementById('dropbtn-' + name);
   if (!panel) return;
   const wasHidden = panel.classList.contains('hidden');
   closeFilterDrops();
-  if (wasHidden) panel.classList.remove('hidden');
+  if (wasHidden) {
+    panel.classList.remove('hidden');
+    if (btn) btn.setAttribute('aria-expanded', 'true');
+  }
 }
 function closeFilterDrops() {
   ['price', 'brand', 'supplier', 'size', 'color', 'rating', 'promo', 'stock'].forEach(k => {
     const d = document.getElementById('drop-' + k);
     if (d) d.classList.add('hidden');
+    const b = document.getElementById('dropbtn-' + k);
+    if (b) b.setAttribute('aria-expanded', 'false');
   });
 }
 document.addEventListener('click', e => {
@@ -1982,7 +2058,7 @@ function renderFilterOptions() {
   if (sizeBox) {
     const sizes = [...new Set(PRODUCTS.flatMap(p => p.sizes || []))].slice(0, 14);
     sizeBox.innerHTML = sizes.map(s => `
-      <button data-size="${escAttr(s)}" class="px-3 py-1.5 rounded-xl border text-[13px] font-medium transition ${activeSizes.includes(s) ? 'bg-primary-700 text-white border-primary-700' : 'border-slate-200 hover:border-primary-300'}">${escHTML(s)}</button>
+      <button data-size="${escAttr(s)}" aria-pressed="${activeSizes.includes(s)}" class="px-3 py-1.5 rounded-xl border text-[13px] font-medium transition ${activeSizes.includes(s) ? 'bg-primary-700 text-white border-primary-700' : 'border-slate-200 hover:border-primary-300'}">${escHTML(s)}</button>
     `).join('');
     sizeBox.querySelectorAll('button').forEach(btn => {
       btn.addEventListener('click', () => toggleSize(btn.dataset.size));
@@ -1993,7 +2069,7 @@ function renderFilterOptions() {
   if (colorBox) {
     const colors = [...new Set(PRODUCTS.flatMap(p => p.colors || []))].slice(0, 14);
     colorBox.innerHTML = colors.map(c => `
-      <button data-color="${escAttr(c)}" title="${escAttr(c)}" class="px-3 py-1.5 rounded-full border text-[13px] font-medium transition ${activeColors.includes(c) ? 'bg-dark-900 text-white border-dark-900' : 'border-slate-200 hover:border-slate-400'}">${escHTML(c)}</button>
+      <button data-color="${escAttr(c)}" title="${escAttr(c)}" aria-pressed="${activeColors.includes(c)}" class="px-3 py-1.5 rounded-full border text-[13px] font-medium transition ${activeColors.includes(c) ? 'bg-dark-900 text-white border-dark-900' : 'border-slate-200 hover:border-slate-400'}">${escHTML(c)}</button>
     `).join('');
     colorBox.querySelectorAll('button').forEach(btn => {
       btn.addEventListener('click', () => toggleColor(btn.dataset.color));
@@ -2011,12 +2087,13 @@ function renderShopProducts() {
 
   const totalPages = Math.ceil(filteredProducts.length / PER_PAGE);
   const pag = document.getElementById('pagination');
-  if (totalPages <= 1) { pag.innerHTML = ''; return; }
+  if (totalPages <= 1) { pag.innerHTML = ''; writeCatalogHash(); return; }
   let html = '';
   for (let i = 1; i <= totalPages; i++) {
     html += `<button onclick="currentPage=${i};renderShopProducts();window.scrollTo({top:0,behavior:'smooth'})" class="w-10 h-10 rounded-xl text-sm font-medium ${i===currentPage?'bg-primary-600 text-white':'bg-white text-slate-600 hover:bg-slate-100'} shadow-soft">${i}</button>`;
   }
   pag.innerHTML = html;
+  writeCatalogHash();
 }
 
 function setViewMode(mode) {
@@ -2059,13 +2136,13 @@ function liveSearch(q, boxId, afterPick) {
     navSearchClearVisibility();
     return;
   }
-  const ql = q.toLowerCase();
+  const ql = normStr(q);
   const results = PRODUCTS.filter(p => {
-    const s = `${p.name} ${p.brand} ${p.category} ${p.description}`.toLowerCase();
+    const s = normStr(`${p.name} ${p.brand} ${p.category} ${p.description}`);
     return s.includes(ql);
   }).slice(0, 5);
-  const cats = CATEGORIES.filter(c => c.name.toLowerCase().includes(ql)).slice(0, 3);
-  const brands = [...new Set(PRODUCTS.map(p => p.brand).filter(b => b && b.toLowerCase().includes(ql)))].slice(0, 3);
+  const cats = CATEGORIES.filter(c => normStr(c.name).includes(ql)).slice(0, 3);
+  const brands = [...new Set(PRODUCTS.map(p => p.brand).filter(b => b && normStr(b).includes(ql)))].slice(0, 3);
   let html = '';
   if (results.length) {
     html += `<p class="px-3 pt-2 pb-1 text-[11px] font-bold uppercase tracking-wider text-slate-400">Produits</p>` + results.map(p => `
@@ -2094,7 +2171,7 @@ function liveSearch(q, boxId, afterPick) {
       </div>
     `).join('');
   }
-  const sups = (typeof SUPPLIERS !== 'undefined' ? SUPPLIERS : []).filter(s => s.name && s.name.toLowerCase().includes(ql)).slice(0, 2);
+  const sups = (typeof SUPPLIERS !== 'undefined' ? SUPPLIERS : []).filter(s => s.name && normStr(s.name).includes(ql)).slice(0, 2);
   if (sups.length) {
     html += `<p class="px-3 pt-2 pb-1 text-[11px] font-bold uppercase tracking-wider text-slate-400">Fournisseurs</p>` + sups.map(s => `
       <div onclick="shopBySupplier('${escAttr(s.name)}');${afterPick}" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-50 cursor-pointer">
@@ -2222,11 +2299,13 @@ function openProduct(id) {
 
   document.getElementById('product-modal').classList.remove('hidden');
   document.body.style.overflow = 'hidden';
+  document.title = p.name + ' — MBOA STYLE';
 }
 
 function closeProductModal() {
   document.getElementById('product-modal').classList.add('hidden');
   document.body.style.overflow = '';
+  document.title = 'MBOA STYLE — Boutique en ligne premium au Cameroun';
 }
 
 // ---------- LIGHTBOX PLEIN ÉCRAN ----------
@@ -2913,7 +2992,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   homePage = 1;
   renderAllProducts();
   renderTestimonials();
-  renderFilterOptions();
+  // Restaure l'état catalogue depuis l'URL (#/boutique?...) si présent
+  const hashRestored = readCatalogHash();
+  if (!hashRestored) {
+    renderShopProducts();
+    renderFilterOptions();
+    renderActiveFilters();
+  }
   updateCartUI();
   updateFavUI();
   startCountdown();

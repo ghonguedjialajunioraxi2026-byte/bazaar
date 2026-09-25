@@ -54,7 +54,9 @@ public class ProductServlet extends HttpServlet {
             } else if ("search".equals(action)) {
                 String q = req.getParameter("q");
                 if (q != null && !q.trim().isEmpty()) {
-                    List<Product> products = productService.search(q.trim());
+                    q = q.trim();
+                    if (q.length() > 100) q = q.substring(0, 100);
+                    List<Product> products = productService.search(q);
                     resp.getWriter().write(JsonUtil.toJson(products));
                 } else {
                     resp.getWriter().write("[]");
