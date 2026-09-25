@@ -4,7 +4,11 @@ import com.ecommerce.model.Order;
 import com.ecommerce.model.OrderItem;
 import com.ecommerce.service.OrderService;
 import com.ecommerce.dao.DeliveryZoneDAO;
+import com.ecommerce.util.ApiResponse;
+import com.ecommerce.util.AppException;
+import com.ecommerce.util.ErrorCodes;
 import com.ecommerce.util.JsonUtil;
+import com.ecommerce.util.RequestValidator;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -71,15 +75,25 @@ public class OrderServlet extends HttpServlet {
             while ((line = reader.readLine()) != null) sb.append(line);
             Map<String, Object> body = JsonUtil.fromJson(sb.toString(), Map.class);
 
+            // Validation serveur (le frontend valide aussi, sans être une frontière).
+            String fullname = RequestValidator.required(body, "fullname", "Nom complet");
+            RequestValidator.maxLen(fullname, 120, "Nom complet");
+            String phone = RequestValidator.required(body, "phone", "Téléphone");
+            RequestValidator.phone(phone, "Téléphone");
+            String city = RequestValidator.required(body, "city", "Ville");
+            RequestValidator.maxLen(city, 60, "Ville");
+            String address = RequestValidator.required(body, "address", "Adresse");
+            RequestValidator.maxLen(address, 255, "Adresse");
+
             Order order = new Order();
-            order.setFullname((String) body.get("fullname"));
-            order.setPhone((String) body.get("phone"));
-            order.setCity((String) body.get("city"));
-            order.setDistrict((String) body.get("district"));
-            order.setAddress((String) body.get("address"));
-            order.setComment((String) body.get("comment"));
-            order.setDeliveryMode((String) body.get("deliveryMode"));
-            order.setPaymentMethod((String) body.get("paymentMethod"));
+            order.setFullname(fullname);
+            order.setPhone(phone);
+            order.setCity(city);
+            order.setDistrict(RequestValidator.optional(body, "district", 80));
+            order.setAddress(address);
+            order.setComment(RequestValidator.optional(body, "comment", 2000));
+            order.setDeliveryMode(RequestValidator.optional(body, "deliveryMode", 30));
+            order.setPaymentMethod(RequestValidator.optional(body, "paymentMethod", 30));
 
             if (body.get("supplierId") != null) {
                 order.setSupplierId(((Number) body.get("supplierId")).intValue());
@@ -88,17 +102,29 @@ public class OrderServlet extends HttpServlet {
             double total = 0;
             ArrayList<OrderItem> items = new ArrayList<>();
             ArrayList<Map<String, Object>> cartItems = (ArrayList<Map<String, Object>>) body.get("items");
-            if (cartItems != null) {
-                for (Map<String, Object> ci : cartItems) {
-                    OrderItem item = new OrderItem();
-                    item.setProductId(((Number) ci.get("productId")).intValue());
-                    item.setSize((String) ci.get("size"));
-                    item.setColor((String) ci.get("color"));
-                    item.setQty(((Number) ci.get("qty")).intValue());
-                    item.setUnitPrice(((Number) ci.get("unitPrice")).intValue());
-                    total += item.getUnitPrice() * item.getQty();
-                    items.add(item);
+            if (cartItems == null || cartItems.isEmpty()) {
+                throw new AppException(ErrorCodes.VALIDATION_ERROR, 400, "Panier vide");
+            }
+            if (cartItems.size() > 100) {
+                throw new AppException(ErrorCodes.VALIDATION_ERROR, 400, "Trop d'articles (max 100)");
+            }
+            for (Map<String, Object> ci : cartItems) {
+                OrderItem item = new OrderItem();
+                item.setProductId(RequestValidator.requiredPositiveInt(ci, "productId", "Produit"));
+                item.setSize(RequestValidator.optional(ci, "size", 20));
+                item.setColor(RequestValidator.optional(ci, "color", 40));
+                item.setQty(RequestValidator.requiredPositiveInt(ci, "qty", "Quantité"));
+                if (item.getQty() > 99) {
+                    throw new AppException(ErrorCodes.VALIDATION_ERROR, 400, "Quantité invalide (max 99)");
                 }
+                Object up = ci.get("unitPrice");
+                int unitPrice = (up instanceof Number) ? ((Number) up).intValue() : -1;
+                if (unitPrice < 0) {
+                    throw new AppException(ErrorCodes.VALIDATION_ERROR, 400, "Prix invalide");
+                }
+                item.setUnitPrice(unitPrice);
+                total += item.getUnitPrice() * item.getQty();
+                items.add(item);
             }
             // Dynamic delivery fee
             int deliveryFee = deliveryDAO.getFee(order.getCity());
@@ -108,10 +134,14 @@ public class OrderServlet extends HttpServlet {
 
             int orderId = orderService.createOrder(order);
 
-            resp.getWriter().write("{\"orderId\":" + orderId + ",\"orderNumber\":\"" + order.getOrderNumber() + "\",\"status\":\"EN_ATTENTE\",\"total\":" + order.getTotal() + ",\"deliveryFee\":" + deliveryFee + "}");
+            // Format historique conservé + champs standardisés (additif).
+            resp.getWriter().write("{\"success\":true,\"orderId\":" + orderId
+                + ",\"orderNumber\":\"" + order.getOrderNumber() + "\",\"status\":\"EN_ATTENTE\",\"total\":"
+                + order.getTotal() + ",\"deliveryFee\":" + deliveryFee + ",\"message\":null,\"errorCode\":null}");
+        } catch (AppException e) {
+            ApiResponse.fromException(resp, e);
         } catch (Exception e) {
-            resp.setStatus(500);
-            resp.getWriter().write("{\"error\":\"" + e.getMessage().replace("\"", "'") + "\"}");
+            ApiResponse.fail(resp, 500, ErrorCodes.INTERNAL_ERROR, "Impossible de traiter votre demande.");
         }
     }
 

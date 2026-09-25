@@ -5,6 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MBOA STYLE — Espace Fournisseur</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<script>
+/* Config Tailwind dédiée (cohérence Phase 0 : vert MBOA + or champagne) */
+tailwind.config = { theme: { extend: {
+  colors: {
+    primary: { 50:'#E8F5EF',100:'#D3F0E0',200:'#A9E2C3',300:'#6FCE9D',400:'#2BB673',500:'#0F9D5C',600:'#087443',700:'#065C36',800:'#05492C',900:'#043B24' },
+    accent: { 50:'#FBF6E9',100:'#F6EBCB',200:'#EDDA9E',400:'#DEB84E',500:'#D4A72C',600:'#B08A22',700:'#8A6D1C' },
+    dark: { 800:'#1e293b',900:'#0f172a' }
+  },
+  fontFamily: { sans:['Manrope','system-ui','sans-serif'] }
+}}};
+</script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
