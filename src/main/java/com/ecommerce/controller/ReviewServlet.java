@@ -64,6 +64,12 @@ public class ReviewServlet extends HttpServlet {
             }
             r.setRating(rating);
             r.setComment((String) body.get("comment"));
+            // Phase 23 : produit inexistant => 404 (la FK levait un 500).
+            if (new com.ecommerce.dao.ProductDAO().findById(r.getProductId()) == null) {
+                resp.setStatus(404);
+                resp.getWriter().write("{\"error\":\"Produit introuvable\"}");
+                return;
+            }
             // Anti-spam : max 5 avis/heure/produit (la modération reste le filtre).
             if (reviewDAO.countRecent(r.getProductId(), 60) >= 5) {
                 resp.setStatus(429);
