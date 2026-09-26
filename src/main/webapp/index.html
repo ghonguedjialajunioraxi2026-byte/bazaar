@@ -619,7 +619,7 @@ tailwind.config = {
           <span id="active-category-name" class="text-sm text-primary-700 font-medium"></span>
           <button onclick="clearCategoryFilter()" class="ml-2 text-primary-500 hover:text-primary-700"><i class="bi bi-x-lg text-xs"></i></button>
         </div>
-        <div id="shop-products" class="grid gap-4 lg:gap-5 grid-cols-[repeat(auto-fill,minmax(min(100%,230px),1fr))]"></div>
+        <div id="shop-products" class="grid gap-3 sm:gap-4 lg:gap-5 grid-cols-2 md:grid-cols-3 lg:grid-cols-[repeat(auto-fill,minmax(min(100%,230px),1fr))]"></div>
         <div id="pagination" class="flex justify-center gap-2 mt-10"></div>
       </div>
     </div>
@@ -691,7 +691,7 @@ tailwind.config = {
       <h2 class="font-display text-xl sm:text-2xl font-bold">Produits de la boutique</h2>
       <p class="text-sm text-slate-500"><span id="supplier-products-count" class="font-bold text-dark-900">0</span> produits</p>
     </div>
-    <div id="supplier-products" class="grid gap-4 lg:gap-5 grid-cols-[repeat(auto-fill,minmax(min(100%,230px),1fr))]"></div>
+    <div id="supplier-products" class="grid gap-3 sm:gap-4 lg:gap-5 grid-cols-2 md:grid-cols-3 lg:grid-cols-[repeat(auto-fill,minmax(min(100%,230px),1fr))]"></div>
   </div>
 </section>
 
@@ -713,11 +713,11 @@ tailwind.config = {
           <h2 class="font-semibold text-lg mb-2">Informations de livraison</h2>
           <div>
             <label class="block text-sm font-medium text-slate-700 mb-1.5">Nom complet *</label>
-            <input type="text" id="order-name" required class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm" placeholder="Jean Dupont">
+            <input type="text" id="order-name" required autocomplete="name" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm" placeholder="Jean Dupont">
           </div>
           <div>
             <label class="block text-sm font-medium text-slate-700 mb-1.5">Numéro de téléphone *</label>
-            <input type="tel" id="order-phone" required pattern="[0-9+\s]{9,15}" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm" placeholder="690 00 00 00">
+            <input type="tel" id="order-phone" required pattern="[0-9+\s]{9,15}" autocomplete="tel" inputmode="tel" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm" placeholder="690 00 00 00">
           </div>
           <div class="grid sm:grid-cols-2 gap-4">
             <div>
@@ -871,7 +871,7 @@ tailwind.config = {
 </footer>
 
 <!-- ========== MOBILE BOTTOM NAV ========== -->
-<nav id="mobile-bottom-nav" class="lg:hidden fixed bottom-0 inset-x-0 z-40 ms-glass border-t border-slate-200" aria-label="Navigation principale mobile">
+<nav id="mobile-bottom-nav" class="lg:hidden fixed bottom-0 inset-x-0 z-40 ms-glass border-t border-slate-200" aria-label="Navigation principale mobile" style="padding-bottom:env(safe-area-inset-bottom)">
   <div class="grid grid-cols-5 h-16">
     <button onclick="showSection('home')" data-sec="home" class="flex flex-col items-center justify-center gap-0.5 text-primary-700" aria-label="Accueil"><i class="bi bi-house-door text-xl"></i><span class="text-[10px] font-semibold">Accueil</span></button>
     <button onclick="showSection('shop')" data-sec="shop" class="flex flex-col items-center justify-center gap-0.5 text-slate-500" aria-label="Boutique"><i class="bi bi-grid text-xl"></i><span class="text-[10px] font-semibold">Boutique</span></button>
@@ -2215,7 +2215,12 @@ document.addEventListener('click', e => {
   if (!e.target.closest('[data-drop]')) closeFilterDrops();
 });
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { closeFilterDrops(); closeNavSearch(); }
+  if (e.key === 'Escape') {
+    closeFilterDrops();
+    closeNavSearch();
+    if (!document.getElementById('product-modal').classList.contains('hidden')) closeProductModal();
+    if (!document.getElementById('cart-drawer').classList.contains('translate-x-full')) toggleCart();
+  }
 });
 
 function refreshDropButtons() {
@@ -2290,7 +2295,7 @@ function renderShopProducts() {
   const start = (currentPage - 1) * PER_PAGE;
   const pageItems = filteredProducts.slice(start, start + PER_PAGE);
   const container = document.getElementById('shop-products');
-  container.className = viewMode === 'grid' ? 'grid gap-4 lg:gap-5 grid-cols-[repeat(auto-fill,minmax(min(100%,230px),1fr))]' : 'flex flex-col gap-4';
+  container.className = viewMode === 'grid' ? 'grid gap-3 sm:gap-4 lg:gap-5 grid-cols-2 md:grid-cols-3 lg:grid-cols-[repeat(auto-fill,minmax(min(100%,230px),1fr))]' : 'flex flex-col gap-4';
   container.innerHTML = pageItems.length ? pageItems.map(p => productCardHTML(p, viewMode === 'list')).join('') : '<div class="col-span-full ms-empty"><div class="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-4 text-2xl text-slate-300"><i class="bi bi-search"></i></div><p class="font-bold mb-1">Aucun produit trouvé</p><p class="text-sm mb-4">Essayez de modifier vos filtres.</p><button onclick="resetFilters()" class="px-6 py-2.5 bg-primary-700 hover:bg-primary-800 text-white text-sm font-semibold rounded-xl transition">Effacer les filtres</button></div>';
   document.getElementById('results-count').textContent = new Intl.NumberFormat('fr-FR').format(filteredProducts.length);
 
@@ -2868,9 +2873,9 @@ function cartItemHTML(item, i) {
         ${item.outOfStock ? '<p class="text-[11px] font-bold text-rose-600 mt-0.5">Rupture de stock — retirez cet article pour commander</p>' : ''}
         <p class="font-semibold text-sm mt-1">${formatPrice(item.price)}</p>
         <div class="flex items-center gap-2 mt-2">
-          <button onclick="updateQuantity(${i},-1)" aria-label="Diminuer la quantité" class="qty-btn w-7 h-7 rounded-lg border border-slate-200 flex items-center justify-center text-sm">−</button>
+          <button onclick="updateQuantity(${i},-1)" aria-label="Diminuer la quantité" class="qty-btn w-10 h-10 rounded-lg border border-slate-200 flex items-center justify-center text-base">−</button>
           <span class="text-sm font-medium w-6 text-center" aria-live="polite">${item.qty}</span>
-          <button onclick="updateQuantity(${i},1)" aria-label="Augmenter la quantité" class="qty-btn w-7 h-7 rounded-lg border border-slate-200 flex items-center justify-center text-sm">+</button>
+          <button onclick="updateQuantity(${i},1)" aria-label="Augmenter la quantité" class="qty-btn w-10 h-10 rounded-lg border border-slate-200 flex items-center justify-center text-base">+</button>
         </div>
       </div>
       <button onclick="removeFromCart(${i})" class="text-slate-400 hover:text-rose-500 self-start"><i class="bi bi-trash"></i></button>
