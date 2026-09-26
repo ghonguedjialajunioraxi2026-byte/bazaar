@@ -273,15 +273,17 @@ public class CategoryService {
             }
         }
         List<Integer> ids = new ArrayList<>();
-        collectIds(rootId, childrenIds, ids);
+        collectIds(rootId, childrenIds, ids, new java.util.HashSet<>());
         return ids;
     }
 
-    private void collectIds(int id, Map<Integer, List<Integer>> childrenIds, List<Integer> out) {
+    private void collectIds(int id, Map<Integer, List<Integer>> childrenIds, List<Integer> out,
+                            java.util.Set<Integer> seen) {
+        if (!seen.add(id)) return; // garde anti-cycle (hiérarchie corrompue)
         out.add(id);
         List<Integer> kids = childrenIds.get(id);
         if (kids != null) {
-            for (int kid : kids) collectIds(kid, childrenIds, out);
+            for (int kid : kids) collectIds(kid, childrenIds, out, seen);
         }
     }
 

@@ -58,6 +58,12 @@ public class OrderService {
                 throw new AppException(ErrorCodes.VALIDATION_ERROR, 400,
                     "Stock insuffisant pour « " + p.getName() + " » (disponible : " + Math.max(0, p.getStock()) + ")");
             }
+            // Intégrité multi-fournisseurs : une commande affectée à un vendeur
+            // ne peut contenir que ses produits (sinon fuite + traitement impossible).
+            if (order.getSupplierId() > 0 && p.getSupplierId() != order.getSupplierId()) {
+                throw new AppException(ErrorCodes.VALIDATION_ERROR, 400,
+                    "« " + p.getName() + " » n'appartient pas à ce vendeur");
+            }
             if (item.getOfferId() != null && item.getOfferId() > 0) {
                 // Ligne au prix négocié : offre ACCEPTED du même téléphone, mêmes variantes.
                 com.ecommerce.model.Offer off;

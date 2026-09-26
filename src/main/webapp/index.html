@@ -1463,11 +1463,22 @@ function flattenCatTree(nodes, depth, parentName, out) {
 }
 
 function subtreeNames(name) {
-  const node = CATEGORIES.find(c => c.name === name);
+  // Parcours par ID avec garde anti-cycle : les noms ne sont pas uniques
+  // (seed : ex. "Batteries" × 3) et l'ancienne récursion par nom bouclait.
   const names = new Set([name]);
-  if (!node) return names;
-  CATEGORIES.filter(c => c.parentId === node.id)
-    .forEach(k => subtreeNames(k.name).forEach(x => names.add(x)));
+  const seen = new Set();
+  const roots = CATEGORIES.filter(c => c.name === name).map(c => c.id);
+  const stack = roots.slice();
+  let guard = 0;
+  while (stack.length && guard++ < 5000) {
+    const id = stack.pop();
+    if (seen.has(id)) continue;
+    seen.add(id);
+    CATEGORIES.filter(c => c.parentId === id).forEach(k => {
+      names.add(k.name);
+      stack.push(k.id);
+    });
+  }
   return names;
 }
 
