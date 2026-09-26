@@ -149,8 +149,9 @@ public class CategoryServlet extends HttpServlet {
                 return;
             }
 
-            int page = parseInt(req.getParameter("page"), 1);
-            int limit = parseInt(req.getParameter("limit"), 20);
+            // Bornes serveur (Phase 20) : page/limit hostiles => 500 (OFFSET négatif).
+            int page = com.ecommerce.util.Pagination.clampPage(parseInt(req.getParameter("page"), 1));
+            int limit = com.ecommerce.util.Pagination.clampLimit(parseInt(req.getParameter("limit"), 20), 50);
             List<Category> data = categoryService.search(search, parent, active, page, limit);
             int total = categoryService.countSearch(search, parent, active);
             Map<String, Object> result = new HashMap<>();

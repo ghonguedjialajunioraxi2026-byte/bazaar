@@ -80,8 +80,9 @@ public class ProductServlet extends HttpServlet {
                 Integer maxPrice = parseIntParamOrNull(req, "maxPrice");
                 Boolean inStock = "true".equals(req.getParameter("inStock"));
                 String sort = req.getParameter("sort");
-                int page = parseIntParam(req, "page", 1);
-                int limit = parseIntParam(req, "limit", 12);
+                // Bornes serveur (Phase 20) : page/limit hostiles => 500 (OFFSET négatif).
+                int page = com.ecommerce.util.Pagination.clampPage(parseIntParam(req, "page", 1));
+                int limit = com.ecommerce.util.Pagination.clampLimit(parseIntParam(req, "limit", 12), 50);
 
                 List<Product> products = productService.filter(category, brand, badge, minPrice, maxPrice, inStock, sort, page, limit);
                 int total = productService.countFiltered(category, brand, badge, minPrice, maxPrice, inStock);

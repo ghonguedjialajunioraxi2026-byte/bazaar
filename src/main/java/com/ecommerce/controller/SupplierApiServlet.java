@@ -178,10 +178,11 @@ public class SupplierApiServlet extends HttpServlet {
                     new com.ecommerce.dao.OfferDAO().findPendingBySupplier(supplierId)), 200);
                 return;
             }
-            // /api/supplier/ledger — écritures comptables (limite 50)
+            // /api/supplier/ledger — écritures comptables (limite 50, bornée Phase 20)
             if (path.equals("/ledger")) {
                 int limit = 50;
                 try { limit = Integer.parseInt(req.getParameter("limit")); } catch (Exception ignored) {}
+                limit = com.ecommerce.util.Pagination.clampLimit(limit, 50);
                 write(resp, ok("Grand-livre",
                     new com.ecommerce.service.MonetizationService().entriesForSupplier(supplierId, limit)), 200);
                 return;
@@ -334,6 +335,9 @@ public class SupplierApiServlet extends HttpServlet {
             write(resp, err("Route inconnue"), 404);
         } catch (com.ecommerce.util.AppException ae) {
             write(resp, err(ae.getMessage()), ae.getHttpStatus());
+        } catch (java.io.IOException ioe) {
+            // Upload refusé (format, contenu, taille) : erreur client, pas 500.
+            write(resp, err("Image invalide ou refusée."), 400);
         } catch (Exception e) {
             write(resp, err("Impossible de traiter votre demande."), 500);
         }
@@ -471,6 +475,9 @@ public class SupplierApiServlet extends HttpServlet {
             write(resp, err("Route inconnue"), 404);
         } catch (com.ecommerce.util.AppException ae) {
             write(resp, err(ae.getMessage()), ae.getHttpStatus());
+        } catch (java.io.IOException ioe) {
+            // Upload refusé (format, contenu, taille) : erreur client, pas 500.
+            write(resp, err("Image invalide ou refusée."), 400);
         } catch (Exception e) {
             write(resp, err("Impossible de traiter votre demande."), 500);
         }

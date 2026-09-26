@@ -126,6 +126,10 @@ public class ProductImageServlet extends HttpServlet {
                 productImageDAO.addImage(productId, url, isPrimary);
                 resp.getWriter().write("{\"success\":true,\"url\":\"" + url + "\"}");
             }
+        } catch (java.io.IOException ioe) {
+            // Upload refusé (format, contenu, taille) : erreur client, pas 500.
+            resp.setStatus(400);
+            resp.getWriter().write("{\"error\":\"Image invalide ou refusée\"}");
         } catch (Exception e) {
             resp.setStatus(500);
             com.ecommerce.util.ApiResponse.internalError(resp);

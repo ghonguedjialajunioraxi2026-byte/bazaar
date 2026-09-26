@@ -81,6 +81,7 @@ public class AdminServlet extends HttpServlet {
             if ("/logs".equals(pathInfo) || "logs".equals(action)) {
                 int limit = 50;
                 try { limit = Integer.parseInt(req.getParameter("limit")); } catch (Exception ignored) {}
+                limit = com.ecommerce.util.Pagination.clampLimit(limit, 200);
                 resp.getWriter().write(JsonUtil.toJson(activityLogDAO.findRecent(limit)));
                 return;
             }
@@ -115,23 +116,22 @@ public class AdminServlet extends HttpServlet {
             }
             if ("/payments".equals(pathInfo)) {
                 resp.getWriter().write(JsonUtil.toJson(control.payments(
-                    req.getParameter("status"), parseInt(req.getParameter("page"), 1),
-                    parseInt(req.getParameter("limit"), 20))));
+                    req.getParameter("status"), boundedPage(req), boundedLimit(req, 20))));
                 return;
             }
             if ("/shipments".equals(pathInfo)) {
                 resp.getWriter().write(JsonUtil.toJson(control.shipments(
-                    req.getParameter("filter"), parseInt(req.getParameter("limit"), 50))));
+                    req.getParameter("filter"), boundedLimit(req, 50))));
                 return;
             }
             if ("/conversations".equals(pathInfo)) {
                 resp.getWriter().write(JsonUtil.toJson(control.conversations(
-                    parseInt(req.getParameter("page"), 1), parseInt(req.getParameter("limit"), 20))));
+                    boundedPage(req), boundedLimit(req, 20))));
                 return;
             }
             if ("/offers/pending".equals(pathInfo)) {
                 resp.getWriter().write(JsonUtil.toJson(control.pendingOffers(
-                    parseInt(req.getParameter("page"), 1), parseInt(req.getParameter("limit"), 20))));
+                    boundedPage(req), boundedLimit(req, 20))));
                 return;
             }
             if ("/reviews".equals(pathInfo)) {
@@ -140,8 +140,8 @@ public class AdminServlet extends HttpServlet {
             }
             if ("/audit".equals(pathInfo)) {
                 resp.getWriter().write(JsonUtil.toJson(control.audit(
-                    req.getParameter("action"), parseInt(req.getParameter("page"), 1),
-                    parseInt(req.getParameter("limit"), 20))));
+                    req.getParameter("action"), boundedPage(req),
+                    boundedLimit(req, 20))));
                 return;
             }
 
@@ -405,6 +405,15 @@ public class AdminServlet extends HttpServlet {
         } catch (NumberFormatException e) {
             return def;
         }
+    }
+
+    /** Bornes serveur (Phase 20) : page/limit hostiles => 500 (OFFSET négatif). */
+    private int boundedPage(jakarta.servlet.http.HttpServletRequest req) {
+        return com.ecommerce.util.Pagination.clampPage(parseInt(req.getParameter("page"), 1));
+    }
+
+    private int boundedLimit(jakarta.servlet.http.HttpServletRequest req, int def) {
+        return com.ecommerce.util.Pagination.clampLimit(parseInt(req.getParameter("limit"), def), 100);
     }
 
     private Map<String, Object> getDashboard() throws SQLException {        Map<String, Object> dash = new LinkedHashMap<>();
