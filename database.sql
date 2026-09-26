@@ -458,7 +458,7 @@ CREATE TABLE `suppliers` (
 
 SET FOREIGN_KEY_CHECKS = 1;
 
--- Admin par défaut : admin / admin123
-INSERT INTO admins (username, password_hash, role) VALUES
-  ('admin', 'JAvlGPq9JyTdtvBO6x2llnRI1+gxwIyPqCKAn3THIKk=', 'SUPER_ADMIN')
-ON DUPLICATE KEY UPDATE password_hash = VALUES(password_hash), role = VALUES(role);
+-- AUCUN compte administrateur par défaut (Phase 22) : l'ancien seed
+-- « admin / admin123 » a été supprimé (credential connu publiquement).
+-- Créer le premier administrateur via la procédure docs/database-production.md §5
+-- (hash PBKDF2 + INSERT), jamais de mot de passe en clair dans le dépôt.

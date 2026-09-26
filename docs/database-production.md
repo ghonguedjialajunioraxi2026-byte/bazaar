@@ -19,17 +19,17 @@ ré-exécutables sans erreur) :
 | 5 | `database/migrate_monetization.sql` | ledger + règles |
 | 6 | `database/migrate_notifications_v2.sql` | notifications v2 |
 | 7 | `database/migrate_notifications_v3.sql` | notifications v3 |
-| 8 | `database/migrate_offers.sql` | négociation |
-| 9 | `database/migrate_order_number_unique.sql` | unicité numéro commande |
-| 10 | `database/migrate_order_snapshot.sql` | snapshot lignes commande |
+| 8 | `database/migrate_order_snapshot.sql` | snapshot lignes commande (**avant** offers : `migrate_offers` fait `ADD COLUMN … AFTER product_name`) |
+| 9 | `database/migrate_offers.sql` | négociation (dépend de `order_items.product_name`) |
+| 10 | `database/migrate_order_number_unique.sql` | unicité numéro commande |
 | 11 | `database/migrate_payments.sql` | paiements |
 | 12 | `database/migrate_perf_indexes.sql` | index performance |
 
 ```bash
 for f in migrate_products_status migrate_categories_v2 seed_categories \
          migrate_delivery migrate_monetization migrate_notifications_v2 \
-         migrate_notifications_v3 migrate_offers migrate_order_number_unique \
-         migrate_order_snapshot migrate_payments migrate_perf_indexes; do
+         migrate_notifications_v3 migrate_order_snapshot migrate_offers \
+         migrate_order_number_unique migrate_payments migrate_perf_indexes; do
   mysql -u root -p mboa_style < "database/$f.sql"
 done
 ```
