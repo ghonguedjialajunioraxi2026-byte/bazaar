@@ -16,4 +16,10 @@
         <location>/404.html</location>
     </error-page>
 
+    <!-- Phase 21 : page 500 brandée, sans stack trace ni détail interne. -->
+    <error-page>
+        <error-code>500</error-code>
+        <location>/500.html</location>
+    </error-page>
+
 </web-app>
