@@ -171,25 +171,38 @@ public class ConversationDAO {
     }
 
     public List<SupplierMessage> findMessages(int conversationId) throws SQLException {
+        return findMessagesAfter(conversationId, 0);
+    }
+
+    /**
+     * Récupération incrémentale (polling) : seuls les messages après
+     * {@code afterId}, bornés à 200. Sans param = 300 derniers (Phase 17).
+     */
+    public List<SupplierMessage> findMessagesAfter(int conversationId, int afterId) throws SQLException {
         List<SupplierMessage> list = new ArrayList<>();
-        String sql = "SELECT * FROM messages WHERE conversation_id = ? ORDER BY id ASC";
+        String sql = afterId > 0
+            ? "SELECT * FROM messages WHERE conversation_id = ? AND id > ? ORDER BY id ASC LIMIT 200"
+            : "SELECT * FROM (SELECT * FROM messages WHERE conversation_id = ? ORDER BY id DESC LIMIT 300) t ORDER BY id ASC";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, conversationId);
+            if (afterId > 0) ps.setInt(2, afterId);
             try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    SupplierMessage m = new SupplierMessage();
-                    m.setId(rs.getInt("id"));
-                    m.setConversationId(rs.getInt("conversation_id"));
-                    m.setSender(rs.getString("sender"));
-                    m.setBody(rs.getString("body"));
-                    m.setRead(rs.getBoolean("is_read"));
-                    m.setCreatedAt(rs.getString("created_at"));
-                    list.add(m);
-                }
+                while (rs.next()) list.add(mapMessage(rs));
             }
         }
         return list;
+    }
+
+    private SupplierMessage mapMessage(ResultSet rs) throws SQLException {
+        SupplierMessage m = new SupplierMessage();
+        m.setId(rs.getInt("id"));
+        m.setConversationId(rs.getInt("conversation_id"));
+        m.setSender(rs.getString("sender"));
+        m.setBody(rs.getString("body"));
+        m.setRead(rs.getBoolean("is_read"));
+        m.setCreatedAt(rs.getString("created_at"));
+        return m;
     }
 
     public int addMessage(int conversationId, String sender, String body) throws SQLException {

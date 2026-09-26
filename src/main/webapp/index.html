@@ -1176,7 +1176,16 @@ async function loadProducts() {
   }
 }
 
+/* Cache court (5 min) des données publiques quasi-statiques : catégories.
+   Jamais de stock/prix/commandes en cache (serveur = vérité). */
+let catCacheAt = 0;
+const CAT_CACHE_MS = 5 * 60 * 1000;
+
 async function loadCategories() {
+  if (CAT_TREE && CAT_TREE.length && Date.now() - catCacheAt < CAT_CACHE_MS) {
+    renderDynamicMenus();
+    return;
+  }
   const base = window.location.pathname.includes('/mboa-style') ? '/mboa-style' : '';
   const candidates = [(base ? base : '') + '/api/categories/tree?activeOnly=true', 'api/categories/tree?activeOnly=true'];
   for (const url of candidates) {
@@ -1185,6 +1194,7 @@ async function loadCategories() {
       if (res.ok) {
         CAT_TREE = await res.json();
         CATEGORIES = flattenCatTree(CAT_TREE);
+        catCacheAt = Date.now();
         renderDynamicMenus();
         return;
       }
@@ -3742,7 +3752,7 @@ function renderClientChat(d) {
   const prod = (typeof PRODUCTS !== 'undefined' ? PRODUCTS : []).find(x => x.id === c.productId);
   document.getElementById('client-chat-product').innerHTML = prod ? `
     <button onclick="openProduct(${prod.id})" class="w-full flex items-center gap-3 px-4 sm:px-5 py-2.5 bg-primary-50/60 border-b border-primary-100 text-left hover:bg-primary-50 transition">
-      <img src="${prod.image}" alt="${escAttr(prod.name)}" class="w-10 h-10 rounded-lg object-cover shrink-0">
+      <img src="${escAttr(prod.image)}" alt="${escAttr(prod.name)}" class="w-10 h-10 rounded-lg object-cover shrink-0">
       <span class="min-w-0 flex-1">
         <span class="block text-[13px] font-bold truncate">${escHTML(prod.name)}</span>
         <span class="block text-xs text-slate-500">${formatPrice(prod.price)}</span>
@@ -3750,17 +3760,43 @@ function renderClientChat(d) {
       <i class="bi bi-chevron-right text-primary-600 shrink-0"></i>
     </button>` : '';
   const msgs = d.messages || [];
-  document.getElementById('client-chat-messages').innerHTML = msgs.length ? msgs.map(m => `
-    <div class="max-w-[80%] px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed ${m.sender === 'CLIENT' ? 'ml-auto bg-primary-700 text-white rounded-br-md' : 'bg-white border border-slate-100 rounded-bl-md'}">
-      <p style="white-space:pre-wrap;word-break:break-word">${escHTML(m.body)}</p>
-      <p class="text-[10px] mt-1 ${m.sender === 'CLIENT' ? 'text-white/60' : 'text-slate-400'}">${escHTML(m.createdAt || '')}</p>
-    </div>`).join('')
+  document.getElementById('client-chat-messages').innerHTML = msgs.length ? msgs.map(clientMsgBubble).join('')
     : '<p class="text-sm text-slate-400 text-center py-8">Commencez la conversation.</p>';
+  if (msgs.length) lastClientMsgId = Math.max.apply(null, msgs.map(m => m.id || 0));
   const offers = d.offers || [];
   document.getElementById('client-chat-offers').innerHTML = offers.map(o => offerCardHTML(o, true)).join('');
   document.getElementById('client-chat-form').style.display = '';
   const box = document.getElementById('client-chat-messages');
   box.scrollTop = box.scrollHeight;
+}
+
+function clientMsgBubble(m) {
+  return `
+    <div class="max-w-[80%] px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed ${m.sender === 'CLIENT' ? 'ml-auto bg-primary-700 text-white rounded-br-md' : 'bg-white border border-slate-100 rounded-bl-md'}">
+      <p style="white-space:pre-wrap;word-break:break-word">${escHTML(m.body)}</p>
+      <p class="text-[10px] mt-1 ${m.sender === 'CLIENT' ? 'text-white/60' : 'text-slate-400'}">${escHTML(m.createdAt || '')}</p>
+    </div>`;
+}
+
+let lastClientMsgId = 0;
+
+/* Polling incrémental : seuls les nouveaux messages transitent. */
+async function pollClientConvo() {
+  if (!currentClientConvo) return;
+  const idn = msgIdentity();
+  try {
+    const res = await fetch(apiBase() + '/api/conversations/' + currentClientConvo.id + '?phone=' + encodeURIComponent(idn.phone) + '&cid=' + encodeURIComponent(idn.cid) + '&after=' + lastClientMsgId);
+    const data = await res.json();
+    if (!res.ok || !data.success) return;
+    const fresh = (data.data && data.data.messages) || [];
+    if (!fresh.length) return;
+    const box = document.getElementById('client-chat-messages');
+    const empty = box.querySelector('p.text-slate-400');
+    if (empty && box.children.length === 1) box.innerHTML = '';
+    box.insertAdjacentHTML('beforeend', fresh.map(clientMsgBubble).join(''));
+    lastClientMsgId = Math.max.apply(null, fresh.map(m => m.id || 0).concat([lastClientMsgId]));
+    box.scrollTop = box.scrollHeight;
+  } catch (e) {}
 }
 
 async function sendClientMessage() {
@@ -3855,7 +3891,7 @@ function startMsgPoll() {
       if (res.ok && data.success) updateMsgBadge(data.data.unread || 0);
     } catch (e) {}
     if (!document.getElementById('section-messages').classList.contains('hidden') && currentClientConvo) {
-      openClientConvo(currentClientConvo.id);
+      pollClientConvo();
     }
   }, 20000);
 }

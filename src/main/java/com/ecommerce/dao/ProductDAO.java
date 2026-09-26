@@ -75,7 +75,7 @@ public class ProductDAO {
 
     public List<Product> findAll() throws SQLException {
         List<Product> list = new ArrayList<>();
-        String sql = buildBaseQuery() + "ORDER BY p.id";
+        String sql = buildBaseQuery() + "ORDER BY p.id LIMIT 2000";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
@@ -87,7 +87,7 @@ public class ProductDAO {
 
     public List<Product> findAllPublic() throws SQLException {
         List<Product> list = new ArrayList<>();
-        String sql = buildBaseQueryPublic() + "ORDER BY p.id";
+        String sql = buildBaseQueryPublic() + "ORDER BY p.id LIMIT 2000";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {

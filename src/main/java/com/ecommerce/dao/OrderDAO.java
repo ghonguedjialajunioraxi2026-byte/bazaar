@@ -199,7 +199,7 @@ public class OrderDAO {
 
     public List<Order> findAll() throws SQLException {
         List<Order> list = new ArrayList<>();
-        String sql = "SELECT * FROM orders ORDER BY created_at DESC";
+        String sql = "SELECT * FROM orders ORDER BY created_at DESC LIMIT 500";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {

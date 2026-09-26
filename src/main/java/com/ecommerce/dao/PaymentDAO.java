@@ -52,7 +52,7 @@ public class PaymentDAO {
 
     public List<Payment> findAll() throws SQLException {
         List<Payment> list = new ArrayList<>();
-        String sql = "SELECT * FROM payments ORDER BY created_at DESC";
+        String sql = "SELECT * FROM payments ORDER BY created_at DESC LIMIT 500";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {

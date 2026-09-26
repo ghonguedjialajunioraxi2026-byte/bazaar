@@ -422,8 +422,8 @@ public class AdminServlet extends HttpServlet {
             dash.put("totalReviews", count(conn, "SELECT COUNT(*) FROM reviews"));
             dash.put("pendingReviews", count(conn, "SELECT COUNT(*) FROM reviews WHERE approved=0"));
             dash.put("totalRevenue", count(conn, "SELECT COALESCE(SUM(total),0) FROM orders WHERE status IN ('CONFIRMEE','EN_PREPARATION','EN_LIVRAISON','LIVREE')"));
-            dash.put("todayOrders", count(conn, "SELECT COUNT(*) FROM orders WHERE DATE(created_at) = CURDATE()"));
-            dash.put("todayRevenue", count(conn, "SELECT COALESCE(SUM(total),0) FROM orders WHERE DATE(created_at) = CURDATE() AND status != 'ANNULEE'"));
+            dash.put("todayOrders", count(conn, "SELECT COUNT(*) FROM orders WHERE created_at >= CURDATE() AND created_at < CURDATE() + INTERVAL 1 DAY"));
+            dash.put("todayRevenue", count(conn, "SELECT COALESCE(SUM(total),0) FROM orders WHERE created_at >= CURDATE() AND created_at < CURDATE() + INTERVAL 1 DAY AND status != 'ANNULEE'"));
             dash.put("lowStockProducts", count(conn, "SELECT COUNT(*) FROM products WHERE stock <= 5 AND stock > 0"));
             dash.put("outOfStockProducts", count(conn, "SELECT COUNT(*) FROM products WHERE stock = 0"));
             dash.put("totalPayments", count(conn, "SELECT COUNT(*) FROM payments"));

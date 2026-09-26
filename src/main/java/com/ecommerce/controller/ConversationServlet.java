@@ -75,12 +75,17 @@ public class ConversationServlet extends HttpServlet {
             if (parts.length == 1) {
                 int convId = Integer.parseInt(parts[0]);
                 Conversation c = conversationService.getForGuest(convId, phone, cid);
-                List<SupplierMessage> messages = conversationService.getMessages(convId, phone, cid);
+                int after = 0;
+                try { after = Integer.parseInt(req.getParameter("after")); } catch (Exception ignored) {}
+                List<SupplierMessage> messages = after > 0
+                    ? conversationService.getMessagesAfter(convId, phone, cid, after)
+                    : conversationService.getMessages(convId, phone, cid);
                 conversationService.markRead(convId, phone, cid);
                 Map<String, Object> m = new LinkedHashMap<>();
                 m.put("conversation", c);
                 m.put("messages", messages);
-                m.put("offers", offerService.listForConversation(convId));
+                m.put("offers", after > 0 ? new java.util.ArrayList<>()
+                    : offerService.listForConversation(convId));
                 ApiResponse.ok(resp, m);
                 return;
             }

@@ -109,6 +109,12 @@ public class ConversationService {
         return conversationDAO.findMessages(convId);
     }
 
+    /** Polling incrémental : seuls les messages après afterId (0 = historique borné). */
+    public List<SupplierMessage> getMessagesAfter(int convId, String phone, String cid, int afterId) throws AppException, SQLException {
+        getForGuest(convId, phone, cid);
+        return conversationDAO.findMessagesAfter(convId, afterId);
+    }
+
     public SupplierMessage sendClientMessage(int convId, String phone, String cid, String body) throws AppException, SQLException {
         Conversation c = getForGuest(convId, phone, cid);
         if (!"OPEN".equals(c.getStatus())) {
