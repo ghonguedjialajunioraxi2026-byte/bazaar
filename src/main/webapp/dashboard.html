@@ -1176,10 +1176,26 @@ async function viewOrder(id) {
         <div id="adminPayBox"><div class="text-xs text-slate-400">Chargement du paiement…</div></div>
         <div class="grid grid-cols-2 gap-3"><div><p class="text-slate-400 text-xs">Statut</p><span class="px-2 py-1 rounded-full text-xs font-medium ${statusClass(o.status)}">${statusLabel(o.status)}</span></div><div><p class="text-slate-400 text-xs">Date</p><p class="font-medium">${formatDate(o.createdAt)}</p></div></div>
         ${o.items && o.items.length > 0 ? `<div><p class="text-slate-400 text-xs mb-1">Articles</p><div class="space-y-1">${o.items.map(i => `<div class="flex justify-between bg-slate-50 rounded-lg px-3 py-2"><span>${i.name || 'Produit #' + i.productId} × ${i.qty}</span><span class="font-medium">${formatMoney(i.unitPrice || i.price)}</span></div>`).join('')}</div></div>` : ''}
+        <div id="adminShipBox"><p class="text-xs text-slate-400">Chargement livraison…</p></div>
         ${o.comment ? `<div><p class="text-slate-400 text-xs">Commentaire</p><p class="bg-slate-50 rounded-lg px-3 py-2">${o.comment}</p></div>` : ''}
       </div>
     </div>`);
-  loadAdminPayment(o.id);
+  loadAdminShipment(o.id);
+}
+
+async function loadAdminShipment(orderId) {
+  const box = document.getElementById('adminShipBox');
+  if (!box) return;
+  try {
+    const d = await api('/api/shipments/order/' + orderId);
+    const s = d && d.shipment;
+    if (!s) { box.innerHTML = '<p class="text-xs text-slate-400">Aucune expédition (créée par le vendeur après confirmation).</p>'; return; }
+    const ev = (d.events || []).slice(-3);
+    box.innerHTML = `<div class="rounded-xl border border-slate-100 bg-slate-50/70 p-3 text-sm space-y-1">
+      <div class="flex items-center justify-between gap-2"><p class="font-mono font-bold text-primary-700">${s.trackingNumber}</p><span class="text-xs font-bold">${s.status}</span></div>
+      ${ev.map(e => `<p class="text-xs text-slate-500">${e.label || e.status} · ${e.createdAt || ''}</p>`).join('')}
+    </div>`;
+  } catch (e) { box.innerHTML = '<p class="text-xs text-red-500">Livraison illisible.</p>'; }
 }
 
 async function loadAdminPayment(orderId) {

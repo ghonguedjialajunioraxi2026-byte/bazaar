@@ -3366,11 +3366,71 @@ function renderOrderDetail(o, phone) {
     <div id="order-payment-block" class="mb-4"><div class="flex justify-center py-3"><span class="ms-spinner"></span></div></div>${steps}
     <p class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Articles</p>
     <div class="mb-4">${items || '<p class="text-sm text-slate-400">—</p>'}</div>
+    <div id="order-shipment-block" class="mb-4"></div>
     <div class="flex flex-wrap gap-2">
       ${status === 'EN_ATTENTE' ? `<button onclick="cancelOrder('${escAttr(o.orderNumber)}','${escAttr(phone || '')}')" class="px-4 py-2.5 border border-rose-200 text-rose-600 text-sm font-bold rounded-xl hover:bg-rose-50 transition">Annuler la commande</button>` : ''}
       <button onclick="document.getElementById('history-phone').value='${escAttr(phone || '')}';submitHistory(event)" class="px-4 py-2.5 border border-slate-200 text-sm font-bold rounded-xl hover:border-slate-400 transition">Mes commandes</button>
     </div>`;
-  renderOrderPayment(o, phone);
+  renderOrderShipment(o, phone);
+}
+
+const SHIP_LABELS = { PREPARING: 'Préparation', READY_FOR_PICKUP: 'Prête à expédier', PICKED_UP: 'Prise en charge', IN_TRANSIT: 'En transit', OUT_FOR_DELIVERY: 'En livraison', DELIVERED: 'Livrée', FAILED: 'Échec', RETURNED: 'Retournée', CANCELLED: 'Annulée' };
+const SHIP_FLOW = ['PREPARING', 'READY_FOR_PICKUP', 'PICKED_UP', 'IN_TRANSIT', 'OUT_FOR_DELIVERY', 'DELIVERED'];
+
+async function renderOrderShipment(o, phone) {
+  const box = document.getElementById('order-shipment-block');
+  if (!box) return;
+  try {
+    const res = await fetch(apiBase() + '/api/shipments/by-order/' + encodeURIComponent(o.orderNumber) + '?phone=' + encodeURIComponent(phone || ''));
+    if (!res.ok) { box.innerHTML = ''; return; }
+    const d = await res.json();
+    if (!d || !d.shipment) {
+      box.innerHTML = '<p class="text-xs text-slate-400 mb-4">Expédition en préparation par le vendeur.</p>';
+      return;
+    }
+    const s = d.shipment;
+    const events = d.events || [];
+    const terminal = ['DELIVERED', 'FAILED', 'RETURNED', 'CANCELLED'].includes(s.status);
+    const idx = SHIP_FLOW.indexOf(s.status);
+    const steps = terminal && idx < 0
+      ? `<div class="ms-alert ${s.status === 'DELIVERED' ? 'ms-alert-success' : 'ms-alert-error'} mb-3">${escHTML(SHIP_LABELS[s.status] || s.status)}${s.failureReason ? ' — ' + escHTML(s.failureReason) : ''}</div>`
+      : `<ol class="space-y-0 mb-3">` + SHIP_FLOW.map((st, i) => `
+        <li class="flex gap-3">
+          <div class="flex flex-col items-center">
+            <span class="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold ${i <= idx ? 'bg-primary-700 text-white' : 'bg-slate-100 text-slate-400'}">${i <= idx ? '<i class="bi bi-check"></i>' : (i + 1)}</span>
+            ${i < SHIP_FLOW.length - 1 ? `<span class="w-0.5 flex-1 ${i < idx ? 'bg-primary-500' : 'bg-slate-100'}"></span>` : ''}
+          </div>
+          <div class="pb-4">
+            <p class="text-sm font-semibold ${i <= idx ? 'text-dark-900' : 'text-slate-400'}">${SHIP_LABELS[st]}</p>
+            ${i === idx ? '<p class="text-xs text-primary-700 font-medium">Étape actuelle</p>' : ''}
+          </div>
+        </li>`).join('') + `</ol>`;
+    const history = events.length ? `<div class="space-y-1.5 mb-3">` + events.slice(-4).map(e => `
+      <p class="text-xs text-slate-500"><span class="font-semibold text-dark-900">${escHTML(e.label || e.status)}</span> · ${escHTML(e.createdAt || '')}${e.detail ? ' — ' + escHTML(e.detail) : ''}</p>`).join('') + `</div>` : '';
+    box.innerHTML = `
+      <div class="rounded-2xl border border-slate-100 bg-white p-4 mb-4">
+        <div class="flex items-center justify-between gap-2 mb-2">
+          <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Livraison</p>
+          <p class="text-xs font-mono font-bold text-primary-700">${escHTML(s.trackingNumber)}</p>
+        </div>${steps}${history}
+        ${s.status === 'OUT_FOR_DELIVERY' ? `<button onclick="confirmReceipt('${escAttr(s.trackingNumber)}','${escAttr(phone || '')}')" class="w-full py-2.5 bg-primary-700 hover:bg-primary-800 text-white text-sm font-bold rounded-xl transition">J'ai reçu ma commande</button>` : ''}
+      </div>`;
+  } catch (e) { box.innerHTML = ''; }
+}
+
+async function confirmReceipt(trackingNumber, phone) {
+  try {
+    const res = await fetch(apiBase() + '/api/shipments/confirm-received', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ trackingNumber, phone })
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error((data && (data.message || data.error)) || 'Erreur');
+    showToast('Réception confirmée, merci !');
+    openOrderDetail(document.getElementById('tracking-number').value, phone);
+  } catch (err) {
+    showToast(err.message || 'Confirmation impossible', 'error');
+  }
 }
 
 const PAY_METHOD_LABELS = { PAIEMENT_LIVRAISON: 'Paiement à la livraison', MOBILE_MONEY_MTN: 'MTN Mobile Money', MOBILE_MONEY_ORANGE: 'Orange Money', WHATSAPP: 'WhatsApp', CART_BANCAIRE: 'Carte bancaire' };

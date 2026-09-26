@@ -898,6 +898,7 @@ async function renderCommandes(){
 
 async function openOrderModal(id){
   try{
+    window._shipOrderId = id;
     const o=(await api('/orders/'+id)).data;
     openModal(`
       <div class="flex items-center justify-between mb-4"><h3 class="text-lg font-bold">Commande #${esc(o.orderNumber||o.id)}</h3><button onclick="closeModal()" class="text-slate-400 hover:text-slate-600"><i class="bi bi-x-lg"></i></button></div>
@@ -910,6 +911,7 @@ async function openOrderModal(id){
       <table class="table mb-3"><thead><tr><th>Produit</th><th>Qté</th><th>Prix</th></tr></thead><tbody>
         ${(o.items||[]).map(i=>`<tr><td>Produit #${i.productId}</td><td>${i.qty}</td><td>${money(i.unitPrice*i.qty)}</td></tr>`).join('')||'<tr><td colspan="3" class="text-slate-400 text-center">Aucun détail</td></tr>'}
       </tbody></table>
+      <div id="supShipBox" class="mb-3"><p class="text-xs text-slate-400">Chargement livraison…</p></div>
       <div class="flex items-center justify-between border-t pt-3">
         <div><p class="text-sm text-slate-500">Total</p><p class="text-xl font-bold text-primary-700">${money(o.total)}</p></div>
         <div><label class="text-xs font-semibold text-slate-600 mr-2">Statut</label>
@@ -918,6 +920,41 @@ async function openOrderModal(id){
         </div>
       </div>`);
   }catch(e){ toast(e.message,'error'); }
+  renderSupplierShipment(id);
+}
+const SHIP_NEXT = { PREPARING:['READY_FOR_PICKUP'], READY_FOR_PICKUP:['PICKED_UP'], PICKED_UP:['IN_TRANSIT'], IN_TRANSIT:['OUT_FOR_DELIVERY'], OUT_FOR_DELIVERY:['DELIVERED'] };
+const SHIP_LABEL = { PREPARING:'Préparation', READY_FOR_PICKUP:'Prête à expédier', PICKED_UP:'Prise en charge', IN_TRANSIT:'En transit', OUT_FOR_DELIVERY:'En livraison', DELIVERED:'Livrée', FAILED:'Échec', RETURNED:'Retournée', CANCELLED:'Annulée' };
+async function renderSupplierShipment(orderId) {
+  const box = document.getElementById('supShipBox');
+  if (!box) return;
+  try {
+    const d = await api('/shipments/order/' + orderId);
+    const s = d && d.shipment;
+    if (!s) {
+      box.innerHTML = `<button onclick="createShipment(${orderId})" class="w-full py-2.5 border border-dashed border-primary-300 text-primary-700 text-sm font-bold rounded-xl hover:bg-primary-50 transition"><i class="bi bi-truck"></i> Créer l'expédition</button>`;
+      return;
+    }
+    const nexts = SHIP_NEXT[s.status] || [];
+    box.innerHTML = `<div class="rounded-xl border border-slate-100 bg-slate-50/70 p-3 text-sm space-y-2">
+      <div class="flex items-center justify-between gap-2">
+        <p class="font-mono font-bold text-primary-700">${esc(s.trackingNumber)}</p>
+        <span class="badge ${s.status==='DELIVERED'?'bg-green-50 text-green-600':['FAILED','RETURNED','CANCELLED'].includes(s.status)?'bg-red-50 text-red-600':'bg-primary-50 text-primary-700'}">${SHIP_LABEL[s.status]||s.status}</span>
+      </div>
+      ${nexts.length ? `<div class="flex flex-wrap gap-2">${nexts.map(n => `<button onclick="advanceShipment(${s.id},'${n}')" class="px-3 py-1.5 bg-dark-900 hover:bg-slate-700 text-white text-xs font-bold rounded-lg transition">→ ${SHIP_LABEL[n]}</button>`).join('')}
+      ${['IN_TRANSIT','OUT_FOR_DELIVERY','PICKED_UP'].includes(s.status) ? `<button onclick="failShipment(${s.id})" class="px-3 py-1.5 border border-red-200 text-red-600 text-xs font-bold rounded-lg hover:bg-red-50 transition">Échec</button>` : ''}</div>` : ''}
+    </div>`;
+  } catch (e) { box.innerHTML = '<p class="text-xs text-red-500">Livraison illisible.</p>'; }
+}
+async function createShipment(orderId) {
+  try { await api('/shipments', { method: 'POST', body: JSON.stringify({ orderId }) }); toast('Expédition créée'); openOrderModal(orderId); } catch (e) { toast(e.message, 'error'); }
+}
+async function advanceShipment(id, status) {
+  try { await api('/shipments/' + id + '/status', { method: 'PATCH', body: JSON.stringify({ status }) }); toast('Expédition mise à jour'); const m = document.getElementById('supShipBox'); if (m) { const oid = currentShipOrder(); if (oid) openOrderModal(oid); } } catch (e) { toast(e.message, 'error'); }
+}
+function currentShipOrder() { return window._shipOrderId || 0; }
+async function failShipment(id) {
+  const reason = prompt('Motif de l\u2019échec (client absent, adresse incorrecte…) :') || 'Échec de livraison';
+  try { await api('/shipments/' + id + '/status', { method: 'PATCH', body: JSON.stringify({ status: 'FAILED', reason }) }); toast('Signalé', 'info'); const oid = currentShipOrder(); if (oid) openOrderModal(oid); } catch (e) { toast(e.message, 'error'); }
 }
 async function updateOrderStatus(id){
   const status=document.getElementById('orderStatus').value;

@@ -19,6 +19,22 @@ public final class AdminAuth {
     private AdminAuth() {}
 
     /**
+     * @return id de l'admin si la session est valide, 0 sinon (sans écrire).
+     */
+    public static int validateAdmin(HttpServletRequest req) {
+        try {
+            String token = req.getHeader("Authorization");
+            if (token != null && token.startsWith("Bearer ")) token = token.substring(7);
+            if (token == null || token.isBlank()) token = req.getParameter("token");
+            if (token != null && !token.isBlank()) {
+                return new AdminSessionDAO().validateSession(token);
+            }
+        } catch (Exception ignored) {
+        }
+        return 0;
+    }
+
+    /**
      * @return id de l'admin si la session est valide, 0 sinon (avec 401 écrit).
      */
     public static int requireAdmin(HttpServletRequest req, HttpServletResponse resp) throws IOException {

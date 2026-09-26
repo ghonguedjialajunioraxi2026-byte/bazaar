@@ -151,6 +151,10 @@ public class OrderService {
         if ("ANNULEE".equals(status)) {
             // Contre-passation idempotente si la commande était comptabilisée.
             new MonetizationService().reverseOrder(id, "ADMIN_CANCEL");
+            // Expédition non terminale annulée aussi (Phase 12).
+            try {
+                new ShipmentService().cancelForOrder(id);
+            } catch (Exception ignored) {}
         }
     }
 
