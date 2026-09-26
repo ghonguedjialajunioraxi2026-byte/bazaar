@@ -2,5 +2,7 @@ User-agent: *
 Allow: /
 Disallow: /api/
 Disallow: /admin/
+Disallow: /dashboard.html
+Disallow: /fournisseur.html
 
-Sitemap: https://camshop.cm/sitemap.xml
+Sitemap: https://mboastyle.cm/sitemap.xml
