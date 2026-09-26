@@ -119,9 +119,9 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(8
         <h2 id="pageTitle" class="text-lg font-semibold text-slate-800">Tableau de bord</h2>
       </div>
       <div class="flex items-center gap-3">
-        <button onclick="loadNotifications()" class="relative p-2 rounded-lg hover:bg-slate-100">
+        <button onclick="loadNotifications()" class="relative p-2 rounded-lg hover:bg-slate-100" aria-label="Notifications" aria-haspopup="true" aria-expanded="false" id="notifBellBtn">
           <i class="bi bi-bell text-lg text-slate-500"></i>
-          <span id="notifBadge" class="absolute -top-0.5 -right-0.5 w-5 h-5 bg-red-500 text-white text-[10px] rounded-full flex items-center justify-center font-bold hidden">0</span>
+          <span id="notifBadge" class="absolute -top-0.5 -right-0.5 w-5 h-5 bg-red-500 text-white text-[10px] rounded-full flex items-center justify-center font-bold hidden" aria-label="Notifications non lues">0</span>
         </button>
         <div class="flex items-center gap-2 pl-3 border-l border-slate-200">
           <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center text-white text-sm font-bold">A</div>
@@ -194,12 +194,17 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(8
         </div>
         <div class="flex flex-wrap items-center gap-2 mb-4">
           <input id="notifSearch" type="text" placeholder="Rechercher (titre, message)..." oninput="notifPage=1;loadNotifCenter()" class="px-4 py-2 rounded-xl border border-slate-200 text-sm w-64">
-          <select id="notifTypeFilter" onchange="notifPage=1;loadNotifCenter()" class="px-3 py-2 rounded-xl border border-slate-200 text-sm">
+          <select id="notifTypeFilter" onchange="notifPage=1;loadNotifCenter()" class="px-3 py-2 rounded-xl border border-slate-200 text-sm" aria-label="Filtrer par catégorie">
             <option value="">Tous types</option>
             <option value="ORDER">Commandes</option>
+            <option value="PAYMENT">Paiements</option>
+            <option value="DELIVERY">Livraisons</option>
+            <option value="MESSAGE">Messages</option>
+            <option value="NEGOTIATION">Offres</option>
+            <option value="PRODUCT">Produits</option>
             <option value="STOCK">Stocks</option>
             <option value="SUPPLIER">Fournisseurs</option>
-            <option value="PAYMENT">Paiements</option>
+            <option value="SECURITY">Sécurité</option>
             <option value="SYSTEM">Système</option>
           </select>
           <select id="notifStatusFilter" onchange="notifPage=1;loadNotifCenter()" class="px-3 py-2 rounded-xl border border-slate-200 text-sm">
@@ -473,7 +478,7 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(8
 </div>
 
 <!-- Toast nouveautés -->
-<div id="notifToast" class="fixed bottom-6 right-6 z-[90] hidden items-center gap-3 bg-slate-900 text-white pl-4 pr-3 py-3 rounded-xl shadow-2xl cursor-pointer max-w-sm" onclick="showPage('notifications');this.classList.add('hidden');this.classList.remove('flex')">
+<div id="notifToast" class="fixed bottom-6 right-6 z-[90] hidden items-center gap-3 bg-slate-900 text-white pl-4 pr-3 py-3 rounded-xl shadow-2xl cursor-pointer max-w-sm" role="status" aria-live="polite" onclick="showPage('notifications');this.classList.add('hidden');this.classList.remove('flex')">
   <i class="bi bi-bell-fill text-amber-400 text-lg"></i>
   <div class="flex-1">
     <p id="notifToastTitle" class="text-sm font-semibold">Nouvelles notifications</p>
@@ -633,9 +638,15 @@ function notifEsc(s) {
 function notifTypeMeta(type) {
   switch ((type || 'SYSTEM').toUpperCase()) {
     case 'ORDER': return { icon: 'bi-receipt', color: 'text-blue-600', bg: 'bg-blue-50', label: 'Commande' };
-    case 'STOCK': return { icon: 'bi-box-seam', color: 'text-amber-600', bg: 'bg-amber-50', label: 'Stock' };
-    case 'SUPPLIER': return { icon: 'bi-people', color: 'text-violet-600', bg: 'bg-violet-50', label: 'Fournisseur' };
     case 'PAYMENT': return { icon: 'bi-credit-card', color: 'text-green-600', bg: 'bg-green-50', label: 'Paiement' };
+    case 'DELIVERY': return { icon: 'bi-truck', color: 'text-cyan-700', bg: 'bg-cyan-50', label: 'Livraison' };
+    case 'MESSAGE': return { icon: 'bi-chat-dots', color: 'text-indigo-600', bg: 'bg-indigo-50', label: 'Message' };
+    case 'NEGOTIATION': return { icon: 'bi-arrow-left-right', color: 'text-fuchsia-600', bg: 'bg-fuchsia-50', label: 'Offre' };
+    case 'PRODUCT': return { icon: 'bi-box-seam', color: 'text-amber-600', bg: 'bg-amber-50', label: 'Produit' };
+    case 'STOCK': return { icon: 'bi-boxes', color: 'text-amber-600', bg: 'bg-amber-50', label: 'Stock' };
+    case 'SUPPLIER': return { icon: 'bi-people', color: 'text-violet-600', bg: 'bg-violet-50', label: 'Fournisseur' };
+    case 'SECURITY': return { icon: 'bi-shield-lock', color: 'text-red-600', bg: 'bg-red-50', label: 'Sécurité' };
+    case 'MARKETING': return { icon: 'bi-megaphone', color: 'text-pink-600', bg: 'bg-pink-50', label: 'Promo' };
     default: return { icon: 'bi-info-circle', color: 'text-slate-500', bg: 'bg-slate-100', label: 'Système' };
   }
 }
@@ -925,9 +936,14 @@ function openNotifCompose() {
             <select id="ncType" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm">
               <option value="SYSTEM">Système</option>
               <option value="ORDER">Commande</option>
+              <option value="PAYMENT">Paiement</option>
+              <option value="DELIVERY">Livraison</option>
+              <option value="MESSAGE">Message</option>
+              <option value="NEGOTIATION">Offre</option>
+              <option value="PRODUCT">Produit</option>
               <option value="STOCK">Stock</option>
               <option value="SUPPLIER">Fournisseur</option>
-              <option value="PAYMENT">Paiement</option>
+              <option value="MARKETING">Marketing</option>
             </select>
           </div>
           <div>
@@ -983,9 +999,12 @@ async function submitNotifCompose() {
 }
 
 /* ---------- Temps réel : polling + toast nouveautés ---------- */
+/* Niveau 1 (polling 30 s, suspendu si onglet masqué) : suffisant pour les
+   volumes admin ; aucun SSE/WebSocket concurrent (voir docs/notifications.md). */
 function startNotifPolling() {
   if (notifPollTimer) clearInterval(notifPollTimer);
   notifPollTimer = setInterval(async () => {
+    if (document.hidden) return; // polling intelligent : onglet inactif = pause
     try {
       const res = await api('/api/notifications?role=SUPER_ADMIN&page=1&limit=5');
       const data = (res && res.data) || [];

@@ -1,7 +1,6 @@
 package com.ecommerce.service;
 
 import com.ecommerce.dao.ConversationDAO;
-import com.ecommerce.dao.NotificationDAO;
 import com.ecommerce.dao.OfferDAO;
 import com.ecommerce.dao.ProductDAO;
 import com.ecommerce.model.Conversation;
@@ -22,7 +21,7 @@ public class OfferService {
     private final OfferDAO offerDAO = new OfferDAO();
     private final ConversationDAO conversationDAO = new ConversationDAO();
     private final ProductDAO productDAO = new ProductDAO();
-    private final NotificationDAO notificationDAO = new NotificationDAO();
+    private final NotificationService notificationService = new NotificationService();
     private final ConversationService conversationService = new ConversationService();
 
     public static final int MAX_OFFERS_PER_DAY = 10;
@@ -91,8 +90,11 @@ public class OfferService {
         // Notifie l'autre partie côté fournisseur (les invités voient via polling).
         try {
             if ("CLIENT".equals(by)) {
-                notificationDAO.createForSupplier(c.getSupplierId(), "Nouvelle offre",
-                    "Offre de " + unitPrice + " FCFA sur « " + p.getName() + " »", "ORDER");
+                notificationService.notifySupplier(c.getSupplierId(), "OFFER_RECEIVED",
+                    "Nouvelle offre",
+                    "Offre de " + unitPrice + " FCFA sur « " + p.getName() + " »",
+                    "OFFER", id, null,
+                    "OFFER:" + id + ":RECEIVED");
             }
         } catch (Exception ignored) {}
         return o;
@@ -118,6 +120,20 @@ public class OfferService {
                    : "Offre refusée : " + o.getUnitPrice() + " FCFA / unité.");
         conversationDAO.updateActivity(o.getConversationId());
         o.setStatus(accept ? "ACCEPTED" : "REJECTED");
+        // Notification fournisseur idempotente (décision réelle, jamais fictive).
+        try {
+            com.ecommerce.model.Conversation conv =
+                conversationDAO.findById(o.getConversationId());
+            if (conv != null) {
+                notificationService.notifySupplier(conv.getSupplierId(),
+                    accept ? "OFFER_ACCEPTED" : "OFFER_REJECTED",
+                    accept ? "Offre acceptée" : "Offre refusée",
+                    (accept ? "Offre acceptée : " : "Offre refusée : ")
+                        + o.getUnitPrice() + " FCFA / unité.",
+                    "OFFER", o.getId(), null,
+                    "OFFER:" + o.getId() + ":" + (accept ? "ACCEPTED" : "REJECTED"));
+            }
+        } catch (Exception ignored) {}
         return o;
     }
 

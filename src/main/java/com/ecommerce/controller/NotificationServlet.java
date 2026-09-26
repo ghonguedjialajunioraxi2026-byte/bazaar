@@ -2,6 +2,10 @@ package com.ecommerce.controller;
 
 import com.ecommerce.dao.NotificationDAO;
 import com.ecommerce.model.Notification;
+import com.ecommerce.service.NotificationType;
+import com.ecommerce.util.ApiResponse;
+import com.ecommerce.util.AppException;
+import com.ecommerce.util.ErrorCodes;
 import com.ecommerce.util.JsonUtil;
 
 import jakarta.servlet.ServletException;
@@ -32,10 +36,13 @@ import java.util.Set;
  * Nouveau (centre de notifications) :
  *   GET  /api/notifications?role=R&type=ORDER&status=unread&q=...&page=1&limit=10
  *        -> {"data":[...],"total":N,"unread":M,"page":1,"limit":10}
+ *   GET  /api/notifications?action=unread-count&role=R -> {"count":N} (polling léger)
+ *   GET  /api/notifications?action=preferences&role=R -> {"ORDER":true,...}
  *   POST /api/notifications  {title,message,type,priority,roles[],targetUserId,link}
- *   PUT  /api/notifications  {action:"read"|"unread"|"readAll"|"readMany", id?, ids[]?}
+ *   PUT  /api/notifications  {action:"read"|"unread"|"readAll"|"readMany"|"preferences", id?, ids[]?}
  *   DELETE /api/notifications?action=clearRead&role=R  (purge les lues)
  *   DELETE /api/notifications  {ids:[...]}  (suppression multiple)
+ * Sécurité : lecture/écriture TOUJOURS scopées au rôle (anti-IDOR).
  */
 @WebServlet("/api/notifications")
 public class NotificationServlet extends HttpServlet {
@@ -44,7 +51,8 @@ public class NotificationServlet extends HttpServlet {
     private static final Set<String> ROLES = new HashSet<>(Arrays.asList(
             "ADMIN", "SUPER_ADMIN", "GESTIONNAIRE", "CLIENT", "SUPPLIER"));
     private static final Set<String> TYPES = new HashSet<>(Arrays.asList(
-            "ORDER", "STOCK", "SUPPLIER", "PAYMENT", "SYSTEM"));
+            "ORDER", "STOCK", "SUPPLIER", "PAYMENT", "SYSTEM",
+            "DELIVERY", "MESSAGE", "NEGOTIATION", "SECURITY", "PRODUCT", "MARKETING"));
     private static final Set<String> PRIORITIES = new HashSet<>(Arrays.asList(
             "LOW", "NORMAL", "HIGH", "URGENT"));
 
@@ -59,6 +67,18 @@ public class NotificationServlet extends HttpServlet {
 
             if ("unread".equals(action)) {
                 resp.getWriter().write("{\"count\":" + notificationDAO.countUnread(role) + "}");
+                return;
+            }
+
+            // Compteur léger (polling intelligent) : alias explicite.
+            if ("unread-count".equals(action)) {
+                resp.getWriter().write("{\"count\":" + notificationDAO.countUnread(role) + "}");
+                return;
+            }
+
+            // Préférences du rôle connecté (jamais d'un autre rôle).
+            if ("preferences".equals(action)) {
+                resp.getWriter().write(JsonUtil.toJson(notificationDAO.getPreferences(role, null)));
                 return;
             }
 
@@ -114,13 +134,17 @@ public class NotificationServlet extends HttpServlet {
                 return;
             }
             if (message == null) message = "";
-            if (title.length() > 200) title = title.substring(0, 200);
+            title = NotificationType.clamp(title, 200);
+            message = NotificationType.clamp(message, 2000);
 
+            String eventCode = str(body.get("eventCode"));
+            if (!NotificationType.isKnown(eventCode)) eventCode = "SYSTEM";
             String type = str(body.get("type"));
-            type = (type != null && TYPES.contains(type.toUpperCase())) ? type.toUpperCase() : "SYSTEM";
+            type = (type != null && TYPES.contains(type.toUpperCase())) ? type.toUpperCase()
+                : NotificationType.categoryOf(eventCode);
             String priority = str(body.get("priority"));
-            priority = (priority != null && PRIORITIES.contains(priority.toUpperCase())) ? priority.toUpperCase() : "NORMAL";
-            String link = str(body.get("link"));
+            priority = NotificationType.normalizePriority(priority);
+            String link = NotificationType.sanitizeActionUrl(str(body.get("link")));
             Integer targetUserId = body.get("targetUserId") instanceof Number
                     ? ((Number) body.get("targetUserId")).intValue() : null;
 
@@ -144,8 +168,11 @@ public class NotificationServlet extends HttpServlet {
                 n.setTitle(title.trim());
                 n.setMessage(message);
                 n.setType(type);
+                n.setEventCode(eventCode);
+                n.setCategory(type);
                 n.setPriority(priority);
                 n.setLink(link);
+                n.setActionUrl(link);
                 created.add(notificationDAO.create(n));
             }
             resp.getWriter().write("{\"success\":true,\"ids\":" + JsonUtil.toJson(created) + "}");
@@ -176,12 +203,39 @@ public class NotificationServlet extends HttpServlet {
             if ("readAll".equals(action)) {
                 notificationDAO.markAllRead(role);
             } else if ("read".equals(action)) {
-                notificationDAO.markRead(parseId(idParam));
+                boolean ok = notificationDAO.markReadScoped(role, parseId(idParam));
+                if (!ok) {
+                    ApiResponse.fail(resp, 403, ErrorCodes.NOTIFICATION_ACCESS_DENIED,
+                        "Notification inaccessible");
+                    return;
+                }
             } else if ("unread".equals(action)) {
-                notificationDAO.markUnread(parseId(idParam));
+                boolean ok = notificationDAO.markUnreadScoped(role, parseId(idParam));
+                if (!ok) {
+                    ApiResponse.fail(resp, 403, ErrorCodes.NOTIFICATION_ACCESS_DENIED,
+                        "Notification inaccessible");
+                    return;
+                }
             } else if ("readMany".equals(action)) {
                 if (body == null) body = JsonUtil.fromJson(readBody(req), Map.class);
                 notificationDAO.markManyRead(role, intList(body.get("ids")));
+            } else if ("preferences".equals(action)) {
+                // PUT {"action":"preferences","category":"MARKETING","enabled":false}
+                if (body == null) body = JsonUtil.fromJson(readBody(req), Map.class);
+                String category = str(body.get("category"));
+                Object enObj = body.get("enabled");
+                boolean enabled = !(enObj instanceof Boolean) || (Boolean) enObj;
+                if (category == null || !TYPES.contains(category.toUpperCase())) {
+                    resp.setStatus(400);
+                    resp.getWriter().write("{\"error\":\"Catégorie inconnue\"}");
+                    return;
+                }
+                if ("SECURITY".equalsIgnoreCase(category)) {
+                    resp.setStatus(400);
+                    resp.getWriter().write("{\"error\":\"Les alertes de sécurité ne peuvent pas être désactivées\"}");
+                    return;
+                }
+                notificationDAO.setPreference(role, null, category.toUpperCase(), enabled);
             } else {
                 resp.setStatus(400);
                 resp.getWriter().write("{\"error\":\"Action inconnue\"}");
@@ -207,7 +261,12 @@ public class NotificationServlet extends HttpServlet {
             if ("clearRead".equals(action)) {
                 deleted = notificationDAO.deleteRead(role);
             } else if (req.getParameter("id") != null) {
-                notificationDAO.delete(Integer.parseInt(req.getParameter("id")));
+                boolean ok = notificationDAO.deleteScoped(role, Integer.parseInt(req.getParameter("id")));
+                if (!ok) {
+                    ApiResponse.fail(resp, 403, ErrorCodes.NOTIFICATION_ACCESS_DENIED,
+                        "Notification inaccessible");
+                    return;
+                }
                 deleted = 1;
             } else {
                 Map<String, Object> body = JsonUtil.fromJson(readBody(req), Map.class);

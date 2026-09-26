@@ -40,6 +40,19 @@ public class ConversationDAO {
         return null;
     }
 
+    /** Lecture serveur non scopée (usage interne : notifications). Jamais exposée telle quelle. */
+    public Conversation findById(int id) throws SQLException {
+        String sql = "SELECT c.* FROM conversations c WHERE c.id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return mapRow(rs, false);
+            }
+        }
+        return null;
+    }
+
     public int create(Conversation c) throws SQLException {
         String sql = "INSERT INTO conversations (supplier_id, client_identifier, client_name, client_phone, order_id, product_id, subject, status) "
                 + "VALUES (?,?,?,?,?,?,?,?)";

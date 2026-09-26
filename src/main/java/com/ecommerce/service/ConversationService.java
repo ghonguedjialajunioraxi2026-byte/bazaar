@@ -1,7 +1,6 @@
 package com.ecommerce.service;
 
 import com.ecommerce.dao.ConversationDAO;
-import com.ecommerce.dao.NotificationDAO;
 import com.ecommerce.dao.ProductDAO;
 import com.ecommerce.dao.SupplierDAO;
 import com.ecommerce.model.Conversation;
@@ -24,7 +23,6 @@ public class ConversationService {
     private final ConversationDAO conversationDAO = new ConversationDAO();
     private final SupplierDAO supplierDAO = new SupplierDAO();
     private final ProductDAO productDAO = new ProductDAO();
-    private final NotificationDAO notificationDAO = new NotificationDAO();
 
     public static final int MESSAGE_MAX = 2000;
     public static final int MESSAGE_PER_MINUTE = 10;
@@ -125,8 +123,11 @@ public class ConversationService {
         int id = conversationDAO.addMessage(convId, "CLIENT", clean);
         conversationDAO.updateActivity(convId);
         try {
-            notificationDAO.createForSupplier(c.getSupplierId(), "Nouveau message",
-                "Nouveau message de " + (c.getClientName() != null ? c.getClientName() : "un client"), "ORDER");
+            new NotificationService().notifySupplier(c.getSupplierId(), "MESSAGE_RECEIVED",
+                "Nouveau message",
+                "Nouveau message de " + (c.getClientName() != null ? c.getClientName() : "un client"),
+                "CONVERSATION", convId, null,
+                "CONV:" + convId + ":MSG:" + id);
         } catch (Exception ignored) {}
         SupplierMessage m = new SupplierMessage();
         m.setId(id);

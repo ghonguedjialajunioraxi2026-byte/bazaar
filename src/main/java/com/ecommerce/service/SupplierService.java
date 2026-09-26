@@ -75,6 +75,14 @@ public class SupplierService {
         if (s == null || s.getPasswordHash() == null) return false;
         if (!com.ecommerce.util.PasswordUtil.verify(current, s.getPasswordHash())) return false;
         supplierDAO.updatePassword(id, com.ecommerce.util.PasswordUtil.hash(newPassword));
+        // Alerte sécurité réelle (chaque changement notifié : pas de déduplication).
+        try {
+            new NotificationService().notifySupplier(id, "PASSWORD_CHANGED",
+                "Mot de passe modifié",
+                "Le mot de passe de votre compte fournisseur a été modifié. "
+                    + "Si ce n'était pas vous, contactez le support.",
+                "SUPPLIER", id, null, null);
+        } catch (Exception ignored) {}
         return true;
     }
 
@@ -135,6 +143,29 @@ public class SupplierService {
     public boolean setProductStock(int supplierId, int productId, int stock) throws SQLException {
         if (!productDAO.isOwner(productId, supplierId)) return false;
         productDAO.updateStock(productId, stock);
+        // Seuils réels (LOW_STOCK_THRESHOLD centralisé) : notification fournisseur + admin.
+        try {
+            Product p = productDAO.findById(productId);
+            String pname = p != null && p.getName() != null ? p.getName() : ("Produit #" + productId);
+            NotificationService notifs = new NotificationService();
+            if (stock <= 0) {
+                notifs.notifySupplier(supplierId, "PRODUCT_OUT_OF_STOCK",
+                    "Rupture de stock : " + pname,
+                    "« " + pname + " » est épuisé.", "PRODUCT", productId, null,
+                    "PRODUCT:" + productId + ":OUT:SUP" + supplierId);
+                notifs.notifyAdmins("PRODUCT_OUT_OF_STOCK",
+                    "Rupture de stock : " + pname,
+                    "« " + pname + " » (fournisseur #" + supplierId + ") est épuisé.",
+                    "PRODUCT", productId, null,
+                    "PRODUCT:" + productId + ":OUT");
+            } else if (stock <= NotificationType.LOW_STOCK_THRESHOLD) {
+                notifs.notifySupplier(supplierId, "PRODUCT_LOW_STOCK",
+                    "Stock faible : " + pname,
+                    "Il ne reste que " + stock + " unité(s) en stock pour « " + pname + " ».",
+                    "PRODUCT", productId, null,
+                    "PRODUCT:" + productId + ":LOW:SUP" + supplierId);
+            }
+        } catch (Exception ignored) {}
         return true;
     }
 
@@ -174,13 +205,11 @@ public class SupplierService {
 
     private void notifyAdminNewProduct(int productId, String productName, String supplierName) {
         try {
-            Notification n = new Notification();
-            n.setTargetRole("SUPER_ADMIN");
-            n.setTitle("Nouveau produit en ligne");
-            n.setMessage("Le fournisseur '" + supplierName + "' a ajouté le produit '" + productName + "' (disponible sur la boutique).");
-            n.setType("SUPPLIER");
-            n.setLink("/products/" + productId);
-            notificationDAO.create(n);
+            new NotificationService().notifyAdmins("PRODUCT_SUBMITTED",
+                "Nouveau produit en ligne",
+                "Le fournisseur '" + supplierName + "' a ajouté le produit '" + productName + "' (disponible sur la boutique).",
+                "PRODUCT", productId, "/products/" + productId,
+                "PRODUCT:" + productId + ":SUBMITTED");
         } catch (Exception ignored) {}
     }
 
@@ -478,6 +507,14 @@ public class SupplierService {
     // --------------------------- NOTIFICATIONS ---------------------------
     public List<Notification> getNotifications(int supplierId) throws SQLException {
         return notificationDAO.findForSupplier(supplierId);
+    }
+
+    public List<Notification> getNotificationsPaged(int supplierId, String category, Boolean unreadOnly, int limit, int offset) throws SQLException {
+        return notificationDAO.findForSupplierPaged(supplierId, category, unreadOnly, limit, offset);
+    }
+
+    public int countNotifications(int supplierId, String category, Boolean unreadOnly) throws SQLException {
+        return notificationDAO.countForSupplierPaged(supplierId, category, unreadOnly);
     }
 
     public int getUnreadNotifications(int supplierId) throws SQLException {

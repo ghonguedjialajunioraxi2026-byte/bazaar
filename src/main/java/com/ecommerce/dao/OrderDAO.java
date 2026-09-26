@@ -73,8 +73,38 @@ public class OrderDAO {
                         try {
                             ProductDAO pDao = new ProductDAO();
                             var product = pDao.findById(item.getProductId());
-                            if (product != null && product.getStock() <= 5 && product.getStock() > 0) {
-                                new NotificationDAO().notifyLowStock(product.getName(), product.getStock());
+                            if (product != null) {
+                                com.ecommerce.service.NotificationService notifs =
+                                    new com.ecommerce.service.NotificationService();
+                                String pname = product.getName();
+                                if (product.getStock() <= 0) {
+                                    // Rupture réelle (stock à zéro après décrément).
+                                    notifs.notifyAdmins("PRODUCT_OUT_OF_STOCK",
+                                        "Rupture de stock : " + pname,
+                                        "« " + pname + " » est épuisé.",
+                                        "PRODUCT", product.getId(), null,
+                                        "PRODUCT:" + product.getId() + ":OUT");
+                                    if (product.getSupplierId() > 0) {
+                                        notifs.notifySupplier(product.getSupplierId(), "PRODUCT_OUT_OF_STOCK",
+                                            "Rupture de stock : " + pname,
+                                            "« " + pname + " » est épuisé.",
+                                            "PRODUCT", product.getId(), null,
+                                            "PRODUCT:" + product.getId() + ":OUT:SUP" + product.getSupplierId());
+                                    }
+                                } else if (product.getStock() <= com.ecommerce.service.NotificationType.LOW_STOCK_THRESHOLD) {
+                                    notifs.notifyAdmins("PRODUCT_LOW_STOCK",
+                                        "Stock faible : " + pname,
+                                        "Il ne reste que " + product.getStock() + " unité(s) en stock pour « " + pname + " ».",
+                                        "PRODUCT", product.getId(), null,
+                                        "PRODUCT:" + product.getId() + ":LOW");
+                                    if (product.getSupplierId() > 0) {
+                                        notifs.notifySupplier(product.getSupplierId(), "PRODUCT_LOW_STOCK",
+                                            "Stock faible : " + pname,
+                                            "Il ne reste que " + product.getStock() + " unité(s) en stock pour « " + pname + " ».",
+                                            "PRODUCT", product.getId(), null,
+                                            "PRODUCT:" + product.getId() + ":LOW:SUP" + product.getSupplierId());
+                                    }
+                                }
                             }
                         } catch (Exception ignored) {}
                     }
@@ -99,8 +129,23 @@ public class OrderDAO {
 
                 // Send notifications (after commit)
                 try {
-                    NotificationDAO notifDAO = new NotificationDAO();
-                    notifDAO.notifyNewOrder(orderId, orderNumber, order.getFullname());
+                    com.ecommerce.service.NotificationService notifs =
+                        new com.ecommerce.service.NotificationService();
+                    // Admins : nouvelle commande (idempotent par commande).
+                    notifs.notifyAdmins("ORDER_CREATED",
+                        "Nouvelle commande reçue",
+                        "Commande " + orderNumber + " de " + order.getFullname()
+                            + " (" + order.getTotal() + " FCFA).",
+                        "ORDER", orderId, "/api/orders?action=find&id=" + orderId,
+                        "ORDER:" + orderId + ":CREATED");
+                    // Fournisseur propriétaire : commande à préparer.
+                    if (order.getSupplierId() > 0) {
+                        notifs.notifySupplier(order.getSupplierId(), "ORDER_CREATED",
+                            "Nouvelle commande à préparer",
+                            "Commande " + orderNumber + " (" + order.getTotal() + " FCFA).",
+                            "ORDER", orderId, null,
+                            "ORDER:" + orderId + ":SUPPLIER");
+                    }
                 } catch (Exception ignored) {}
 
                 return orderId;

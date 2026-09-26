@@ -130,6 +130,10 @@ tailwind.config = {
             <i class="bi bi-chat-dots text-lg"></i>
             <span id="msg-count" class="absolute -top-0.5 -right-0.5 min-w-5 h-5 px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center hidden">0</span>
           </button>
+          <button onclick="showSection('notifications')" class="nav-icon-btn relative" aria-label="Notifications">
+            <i class="bi bi-bell text-lg"></i>
+            <span id="notif-count" role="status" class="absolute -top-0.5 -right-0.5 min-w-5 h-5 px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center hidden">0</span>
+          </button>
           <button onclick="toggleCart()" class="nav-icon-btn relative" aria-label="Panier">
             <i class="bi bi-bag text-lg"></i>
             <span id="cart-count" class="absolute -top-0.5 -right-0.5 min-w-5 h-5 px-1 bg-amber-400 text-dark-900 text-[10px] font-bold rounded-full flex items-center justify-center cart-badge hidden">0</span>
@@ -158,6 +162,7 @@ tailwind.config = {
       <a href="#" onclick="showSection('home');toggleMobileMenu()" class="block px-4 py-3 rounded-xl text-sm font-medium hover:bg-primary-50">Accueil</a>
       <a href="#" onclick="showSection('shop');toggleMobileMenu()" class="block px-4 py-3 rounded-xl text-sm font-medium hover:bg-primary-50">Boutique</a>
       <a href="#" onclick="showSection('messages');toggleMobileMenu()" class="block px-4 py-3 rounded-xl text-sm font-medium hover:bg-primary-50">Messages</a>
+      <a href="#" onclick="showSection('notifications');toggleMobileMenu()" class="block px-4 py-3 rounded-xl text-sm font-medium hover:bg-primary-50">Notifications</a>
       <div id="mobile-categories" class="space-y-1"></div>
       <a href="fournisseur.html?register=1" target="_blank" rel="noopener" onclick="toggleMobileMenu()" class="block px-4 py-3 rounded-xl text-sm font-semibold text-primary-700 hover:bg-primary-50"><i class="bi bi-shop mr-2"></i>Devenir fournisseur</a>
       <a href="#promotions" onclick="showSection('home');toggleMobileMenu()" class="block px-4 py-3 rounded-xl text-sm font-medium hover:bg-primary-50">Promotions</a>
@@ -653,6 +658,24 @@ tailwind.config = {
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ========== NOTIFICATIONS SECTION (invité : timeline réelle dérivée) ========== -->
+<section id="section-notifications" class="hidden">
+  <div class="w-full px-4 sm:px-6 lg:px-8 2xl:px-12 py-10 max-w-3xl mx-auto">
+    <nav class="flex items-center gap-1.5 text-[13px] text-slate-400 mb-3" aria-label="Fil d'Ariane">
+      <button onclick="showSection('home')" class="hover:text-primary-700 transition font-medium">Accueil</button>
+      <i class="bi bi-chevron-right text-[10px]"></i><span class="text-dark-900 font-semibold">Notifications</span>
+    </nav>
+    <p class="eyebrow mb-2">Activité</p>
+    <h1 class="font-display text-3xl font-bold text-dark-900 mb-2 tracking-tight">Mes notifications</h1>
+    <p class="text-slate-500 mb-6">Commandes, paiements, livraisons, messages et offres — en direct de vos données.</p>
+    <div class="bg-white rounded-2xl border border-slate-100 shadow-soft p-4 mb-5 flex flex-col sm:flex-row gap-2">
+      <input type="tel" id="notif-phone" placeholder="Votre numéro de téléphone" aria-label="Votre numéro de téléphone" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 text-sm">
+      <button onclick="refreshGuestNotifications()" class="px-5 py-2.5 rounded-xl bg-primary-700 hover:bg-primary-800 text-white text-sm font-semibold transition">Actualiser</button>
+    </div>
+    <div id="guest-notif-list" class="space-y-3" role="list" aria-live="polite" aria-label="Notifications"></div>
   </div>
 </section>
 
@@ -1298,7 +1321,7 @@ function heroQuickSearch(q) {
   heroSearch();
 }
 function showSection(name) {
-  ['home', 'shop', 'checkout', 'messages', 'supplier'].forEach(n =>
+  ['home', 'shop', 'checkout', 'messages', 'notifications', 'supplier'].forEach(n =>
     document.getElementById('section-' + n).classList.toggle('hidden', name !== n));
   // État actif : nav desktop + nav mobile basse
   [['nav-home', 'home'], ['nav-shop', 'shop']].forEach(([id, sec]) => {
@@ -1325,6 +1348,9 @@ function showSection(name) {
   }
   if (name === 'messages') {
     renderClientMessages();
+  }
+  if (name === 'notifications') {
+    renderGuestNotifications();
   }
   document.getElementById('mobile-menu').classList.add('hidden');
 }
@@ -3593,6 +3619,76 @@ function updateMsgBadge(n) {
   b.classList.toggle('hidden', !n);
 }
 
+/* ---------- Notifications invité : timeline réelle (Phase 13) ----------
+   Pas de stockage : dérivée de /api/guest-notifications (téléphone + cid).
+   Polling 60 s, suspendu si onglet masqué. */
+let guestNotifTimer = null;
+function guestNotifIcon(code) {
+  code = String(code || '');
+  if (code.startsWith('ORDER')) return 'bi-bag-check';
+  if (code.startsWith('PAYMENT')) return 'bi-credit-card';
+  if (code.startsWith('DELIVERY')) return 'bi-truck';
+  if (code.startsWith('MESSAGE')) return 'bi-chat-dots';
+  if (code.startsWith('OFFER')) return 'bi-arrow-left-right';
+  return 'bi-bell';
+}
+async function refreshGuestNotifications() {
+  const input = document.getElementById('notif-phone');
+  const phone = input && input.value.trim() ? input.value.trim() : (msgIdentity().phone || '');
+  if (input && !input.value.trim() && phone) input.value = phone;
+  if (!phone || phone.replace(/\D/g, '').length < 9) {
+    document.getElementById('guest-notif-list').innerHTML =
+      '<p class="text-sm text-slate-400 bg-white rounded-2xl border border-slate-100 p-8 text-center">Indiquez votre numéro de téléphone pour voir votre activité.<br><span class="text-xs">Même numéro que vos commandes et messages.</span></p>';
+    updateGuestNotifBadge(0);
+    try { localStorage.setItem('ms_phone', phone); } catch (e) {}
+    return;
+  }
+  try { localStorage.setItem('ms_phone', phone); } catch (e) {}
+  const id = msgIdentity();
+  document.getElementById('guest-notif-list').innerHTML =
+    '<p class="text-sm text-slate-400 text-center py-8">Chargement de vos notifications…</p>';
+  try {
+    const res = await fetch(apiBase() + '/api/guest-notifications?phone=' + encodeURIComponent(phone) + '&cid=' + encodeURIComponent(id.cid || ''));
+    const data = await res.json();
+    if (!res.ok || !data.success) throw new Error((data && (data.message || data.error)) || 'Erreur');
+    const tl = (data.data && data.data.timeline) || [];
+    updateGuestNotifBadge((data.data && data.data.unread) || 0);
+    document.getElementById('guest-notif-list').innerHTML = tl.length ? tl.map(n =>
+      '<div role="listitem" class="bg-white rounded-2xl border border-slate-100 shadow-soft p-4 flex gap-3">'
+      + '<div class="w-10 h-10 rounded-xl bg-primary-50 text-primary-700 flex items-center justify-center shrink-0"><i class="bi ' + guestNotifIcon(n.eventCode) + '"></i></div>'
+      + '<div class="min-w-0"><p class="text-sm font-semibold text-dark-900">' + escHTML(n.title || 'Notification') + '</p>'
+      + '<p class="text-sm text-slate-500">' + escHTML(n.message || '') + '</p></div></div>'
+    ).join('') : '<p class="text-sm text-slate-400 bg-white rounded-2xl border border-slate-100 p-8 text-center">Vous êtes à jour.<br><span class="text-xs">Aucune activité pour ce numéro.</span></p>';
+  } catch (e) {
+    document.getElementById('guest-notif-list').innerHTML =
+      '<p class="text-sm text-slate-400 bg-white rounded-2xl border border-slate-100 p-8 text-center">Impossible de charger vos notifications. <button onclick="refreshGuestNotifications()" class="text-primary-700 font-semibold">Réessayer</button></p>';
+  }
+}
+function renderGuestNotifications() { refreshGuestNotifications(); }
+function updateGuestNotifBadge(n) {
+  const b = document.getElementById('notif-count');
+  if (!b) return;
+  b.textContent = n > 99 ? '99+' : n;
+  b.classList.toggle('hidden', !n);
+}
+function startGuestNotifPoll() {
+  if (guestNotifTimer) return;
+  guestNotifTimer = setInterval(async () => {
+    if (document.hidden) return;
+    try {
+      const phone = (localStorage.getItem('ms_phone') || '');
+      if (!phone || phone.replace(/\D/g, '').length < 9) return;
+      const cid = localStorage.getItem('ms_cid') || '';
+      const res = await fetch(apiBase() + '/api/guest-notifications?phone=' + encodeURIComponent(phone) + '&cid=' + encodeURIComponent(cid));
+      const data = await res.json();
+      if (res.ok && data.success) {
+        updateGuestNotifBadge((data.data && data.data.unread) || 0);
+        if (!document.getElementById('section-notifications').classList.contains('hidden')) refreshGuestNotifications();
+      }
+    } catch (e) {}
+  }, 60000);
+}
+
 async function openClientConvo(id, focusOffer) {
   const idn = msgIdentity();
   try {
@@ -3948,6 +4044,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   updateFavUI();
   startCountdown();
   startMsgPoll();
+  startGuestNotifPoll();
 });
 </script>
 </body>

@@ -233,7 +233,7 @@ tailwind.config = { theme: { extend: {
         <a class="nav-link" data-view="paiements"><i class="bi bi-wallet2"></i>Paiements</a>
         <a class="nav-link" data-view="messages"><i class="bi bi-chat-dots"></i>Messages<span id="badgeMsgs" class="ml-auto bg-red-500 text-white text-[10px] rounded-full px-2 py-0.5 hidden">0</span></a>
         <a class="nav-link" data-view="negociations"><i class="bi bi-tag"></i>Négociations<span id="badgeNegos" class="ml-auto bg-amber-500 text-white text-[10px] rounded-full px-2 py-0.5 hidden">0</span></a>
-        <a class="nav-link" data-view="notifications"><i class="bi bi-bell"></i>Notifications<span id="badgeNotifs" class="ml-auto bg-red-500 text-white text-[10px] rounded-full px-2 py-0.5 hidden">0</span></a>
+        <a class="nav-link" data-view="notifications" aria-label="Notifications"><i class="bi bi-bell"></i>Notifications<span id="badgeNotifs" role="status" class="ml-auto bg-red-500 text-white text-[10px] rounded-full px-2 py-0.5 hidden">0</span></a>
         <a class="nav-link" data-view="profil"><i class="bi bi-person-circle"></i>Mon profil</a>
       </nav>
       <div class="p-4 border-t border-slate-800">
@@ -571,7 +571,7 @@ async function refreshBadges() {
     if (b) { b.textContent = n; b.classList.toggle('hidden', n<=0); }
   } catch(e){}
 }
-setInterval(refreshBadges, 30000);
+setInterval(() => { if (!document.hidden) refreshBadges(); }, 45000);
 
 /* ==================== DASHBOARD ==================== */
 async function renderDashboard() {
@@ -1223,17 +1223,17 @@ async function renderNotifications(){
   try{
     const n=(await api('/notifications')).data;
     content.innerHTML=`<div class="flex items-center justify-between mb-4"><h3 class="font-bold">Notifications <span class="badge bg-primary-600 text-white ml-1">${n.unread} non lues</span></h3><button class="btn btn-outline text-xs" onclick="markAllNotifs()"><i class="bi bi-check2-all"></i> Tout marquer lu</button></div>
-    <div class="space-y-3">
-      ${(n.list||[]).map(x=>`<div class="card p-4 flex items-start gap-3 ${x.read?'':'border-l-4 border-primary-500'}">
-        <div class="w-9 h-9 rounded-full ${notifIcon(x.type)} flex items-center justify-center shrink-0"><i class="bi ${notifIco(x.type)}"></i></div>
-        <div class="flex-1"><p class="font-semibold text-sm">${esc(x.title)}</p><p class="text-sm text-slate-500">${esc(x.message)}</p><p class="text-xs text-slate-400 mt-1">${fmtDate(x.createdAt)}</p></div>
+    <div class="space-y-3" role="list" aria-label="Notifications">
+      ${(n.list||[]).map(x=>`<div role="listitem" class="card p-4 flex items-start gap-3 ${x.read?'':'border-l-4 border-primary-500'}">
+        <div class="w-9 h-9 rounded-full ${notifIcon(x.type)} flex items-center justify-center shrink-0" aria-hidden="true"><i class="bi ${notifIco(x.type)}"></i></div>
+        <div class="flex-1"><p class="font-semibold text-sm">${esc(x.title)}</p><p class="text-sm text-slate-500">${esc(x.message)}</p><p class="text-xs text-slate-400 mt-1">${fmtDate(x.createdAt)}${x.eventCode?' · '+esc(x.eventCode):''}</p></div>
         ${x.read?'':'<button class="text-xs text-primary-600 hover:underline" onclick="readNotif(${x.id})">Marquer lu</button>'}
       </div>`).join('')||emptyState('Aucune notification')}
     </div>`;
   }catch(e){ content.innerHTML=emptyState('Erreur: '+e.message); }
 }
-function notifIco(t){ const m={ORDER:'bi-cart-check',STOCK:'bi-box-seam',SUPPLIER:'bi-shop',PAYMENT:'bi-credit-card',SYSTEM:'bi-bell'}; return m[t]||'bi-bell'; }
-function notifIcon(t){ const m={ORDER:'bg-primary-50 text-primary-600',STOCK:'bg-amber-50 text-amber-600',SUPPLIER:'bg-sky-50 text-sky-600',PAYMENT:'bg-green-50 text-green-600',SYSTEM:'bg-slate-100 text-slate-500'}; return m[t]||'bg-slate-100 text-slate-500'; }
+function notifIco(t){ const m={ORDER:'bi-cart-check',PAYMENT:'bi-credit-card',DELIVERY:'bi-truck',MESSAGE:'bi-chat-dots',NEGOTIATION:'bi-arrow-left-right',PRODUCT:'bi-box-seam',STOCK:'bi-box-seam',SUPPLIER:'bi-shop',SECURITY:'bi-shield-lock',SYSTEM:'bi-bell'}; return m[t]||'bi-bell'; }
+function notifIcon(t){ const m={ORDER:'bg-primary-50 text-primary-600',PAYMENT:'bg-green-50 text-green-600',DELIVERY:'bg-cyan-50 text-cyan-700',MESSAGE:'bg-indigo-50 text-indigo-600',NEGOTIATION:'bg-fuchsia-50 text-fuchsia-600',PRODUCT:'bg-amber-50 text-amber-600',STOCK:'bg-amber-50 text-amber-600',SUPPLIER:'bg-sky-50 text-sky-600',SECURITY:'bg-red-50 text-red-600',SYSTEM:'bg-slate-100 text-slate-500'}; return m[t]||'bg-slate-100 text-slate-500'; }
 async function readNotif(id){ try{ await api('/notifications/'+id+'/read',{method:'PATCH'}); renderNotifications(); refreshBadges(); }catch(e){} }
 async function markAllNotifs(){ try{ await api('/notifications/read-all',{method:'POST'}); renderNotifications(); refreshBadges(); }catch(e){} }
 

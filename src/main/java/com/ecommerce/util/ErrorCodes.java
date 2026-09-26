@@ -33,4 +33,6 @@ public final class ErrorCodes {
     public static final String PAYMENT_NOT_FOUND = "PAYMENT_NOT_FOUND";
     public static final String PAYMENT_INVALID = "PAYMENT_INVALID";
     public static final String PROVIDER_UNAVAILABLE = "PROVIDER_UNAVAILABLE";
+    public static final String NOTIFICATION_NOT_FOUND = "NOTIFICATION_NOT_FOUND";
+    public static final String NOTIFICATION_ACCESS_DENIED = "NOTIFICATION_ACCESS_DENIED";
 }

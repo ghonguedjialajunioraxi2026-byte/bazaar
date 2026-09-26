@@ -1,6 +1,5 @@
 package com.ecommerce.service;
 
-import com.ecommerce.dao.NotificationDAO;
 import com.ecommerce.dao.OrderDAO;
 import com.ecommerce.dao.PaymentDAO;
 import com.ecommerce.model.Order;
@@ -24,7 +23,6 @@ public class PaymentService {
 
     private final PaymentDAO paymentDAO = new PaymentDAO();
     private final OrderDAO orderDAO = new OrderDAO();
-    private final NotificationDAO notificationDAO = new NotificationDAO();
 
     public static final String CURRENCY = "FCFA";
 
@@ -157,7 +155,8 @@ public class PaymentService {
         } catch (SQLException e) {
             throw new AppException(ErrorCodes.DATABASE_ERROR, 500, "Impossible de traiter votre demande.", e);
         }
-        notifyParties(p, "Paiement confirmé", "Le paiement de la commande a été confirmé.");
+        notifyParties(p, "PAYMENT_SUCCEEDED", "Paiement confirmé",
+            "Le paiement de la commande a été confirmé.");
     }
 
     public void failPayment(int paymentId, int adminId, String reason) throws AppException, SQLException {
@@ -178,6 +177,9 @@ public class PaymentService {
         } catch (SQLException e) {
             throw new AppException(ErrorCodes.DATABASE_ERROR, 500, "Impossible de traiter votre demande.", e);
         }
+        notifyParties(p, "PAYMENT_FAILED", "Paiement échoué",
+            "Le paiement de la commande a échoué."
+                + (reason != null && !reason.trim().isEmpty() ? " Motif : " + reason.trim() : ""));
     }
 
     /** Confirmation COD à la livraison (événement serveur réel). */
@@ -193,6 +195,8 @@ public class PaymentService {
         Payment p = paymentDAO.findById(paymentId);
         if (p != null && "REUSSIE".equals(p.getStatus())) {
             paymentDAO.updateStatus(p.getId(), "ANNULEE", p.getTransactionRef());
+            notifyParties(p, "PAYMENT_REFUNDED", "Remboursement effectué",
+                "Le paiement de la commande a été remboursé.");
         }
     }
 
@@ -212,11 +216,23 @@ public class PaymentService {
         return paymentDAO.findAll();
     }
 
-    private void notifyParties(Payment p, String title, String message) {
+    private void notifyParties(Payment p, String eventCode, String title, String message) {
         try {
             Order o = orderDAO.findById(p.getOrderId());
+            NotificationService notifs = new NotificationService();
             if (o != null && o.getSupplierId() > 0) {
-                notificationDAO.createForSupplier(o.getSupplierId(), title, message + " Commande " + o.getOrderNumber() + ".", "PAYMENT");
+                notifs.notifySupplier(o.getSupplierId(), eventCode, title,
+                    message + " Commande " + o.getOrderNumber() + ".",
+                    "PAYMENT", p.getId(), null,
+                    "ORDER:" + o.getId() + ":" + eventCode);
+            }
+            // Paiements problématiques -> admins (pas de bruit pour les succès simples
+            // côté admin : seul l'échec/remboursement remonte).
+            if (o != null && ("PAYMENT_FAILED".equals(eventCode) || "PAYMENT_REFUNDED".equals(eventCode))) {
+                notifs.notifyAdmins(eventCode, title,
+                    message + " Commande " + o.getOrderNumber() + " (" + p.getAmount() + " FCFA).",
+                    "PAYMENT", p.getId(), null,
+                    "ORDER:" + o.getId() + ":" + eventCode);
             }
         } catch (Exception ignored) {}
     }

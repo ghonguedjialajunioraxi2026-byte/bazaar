@@ -174,13 +174,16 @@ public class AdminServlet extends HttpServlet {
 
                     int supplierId = p.getSupplierId();
                     if (supplierId > 0) {
-                        if (approved) {
-                            notificationDAO.createForSupplier(supplierId, "Produit validé",
-                                "Votre produit '" + productName + "' est maintenant en ligne sur la boutique.", "SUPPLIER");
-                        } else {
-                            notificationDAO.createForSupplier(supplierId, "Produit refusé",
-                                "Votre produit '" + productName + "' a été refusé par l'administrateur.", "SUPPLIER");
-                        }
+                        try {
+                            new com.ecommerce.service.NotificationService().notifySupplier(supplierId,
+                                approved ? "PRODUCT_APPROVED" : "PRODUCT_REJECTED",
+                                approved ? "Produit validé" : "Produit refusé",
+                                approved
+                                    ? "Votre produit '" + productName + "' est maintenant en ligne sur la boutique."
+                                    : "Votre produit '" + productName + "' a été refusé par l'administrateur.",
+                                "PRODUCT", productId, null,
+                                "PRODUCT:" + productId + ":VALIDATED:" + (approved ? "APPROVED" : "REJECTED"));
+                        } catch (Exception ignored) {}
                     }
                 } finally {
                     if (conn != null) conn.close();

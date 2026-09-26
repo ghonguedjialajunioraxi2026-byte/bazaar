@@ -138,6 +138,23 @@ public class OrderService {
             }
         }
         orderDAO.updateStatus(id, status);
+        // Notifications fournisseur déduites du serveur (destinataire = propriétaire).
+        try {
+            NotificationService notifs = new NotificationService();
+            com.ecommerce.model.Order updated = orderDAO.findById(id);
+            int sup = updated != null ? updated.getSupplierId() : o.getSupplierId();
+            String num = updated != null && updated.getOrderNumber() != null
+                ? updated.getOrderNumber() : ("#" + id);
+            if (sup > 0 && ("CONFIRMEE".equals(status) || "ANNULEE".equals(status))) {
+                notifs.notifySupplier(sup,
+                    "CONFIRMEE".equals(status) ? "ORDER_CONFIRMED" : "ORDER_CANCELLED",
+                    "CONFIRMEE".equals(status) ? "Commande confirmée" : "Commande annulée",
+                    "Commande " + num + ("CONFIRMEE".equals(status)
+                        ? " confirmée (paiement vérifié)." : " annulée."),
+                    "ORDER", id, null,
+                    "ORDER:" + id + ":" + status);
+            }
+        } catch (Exception ignored) {}
         if ("LIVREE".equals(status)) {
             // Comptabilisation idempotente (retry sûr en cas d'échec).
             new MonetizationService().settleDeliveredOrder(id);

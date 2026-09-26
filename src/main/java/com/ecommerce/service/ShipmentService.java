@@ -1,6 +1,5 @@
 package com.ecommerce.service;
 
-import com.ecommerce.dao.NotificationDAO;
 import com.ecommerce.dao.OrderDAO;
 import com.ecommerce.dao.ShipmentDAO;
 import com.ecommerce.model.Order;
@@ -23,7 +22,7 @@ public class ShipmentService {
 
     private final ShipmentDAO shipmentDAO = new ShipmentDAO();
     private final OrderDAO orderDAO = new OrderDAO();
-    private final NotificationDAO notificationDAO = new NotificationDAO();
+    private final NotificationService notificationService = new NotificationService();
     private final OrderService orderService = new OrderService();
 
     public static final Map<String, String> LABELS;
@@ -88,8 +87,11 @@ public class ShipmentService {
             orderService.updateStatus(orderId, "EN_PREPARATION");
         }
         try {
-            notificationDAO.createForSupplier(o.getSupplierId() > 0 ? o.getSupplierId() : 0,
-                "Expédition créée", "Commande " + o.getOrderNumber() + " en préparation.", "ORDER");
+            notificationService.notifySupplier(o.getSupplierId() > 0 ? o.getSupplierId() : 0,
+                "DELIVERY_PREPARING", "Commande en préparation",
+                "Commande " + o.getOrderNumber() + " en préparation.",
+                "SHIPMENT", id, null,
+                "SHIPMENT:" + id + ":PREPARING");
         } catch (Exception ignored) {}
         Shipment s;
         try {
@@ -137,25 +139,49 @@ public class ShipmentService {
                 }
                 orderService.updateStatus(o.getId(), "LIVREE");
             }
+            notifyShipment(o, s.getId(), "DELIVERY_DELIVERED", "Commande livrée",
+                "Commande " + (o != null ? o.getOrderNumber() : "") + " livrée.");
+        } else if (ShipmentStatus.FAILED.equals(toStatus) || ShipmentStatus.RETURNED.equals(toStatus)) {
+            Order o = null;
             try {
-                notificationDAO.createForSupplier(o != null && o.getSupplierId() > 0 ? o.getSupplierId() : 0,
-                    "Commande livrée", "Commande " + (o != null ? o.getOrderNumber() : "") + " livrée.", "ORDER");
-            } catch (Exception ignored) {}
-        }
-        if (ShipmentStatus.FAILED.equals(toStatus) || ShipmentStatus.RETURNED.equals(toStatus)) {
-            try {
-                Order o = orderDAO.findById(s.getOrderId());
-                if (o != null) {
-                    notificationDAO.createForSupplier(o.getSupplierId() > 0 ? o.getSupplierId() : 0,
-                        "Problème de livraison", "Commande " + o.getOrderNumber() + " : " + LABELS.getOrDefault(toStatus, toStatus) + ".", "ORDER");
-                }
-            } catch (Exception ignored) {}
+                o = orderDAO.findById(s.getOrderId());
+            } catch (SQLException ignored) {}
+            notifyShipment(o, s.getId(), "DELIVERY_FAILED", "Problème de livraison",
+                "Commande " + (o != null ? o.getOrderNumber() : "") + " : "
+                    + LABELS.getOrDefault(toStatus, toStatus) + ".");
+        } else {
+            // Transitions intermédiaires : notification fournisseur réelle (source = shipment).
+            String event = null;
+            if (ShipmentStatus.PICKED_UP.equals(toStatus)) event = "DELIVERY_SHIPPED";
+            else if (ShipmentStatus.IN_TRANSIT.equals(toStatus)) event = "DELIVERY_IN_TRANSIT";
+            else if (ShipmentStatus.OUT_FOR_DELIVERY.equals(toStatus)) event = "DELIVERY_OUT_FOR_DELIVERY";
+            else if (ShipmentStatus.READY_FOR_PICKUP.equals(toStatus)) event = "DELIVERY_PREPARING";
+            if (event != null) {
+                Order o = null;
+                try {
+                    o = orderDAO.findById(s.getOrderId());
+                } catch (SQLException ignored) {}
+                notifyShipment(o, s.getId(), event, LABELS.getOrDefault(toStatus, toStatus),
+                    "Commande " + (o != null ? o.getOrderNumber() : "") + " : "
+                        + LABELS.getOrDefault(toStatus, toStatus) + ".");
+            }
         }
         try {
             return shipmentDAO.findByOrder(s.getOrderId());
         } catch (SQLException e) {
             throw new AppException(ErrorCodes.DATABASE_ERROR, 500, "Impossible de traiter votre demande.", e);
         }
+    }
+
+    /** Notification fournisseur déduite de l'événement livraison (idempotente). */
+    private void notifyShipment(Order o, int shipmentId, String eventCode, String title, String message) {
+        try {
+            if (o != null && o.getSupplierId() > 0) {
+                notificationService.notifySupplier(o.getSupplierId(), eventCode, title, message,
+                    "SHIPMENT", shipmentId, null,
+                    "SHIPMENT:" + shipmentId + ":" + eventCode);
+            }
+        } catch (Exception ignored) {}
     }
 
     private Shipment getScoped(int shipmentId, Integer supplierId) throws AppException, SQLException {

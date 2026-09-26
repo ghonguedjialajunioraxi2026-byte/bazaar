@@ -7,6 +7,14 @@ public class Notification {
     private String title;
     private String message;
     private String type;
+    private String eventCode;
+    private String category;
+    private String entityType;
+    private Integer entityId;
+    private String actionUrl;
+    private String dedupKey;
+    private String metadata;
+    private String readAt;
     private String priority = "NORMAL";
     private boolean read;
     private String link;
@@ -31,6 +39,30 @@ public class Notification {
 
     public String getType() { return type; }
     public void setType(String type) { this.type = type; }
+
+    public String getEventCode() { return eventCode; }
+    public void setEventCode(String eventCode) { this.eventCode = eventCode; }
+
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
+
+    public String getEntityType() { return entityType; }
+    public void setEntityType(String entityType) { this.entityType = entityType; }
+
+    public Integer getEntityId() { return entityId; }
+    public void setEntityId(Integer entityId) { this.entityId = entityId; }
+
+    public String getActionUrl() { return actionUrl; }
+    public void setActionUrl(String actionUrl) { this.actionUrl = actionUrl; }
+
+    public String getDedupKey() { return dedupKey; }
+    public void setDedupKey(String dedupKey) { this.dedupKey = dedupKey; }
+
+    public String getMetadata() { return metadata; }
+    public void setMetadata(String metadata) { this.metadata = metadata; }
+
+    public String getReadAt() { return readAt; }
+    public void setReadAt(String readAt) { this.readAt = readAt; }
 
     public String getPriority() { return priority; }
     public void setPriority(String priority) {

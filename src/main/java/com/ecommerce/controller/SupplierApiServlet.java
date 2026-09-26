@@ -134,12 +134,36 @@ public class SupplierApiServlet extends HttpServlet {
                 write(resp, ok("Conversation", data), 200);
                 return;
             }
-            // /api/supplier/notifications
+            // /api/supplier/notifications (centre paginé + filtres)
             if (path.equals("/notifications")) {
+                String category = req.getParameter("type");
+                if (category == null) category = req.getParameter("category");
+                String status = req.getParameter("status");
+                Boolean unreadOnly = null;
+                if ("unread".equalsIgnoreCase(status)) unreadOnly = true;
+                else if ("read".equalsIgnoreCase(status)) unreadOnly = false;
+                int page = parseNum(req.getParameter("page"), 1);
+                int limit = Math.min(50, Math.max(1, parseNum(req.getParameter("limit"), 20)));
                 Map<String, Object> data = new LinkedHashMap<>();
-                data.put("list", supplierService.getNotifications(supplierId));
+                data.put("list", supplierService.getNotificationsPaged(supplierId, category, unreadOnly, limit, (page - 1) * limit));
+                data.put("total", supplierService.countNotifications(supplierId, category, unreadOnly));
                 data.put("unread", supplierService.getUnreadNotifications(supplierId));
+                data.put("page", page);
+                data.put("limit", limit);
                 write(resp, ok("Notifications", data), 200);
+                return;
+            }
+            // /api/supplier/notifications/unread-count (polling léger)
+            if (path.equals("/notifications/unread-count")) {
+                Map<String, Object> data = new LinkedHashMap<>();
+                data.put("count", supplierService.getUnreadNotifications(supplierId));
+                write(resp, ok("Compteur", data), 200);
+                return;
+            }
+            // /api/supplier/notifications/preferences
+            if (path.equals("/notifications/preferences")) {
+                write(resp, ok("Préférences",
+                    new com.ecommerce.dao.NotificationDAO().getPreferences("SUPPLIER", supplierId)), 200);
                 return;
             }
             // /api/supplier/payments
@@ -279,6 +303,30 @@ public class SupplierApiServlet extends HttpServlet {
             if (path.equals("/notifications/read-all")) {
                 supplierService.markAllNotificationsRead(supplierId);
                 write(resp, ok("Toutes lues", null), 200);
+                return;
+            }
+
+            // PUT /api/supplier/notifications/preferences {category, enabled}
+            if (path.equals("/notifications/preferences")) {
+                BufferedReader preader = req.getReader();
+                StringBuilder psb = new StringBuilder();
+                String pline;
+                while ((pline = preader.readLine()) != null) psb.append(pline);
+                Map<String, Object> pbody = JsonUtil.fromJson(psb.toString(), Map.class);
+                String rawCategory = str(pbody.get("category"));
+                Object enObj = pbody.get("enabled");
+                boolean enabled = !(enObj instanceof Boolean) || (Boolean) enObj;
+                if (rawCategory == null || rawCategory.trim().isEmpty()) {
+                    write(resp, err("Catégorie inconnue"), 400); return;
+                }
+                final String catUp = rawCategory.trim().toUpperCase();
+                boolean knownCategory = com.ecommerce.service.NotificationType.all().values().stream()
+                        .anyMatch(d -> d.category.equals(catUp));
+                if (!knownCategory) { write(resp, err("Catégorie inconnue"), 400); return; }
+                String category = catUp;
+                if ("SECURITY".equals(category)) { write(resp, err("Les alertes de sécurité ne peuvent pas être désactivées"), 400); return; }
+                new com.ecommerce.dao.NotificationDAO().setPreference("SUPPLIER", supplierId, category, enabled);
+                write(resp, ok("Préférence enregistrée", null), 200);
                 return;
             }
 
@@ -567,6 +615,7 @@ public class SupplierApiServlet extends HttpServlet {
     }
 
     private int parseInt(String s) { try { return Integer.parseInt(s); } catch (Exception e) { return 0; } }
+    private int parseNum(String s, int def) { try { if (s == null) return def; return Integer.parseInt(s); } catch (Exception e) { return def; } }
     private Integer optInt(String s) { if (s == null || s.isEmpty()) return null; try { return Integer.parseInt(s); } catch (Exception e) { return null; } }
     private int num(Object o) { if (o == null) return 0; if (o instanceof Number) return ((Number) o).intValue(); try { return (int) Double.parseDouble(o.toString()); } catch (Exception e) { return 0; } }
     private String str(Object o) { return o == null ? null : o.toString(); }
