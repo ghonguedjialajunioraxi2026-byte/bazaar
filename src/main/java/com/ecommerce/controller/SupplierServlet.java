@@ -86,7 +86,8 @@ public class SupplierServlet extends HttpServlet {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
         try {
-            if (com.ecommerce.util.AdminAuth.requireAdmin(req, resp) <= 0) return;
+            int adminId = com.ecommerce.util.AdminAuth.requireAdmin(req, resp);
+            if (adminId <= 0) return;
             BufferedReader reader = req.getReader();
             StringBuilder sb = new StringBuilder();
             String line;
@@ -104,6 +105,12 @@ public class SupplierServlet extends HttpServlet {
             s.setActive(body.get("active") == null || (Boolean) body.get("active"));
 
             supplierService.updateSupplier(s);
+            try {
+                new com.ecommerce.dao.ActivityLogDAO().log(adminId,
+                    s.isActive() ? "SUPPLIER_ACTIVATED" : "SUPPLIER_SUSPENDED",
+                    "supplier", s.getId(),
+                    "Fournisseur " + (s.isActive() ? "activé" : "suspendu"), req.getRemoteAddr());
+            } catch (Exception ignored) {}
             resp.getWriter().write("{\"success\":true}");
         } catch (Exception e) {
             resp.setStatus(500);
@@ -116,7 +123,8 @@ public class SupplierServlet extends HttpServlet {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
         try {
-            if (com.ecommerce.util.AdminAuth.requireAdmin(req, resp) <= 0) return;
+            if (com.ecommerce.util.AdminRole.requireAction(req, resp,
+                    com.ecommerce.util.AdminRole.DESTRUCTIVE) <= 0) return;
             int id = Integer.parseInt(req.getParameter("id"));
             supplierService.deleteSupplier(id);
             resp.getWriter().write("{\"success\":true}");

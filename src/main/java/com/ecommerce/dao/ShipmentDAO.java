@@ -124,6 +124,64 @@ public class ShipmentDAO {
         return list;
     }
 
+    /**
+     * Supervision admin : expéditions + commande/client (1 requête).
+     * @param filter "active" (en cours), "incidents" (FAILED/RETURNED), "all".
+     */
+    public List<java.util.Map<String, Object>> findForAdmin(String filter, int limit) throws SQLException {
+        List<java.util.Map<String, Object>> list = new ArrayList<>();
+        StringBuilder sql = new StringBuilder(
+            "SELECT s.*, o.order_number, o.fullname, o.phone, o.city FROM shipments s "
+            + "LEFT JOIN orders o ON o.id = s.order_id");
+        if ("incidents".equals(filter)) {
+            sql.append(" WHERE s.status IN ('FAILED','RETURNED')");
+        } else if (!"all".equals(filter)) {
+            sql.append(" WHERE s.status NOT IN ('DELIVERED','CANCELLED','RETURNED')");
+        }
+        sql.append(" ORDER BY s.updated_at DESC LIMIT ?");
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+            ps.setInt(1, Math.max(1, Math.min(200, limit)));
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    java.util.Map<String, Object> m = new java.util.LinkedHashMap<>();
+                    m.put("id", rs.getInt("id"));
+                    m.put("orderId", rs.getInt("order_id"));
+                    m.put("orderNumber", rs.getString("order_number"));
+                    m.put("customer", rs.getString("fullname"));
+                    m.put("phone", rs.getString("phone"));
+                    m.put("city", rs.getString("city"));
+                    m.put("trackingNumber", rs.getString("tracking_number"));
+                    m.put("carrier", rs.getString("carrier"));
+                    m.put("status", rs.getString("status"));
+                    m.put("failureReason", rs.getString("failure_reason"));
+                    m.put("shippedAt", rs.getString("shipped_at"));
+                    m.put("deliveredAt", rs.getString("delivered_at"));
+                    m.put("createdAt", rs.getString("created_at"));
+                    list.add(m);
+                }
+            }
+        }
+        return list;
+    }
+
+    public int countByStatusGroup(String group) throws SQLException {
+        String sql;
+        if ("incidents".equals(group)) {
+            sql = "SELECT COUNT(*) FROM shipments WHERE status IN ('FAILED','RETURNED')";
+        } else if ("all".equals(group)) {
+            sql = "SELECT COUNT(*) FROM shipments";
+        } else {
+            sql = "SELECT COUNT(*) FROM shipments WHERE status NOT IN ('DELIVERED','CANCELLED','RETURNED')";
+        }
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) return rs.getInt(1);
+        }
+        return 0;
+    }
+
     private Shipment mapRow(ResultSet rs) throws SQLException {
         Shipment s = new Shipment();
         s.setId(rs.getInt("id"));

@@ -212,7 +212,8 @@ public class ProductServlet extends HttpServlet {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
         try {
-            if (com.ecommerce.util.AdminAuth.requireAdmin(req, resp) <= 0) return;
+            if (com.ecommerce.util.AdminRole.requireAction(req, resp,
+                    com.ecommerce.util.AdminRole.DESTRUCTIVE) <= 0) return;
             int id = parseIntParam(req, "id", 0);
             if (id <= 0) {
                 resp.setStatus(400);

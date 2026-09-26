@@ -94,6 +94,56 @@ public class AdminServlet extends HttpServlet {
                 return;
             }
 
+            // Identité réelle (rôle résolu serveur, jamais choisi par le frontend).
+            if ("/me".equals(pathInfo)) {
+                int meId = validateAndGetAdminId(req);
+                com.ecommerce.model.Admin me = new com.ecommerce.dao.AdminDAO().findById(meId);
+                Map<String, Object> m = new LinkedHashMap<>();
+                m.put("id", meId);
+                m.put("username", me == null ? null : me.getUsername());
+                m.put("role", me == null || me.getRole() == null ? "ADMIN" : me.getRole());
+                resp.getWriter().write(JsonUtil.toJson(m));
+                return;
+            }
+
+            // Control Center : supervision (tous rôles authentifiés, lecture seule).
+            com.ecommerce.service.AdminControlService control = new com.ecommerce.service.AdminControlService();
+            if ("/overview".equals(pathInfo)) {
+                resp.getWriter().write(JsonUtil.toJson(control.overview()));
+                return;
+            }
+            if ("/payments".equals(pathInfo)) {
+                resp.getWriter().write(JsonUtil.toJson(control.payments(
+                    req.getParameter("status"), parseInt(req.getParameter("page"), 1),
+                    parseInt(req.getParameter("limit"), 20))));
+                return;
+            }
+            if ("/shipments".equals(pathInfo)) {
+                resp.getWriter().write(JsonUtil.toJson(control.shipments(
+                    req.getParameter("filter"), parseInt(req.getParameter("limit"), 50))));
+                return;
+            }
+            if ("/conversations".equals(pathInfo)) {
+                resp.getWriter().write(JsonUtil.toJson(control.conversations(
+                    parseInt(req.getParameter("page"), 1), parseInt(req.getParameter("limit"), 20))));
+                return;
+            }
+            if ("/offers/pending".equals(pathInfo)) {
+                resp.getWriter().write(JsonUtil.toJson(control.pendingOffers(
+                    parseInt(req.getParameter("page"), 1), parseInt(req.getParameter("limit"), 20))));
+                return;
+            }
+            if ("/reviews".equals(pathInfo)) {
+                resp.getWriter().write(JsonUtil.toJson(control.reviews(req.getParameter("status"))));
+                return;
+            }
+            if ("/audit".equals(pathInfo)) {
+                resp.getWriter().write(JsonUtil.toJson(control.audit(
+                    req.getParameter("action"), parseInt(req.getParameter("page"), 1),
+                    parseInt(req.getParameter("limit"), 20))));
+                return;
+            }
+
             // Default: dashboard
             resp.getWriter().write(JsonUtil.toJson(getDashboard()));
         } catch (Exception e) {
@@ -202,8 +252,9 @@ public class AdminServlet extends HttpServlet {
                 while ((line = reader.readLine()) != null) sb.append(line);
                 Map<String, Object> body = JsonUtil.fromJson(sb.toString(), Map.class);
 
-                int adminId = validateAndGetAdminId(req);
-                if (adminId <= 0) { resp.setStatus(401); resp.getWriter().write("{\"error\":\"Non autorisé\"}"); return; }
+                int adminId = com.ecommerce.util.AdminRole.requireAction(req, resp,
+                    com.ecommerce.util.AdminRole.MONEY);
+                if (adminId <= 0) return;
 
                 com.ecommerce.service.MonetizationService monetization = new com.ecommerce.service.MonetizationService();
                 int ruleId = monetization.createRule(
@@ -217,17 +268,45 @@ public class AdminServlet extends HttpServlet {
                 return;
             }
 
+            // Mot de passe du compte connecté (tous rôles, vérification de l'actuel).
+            if ("/password".equals(pathInfo)) {
+                int pwdAdmin = validateAndGetAdminId(req);
+                if (pwdAdmin <= 0) { resp.setStatus(401); resp.getWriter().write("{\"error\":\"Non autorisé\"}"); return; }
+                BufferedReader reader0 = req.getReader();
+                StringBuilder sb0 = new StringBuilder();
+                String line0;
+                while ((line0 = reader0.readLine()) != null) sb0.append(line0);
+                Map<String, Object> body0 = JsonUtil.fromJson(sb0.toString(), Map.class);
+                String current = body0.get("current") == null ? null : String.valueOf(body0.get("current"));
+                String fresh = body0.get("new") == null ? null : String.valueOf(body0.get("new"));
+                if (current == null || current.isEmpty() || fresh == null || fresh.length() < 8) {
+                    resp.setStatus(400);
+                    resp.getWriter().write("{\"error\":\"Mot de passe actuel requis, nouveau min 8 caractères\"}");
+                    return;
+                }
+                boolean ok = new com.ecommerce.dao.AdminDAO().updatePassword(pwdAdmin, current, fresh);
+                if (!ok) {
+                    resp.setStatus(400);
+                    resp.getWriter().write("{\"error\":\"Mot de passe actuel incorrect\"}");
+                    return;
+                }
+                activityLogDAO.log(pwdAdmin, "ADMIN_PASSWORD_CHANGED", "admin", pwdAdmin,
+                    "Mot de passe modifié", req.getRemoteAddr());
+                resp.getWriter().write("{\"success\":true}");
+                return;
+            }
+
             // Remboursement FINANCIER uniquement (Phase 10) : contre-passation
             // comptable, aucun mouvement d'argent (Phase 11).
-            if ("/orders/refund".equals(pathInfo)) {
-                BufferedReader reader2 = req.getReader();
+            if ("/orders/refund".equals(pathInfo)) {                BufferedReader reader2 = req.getReader();
                 StringBuilder sb2 = new StringBuilder();
                 String line2;
                 while ((line2 = reader2.readLine()) != null) sb2.append(line2);
                 Map<String, Object> body2 = JsonUtil.fromJson(sb2.toString(), Map.class);
 
-                int adminId2 = validateAndGetAdminId(req);
-                if (adminId2 <= 0) { resp.setStatus(401); resp.getWriter().write("{\"error\":\"Non autorisé\"}"); return; }
+                int adminId2 = com.ecommerce.util.AdminRole.requireAction(req, resp,
+                    com.ecommerce.util.AdminRole.MONEY);
+                if (adminId2 <= 0) return;
 
                 int orderId = body2.get("id") instanceof Number ? ((Number) body2.get("id")).intValue() : 0;
                 if (orderId <= 0) { resp.setStatus(400); resp.getWriter().write("{\"error\":\"Commande requise\"}"); return; }
@@ -253,8 +332,9 @@ public class AdminServlet extends HttpServlet {
             }
 
             if ("/finance/rebuild".equals(pathInfo)) {
-                int adminId3 = validateAndGetAdminId(req);
-                if (adminId3 <= 0) { resp.setStatus(401); resp.getWriter().write("{\"error\":\"Non autorisé\"}"); return; }
+                int adminId3 = com.ecommerce.util.AdminRole.requireAction(req, resp,
+                    com.ecommerce.util.AdminRole.MONEY);
+                if (adminId3 <= 0) return;
                 int n = new com.ecommerce.service.MonetizationService().rebuildBalances();
                 activityLogDAO.log(adminId3, "FINANCE_REBUILT", "supplier", 0,
                     n + " soldes recalculés", req.getRemoteAddr());
@@ -268,8 +348,9 @@ public class AdminServlet extends HttpServlet {
                 while ((line = reader.readLine()) != null) sb.append(line);
                 Map<String, Object> body = JsonUtil.fromJson(sb.toString(), Map.class);
 
-                int adminId = validateAndGetAdminId(req);
-                if (adminId <= 0) { resp.setStatus(401); resp.getWriter().write("{\"error\":\"Non autorisé\"}"); return; }
+                int adminId = com.ecommerce.util.AdminRole.requireAction(req, resp,
+                    com.ecommerce.util.AdminRole.MONEY);
+                if (adminId <= 0) return;
 
                 int ruleId = body.get("id") instanceof Number ? ((Number) body.get("id")).intValue() : 0;
                 boolean active = Boolean.TRUE.equals(body.get("active")) || "true".equals(String.valueOf(body.get("active")));
@@ -305,8 +386,16 @@ public class AdminServlet extends HttpServlet {
         }
     }
 
-    private Map<String, Object> getDashboard() throws SQLException {
-        Map<String, Object> dash = new LinkedHashMap<>();
+    private int parseInt(String s, int def) {
+        try {
+            if (s == null) return def;
+            return Integer.parseInt(s);
+        } catch (NumberFormatException e) {
+            return def;
+        }
+    }
+
+    private Map<String, Object> getDashboard() throws SQLException {        Map<String, Object> dash = new LinkedHashMap<>();
         try (Connection conn = DBConnection.getConnection()) {
             dash.put("totalProducts", count(conn, "SELECT COUNT(*) FROM products"));
             dash.put("totalSuppliers", count(conn, "SELECT COUNT(*) FROM suppliers"));

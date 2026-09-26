@@ -102,7 +102,9 @@ public class PaymentServlet extends HttpServlet {
             }
 
             // Actions admin : vérification / échec (montants jamais saisis).
-            int adminId = com.ecommerce.util.AdminAuth.requireAdmin(req, resp);
+            // MONEY : GESTIONNAIRE exclu (lecture seule sur les paiements).
+            int adminId = com.ecommerce.util.AdminRole.requireAction(req, resp,
+                com.ecommerce.util.AdminRole.MONEY);
             if (adminId <= 0) return;
             String adminAction = action;
             try {
@@ -147,13 +149,16 @@ public class PaymentServlet extends HttpServlet {
             String status = (String) body.get("status");
             String transactionRef = (String) body.get("transactionRef");
 
-            // Plus de statut arbitraire : verify / fail uniquement.
+            // Plus de statut arbitraire : verify / fail uniquement (MONEY : ADMIN+).
+            int moneyAdmin = com.ecommerce.util.AdminRole.requireAction(req, resp,
+                com.ecommerce.util.AdminRole.MONEY);
+            if (moneyAdmin <= 0) return;
             com.ecommerce.service.PaymentService paymentService = new com.ecommerce.service.PaymentService();
             try {
                 if ("REUSSIE".equals(status)) {
-                    paymentService.verifyPayment(id, com.ecommerce.util.AdminAuth.requireAdmin(req, resp));
+                    paymentService.verifyPayment(id, moneyAdmin);
                 } else if ("ECHOUEE".equals(status)) {
-                    paymentService.failPayment(id, com.ecommerce.util.AdminAuth.requireAdmin(req, resp), transactionRef);
+                    paymentService.failPayment(id, moneyAdmin, transactionRef);
                 } else {
                     resp.setStatus(400);
                     resp.getWriter().write("{\"error\":\"Statut non supporté (REUSSIE / ECHOUEE)\"}");

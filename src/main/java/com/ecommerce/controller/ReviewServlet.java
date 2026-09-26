@@ -69,7 +69,9 @@ public class ReviewServlet extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
         try {
             // Approbation réservée à l'admin (le dépôt d'avis reste public).
-            if (com.ecommerce.util.AdminAuth.requireAdmin(req, resp) <= 0) return;
+            // Modération opérationnelle : tous les rôles (traçée dans l'audit).
+            int modId = com.ecommerce.util.AdminAuth.requireAdmin(req, resp);
+            if (modId <= 0) return;
             BufferedReader reader = req.getReader();
             StringBuilder sb = new StringBuilder();
             String line;
@@ -80,6 +82,10 @@ public class ReviewServlet extends HttpServlet {
             String action = (String) body.get("action");
             if ("approve".equals(action)) {
                 reviewDAO.approve(id);
+                try {
+                    new com.ecommerce.dao.ActivityLogDAO().log(modId, "REVIEW_APPROVED",
+                        "review", id, "Avis approuvé", req.getRemoteAddr());
+                } catch (Exception ignored) {}
             }
             resp.getWriter().write("{\"success\":true}");
         } catch (Exception e) {
@@ -93,9 +99,14 @@ public class ReviewServlet extends HttpServlet {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
         try {
-            if (com.ecommerce.util.AdminAuth.requireAdmin(req, resp) <= 0) return;
+            int delId = com.ecommerce.util.AdminAuth.requireAdmin(req, resp);
+            if (delId <= 0) return;
             int id = Integer.parseInt(req.getParameter("id"));
             reviewDAO.delete(id);
+            try {
+                new com.ecommerce.dao.ActivityLogDAO().log(delId, "REVIEW_DELETED",
+                    "review", id, "Avis supprimé", req.getRemoteAddr());
+            } catch (Exception ignored) {}
             resp.getWriter().write("{\"success\":true}");
         } catch (Exception e) {
             resp.setStatus(500);

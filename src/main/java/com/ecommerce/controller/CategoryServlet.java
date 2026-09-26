@@ -281,7 +281,8 @@ public class CategoryServlet extends HttpServlet {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
         try {
-            if (com.ecommerce.util.AdminAuth.requireAdmin(req, resp) <= 0) return;
+            if (com.ecommerce.util.AdminRole.requireAction(req, resp,
+                    com.ecommerce.util.AdminRole.DESTRUCTIVE) <= 0) return;
             String[] parts = pathParts(req);
             int id;
             if (parts.length == 1 && parts[0].matches("\\d+")) {

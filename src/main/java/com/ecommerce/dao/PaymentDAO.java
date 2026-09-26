@@ -61,6 +61,63 @@ public class PaymentDAO {
         return list;
     }
 
+    /** Supervision admin : paiements + commande associée (1 requête, pas de N+1). */
+    public List<java.util.Map<String, Object>> findPagedWithOrder(String status, int limit, int offset) throws SQLException {
+        List<java.util.Map<String, Object>> list = new ArrayList<>();
+        StringBuilder sql = new StringBuilder(
+            "SELECT p.*, o.order_number, o.fullname FROM payments p "
+            + "LEFT JOIN orders o ON o.id = p.order_id");
+        List<Object> params = new ArrayList<>();
+        if (status != null && !status.isEmpty()) {
+            sql.append(" WHERE p.status = ?");
+            params.add(status);
+        }
+        sql.append(" ORDER BY p.created_at DESC LIMIT ? OFFSET ?");
+        params.add(Math.max(1, Math.min(100, limit)));
+        params.add(Math.max(0, offset));
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+            for (int i = 0; i < params.size(); i++) {
+                Object p = params.get(i);
+                if (p instanceof Integer) ps.setInt(i + 1, (Integer) p);
+                else ps.setString(i + 1, String.valueOf(p));
+            }
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    java.util.Map<String, Object> m = new java.util.LinkedHashMap<>();
+                    m.put("id", rs.getInt("id"));
+                    m.put("orderId", rs.getInt("order_id"));
+                    m.put("orderNumber", rs.getString("order_number"));
+                    m.put("customer", rs.getString("fullname"));
+                    m.put("method", rs.getString("method"));
+                    m.put("provider", rs.getString("provider"));
+                    m.put("amount", rs.getInt("amount"));
+                    m.put("currency", rs.getString("currency"));
+                    m.put("status", rs.getString("status"));
+                    m.put("transactionRef", rs.getString("transaction_ref"));
+                    m.put("failureReason", rs.getString("failure_reason"));
+                    m.put("paidAt", rs.getString("paid_at"));
+                    m.put("createdAt", rs.getString("created_at"));
+                    list.add(m);
+                }
+            }
+        }
+        return list;
+    }
+
+    public int countByStatus(String status) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM payments"
+            + (status != null && !status.isEmpty() ? " WHERE status = ?" : "");
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            if (status != null && !status.isEmpty()) ps.setString(1, status);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return rs.getInt(1);
+            }
+        }
+        return 0;
+    }
+
     public void updateStatus(int id, String status, String transactionRef) throws SQLException {
         String sql = "UPDATE payments SET status = ?, transaction_ref = ?, paid_at = IF(?='REUSSIE',NOW(),NULL) WHERE id = ?";
         try (Connection conn = DBConnection.getConnection();

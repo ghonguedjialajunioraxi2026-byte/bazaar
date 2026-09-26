@@ -11,20 +11,92 @@ import java.util.List;
 public class ConversationDAO {
 
     public List<Conversation> findBySupplier(int supplierId) throws SQLException {
+        return findBySupplier(supplierId, 200);
+    }
+
+    public List<Conversation> findBySupplier(int supplierId, int cap) throws SQLException {
         List<Conversation> list = new ArrayList<>();
         String sql = "SELECT c.*, "
                 + "(SELECT COUNT(*) FROM messages m WHERE m.conversation_id = c.id AND m.sender='CLIENT' AND m.is_read=0) AS unread_count, "
                 + "(SELECT m.body FROM messages m WHERE m.conversation_id = c.id ORDER BY m.id DESC LIMIT 1) AS last_message, "
                 + "(SELECT m.created_at FROM messages m WHERE m.conversation_id = c.id ORDER BY m.id DESC LIMIT 1) AS last_message_at "
-                + "FROM conversations c WHERE c.supplier_id = ? ORDER BY c.updated_at DESC";
+                + "FROM conversations c WHERE c.supplier_id = ? ORDER BY c.updated_at DESC LIMIT ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, supplierId);
+            ps.setInt(2, Math.max(1, Math.min(500, cap)));
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) list.add(mapRow(rs, true));
             }
         }
         return list;
+    }
+
+    /**
+     * Supervision admin (lecture seule) : conversations + boutique + non lus.
+     * Ne retourne jamais le contenu des messages (confidentialité).
+     */
+    public List<java.util.Map<String, Object>> findAllForAdmin(int limit, int offset) throws SQLException {
+        List<java.util.Map<String, Object>> list = new ArrayList<>();
+        String sql = "SELECT c.id, c.supplier_id, s.name AS supplier_name, c.client_name, "
+                + "c.client_phone, c.subject, c.status, c.updated_at, "
+                + "(SELECT COUNT(*) FROM messages m WHERE m.conversation_id = c.id AND m.sender='CLIENT' AND m.is_read=0) AS unread_count, "
+                + "(SELECT COUNT(*) FROM messages m WHERE m.conversation_id = c.id) AS message_count, "
+                + "(SELECT COUNT(*) FROM offers o WHERE o.conversation_id = c.id AND o.status='PENDING') AS pending_offers "
+                + "FROM conversations c LEFT JOIN suppliers s ON s.id = c.supplier_id "
+                + "ORDER BY c.updated_at DESC LIMIT ? OFFSET ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, Math.max(1, Math.min(100, limit)));
+            ps.setInt(2, Math.max(0, offset));
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    java.util.Map<String, Object> m = new java.util.LinkedHashMap<>();
+                    m.put("id", rs.getInt("id"));
+                    m.put("supplierId", rs.getInt("supplier_id"));
+                    m.put("supplierName", rs.getString("supplier_name"));
+                    m.put("clientName", rs.getString("client_name"));
+                    m.put("clientPhone", maskPhone(rs.getString("client_phone")));
+                    m.put("subject", rs.getString("subject"));
+                    m.put("status", rs.getString("status"));
+                    m.put("unreadCount", rs.getInt("unread_count"));
+                    m.put("messageCount", rs.getInt("message_count"));
+                    m.put("pendingOffers", rs.getInt("pending_offers"));
+                    m.put("updatedAt", rs.getString("updated_at"));
+                    list.add(m);
+                }
+            }
+        }
+        return list;
+    }
+
+    public int countAll() throws SQLException {
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement("SELECT COUNT(*) FROM conversations");
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) return rs.getInt(1);
+        }
+        return 0;
+    }
+
+    /** Total messages clients non lus (KPI supervision). */
+    public int unreadTotal() throws SQLException {
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(
+                 "SELECT COUNT(*) FROM messages m JOIN conversations c ON c.id = m.conversation_id "
+                 + "WHERE m.sender='CLIENT' AND m.is_read=0");
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) return rs.getInt(1);
+        }
+        return 0;
+    }
+
+    /** Masquage téléphone côté supervision (confidentialité : 6XX XX 12). */
+    static String maskPhone(String phone) {
+        if (phone == null) return null;
+        String digits = phone.replaceAll("\\D", "");
+        if (digits.length() < 4) return "***";
+        return "*** ** " + digits.substring(digits.length() - 2);
     }
 
     public Conversation findByIdScoped(int supplierId, int id) throws SQLException {

@@ -108,6 +108,50 @@ public class OfferDAO {
         return list;
     }
 
+    /** Supervision admin : offres en attente globales (lecture seule). */
+    public List<java.util.Map<String, Object>> findAllPendingForAdmin(int limit, int offset) throws SQLException {
+        List<java.util.Map<String, Object>> list = new ArrayList<>();
+        String sql = "SELECT o.id, o.conversation_id, o.product_id, p.name AS product_name, "
+            + "s.name AS supplier_name, o.qty, o.unit_price, o.catalog_price, o.created_by, "
+            + "o.status, o.created_at FROM offers o "
+            + "JOIN conversations c ON c.id = o.conversation_id "
+            + "LEFT JOIN suppliers s ON s.id = c.supplier_id "
+            + "LEFT JOIN products p ON p.id = o.product_id "
+            + "WHERE o.status = 'PENDING' ORDER BY o.id DESC LIMIT ? OFFSET ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, Math.max(1, Math.min(100, limit)));
+            ps.setInt(2, Math.max(0, offset));
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    java.util.Map<String, Object> m = new java.util.LinkedHashMap<>();
+                    m.put("id", rs.getInt("id"));
+                    m.put("conversationId", rs.getInt("conversation_id"));
+                    m.put("productId", rs.getInt("product_id"));
+                    m.put("productName", rs.getString("product_name"));
+                    m.put("supplierName", rs.getString("supplier_name"));
+                    m.put("qty", rs.getInt("qty"));
+                    m.put("unitPrice", rs.getInt("unit_price"));
+                    m.put("catalogPrice", rs.getInt("catalog_price"));
+                    m.put("createdBy", rs.getString("created_by"));
+                    m.put("status", rs.getString("status"));
+                    m.put("createdAt", rs.getString("created_at"));
+                    list.add(m);
+                }
+            }
+        }
+        return list;
+    }
+
+    public int countPending() throws SQLException {
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement("SELECT COUNT(*) FROM offers WHERE status='PENDING'");
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) return rs.getInt(1);
+        }
+        return 0;
+    }
+
     public int countToday(int conversationId) throws SQLException {        String sql = "SELECT COUNT(*) FROM offers WHERE conversation_id = ? AND created_at >= NOW() - INTERVAL 1 DAY";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {

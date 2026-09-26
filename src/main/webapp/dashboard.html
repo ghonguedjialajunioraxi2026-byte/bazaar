@@ -70,37 +70,60 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(8
         <span class="text-xs bg-primary-100 text-primary-700 px-2 py-0.5 rounded-full font-medium ml-auto">Admin</span>
       </div>
     </div>
-    <nav class="p-3">
-      <p class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold px-3 mb-2 mt-2">Principal</p>
+    <nav class="p-3" aria-label="Navigation administrative">
+      <p class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold px-3 mb-2 mt-2">Accueil</p>
       <a href="#" onclick="showPage('dashboard')" data-page="dashboard" class="sidebar-link active flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600">
-        <i class="bi bi-grid-1x2-fill text-base"></i> Tableau de bord
+        <i class="bi bi-grid-1x2-fill text-base"></i> Vue générale
       </a>
+      <p class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold px-3 mb-2 mt-5">Catalogue</p>
+      <a href="#" onclick="showPage('categories')" data-page="categories" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600">
+        <i class="bi bi-tags text-base"></i> Catégories &amp; Produits
+      </a>
+      <a href="#" onclick="showPage('promotions')" data-page="promotions" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600">
+        <i class="bi bi-percent text-base"></i> Promotions
+      </a>
+      <p class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold px-3 mb-2 mt-5">Marketplace</p>
       <a href="#" onclick="showPage('orders')" data-page="orders" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600">
         <i class="bi bi-receipt text-base"></i> Commandes
+      </a>
+      <a href="#" onclick="showPage('suppliers')" data-page="suppliers" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600">
+        <i class="bi bi-people text-base"></i> Fournisseurs
+      </a>
+      <p class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold px-3 mb-2 mt-5">Finances</p>
+      <a href="#" onclick="showPage('payments')" data-page="payments" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600">
+        <i class="bi bi-credit-card text-base"></i> Paiements
+        <span id="payPageBadge" class="ml-auto min-w-[20px] h-5 px-1.5 bg-amber-500 text-white text-[10px] rounded-full hidden items-center justify-center font-bold">0</span>
+      </a>
+      <p class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold px-3 mb-2 mt-5">Livraison</p>
+      <a href="#" onclick="showPage('shipments')" data-page="shipments" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600">
+        <i class="bi bi-truck text-base"></i> Expéditions
+        <span id="shipPageBadge" class="ml-auto min-w-[20px] h-5 px-1.5 bg-red-500 text-white text-[10px] rounded-full hidden items-center justify-center font-bold">0</span>
+      </a>
+      <p class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold px-3 mb-2 mt-5">Communication</p>
+      <a href="#" onclick="showPage('messages')" data-page="messages" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600">
+        <i class="bi bi-chat-dots text-base"></i> Messages
+        <span id="msgPageBadge" class="ml-auto min-w-[20px] h-5 px-1.5 bg-indigo-500 text-white text-[10px] rounded-full hidden items-center justify-center font-bold">0</span>
       </a>
       <a href="#" onclick="showPage('notifications')" data-page="notifications" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600">
         <i class="bi bi-bell text-base"></i> Notifications
         <span id="notifPageBadge" class="ml-auto min-w-[20px] h-5 px-1.5 bg-red-500 text-white text-[10px] rounded-full hidden items-center justify-center font-bold">0</span>
       </a>
-      <p class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold px-3 mb-2 mt-5">Catalogue</p>
-      <a href="#" onclick="showPage('categories')" data-page="categories" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600">
-        <i class="bi bi-tags text-base"></i> Catégories
-      </a>
-      <a href="#" onclick="showPage('promotions')" data-page="promotions" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600">
-        <i class="bi bi-percent text-base"></i> Promotions
-      </a>
-      <p class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold px-3 mb-2 mt-5">Fournisseurs</p>
-      <a href="#" onclick="showPage('suppliers')" data-page="suppliers" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600">
-        <i class="bi bi-people text-base"></i> Fournisseurs
+      <p class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold px-3 mb-2 mt-5">Modération</p>
+      <a href="#" onclick="showPage('reviews')" data-page="reviews" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600">
+        <i class="bi bi-star text-base"></i> Avis
+        <span id="revPageBadge" class="ml-auto min-w-[20px] h-5 px-1.5 bg-amber-500 text-white text-[10px] rounded-full hidden items-center justify-center font-bold">0</span>
       </a>
       <p class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold px-3 mb-2 mt-5">Analyse</p>
-      <a href="#" onclick="showPage('visitors')" data-page="visitors" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600">
-        <i class="bi bi-bar-chart-line text-base"></i> Visiteurs
-      </a>
       <a href="#" onclick="showPage('stats')" data-page="stats" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600">
         <i class="bi bi-graph-up text-base"></i> Statistiques
       </a>
+      <a href="#" onclick="showPage('visitors')" data-page="visitors" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600">
+        <i class="bi bi-bar-chart-line text-base"></i> Activité
+      </a>
       <p class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold px-3 mb-2 mt-5">Système</p>
+      <a href="#" onclick="showPage('audit')" data-page="audit" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600">
+        <i class="bi bi-journal-text text-base"></i> Journal d'audit
+      </a>
       <a href="#" onclick="showPage('settings')" data-page="settings" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600">
         <i class="bi bi-gear text-base"></i> Paramètres
       </a>
@@ -126,6 +149,7 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(8
         <div class="flex items-center gap-2 pl-3 border-l border-slate-200">
           <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center text-white text-sm font-bold">A</div>
           <span class="text-sm font-medium text-slate-700 hidden sm:block">Admin</span>
+          <span id="roleChip" class="hidden text-[10px] font-bold px-2 py-0.5 rounded-full bg-primary-100 text-primary-700">ADMIN</span>
           <button onclick="handleLogout()" class="p-1.5 rounded-lg hover:bg-red-50 text-slate-400 hover:text-red-500 transition" title="Déconnexion">
             <i class="bi bi-box-arrow-right text-lg"></i>
           </button>
@@ -138,6 +162,8 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(8
       <!-- DASHBOARD PAGE -->
       <div id="page-dashboard" class="page-content">
         <div id="dashStats" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-5 gap-4 mb-6"></div>
+        <h3 class="font-semibold text-slate-700 mb-3">Supervision <span class="text-xs font-normal text-slate-400">(temps réel, toutes données réelles)</span></h3>
+        <div id="overviewRow" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-6"></div>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-100">
             <h3 class="font-semibold text-slate-700 mb-4">Commandes par statut</h3>
@@ -173,6 +199,33 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(8
         </div>
       </div>
 
+      <!-- PAYMENTS PAGE -->
+      <div id="page-payments" class="page-content hidden">
+        <div class="flex flex-wrap gap-2 mb-4" role="group" aria-label="Filtrer les paiements">
+          <button onclick="filterPayments('', event)" class="pay-filter active px-4 py-2 rounded-lg text-sm font-medium border border-slate-200 bg-primary-600 text-white transition">Tous</button>
+          <button onclick="filterPayments('EN_ATTENTE', event)" class="pay-filter px-4 py-2 rounded-lg text-sm font-medium border border-slate-200 bg-white text-slate-600 transition">En attente</button>
+          <button onclick="filterPayments('REUSSIE', event)" class="pay-filter px-4 py-2 rounded-lg text-sm font-medium border border-slate-200 bg-white text-slate-600 transition">Réussis</button>
+          <button onclick="filterPayments('ECHOUEE', event)" class="pay-filter px-4 py-2 rounded-lg text-sm font-medium border border-slate-200 bg-white text-slate-600 transition">Échoués</button>
+          <button onclick="filterPayments('ANNULEE', event)" class="pay-filter px-4 py-2 rounded-lg text-sm font-medium border border-slate-200 bg-white text-slate-600 transition">Remboursés</button>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+          <div id="paymentsTable" class="overflow-x-auto"></div>
+        </div>
+        <div id="payPagination" class="flex justify-center gap-2 mt-5"></div>
+      </div>
+
+      <!-- SHIPMENTS PAGE -->
+      <div id="page-shipments" class="page-content hidden">
+        <div class="flex flex-wrap gap-2 mb-4" role="group" aria-label="Filtrer les expéditions">
+          <button onclick="filterShipments('active', event)" class="ship-filter active px-4 py-2 rounded-lg text-sm font-medium border border-slate-200 bg-primary-600 text-white transition">En cours</button>
+          <button onclick="filterShipments('incidents', event)" class="ship-filter px-4 py-2 rounded-lg text-sm font-medium border border-slate-200 bg-white text-slate-600 transition">Incidents</button>
+          <button onclick="filterShipments('all', event)" class="ship-filter px-4 py-2 rounded-lg text-sm font-medium border border-slate-200 bg-white text-slate-600 transition">Toutes</button>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+          <div id="shipmentsTable" class="overflow-x-auto"></div>
+        </div>
+      </div>
+
       <!-- NOTIFICATIONS PAGE -->
       <div id="page-notifications" class="page-content hidden">
         <div class="flex flex-wrap justify-between items-center gap-3 mb-4">
@@ -181,7 +234,7 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(8
             <span id="notifUnreadChip" class="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-red-50 text-red-600 hidden">0 non lue(s)</span>
           </div>
           <div class="flex flex-wrap items-center gap-2">
-            <button onclick="openNotifCompose()" class="px-4 py-2 bg-primary-600 text-white rounded-xl text-sm font-semibold hover:bg-primary-700 transition flex items-center gap-2">
+            <button onclick="openNotifCompose()" data-money class="px-4 py-2 bg-primary-600 text-white rounded-xl text-sm font-semibold hover:bg-primary-700 transition flex items-center gap-2">
               <i class="bi bi-megaphone"></i> Nouveau message
             </button>
             <button onclick="notifReadAll()" class="px-4 py-2 bg-green-50 text-green-700 rounded-xl text-sm font-semibold hover:bg-green-100 transition flex items-center gap-2">
@@ -228,6 +281,20 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(8
           <div id="notifCenterList" class="divide-y divide-slate-100"></div>
         </div>
         <div id="notifPagination" class="flex justify-center gap-2 mt-5"></div>
+      </div>
+
+      <!-- MESSAGES PAGE (supervision lecture seule, contenus masqués) -->
+      <div id="page-messages" class="page-content hidden">
+        <p class="text-xs text-slate-400 mb-4">Supervision : volumes et non-lus uniquement. Le contenu des messages reste privé (téléphones masqués).</p>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6" id="msgStatCards"></div>
+        <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden mb-6">
+          <div id="convosTable" class="overflow-x-auto"></div>
+        </div>
+        <div id="convoPagination" class="flex justify-center gap-2 mt-5"></div>
+        <h3 class="font-semibold text-slate-700 mt-8 mb-3">Offres en attente (toutes conversations)</h3>
+        <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+          <div id="pendingOffersTable" class="overflow-x-auto"></div>
+        </div>
       </div>
 
       <!-- CATEGORIES PAGE -->
@@ -305,43 +372,42 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(8
         </div>
       </div>
 
-      <!-- VISITORS PAGE -->
+      <!-- REVIEWS PAGE -->
+      <div id="page-reviews" class="page-content hidden">
+        <div class="flex flex-wrap gap-2 mb-4" role="group" aria-label="Filtrer les avis">
+          <button onclick="filterReviews('pending', event)" class="rev-filter active px-4 py-2 rounded-lg text-sm font-medium border border-slate-200 bg-primary-600 text-white transition">En attente</button>
+          <button onclick="filterReviews('all', event)" class="rev-filter px-4 py-2 rounded-lg text-sm font-medium border border-slate-200 bg-white text-slate-600 transition">Tous</button>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+          <div id="reviewsTable" class="overflow-x-auto"></div>
+        </div>
+      </div>
+
+      <!-- VISITORS PAGE : aucune mesure d'audience côté plateforme (honnêteté : pas de faux chiffres) -->
       <div id="page-visitors" class="page-content hidden">
+        <p class="text-xs text-slate-400 mb-4">Aucun système de mesure d'audience n'est installé : cette page montre l'activité commandes réelle, pas des visites.</p>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
           <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-100">
-            <p class="text-sm text-slate-500">Visites aujourd'hui</p>
-            <p class="text-3xl font-bold text-slate-800 mt-1" id="visitorsToday">247</p>
-            <p class="text-xs text-green-500 mt-1"><i class="bi bi-arrow-up"></i> +12% vs hier</p>
+            <p class="text-sm text-slate-500">Commandes aujourd'hui</p>
+            <p class="text-3xl font-bold text-slate-800 mt-1" id="visitorsToday">—</p>
           </div>
           <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-100">
-            <p class="text-sm text-slate-500">Cette semaine</p>
-            <p class="text-3xl font-bold text-slate-800 mt-1" id="visitorsWeek">1 842</p>
-            <p class="text-xs text-green-500 mt-1"><i class="bi bi-arrow-up"></i> +8% vs semaine dernière</p>
+            <p class="text-sm text-slate-500">Commandes (7 jours)</p>
+            <p class="text-3xl font-bold text-slate-800 mt-1" id="visitorsWeek">—</p>
           </div>
           <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-100">
-            <p class="text-sm text-slate-500">Ce mois</p>
-            <p class="text-3xl font-bold text-slate-800 mt-1" id="visitorsMonth">6 321</p>
-            <p class="text-xs text-red-500 mt-1"><i class="bi bi-arrow-down"></i> -3% vs mois dernier</p>
+            <p class="text-sm text-slate-500">Commandes (total)</p>
+            <p class="text-3xl font-bold text-slate-800 mt-1" id="visitorsMonth">—</p>
           </div>
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-100">
-            <h3 class="font-semibold text-slate-700 mb-4">Visites quotidiennes (7j)</h3>
+            <h3 class="font-semibold text-slate-700 mb-4">Commandes quotidiennes (7j)</h3>
             <canvas id="chartVisitorsDay" height="200"></canvas>
           </div>
           <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-100">
-            <h3 class="font-semibold text-slate-700 mb-4">Pages vues vs Visiteurs uniques</h3>
+            <h3 class="font-semibold text-slate-700 mb-4">Revenus quotidiens (7j)</h3>
             <canvas id="chartPagesVsVisitors" height="200"></canvas>
-          </div>
-        </div>
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-100">
-            <h3 class="font-semibold text-slate-700 mb-4">Top pages vues</h3>
-            <div id="topPages"></div>
-          </div>
-          <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-100">
-            <h3 class="font-semibold text-slate-700 mb-4">Sources de trafic</h3>
-            <canvas id="chartTrafficSource" height="200"></canvas>
           </div>
         </div>
       </div>
@@ -381,7 +447,7 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(8
         <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-100 mb-6">
           <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
             <h3 class="font-semibold text-slate-700">Règles de commission</h3>
-            <button onclick="openRuleModal()" class="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white text-xs font-bold rounded-xl transition">+ Nouvelle règle</button>
+            <button data-money onclick="openRuleModal()" class="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white text-xs font-bold rounded-xl transition">+ Nouvelle règle</button>
           </div>
           <p class="text-xs text-slate-400 mb-3">Le taux est figé par commande au moment de la vente : changer de règle ne modifie jamais l'historique.</p>
           <div id="rulesTable"></div>
@@ -402,52 +468,48 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(8
         </div>
       </div>
 
+      <!-- AUDIT PAGE -->
+      <div id="page-audit" class="page-content hidden">
+        <div class="flex flex-wrap items-center gap-2 mb-4">
+          <input id="auditSearch" type="text" placeholder="Filtrer par action (ex. ORDER_REFUNDED)..." oninput="auditPage=1;loadAudit()" aria-label="Filtrer par action" class="px-4 py-2 rounded-xl border border-slate-200 text-sm w-72">
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+          <div id="auditTable" class="overflow-x-auto"></div>
+        </div>
+        <div id="auditPagination" class="flex justify-center gap-2 mt-5"></div>
+      </div>
+
       <!-- SETTINGS PAGE -->
       <div id="page-settings" class="page-content hidden">
         <div class="max-w-2xl space-y-6">
           <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-100">
-            <h3 class="font-semibold text-slate-700 mb-4">Profil administrateur</h3>
+            <h3 class="font-semibold text-slate-700 mb-1">Profil administrateur</h3>
+            <p class="text-xs text-slate-400 mb-4">Identité résolue par le serveur depuis votre session.</p>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label class="block text-sm font-medium text-slate-600 mb-1">Nom d'utilisateur</label>
-                <input type="text" value="admin" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm" disabled>
+                <label class="block text-sm font-medium text-slate-600 mb-1" for="setUsername">Nom d'utilisateur</label>
+                <input id="setUsername" type="text" value="—" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm" disabled>
               </div>
               <div>
-                <label class="block text-sm font-medium text-slate-600 mb-1">Rôle</label>
-                <input type="text" value="SUPER_ADMIN" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm" disabled>
+                <label class="block text-sm font-medium text-slate-600 mb-1" for="setRole">Rôle</label>
+                <input id="setRole" type="text" value="—" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm" disabled>
               </div>
             </div>
+            <div id="permMatrix" class="mt-4 text-xs text-slate-500"></div>
           </div>
           <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-100">
-            <h3 class="font-semibold text-slate-700 mb-4">Modifier le mot de passe</h3>
-            <div class="space-y-3">
-              <input type="password" placeholder="Mot de passe actuel" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm">
-              <input type="password" placeholder="Nouveau mot de passe" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm">
-              <input type="password" placeholder="Confirmer le mot de passe" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm">
+            <h3 class="font-semibold text-slate-700 mb-4">Modifier mon mot de passe</h3>
+            <form onsubmit="return saveAdminPassword(event)" class="space-y-3">
+              <label class="block text-xs font-medium text-slate-500" for="apCurrent">Mot de passe actuel</label>
+              <input id="apCurrent" type="password" required autocomplete="current-password" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm">
+              <label class="block text-xs font-medium text-slate-500" for="apNew">Nouveau mot de passe (min 8 caractères)</label>
+              <input id="apNew" type="password" required minlength="8" autocomplete="new-password" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm">
               <button class="px-5 py-2.5 bg-primary-600 text-white rounded-xl text-sm font-semibold hover:bg-primary-700 transition">Mettre à jour</button>
-            </div>
+            </form>
           </div>
           <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-100">
-            <h3 class="font-semibold text-slate-700 mb-4">Informations boutique</h3>
-            <div class="space-y-3">
-              <div>
-                <label class="block text-sm font-medium text-slate-600 mb-1">Nom de la boutique</label>
-                <input type="text" value="MBOA STYLE" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm">
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-slate-600 mb-1">Téléphone WhatsApp</label>
-                <input type="text" value="+237 6XX XXX XXX" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm">
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-slate-600 mb-1">Email de contact</label>
-                <input type="email" value="contact@mboastyle.cm" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm">
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-slate-600 mb-1">Adresse</label>
-                <textarea class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm" rows="2">Yaoundé, Cameroun</textarea>
-              </div>
-              <button class="px-5 py-2.5 bg-primary-600 text-white rounded-xl text-sm font-semibold hover:bg-primary-700 transition">Enregistrer</button>
-            </div>
+            <h3 class="font-semibold text-slate-700 mb-1">Clients</h3>
+            <p class="text-sm text-slate-500">MBOA STYLE n'a pas de comptes clients : les acheteurs sont des <strong>invités</strong> identifiés par téléphone (commandes, messages, suivi). Aucune donnée à administrer ici — voir Commandes et Messages.</p>
           </div>
           <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-100">
             <h3 class="font-semibold text-slate-700 mb-4">Journal d'activité récent</h3>
@@ -560,6 +622,10 @@ async function handleLogin(e) {
     if (data.token) {
       token = data.token;
       localStorage.setItem('admin_token', token);
+      if (data.role) {
+        adminRole = data.role;
+        localStorage.setItem('admin_role', adminRole);
+      }
       document.getElementById('loginPage').classList.add('hidden');
       document.getElementById('appShell').classList.remove('hidden');
       document.getElementById('loginError').classList.add('hidden');
@@ -574,7 +640,9 @@ async function handleLogin(e) {
 
 function handleLogout() {
   token = '';
+  adminRole = '';
   localStorage.removeItem('admin_token');
+  localStorage.removeItem('admin_role');
   document.getElementById('appShell').classList.add('hidden');
   document.getElementById('loginPage').classList.remove('hidden');
 }
@@ -597,16 +665,21 @@ function showPage(page) {
     if (el === activeLink) el.setAttribute('aria-current', 'page');
     else el.removeAttribute('aria-current');
   });
-  const titles = { dashboard:'Tableau de bord', orders:'Commandes', notifications:'Notifications', categories:'Catégories', promotions:'Promotions', suppliers:'Fournisseurs', visitors:'Visiteurs', stats:'Statistiques', settings:'Paramètres' };
+  const titles = { dashboard:'Vue générale', orders:'Commandes', payments:'Paiements', shipments:'Expéditions', messages:'Messages', notifications:'Notifications', reviews:'Avis', categories:'Catégories & Produits', promotions:'Promotions', suppliers:'Fournisseurs', visitors:'Activité commandes', stats:'Statistiques', audit:'Journal d\'audit', settings:'Paramètres' };
   document.getElementById('pageTitle').textContent = titles[page] || 'MBOA STYLE';
-  if (page === 'dashboard') loadDashboardData();
+  if (page === 'dashboard') { loadDashboardData(); loadOverview(); }
   if (page === 'orders') loadOrders();
+  if (page === 'payments') loadPayments();
+  if (page === 'shipments') loadShipments();
+  if (page === 'messages') loadMessages();
+  if (page === 'reviews') loadReviews();
   if (page === 'notifications') loadNotifCenter();
   if (page === 'categories') { productCategoryFilter = null; loadCategories(); }
   if (page === 'promotions') loadPromotions();
   if (page === 'suppliers') loadSuppliers();
   if (page === 'visitors') loadVisitors();
   if (page === 'stats') { loadStats(); loadFinance(); }
+  if (page === 'audit') loadAudit();
   if (page === 'settings') loadSettings();
 }
 
@@ -1231,7 +1304,7 @@ async function loadAdminPayment(orderId) {
     box.innerHTML = `<div class="rounded-xl border border-slate-100 p-3 space-y-1.5">
       <div class="flex items-center justify-between gap-2"><p class="text-xs font-bold uppercase tracking-wider text-slate-400">Paiement ${formatMoney(p.amount)}</p>${badge}</div>
       ${p.transactionRef ? `<p class="text-xs">Référence : <strong>${p.transactionRef}</strong></p>` : '<p class="text-xs text-slate-400">Aucune référence transmise.</p>'}
-      ${p.status === 'EN_ATTENTE' ? `<div class="flex gap-2 pt-1">
+      ${p.status === 'EN_ATTENTE' && isMoneyAllowed() ? `<div class="flex gap-2 pt-1">
         <button onclick="verifyPayment(${p.id})" class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-xs font-bold rounded-lg transition">Vérifier</button>
         <button onclick="failPayment(${p.id})" class="px-3 py-1.5 border border-slate-200 hover:border-red-300 hover:text-red-600 text-xs font-bold rounded-lg transition">Rejeter</button>
       </div>` : ''}
@@ -1239,13 +1312,29 @@ async function loadAdminPayment(orderId) {
   } catch (e) { box.innerHTML = '<p class="text-xs text-red-500">Paiement illisible.</p>'; }
 }
 async function verifyPayment(id) {
-  try { await api('/api/payments', { method: 'POST', body: JSON.stringify({ action: 'verify', id }) }); notifyMsg('Paiement confirmé'); viewOrder(currentOrderId()); }
-  catch (e) { notifyMsg('Erreur: ' + e.message); }
+  confirmAction('Confirmer ce paiement ?', 'Le paiement sera marqué RÉUSSI et le fournisseur notifié. Action journalisée et irréversible ici.', 'Confirmer', async () => {
+    try { await api('/api/payments', { method: 'POST', body: JSON.stringify({ action: 'verify', id }) }); notifyMsg('Paiement confirmé', 'success'); viewOrder(currentOrderId()); }
+    catch (e) { notifyMsg('Erreur: ' + e.message); }
+  });
 }
 async function failPayment(id) {
-  const reason = prompt('Motif du rejet :') || '';
-  try { await api('/api/payments', { method: 'POST', body: JSON.stringify({ action: 'fail', id, reason }) }); notifyMsg('Paiement rejeté', 'info'); viewOrder(currentOrderId()); }
-  catch (e) { notifyMsg('Erreur: ' + e.message); }
+  openModal(`
+    <div class="p-6">
+      <h3 class="text-lg font-bold mb-2">Rejeter ce paiement ?</h3>
+      <p class="text-sm text-slate-500 mb-3">Le paiement sera marqué ÉCHOUÉ. Le client pourra soumettre une nouvelle référence.</p>
+      <label class="block text-xs font-medium text-slate-500 mb-1">Motif (optionnel)</label>
+      <input id="failReason" maxlength="255" placeholder="Ex : référence introuvable" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm mb-4">
+      <div class="flex gap-3">
+        <button onclick="closeModal()" class="flex-1 py-2.5 bg-slate-100 text-slate-600 rounded-xl text-sm font-semibold hover:bg-slate-200 transition">Annuler</button>
+        <button id="failGo" class="flex-1 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl text-sm font-semibold transition">Rejeter</button>
+      </div>
+    </div>`);
+  document.getElementById('failGo').onclick = async () => {
+    const reason = document.getElementById('failReason').value || '';
+    closeModal();
+    try { await api('/api/payments', { method: 'POST', body: JSON.stringify({ action: 'fail', id, reason }) }); notifyMsg('Paiement rejeté', 'info'); viewOrder(currentOrderId()); }
+    catch (e) { notifyMsg('Erreur: ' + e.message); }
+  };
 }
 function currentOrderId() {
   return window._currentOrderId || 0;
@@ -1260,9 +1349,10 @@ async function advanceOrder(id) {  const o = orders.find(x => x.id === id);
 }
 
 async function cancelOrder(id) {
-  if (!confirm('Annuler cette commande ?')) return;
-  await api('/api/orders', { method: 'PUT', body: JSON.stringify({ id, status: 'ANNULEE' }) });
-  loadOrders();
+  confirmAction('Annuler cette commande ?', 'La commande passera à ANNULÉE (contre-passation si comptabilisée, expédition annulée).', 'Annuler la commande', async () => {
+    try { await api('/api/orders', { method: 'PUT', body: JSON.stringify({ id, status: 'ANNULEE' }) }); loadOrders(); notifyMsg('Commande annulée', 'success'); }
+    catch (e) { notifyMsg('Erreur: ' + e.message); }
+  }, true);
 }
 
 // =====================================================================
@@ -1485,7 +1575,7 @@ async function saveProduct(e, id) {
 }
 
 async function deleteProduct(id) {
-  if (!confirm('Supprimer ce produit et toutes ses images ?')) return;
+  confirmAction('Supprimer ce produit ?', 'Le produit et ses images seront supprimés (réservé ADMIN+).', 'Supprimer', async () => {
   try {
     const res = await api('/api/products?id=' + id, { method: 'DELETE' });
     if (res && res.error) {
@@ -1497,6 +1587,7 @@ async function deleteProduct(id) {
   } catch (e) {
     notifyMsg('Erreur lors de la suppression : ' + e.message);
   }
+  }, true);
 }
 
 // =====================================================================
@@ -1583,11 +1674,12 @@ async function setImagePrimary(productId, imageId) {
 }
 
 async function deleteProductImage(productId, imageId) {
-  if (!confirm('Supprimer cette image ?')) return;
+  confirmAction('Supprimer cette image ?', 'L\'image sera définitivement retirée du produit.', 'Supprimer', async () => {
   try {
     await api('/api/product-images?id=' + imageId, { method: 'DELETE' });
     openImageManager(productId);
   } catch (e) { notifyMsg('Erreur: ' + e.message); }
+  }, true);
 }
 
 // =====================================================================
@@ -1851,11 +1943,12 @@ async function toggleCategoryStatus(id) {
 
 async function deleteCategory(id) {
   const c = findCategoryEverywhere(id);
-  if (!confirm('Supprimer la catégorie « ' + (c ? c.name : id) + ' » ?\n(Les catégories avec sous-catégories ou produits ne peuvent pas être supprimées.)')) return;
+  confirmAction('Supprimer la catégorie « ' + (c ? c.name : id) + ' » ?', 'Les catégories avec sous-catégories ou produits ne peuvent pas être supprimées (réservé ADMIN+).', 'Supprimer', async () => {
   try {
     await apiStrict('/api/categories?id=' + id, { method: 'DELETE' });
     loadCategories();
   } catch (err) { notifyMsg('Suppression impossible : ' + err.message); }
+  }, true);
 }
 
 // =====================================================================
@@ -1941,9 +2034,10 @@ async function savePromotion(e, id) {
 }
 
 async function deletePromotion(id) {
-  if (!confirm('Supprimer cette promotion ?')) return;
-  await api('/api/promotions?id=' + id, { method: 'DELETE' });
-  loadPromotions();
+  confirmAction('Supprimer cette promotion ?', 'La promotion sera définitivement retirée (réservé ADMIN+).', 'Supprimer', async () => {
+    try { await api('/api/promotions?id=' + id, { method: 'DELETE' }); loadPromotions(); notifyMsg('Promotion supprimée', 'success'); }
+    catch (e) { notifyMsg('Erreur: ' + e.message); }
+  }, true);
 }
 
 // =====================================================================
@@ -1993,8 +2087,8 @@ function renderSuppliers() {
           <td class="px-4 py-3 font-semibold">${(s.commissionRate || 0)}%</td>
           <td class="px-4 py-3"><span class="px-2 py-1 rounded-full text-xs font-medium ${s.active ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-500'}">${s.active ? 'Actif' : 'Inactif'}</span></td>
           <td class="px-4 py-3"><div class="flex gap-1">
-            <button onclick="toggleSupplier(${s.id}, ${s.active ? 'false' : 'true'})" class="p-1.5 rounded-lg hover:bg-amber-50 text-amber-500" title="${s.active ? 'Désactiver' : 'Activer'}"><i class="bi ${s.active ? 'bi-pause-circle' : 'bi-play-circle'} text-sm"></i></button>
-            <button onclick="deleteSupplier(${s.id})" class="p-1.5 rounded-lg hover:bg-red-50 text-red-500" title="Supprimer"><i class="bi bi-trash text-sm"></i></button>
+            <button onclick="toggleSupplier(${s.id}, ${s.active ? 'false' : 'true'})" class="p-1.5 rounded-lg hover:bg-amber-50 text-amber-500" title="${s.active ? 'Suspendre' : 'Activer'}"><i class="bi ${s.active ? 'bi-pause-circle' : 'bi-play-circle'} text-sm"></i></button>
+            ${isDestructiveAllowed() ? `<button onclick="deleteSupplier(${s.id})" class="p-1.5 rounded-lg hover:bg-red-50 text-red-500" title="Supprimer"><i class="bi bi-trash text-sm"></i></button>` : ''}
           </div></td>
         </tr>`).join('')}</tbody></table>`;
 }
@@ -2044,37 +2138,57 @@ async function saveSupplier(e) {
 }
 
 async function toggleSupplier(id, active) {
-  await api('/api/suppliers', { method: 'PUT', body: JSON.stringify({ id, active }) });
-  loadSuppliers();
+  if (!active) {
+    confirmAction('Suspendre ce fournisseur ?', 'Sa boutique sera temporairement désactivée. Cette action est journalisée.', 'Suspendre', async () => {
+      try { await api('/api/suppliers', { method: 'PUT', body: JSON.stringify({ id, active }) }); loadSuppliers(); notifyMsg('Fournisseur suspendu', 'success'); }
+      catch (e) { notifyMsg('Erreur: ' + e.message); }
+    }, true);
+    return;
+  }
+  try { await api('/api/suppliers', { method: 'PUT', body: JSON.stringify({ id, active }) }); loadSuppliers(); }
+  catch (e) { notifyMsg('Erreur: ' + e.message); }
 }
 
 async function deleteSupplier(id) {
-  if (!confirm('Supprimer ce fournisseur ?')) return;
-  await api('/api/suppliers?id=' + id, { method: 'DELETE' });
-  loadSuppliers();
+  confirmAction('Supprimer ce fournisseur ?', 'Suppression définitive (réservée ADMIN+). Préférez la suspension si un historique existe.', 'Supprimer', async () => {
+    try { await api('/api/suppliers?id=' + id, { method: 'DELETE' }); loadSuppliers(); notifyMsg('Fournisseur supprimé', 'success'); }
+    catch (e) { notifyMsg('Erreur: ' + e.message); }
+  }, true);
 }
 
 // =====================================================================
 // VISITORS
 // =====================================================================
 function loadVisitors() {
-  // Visitor data is analytics — render with mock since no endpoint
+  // Pas de mesure d'audience : activité commandes réelle (ordres 7/30 j).
   document.getElementById('visitorsToday').textContent = '—';
   document.getElementById('visitorsWeek').textContent = '—';
   document.getElementById('visitorsMonth').textContent = '—';
   try {
     api('/api/admin/stats').then(stats => {
-      if (!stats) return;
-      if (stats.ordersByDay) {
-        if (window._chartVisitorsDay) window._chartVisitorsDay.destroy();
-        window._chartVisitorsDay = new Chart(document.getElementById('chartVisitorsDay'), {
-          type: 'bar',
-          data: { labels: stats.ordersByDay.slice(-7).map(d => d.day), datasets: [{ label: 'Commandes', data: stats.ordersByDay.slice(-7).map(d => d.count || 0), backgroundColor: '#087443' }] },
-          options: { responsive: true, plugins: { legend: { display: false } } }
-        });
-      }
+      if (!stats || !stats.ordersByDay) return;
+      const last7 = stats.ordersByDay.slice(-7);
+      const sum = a => last7.reduce((t, d) => t + (d[a] || 0), 0);
+      const dash30 = (dashboard && dashboard.todayOrders) || 0;
+      document.getElementById('visitorsToday').textContent = dash30;
+      document.getElementById('visitorsWeek').textContent = sum('count');
+      if (window._chartVisitorsDay) window._chartVisitorsDay.destroy();
+      window._chartVisitorsDay = new Chart(document.getElementById('chartVisitorsDay'), {
+        type: 'bar',
+        data: { labels: last7.map(d => d.day), datasets: [{ label: 'Commandes', data: last7.map(d => d.count || 0), backgroundColor: '#087443' }] },
+        options: { responsive: true, plugins: { legend: { display: false } } }
+      });
+      if (window._chartPagesVsVisitors) window._chartPagesVsVisitors.destroy();
+      window._chartPagesVsVisitors = new Chart(document.getElementById('chartPagesVsVisitors'), {
+        type: 'line',
+        data: { labels: last7.map(d => d.day), datasets: [{ label: 'Revenus', data: last7.map(d => d.revenue || 0), borderColor: '#D4A72C', backgroundColor: 'rgba(212,167,44,0.12)', fill: true, tension: 0.4 }] },
+        options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+      });
     }).catch(() => {});
-  } catch {}
+    api('/api/admin/dashboard').then(d => {
+      if (d && d.totalOrders != null) document.getElementById('visitorsMonth').textContent = d.totalOrders;
+    }).catch(() => {});
+  } catch (e) {}
 }
 
 // =====================================================================
@@ -2121,7 +2235,7 @@ async function loadFinance() {
   try {
     const rules = await api('/api/admin/monetization/rules');
     document.getElementById('rulesTable').innerHTML = `<div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="text-left text-slate-500 text-xs uppercase bg-slate-50"><th class="px-4 py-2">Règle</th><th class="px-4 py-2">Commission</th><th class="px-4 py-2">Frais fixes</th><th class="px-4 py-2">Statut</th><th class="px-4 py-2"></th></tr></thead><tbody>` +
-      rules.map(r => `<tr class="border-t border-slate-50"><td class="px-4 py-2 font-medium">${r.name}</td><td class="px-4 py-2 tabular-nums">${(r.commissionBps / 100).toFixed(2)} %</td><td class="px-4 py-2 tabular-nums">${formatMoney(r.fixedFee || 0)}</td><td class="px-4 py-2">${r.active ? '<span class="text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">ACTIVE</span>' : '<span class="text-xs font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">inactive</span>'}</td><td class="px-4 py-2 text-right"><button onclick="toggleRule(${r.id},${r.active ? 'false' : 'true'})" class="text-xs font-bold text-primary-700 hover:underline">${r.active ? 'Désactiver' : 'Activer'}</button></td></tr>`).join('') + `</tbody></table></div>`;
+      rules.map(r => `<tr class="border-t border-slate-50"><td class="px-4 py-2 font-medium">${r.name}</td><td class="px-4 py-2 tabular-nums">${(r.commissionBps / 100).toFixed(2)} %</td><td class="px-4 py-2 tabular-nums">${formatMoney(r.fixedFee || 0)}</td><td class="px-4 py-2">${r.active ? '<span class="text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">ACTIVE</span>' : '<span class="text-xs font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">inactive</span>'}</td><td class="px-4 py-2 text-right">${isMoneyAllowed() ? `<button onclick="toggleRule(${r.id},${r.active ? 'false' : 'true'})" class="text-xs font-bold text-primary-700 hover:underline">${r.active ? 'Désactiver' : 'Activer'}</button>` : '<span class="text-xs text-slate-300">Lecture seule</span>'}</td></tr>`).join('') + `</tbody></table></div>`;
   } catch (e) { document.getElementById('rulesTable').innerHTML = '<p class="text-sm text-red-500">Chargement impossible.</p>'; }
 }
 async function toggleRule(id, active) {
@@ -2151,10 +2265,320 @@ async function saveRule(e) {
 }
 
 // =====================================================================
+// CONTROL CENTER (Phase 14) : supervision + rôles + audit
+// =====================================================================
+let adminRole = localStorage.getItem('admin_role') || '';
+let overview = {};
+let payFilter = '', payPage = 1; const payLimit = 20;
+let shipFilter = 'active';
+let convoPage = 1; const convoLimit = 20;
+let revFilter = 'pending';
+let auditPage = 1; const auditLimit = 20;
+
+function isMoneyAllowed() { return adminRole === 'ADMIN' || adminRole === 'SUPER_ADMIN'; }
+function isDestructiveAllowed() { return adminRole === 'ADMIN' || adminRole === 'SUPER_ADMIN'; }
+
+async function loadMe() {
+  try {
+    const me = await api('/api/admin/me');
+    if (me && me.role) {
+      adminRole = me.role;
+      localStorage.setItem('admin_role', adminRole);
+    }
+  } catch (e) {}
+  applyRoleUI();
+}
+
+function applyRoleUI() {
+  document.querySelectorAll('[data-money]').forEach(el => {
+    el.style.display = isMoneyAllowed() ? '' : 'none';
+  });
+  document.querySelectorAll('[data-destructive]').forEach(el => {
+    el.style.display = isDestructiveAllowed() ? '' : 'none';
+  });
+  const badge = document.getElementById('roleBadge');
+  if (badge) badge.textContent = adminRole || 'ADMIN';
+  const chip = document.getElementById('roleChip');
+  if (chip) {
+    chip.textContent = adminRole || 'ADMIN';
+    chip.classList.remove('hidden');
+  }
+}
+
+/** Confirmation Design System (jamais de confirm()/alert() natifs ici). */
+function confirmAction(title, text, confirmLabel, onConfirm, danger) {
+  openModal(`
+    <div class="p-6">
+      <h3 class="text-lg font-bold mb-2">${title}</h3>
+      <p class="text-sm text-slate-500 mb-6">${text}</p>
+      <div class="flex gap-3">
+        <button onclick="closeModal()" class="flex-1 py-2.5 bg-slate-100 text-slate-600 rounded-xl text-sm font-semibold hover:bg-slate-200 transition">Annuler</button>
+        <button id="confirmGo" class="flex-1 py-2.5 ${danger ? 'bg-red-600 hover:bg-red-700' : 'bg-primary-600 hover:bg-primary-700'} text-white rounded-xl text-sm font-semibold transition">${confirmLabel}</button>
+      </div>
+    </div>`);
+  document.getElementById('confirmGo').onclick = async () => { closeModal(); await onConfirm(); };
+}
+
+function setFilterButtons(cls, btn) {
+  document.querySelectorAll('.' + cls).forEach(b => {
+    b.classList.remove('bg-primary-600', 'text-white', 'active');
+    b.classList.add('bg-white', 'text-slate-600');
+  });
+  if (btn) {
+    btn.classList.add('bg-primary-600', 'text-white', 'active');
+    btn.classList.remove('bg-white', 'text-slate-600');
+  }
+}
+
+function sideBadge(id, n) {
+  const b = document.getElementById(id);
+  if (!b) return;
+  b.textContent = n > 99 ? '99+' : n;
+  b.classList.toggle('hidden', !n);
+  b.classList.toggle('flex', !!n);
+}
+
+/* ---------- Vue générale : supervision ---------- */
+async function loadOverview() {
+  try {
+    overview = await api('/api/admin/overview');
+    if (!overview) return;
+    const card = (label, val, sub, color) => `
+      <div class="bg-white rounded-xl p-4 shadow-sm border border-slate-100">
+        <p class="text-xs text-slate-500">${label}</p>
+        <p class="text-2xl font-bold mt-1 ${color || 'text-slate-800'}">${val}</p>
+        ${sub ? `<p class="text-[11px] text-slate-400 mt-0.5">${sub}</p>` : ''}
+      </div>`;
+    document.getElementById('overviewRow').innerHTML =
+      card('Clients (tél. uniques)', overview.distinctClients || 0, 'invités, sans comptes') +
+      card('Messages non lus', overview.unreadMessages || 0, (overview.conversations || 0) + ' conversations', (overview.unreadMessages || 0) ? 'text-indigo-600' : '') +
+      card('Offres en attente', overview.pendingOffers || 0, 'négociations') +
+      card('Paiements en attente', overview.pendingPayments || 0, (overview.failedPayments || 0) + ' échoués', (overview.failedPayments || 0) ? 'text-red-500' : '') +
+      card('Expéditions en cours', overview.activeShipments || 0, (overview.shipmentIncidents || 0) + ' incident(s)', (overview.shipmentIncidents || 0) ? 'text-red-500' : '') +
+      card('À modérer', (overview.pendingReviews || 0) + (overview.pendingProducts || 0), 'avis + produits', ((overview.pendingReviews || 0) + (overview.pendingProducts || 0)) ? 'text-amber-600' : '');
+    sideBadge('payPageBadge', overview.pendingPayments || 0);
+    sideBadge('shipPageBadge', overview.shipmentIncidents || 0);
+    sideBadge('msgPageBadge', overview.unreadMessages || 0);
+    sideBadge('revPageBadge', overview.pendingReviews || 0);
+  } catch (e) { console.error('Overview error:', e); }
+}
+
+/* ---------- Paiements ---------- */
+async function loadPayments() {
+  const box = document.getElementById('paymentsTable');
+  box.innerHTML = '<p class="p-6 text-sm text-slate-400 text-center">Chargement des paiements…</p>';
+  try {
+    const res = await api('/api/admin/payments?status=' + encodeURIComponent(payFilter) + '&page=' + payPage + '&limit=' + payLimit);
+    const data = (res && res.data) || [];
+    const total = (res && res.total) || 0;
+    box.innerHTML = data.length === 0
+      ? '<p class="p-6 text-sm text-slate-400 text-center">Aucun paiement pour ce statut</p>'
+      : `<table class="w-full text-sm"><thead><tr class="text-left text-slate-500 text-xs uppercase bg-slate-50">
+          <th class="px-4 py-3">Commande</th><th class="px-4 py-3">Client</th><th class="px-4 py-3">Montant</th>
+          <th class="px-4 py-3">Méthode</th><th class="px-4 py-3">Référence</th><th class="px-4 py-3">Statut</th><th class="px-4 py-3">Date</th>
+        </tr></thead><tbody>${data.map(p => `
+        <tr class="table-row border-t border-slate-50">
+          <td class="px-4 py-3 font-mono text-xs">${notifEsc(p.orderNumber || ('#' + p.orderId))}</td>
+          <td class="px-4 py-3">${notifEsc(p.customer || '—')}</td>
+          <td class="px-4 py-3 font-semibold tabular-nums">${formatMoney(p.amount)}</td>
+          <td class="px-4 py-3 text-xs">${notifEsc(p.method || '—')}</td>
+          <td class="px-4 py-3 font-mono text-xs">${notifEsc(p.transactionRef || '—')}</td>
+          <td class="px-4 py-3">${p.status === 'REUSSIE' ? '<span class="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">Réussi</span>'
+            : p.status === 'EN_ATTENTE' ? '<span class="px-2 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-700">En attente</span>'
+            : p.status === 'ECHOUEE' ? '<span class="px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700">Échoué</span>'
+            : '<span class="px-2 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-500">Remboursé</span>'}</td>
+          <td class="px-4 py-3 text-xs text-slate-400">${formatDate(p.createdAt)}</td>
+        </tr>`).join('')}</tbody></table>`;
+    renderPayPagination(total);
+  } catch (e) {
+    box.innerHTML = '<p class="p-6 text-sm text-red-500 text-center">Impossible de charger les paiements. <button onclick="loadPayments()" class="font-semibold underline">Réessayer</button></p>';
+  }
+}
+function filterPayments(status, ev) { payFilter = status; payPage = 1; setFilterButtons('pay-filter', ev && ev.target); loadPayments(); }
+function payGoto(p) { payPage = Math.max(1, p); loadPayments(); }
+function renderPayPagination(total) {
+  const pages = Math.max(1, Math.ceil(total / payLimit));
+  const el = document.getElementById('payPagination');
+  if (pages <= 1) { el.innerHTML = ''; return; }
+  el.innerHTML = `<button onclick="payGoto(${payPage - 1})" ${payPage === 1 ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg border border-slate-200 text-sm bg-white disabled:opacity-40">Précédent</button>
+    <span class="text-sm text-slate-500 self-center">Page ${payPage} / ${pages} · ${total} paiement(s)</span>
+    <button onclick="payGoto(${payPage + 1})" ${payPage === pages ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg border border-slate-200 text-sm bg-white disabled:opacity-40">Suivant</button>`;
+}
+
+/* ---------- Expéditions ---------- */
+async function loadShipments() {
+  const box = document.getElementById('shipmentsTable');
+  box.innerHTML = '<p class="p-6 text-sm text-slate-400 text-center">Chargement des expéditions…</p>';
+  try {
+    const res = await api('/api/admin/shipments?filter=' + encodeURIComponent(shipFilter) + '&limit=100');
+    const data = (res && res.data) || [];
+    box.innerHTML = data.length === 0
+      ? '<p class="p-6 text-sm text-slate-400 text-center">Aucune expédition dans cette catégorie</p>'
+      : `<table class="w-full text-sm"><thead><tr class="text-left text-slate-500 text-xs uppercase bg-slate-50">
+          <th class="px-4 py-3">Suivi</th><th class="px-4 py-3">Commande</th><th class="px-4 py-3">Client</th>
+          <th class="px-4 py-3">Destination</th><th class="px-4 py-3">Statut</th><th class="px-4 py-3">Motif</th>
+        </tr></thead><tbody>${data.map(s => `
+        <tr class="table-row border-t border-slate-50">
+          <td class="px-4 py-3 font-mono text-xs font-bold text-primary-700">${notifEsc(s.trackingNumber || '—')}</td>
+          <td class="px-4 py-3 font-mono text-xs">${notifEsc(s.orderNumber || ('#' + s.orderId))}</td>
+          <td class="px-4 py-3">${notifEsc(s.customer || '—')}</td>
+          <td class="px-4 py-3">${notifEsc(s.city || '—')}</td>
+          <td class="px-4 py-3"><span class="px-2 py-1 rounded-full text-xs font-medium ${s.status === 'DELIVERED' ? 'bg-green-100 text-green-700' : (s.status === 'FAILED' || s.status === 'RETURNED') ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'}">${notifEsc(s.status)}</span></td>
+          <td class="px-4 py-3 text-xs text-slate-400">${notifEsc(s.failureReason || '—')}</td>
+        </tr>`).join('')}</tbody></table>`;
+  } catch (e) {
+    box.innerHTML = '<p class="p-6 text-sm text-red-500 text-center">Impossible de charger les expéditions. <button onclick="loadShipments()" class="font-semibold underline">Réessayer</button></p>';
+  }
+}
+function filterShipments(f, ev) { shipFilter = f; setFilterButtons('ship-filter', ev && ev.target); loadShipments(); }
+
+/* ---------- Messages (supervision) ---------- */
+async function loadMessages() {
+  const box = document.getElementById('convosTable');
+  box.innerHTML = '<p class="p-6 text-sm text-slate-400 text-center">Chargement des conversations…</p>';
+  try {
+    const [res, offers] = await Promise.all([
+      api('/api/admin/conversations?page=' + convoPage + '&limit=' + convoLimit),
+      api('/api/admin/offers/pending?page=1&limit=50')
+    ]);
+    const data = (res && res.data) || [];
+    const total = (res && res.total) || 0;
+    document.getElementById('msgStatCards').innerHTML = `
+      <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-100"><p class="text-sm text-slate-500">Conversations</p><p class="text-3xl font-bold text-slate-800 mt-1">${total}</p></div>
+      <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-100"><p class="text-sm text-slate-500">Messages non lus</p><p class="text-3xl font-bold ${((res && res.unread) || 0) ? 'text-indigo-600' : 'text-slate-800'} mt-1">${(res && res.unread) || 0}</p></div>
+      <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-100"><p class="text-sm text-slate-500">Offres en attente</p><p class="text-3xl font-bold text-slate-800 mt-1">${(offers && offers.total) || 0}</p></div>`;
+    box.innerHTML = data.length === 0
+      ? '<p class="p-6 text-sm text-slate-400 text-center">Aucune conversation</p>'
+      : `<table class="w-full text-sm"><thead><tr class="text-left text-slate-500 text-xs uppercase bg-slate-50">
+          <th class="px-4 py-3">#</th><th class="px-4 py-3">Boutique</th><th class="px-4 py-3">Client</th><th class="px-4 py-3">Sujet</th>
+          <th class="px-4 py-3">Messages</th><th class="px-4 py-3">Non lus</th><th class="px-4 py-3">Statut</th>
+        </tr></thead><tbody>${data.map(c => `
+        <tr class="table-row border-t border-slate-50">
+          <td class="px-4 py-3 font-mono text-xs">${c.id}</td>
+          <td class="px-4 py-3 font-medium">${notifEsc(c.supplierName || ('#' + c.supplierId))}</td>
+          <td class="px-4 py-3">${notifEsc(c.clientName || 'Client')} <span class="text-xs text-slate-400">${notifEsc(c.clientPhone || '')}</span></td>
+          <td class="px-4 py-3 text-slate-500">${notifEsc(c.subject || '—')}</td>
+          <td class="px-4 py-3 tabular-nums">${c.messageCount || 0}</td>
+          <td class="px-4 py-3">${(c.unreadCount || 0) ? `<span class="px-2 py-1 rounded-full text-xs font-bold bg-indigo-100 text-indigo-700">${c.unreadCount}</span>` : '<span class="text-slate-300">0</span>'}</td>
+          <td class="px-4 py-3"><span class="px-2 py-1 rounded-full text-xs font-medium ${c.status === 'OPEN' ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-500'}">${c.status}</span></td>
+        </tr>`).join('')}</tbody></table>`;
+    const pages = Math.max(1, Math.ceil(total / convoLimit));
+    document.getElementById('convoPagination').innerHTML = pages <= 1 ? '' :
+      `<button onclick="convoGoto(${convoPage - 1})" ${convoPage === 1 ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg border border-slate-200 text-sm bg-white disabled:opacity-40">Précédent</button>
+       <span class="text-sm text-slate-500 self-center">Page ${convoPage} / ${pages}</span>
+       <button onclick="convoGoto(${convoPage + 1})" ${convoPage === pages ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg border border-slate-200 text-sm bg-white disabled:opacity-40">Suivant</button>`;
+    const offs = (offers && offers.data) || [];
+    document.getElementById('pendingOffersTable').innerHTML = offs.length === 0
+      ? '<p class="p-6 text-sm text-slate-400 text-center">Aucune offre en attente</p>'
+      : `<table class="w-full text-sm"><thead><tr class="text-left text-slate-500 text-xs uppercase bg-slate-50">
+          <th class="px-4 py-3">Produit</th><th class="px-4 py-3">Boutique</th><th class="px-4 py-3">Proposé</th><th class="px-4 py-3">Catalogue</th><th class="px-4 py-3">Par</th><th class="px-4 py-3">Date</th>
+        </tr></thead><tbody>${offs.map(o => `
+        <tr class="table-row border-t border-slate-50">
+          <td class="px-4 py-3 font-medium">${notifEsc(o.productName || ('Produit #' + o.productId))} <span class="text-xs text-slate-400">× ${o.qty}</span></td>
+          <td class="px-4 py-3">${notifEsc(o.supplierName || '—')}</td>
+          <td class="px-4 py-3 font-semibold tabular-nums">${formatMoney(o.unitPrice)}</td>
+          <td class="px-4 py-3 text-slate-400 tabular-nums">${formatMoney(o.catalogPrice)}</td>
+          <td class="px-4 py-3 text-xs">${o.createdBy === 'CLIENT' ? 'Client' : 'Vendeur'}</td>
+          <td class="px-4 py-3 text-xs text-slate-400">${formatDate(o.createdAt)}</td>
+        </tr>`).join('')}</tbody></table>`;
+  } catch (e) {
+    box.innerHTML = '<p class="p-6 text-sm text-red-500 text-center">Impossible de charger. <button onclick="loadMessages()" class="font-semibold underline">Réessayer</button></p>';
+  }
+}
+function convoGoto(p) { convoPage = Math.max(1, p); loadMessages(); }
+
+/* ---------- Avis ---------- */
+async function loadReviews() {
+  const box = document.getElementById('reviewsTable');
+  box.innerHTML = '<p class="p-6 text-sm text-slate-400 text-center">Chargement des avis…</p>';
+  try {
+    const data = await api('/api/admin/reviews?status=' + encodeURIComponent(revFilter));
+    const list = Array.isArray(data) ? data : [];
+    box.innerHTML = list.length === 0
+      ? '<p class="p-6 text-sm text-slate-400 text-center">Aucun avis dans cette catégorie</p>'
+      : `<table class="w-full text-sm"><thead><tr class="text-left text-slate-500 text-xs uppercase bg-slate-50">
+          <th class="px-4 py-3">Produit</th><th class="px-4 py-3">Auteur</th><th class="px-4 py-3">Note</th>
+          <th class="px-4 py-3">Commentaire</th><th class="px-4 py-3">Statut</th><th class="px-4 py-3">Actions</th>
+        </tr></thead><tbody>${list.map(r => `
+        <tr class="table-row border-t border-slate-50">
+          <td class="px-4 py-3 font-mono text-xs">Produit #${r.productId}</td>
+          <td class="px-4 py-3">${notifEsc(r.fullname || '—')}</td>
+          <td class="px-4 py-3 font-bold text-amber-500">${'★'.repeat(Math.max(0, Math.min(5, r.rating || 0)))}<span class="text-slate-300">${'★'.repeat(5 - Math.max(0, Math.min(5, r.rating || 0)))}</span></td>
+          <td class="px-4 py-3 text-slate-500 max-w-xs truncate">${notifEsc(r.comment || '—')}</td>
+          <td class="px-4 py-3">${r.approved ? '<span class="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">Approuvé</span>' : '<span class="px-2 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-700">En attente</span>'}</td>
+          <td class="px-4 py-3"><div class="flex gap-1">
+            ${r.approved ? '' : `<button onclick="approveReview(${r.id})" class="p-1.5 rounded-lg hover:bg-green-50 text-green-600" title="Approuver"><i class="bi bi-check-circle text-sm"></i></button>`}
+            <button onclick="deleteReview(${r.id})" class="p-1.5 rounded-lg hover:bg-red-50 text-red-500" title="Supprimer"><i class="bi bi-trash text-sm"></i></button>
+          </div></td>
+        </tr>`).join('')}</tbody></table>`;
+  } catch (e) {
+    box.innerHTML = '<p class="p-6 text-sm text-red-500 text-center">Impossible de charger les avis. <button onclick="loadReviews()" class="font-semibold underline">Réessayer</button></p>';
+  }
+}
+function filterReviews(status, ev) { revFilter = status; setFilterButtons('rev-filter', ev && ev.target); loadReviews(); }
+async function approveReview(id) {
+  confirmAction('Approuver cet avis ?', 'L\'avis deviendra visible sur la fiche produit. Cette action est journalisée.', 'Approuver', async () => {
+    try { await apiStrict('/api/reviews', { method: 'PUT', body: JSON.stringify({ action: 'approve', id }) }); loadReviews(); loadOverview(); notifyMsg('Avis approuvé', 'success'); }
+    catch (e) { notifyMsg('Erreur: ' + e.message); }
+  });
+}
+async function deleteReview(id) {
+  confirmAction('Supprimer cet avis ?', 'Suppression définitive. Cette action est journalisée.', 'Supprimer', async () => {
+    try { await apiStrict('/api/reviews?id=' + id, { method: 'DELETE' }); loadReviews(); loadOverview(); notifyMsg('Avis supprimé', 'success'); }
+    catch (e) { notifyMsg('Erreur: ' + e.message); }
+  }, true);
+}
+
+/* ---------- Journal d'audit ---------- */
+async function loadAudit() {
+  const box = document.getElementById('auditTable');
+  box.innerHTML = '<p class="p-6 text-sm text-slate-400 text-center">Chargement du journal…</p>';
+  try {
+    const q = (document.getElementById('auditSearch') || {}).value || '';
+    const res = await api('/api/admin/audit?action=' + encodeURIComponent(q.trim()) + '&page=' + auditPage + '&limit=' + auditLimit);
+    const data = (res && res.data) || [];
+    const total = (res && res.total) || 0;
+    box.innerHTML = data.length === 0
+      ? '<p class="p-6 text-sm text-slate-400 text-center">Aucune entrée d\'audit</p>'
+      : `<table class="w-full text-sm"><thead><tr class="text-left text-slate-500 text-xs uppercase bg-slate-50">
+          <th class="px-4 py-3">Date</th><th class="px-4 py-3">Admin</th><th class="px-4 py-3">Action</th>
+          <th class="px-4 py-3">Entité</th><th class="px-4 py-3">Détail</th><th class="px-4 py-3">IP</th>
+        </tr></thead><tbody>${data.map(l => `
+        <tr class="table-row border-t border-slate-50">
+          <td class="px-4 py-3 text-xs text-slate-400 whitespace-nowrap">${notifEsc(l.createdAt || '—')}</td>
+          <td class="px-4 py-3 font-medium">${notifEsc(l.username || ('#' + (l.adminId || '?')))}</td>
+          <td class="px-4 py-3"><span class="px-2 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">${notifEsc(l.action || '')}</span></td>
+          <td class="px-4 py-3 font-mono text-xs">${notifEsc(l.entityType || '')} ${l.entityId ? '#' + l.entityId : ''}</td>
+          <td class="px-4 py-3 text-slate-500 max-w-xs truncate">${notifEsc(l.details || '—')}</td>
+          <td class="px-4 py-3 font-mono text-xs text-slate-400">${notifEsc(l.ip || '—')}</td>
+        </tr>`).join('')}</tbody></table>`;
+    const pages = Math.max(1, Math.ceil(total / auditLimit));
+    document.getElementById('auditPagination').innerHTML = pages <= 1 ? `<span class="text-sm text-slate-400">${total} entrée(s)</span>` :
+      `<button onclick="auditGoto(${auditPage - 1})" ${auditPage === 1 ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg border border-slate-200 text-sm bg-white disabled:opacity-40">Précédent</button>
+       <span class="text-sm text-slate-500 self-center">Page ${auditPage} / ${pages} · ${total} entrée(s)</span>
+       <button onclick="auditGoto(${auditPage + 1})" ${auditPage === pages ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg border border-slate-200 text-sm bg-white disabled:opacity-40">Suivant</button>`;
+  } catch (e) {
+    box.innerHTML = '<p class="p-6 text-sm text-red-500 text-center">Impossible de charger le journal. <button onclick="loadAudit()" class="font-semibold underline">Réessayer</button></p>';
+  }
+}
+function auditGoto(p) { auditPage = Math.max(1, p); loadAudit(); }
+
+// =====================================================================
 // SETTINGS
 // =====================================================================
 async function loadSettings() {
   try {
+    const me = await api('/api/admin/me');
+    if (me) {
+      document.getElementById('setUsername').value = me.username || '—';
+      document.getElementById('setRole').value = me.role || '—';
+      const money = me.role === 'ADMIN' || me.role === 'SUPER_ADMIN';
+      document.getElementById('permMatrix').innerHTML =
+        'Vos droits : lecture et pilotage opérationnel ✓ · ' +
+        (money ? 'argent (remboursements, paiements, règles) ✓ · suppressions ✓'
+               : 'argent ✗ · suppressions ✗ (lecture seule)') +
+        (me.role === 'SUPER_ADMIN' ? ' · gestion des rôles ✓' : '');
+    }
     const logs = await api('/api/admin/logs?limit=20');
     const list = document.getElementById('activityLogs');
     if (!Array.isArray(logs) || logs.length === 0) {
@@ -2173,6 +2597,20 @@ async function loadSettings() {
   } catch (e) { console.error('Settings error:', e); }
 }
 
+async function saveAdminPassword(e) {
+  e.preventDefault();
+  const current = document.getElementById('apCurrent').value;
+  const fresh = document.getElementById('apNew').value;
+  if (!fresh || fresh.length < 8) { notifyMsg('Nouveau mot de passe trop court (min 8)'); return false; }
+  try {
+    await apiStrict('/api/admin/password', { method: 'POST', body: JSON.stringify({ current, new: fresh }) });
+    document.getElementById('apCurrent').value = '';
+    document.getElementById('apNew').value = '';
+    notifyMsg('Mot de passe mis à jour', 'success');
+  } catch (err) { notifyMsg('Erreur: ' + err.message); }
+  return false;
+}
+
 // =====================================================================
 // INIT
 // =====================================================================
@@ -2187,6 +2625,8 @@ async function initDashboard() {
       refreshNotifBadge();
       startNotifPolling();
     }
+    await loadMe();
+    await loadOverview();
   } catch (e) { console.error('Init error:', e); }
 }
 
@@ -2200,6 +2640,7 @@ if (token) {
     } else {
       token = '';
       localStorage.removeItem('admin_token');
+      localStorage.removeItem('admin_role');
     }
   }).catch(() => {});
 }
