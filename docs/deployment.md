@@ -107,7 +107,9 @@ inattendu de Tomcat (23:29, cause non établie) → restart + recommandation
 
 ## 13. Version déployée (répétition locale Phase 22)
 
-- Version : 1.0.0 — commit : voir log Git — WAR : `releases/mboa-style-1.0.0.war` (5,0 Mo)
+- Version : 1.0.1 (1.0.0 initiale + fix avis 404 BUG-P23-001, voir
+  `docs/production-test-report.md`) — WAR : `releases/mboa-style-1.0.1.war`
+  (5,0 Mo), rollback : `releases/mboa-style-1.0.0.war` conservé
 - Date : 2026-09-27 — serveur : local isolé `/tmp/mboa-style` (pas de serveur public)
 - DB : `mboa_style_prod` (fraîche : `database.sql` + 12 migrations, backup pré-déploiement conservé)
 - Tomcat 10.1.59 (port 8080, JVM 256m/1024m) — Java 17.0.19
