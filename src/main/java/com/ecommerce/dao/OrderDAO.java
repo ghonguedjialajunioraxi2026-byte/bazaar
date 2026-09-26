@@ -11,6 +11,31 @@ import java.util.List;
 public class OrderDAO {
 
     public int create(Order order) throws SQLException {
+        // Concurrence : deux commandes simultanées peuvent tirer le même
+        // numéro (MAX+1). Contrainte UNIQUE + rejeu (rollback sûr : tout est
+        // transactionnel, notifications dédupliquées par clé).
+        SQLException last = null;
+        for (int attempt = 0; attempt < 3; attempt++) {
+            try {
+                return createOnce(order);
+            } catch (SQLException e) {
+                if (isDuplicateOrderNumber(e)) {
+                    last = e;
+                    continue;
+                }
+                throw e;
+            }
+        }
+        throw last;
+    }
+
+    private static boolean isDuplicateOrderNumber(SQLException e) {
+        if (!"23000".equals(e.getSQLState())) return false;
+        String m = e.getMessage() == null ? "" : e.getMessage();
+        return m.contains("order_number") || m.contains("uq_orders_number");
+    }
+
+    private int createOnce(Order order) throws SQLException {
         String sqlOrder = "INSERT INTO orders (order_number, fullname, phone, city, district, address, comment, delivery_mode, payment_method, total, supplier_id, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'EN_ATTENTE')";
         String sqlItem = "INSERT INTO order_items (order_id, product_id, product_name, size, color, qty, unit_price, offer_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -325,30 +350,45 @@ public class OrderDAO {
     }
 
     public void delete(int id) throws SQLException {
-        // Restore stock first
-        List<OrderItem> items = findById(id).getItems();
-        if (items != null) {
-            String sqlRestore = "UPDATE products SET stock = stock + ? WHERE id = ?";
-            try (Connection conn = DBConnection.getConnection();
-                 PreparedStatement ps = conn.prepareStatement(sqlRestore)) {
-                for (OrderItem item : items) {
-                    ps.setInt(1, item.getQty());
-                    ps.setInt(2, item.getProductId());
-                    ps.executeUpdate();
-                }
-            }
-        }
+        // Restauration du stock + suppressions DANS la même transaction
+        // (aucune fenêtre d'incohérence en cas de crash).
         String sqlItems = "DELETE FROM order_items WHERE order_id = ?";
         String sqlOrder = "DELETE FROM orders WHERE id = ?";
+        String sqlRestore = "UPDATE products SET stock = stock + ? WHERE id = ?";
         try (Connection conn = DBConnection.getConnection()) {
             conn.setAutoCommit(false);
             try {
-                PreparedStatement psi = conn.prepareStatement(sqlItems);
-                psi.setInt(1, id);
-                psi.executeUpdate();
-                PreparedStatement pso = conn.prepareStatement(sqlOrder);
-                pso.setInt(1, id);
-                pso.executeUpdate();
+                List<OrderItem> items;
+                try (PreparedStatement psFind = conn.prepareStatement(
+                        "SELECT product_id, qty FROM order_items WHERE order_id = ?")) {
+                    psFind.setInt(1, id);
+                    items = new ArrayList<>();
+                    try (ResultSet rs = psFind.executeQuery()) {
+                        while (rs.next()) {
+                            OrderItem it = new OrderItem();
+                            it.setProductId(rs.getInt("product_id"));
+                            it.setQty(rs.getInt("qty"));
+                            items.add(it);
+                        }
+                    }
+                }
+                if (items != null) {
+                    try (PreparedStatement psRestore = conn.prepareStatement(sqlRestore)) {
+                        for (OrderItem item : items) {
+                            psRestore.setInt(1, item.getQty());
+                            psRestore.setInt(2, item.getProductId());
+                            psRestore.executeUpdate();
+                        }
+                    }
+                }
+                try (PreparedStatement psi = conn.prepareStatement(sqlItems)) {
+                    psi.setInt(1, id);
+                    psi.executeUpdate();
+                }
+                try (PreparedStatement pso = conn.prepareStatement(sqlOrder)) {
+                    pso.setInt(1, id);
+                    pso.executeUpdate();
+                }
                 conn.commit();
             } catch (SQLException e) {
                 conn.rollback();

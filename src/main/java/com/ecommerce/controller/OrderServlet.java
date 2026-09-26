@@ -33,6 +33,9 @@ public class OrderServlet extends HttpServlet {
         try {
             String action = req.getParameter("action");
             if ("find".equals(action)) {
+                // Lecture admin uniquement (PII : nom/téléphone/adresse).
+                // Les invités utilisent track (numéro + téléphone).
+                if (com.ecommerce.util.AdminAuth.requireAdmin(req, resp) <= 0) return;
                 int id = Integer.parseInt(req.getParameter("id"));
                 Order order = orderService.getOrderById(id);
                 if (order != null) {
@@ -42,6 +45,7 @@ public class OrderServlet extends HttpServlet {
                     resp.getWriter().write("{\"error\":\"Commande non trouvée\"}");
                 }
             } else if ("search".equals(action)) {
+                if (com.ecommerce.util.AdminAuth.requireAdmin(req, resp) <= 0) return;
                 String query = req.getParameter("q");
                 resp.getWriter().write(JsonUtil.toJson(orderService.searchOrders(query)));
             } else if ("myorders".equals(action)) {
@@ -61,9 +65,13 @@ public class OrderServlet extends HttpServlet {
                     ApiResponse.fromException(resp, ae);
                 }
             } else if ("status".equals(action)) {
+                if (com.ecommerce.util.AdminAuth.requireAdmin(req, resp) <= 0) return;
                 String status = req.getParameter("status");
                 resp.getWriter().write(JsonUtil.toJson(orderService.getOrdersByStatus(status)));
             } else if ("supplier".equals(action)) {
+                // IDOR corrigé : seul le périmètre admin (ou l'API fournisseur
+                // scopée au token) expose les commandes d'un vendeur.
+                if (com.ecommerce.util.AdminAuth.requireAdmin(req, resp) <= 0) return;
                 int supplierId = Integer.parseInt(req.getParameter("supplierId"));
                 resp.getWriter().write(JsonUtil.toJson(orderService.getOrdersBySupplier(supplierId)));
             } else if ("delivery-fee".equals(action)) {
@@ -71,11 +79,13 @@ public class OrderServlet extends HttpServlet {
                 int fee = deliveryDAO.getFee(city);
                 resp.getWriter().write("{\"city\":\"" + city + "\",\"fee\":" + fee + "}");
             } else {
+                // Liste complète : admin uniquement (dashboard avec token).
+                if (com.ecommerce.util.AdminAuth.requireAdmin(req, resp) <= 0) return;
                 resp.getWriter().write(JsonUtil.toJson(orderService.getAllOrders()));
             }
         } catch (Exception e) {
             resp.setStatus(500);
-            resp.getWriter().write("{\"error\":\"" + e.getMessage().replace("\"", "'") + "\"}");
+            com.ecommerce.util.ApiResponse.internalError(resp);
         }
     }
 
@@ -202,7 +212,7 @@ public class OrderServlet extends HttpServlet {
             resp.getWriter().write("{\"success\":true}");
         } catch (Exception e) {
             resp.setStatus(500);
-            resp.getWriter().write("{\"error\":\"" + e.getMessage().replace("\"", "'") + "\"}");
+            com.ecommerce.util.ApiResponse.internalError(resp);
         }
     }
 
@@ -223,7 +233,7 @@ public class OrderServlet extends HttpServlet {
             resp.getWriter().write("{\"success\":true}");
         } catch (Exception e) {
             resp.setStatus(500);
-            resp.getWriter().write("{\"error\":\"" + e.getMessage().replace("\"", "'") + "\"}");
+            com.ecommerce.util.ApiResponse.internalError(resp);
         }
     }
 }

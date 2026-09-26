@@ -57,15 +57,29 @@ public class AdminDAO {
         }
     }
 
-    public boolean updatePassword(int id, String currentPlain, String newPlain) throws SQLException {
-        Admin a = findById(id);
+    /** Écriture directe du hash (migration transparente uniquement, sans révocation). */
+    public void setPasswordHash(int id, String hash) throws SQLException {
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement("UPDATE admins SET password_hash = ? WHERE id = ?")) {
+            ps.setString(1, hash);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        }
+    }
+
+    public boolean updatePassword(int id, String currentPlain, String newPlain) throws SQLException {        Admin a = findById(id);
         if (a == null || a.getPasswordHash() == null) return false;
         if (!PasswordUtil.verify(currentPlain, a.getPasswordHash())) return false;
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement("UPDATE admins SET password_hash = ? WHERE id = ?")) {
             ps.setString(1, PasswordUtil.hash(newPlain));
             ps.setInt(2, id);
-            return ps.executeUpdate() > 0;
+            if (ps.executeUpdate() == 0) return false;
         }
+        // Révocation : les sessions volées ne survivent pas au changement.
+        try {
+            new AdminSessionDAO().invalidateAllForAdmin(id);
+        } catch (Exception ignored) {}
+        return true;
     }
 }

@@ -100,7 +100,7 @@ public class ProductServlet extends HttpServlet {
             }
         } catch (Exception e) {
             resp.setStatus(500);
-            resp.getWriter().write("{\"error\":\"" + e.getMessage().replace("\"", "'") + "\"}");
+            com.ecommerce.util.ApiResponse.internalError(resp);
         }
     }
 
@@ -166,7 +166,7 @@ public class ProductServlet extends HttpServlet {
             resp.getWriter().write("{\"success\":true}");
         } catch (Exception e) {
             resp.setStatus(500);
-            resp.getWriter().write("{\"error\":\"" + e.getMessage().replace("\"", "'") + "\"}");
+            com.ecommerce.util.ApiResponse.internalError(resp);
         }
     }
 
@@ -203,7 +203,7 @@ public class ProductServlet extends HttpServlet {
             resp.getWriter().write("{\"success\":true,\"id\":" + id + "}");
         } catch (Exception e) {
             resp.setStatus(500);
-            resp.getWriter().write("{\"error\":\"" + e.getMessage().replace("\"", "'") + "\"}");
+            com.ecommerce.util.ApiResponse.internalError(resp);
         }
     }
 
@@ -225,7 +225,7 @@ public class ProductServlet extends HttpServlet {
             resp.getWriter().write("{\"success\":true}");
         } catch (Exception e) {
             resp.setStatus(500);
-            resp.getWriter().write("{\"error\":\"" + e.getMessage().replace("\"", "'") + "\"}");
+            com.ecommerce.util.ApiResponse.internalError(resp);
         }
     }
 

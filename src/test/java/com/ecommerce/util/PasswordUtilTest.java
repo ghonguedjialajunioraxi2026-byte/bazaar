@@ -19,7 +19,12 @@ class PasswordUtilTest {
     }
 
     @Test
-    void hashDeterministe() {
-        assertEquals(PasswordUtil.hash("test"), PasswordUtil.hash("test"));
+    void hashSaleChaqueHachageEstUnique() {
+        // Sel aléatoire : deux hash du même mot de passe diffèrent, mais vérifient tous deux.
+        String h1 = PasswordUtil.hash("test");
+        String h2 = PasswordUtil.hash("test");
+        assertNotEquals(h1, h2);
+        assertTrue(PasswordUtil.verify("test", h1));
+        assertTrue(PasswordUtil.verify("test", h2));
     }
 }

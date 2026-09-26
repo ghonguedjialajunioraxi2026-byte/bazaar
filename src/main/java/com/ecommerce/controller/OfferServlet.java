@@ -48,7 +48,7 @@ public class OfferServlet extends HttpServlet {
         try {
             String token = req.getHeader("Authorization");
             if (token != null && token.startsWith("Bearer ")) token = token.substring(7);
-            else token = req.getParameter("token");
+            else token = null; // header seul (le ?token= fuit dans logs/historique)
             if (token == null || token.isBlank()) return 0;
             return supplierAuthService.validateToken(token);
         } catch (Exception e) {
@@ -79,6 +79,13 @@ public class OfferServlet extends HttpServlet {
                     return;
                 }
                 if (supplierId > 0) {
+                    // IDOR corrigé : la conversation doit appartenir au fournisseur.
+                    if (new com.ecommerce.dao.ConversationDAO()
+                            .findByIdScoped(supplierId, convId) == null) {
+                        ApiResponse.fail(resp, 403, ErrorCodes.OFFER_ACCESS_DENIED,
+                            "Conversation inaccessible");
+                        return;
+                    }
                     ApiResponse.ok(resp, offerService.listForConversation(convId));
                     return;
                 }

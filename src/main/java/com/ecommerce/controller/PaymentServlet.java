@@ -61,7 +61,7 @@ public class PaymentServlet extends HttpServlet {
             }
         } catch (Exception e) {
             resp.setStatus(500);
-            resp.getWriter().write("{\"error\":\"" + e.getMessage().replace("\"", "'") + "\"}");
+            com.ecommerce.util.ApiResponse.internalError(resp);
         }
     }
 
@@ -123,7 +123,7 @@ public class PaymentServlet extends HttpServlet {
             }
         } catch (Exception e) {
             resp.setStatus(500);
-            resp.getWriter().write("{\"error\":\"" + e.getMessage().replace("\"", "'") + "\"}");
+            com.ecommerce.util.ApiResponse.internalError(resp);
         }
     }
 
@@ -180,7 +180,7 @@ public class PaymentServlet extends HttpServlet {
             resp.getWriter().write("{\"success\":true}");
         } catch (Exception e) {
             resp.setStatus(500);
-            resp.getWriter().write("{\"error\":\"" + e.getMessage().replace("\"", "'") + "\"}");
+            com.ecommerce.util.ApiResponse.internalError(resp);
         }
     }
 }

@@ -75,6 +75,10 @@ public class SupplierService {
         if (s == null || s.getPasswordHash() == null) return false;
         if (!com.ecommerce.util.PasswordUtil.verify(current, s.getPasswordHash())) return false;
         supplierDAO.updatePassword(id, com.ecommerce.util.PasswordUtil.hash(newPassword));
+        // Révocation : les sessions volées ne survivent pas au changement.
+        try {
+            sessionDAO.invalidateAllForSupplier(id);
+        } catch (Exception ignored) {}
         // Alerte sécurité réelle (chaque changement notifié : pas de déduplication).
         try {
             new NotificationService().notifySupplier(id, "PASSWORD_CHANGED",
@@ -484,10 +488,18 @@ public class SupplierService {
         return conversationDAO.findMessages(convId);
     }
 
-    public boolean sendSupplierMessage(int supplierId, int convId, String body) throws SQLException {
+    public boolean sendSupplierMessage(int supplierId, int convId, String body)
+            throws SQLException, com.ecommerce.util.AppException {
         Conversation c = conversationDAO.findByIdScoped(supplierId, convId);
         if (c == null) return false;
         if (body == null || body.trim().isEmpty()) return false;
+        if (body.trim().length() > ConversationService.MESSAGE_MAX) return false;
+        // Même garde anti-spam que côté client (10/min/conversation).
+        if (conversationDAO.countRecentFrom(convId, "SUPPLIER", 1)
+                >= ConversationService.MESSAGE_PER_MINUTE) {
+            throw new com.ecommerce.util.AppException(
+                com.ecommerce.util.ErrorCodes.RATE_LIMITED, 429, "Ralentissez : trop de messages");
+        }
         conversationDAO.addMessage(convId, "SUPPLIER", body.trim());
         conversationDAO.updateActivity(convId);
         return true;

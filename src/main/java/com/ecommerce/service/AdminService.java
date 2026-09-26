@@ -12,6 +12,12 @@ public class AdminService {
     public Admin login(String username, String password) throws SQLException {
         Admin admin = adminDAO.findByUsername(username);
         if (admin != null && PasswordUtil.verify(password, admin.getPasswordHash())) {
+            // Migration transparente vers PBKDF2 (comptes pré-Phase 15).
+            if (PasswordUtil.needsRehash(admin.getPasswordHash())) {
+                try {
+                    adminDAO.setPasswordHash(admin.getId(), PasswordUtil.hash(password));
+                } catch (Exception ignored) {}
+            }
             return admin;
         }
         return null;

@@ -42,7 +42,7 @@ public class SitemapServlet extends HttpServlet {
             resp.getWriter().write(sb.toString());
         } catch (Exception e) {
             resp.setStatus(500);
-            resp.getWriter().write("<?xml version=\"1.0\" encoding=\"UTF-8\"?><error>" + e.getMessage() + "</error>");
+            resp.getWriter().write("<?xml version=\"1.0\" encoding=\"UTF-8\"?><error>Erreur interne</error>");
         }
     }
 

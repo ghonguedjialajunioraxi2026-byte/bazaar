@@ -31,7 +31,8 @@ public class SupplierApiServlet extends HttpServlet {
     private String extractToken(HttpServletRequest req) {
         String token = req.getHeader("Authorization");
         if (token != null && token.startsWith("Bearer ")) return token.substring(7);
-        return req.getParameter("token");
+        // Header seul : le token en query (?token=) fuit dans logs/historique/Referer.
+        return null;
     }
 
     private int requireAuth(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -202,7 +203,7 @@ public class SupplierApiServlet extends HttpServlet {
 
             write(resp, err("Route inconnue"), 404);
         } catch (Exception e) {
-            write(resp, err(e.getMessage()), 500);
+            write(resp, err("Impossible de traiter votre demande."), 500);
         }
     }
 
@@ -334,7 +335,7 @@ public class SupplierApiServlet extends HttpServlet {
         } catch (com.ecommerce.util.AppException ae) {
             write(resp, err(ae.getMessage()), ae.getHttpStatus());
         } catch (Exception e) {
-            write(resp, err(e.getMessage()), 500);
+            write(resp, err("Impossible de traiter votre demande."), 500);
         }
     }
 
@@ -471,7 +472,7 @@ public class SupplierApiServlet extends HttpServlet {
         } catch (com.ecommerce.util.AppException ae) {
             write(resp, err(ae.getMessage()), ae.getHttpStatus());
         } catch (Exception e) {
-            write(resp, err(e.getMessage()), 500);
+            write(resp, err("Impossible de traiter votre demande."), 500);
         }
     }
 
@@ -493,7 +494,7 @@ public class SupplierApiServlet extends HttpServlet {
             }
             write(resp, err("Route inconnue"), 404);
         } catch (Exception e) {
-            write(resp, err(e.getMessage()), 500);
+            write(resp, err("Impossible de traiter votre demande."), 500);
         }
     }
 
@@ -569,7 +570,7 @@ public class SupplierApiServlet extends HttpServlet {
 
             write(resp, err("Route inconnue"), 404);
         } catch (Exception e) {
-            write(resp, err(e.getMessage()), 500);
+            write(resp, err("Impossible de traiter votre demande."), 500);
         }
     }
 

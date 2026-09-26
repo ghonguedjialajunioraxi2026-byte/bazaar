@@ -51,4 +51,12 @@ public final class ApiResponse {
         // Cause réelle journalisable côté serveur par l'appelant ; jamais exposée ici.
         fail(resp, e.getHttpStatus(), e.getCode(), e.getMessage());
     }
+
+    /**
+     * Erreur interne générique (Phase 15) : ne révèle jamais le message
+     * d'exception (SQL, chemins, classes). Détail = logs serveur uniquement.
+     */
+    public static void internalError(HttpServletResponse resp) throws IOException {
+        fail(resp, 500, ErrorCodes.INTERNAL_ERROR, "Impossible de traiter votre demande.");
+    }
 }

@@ -36,6 +36,23 @@ public class ProductImageServlet extends HttpServlet {
         return UploadUtil.saveImage(part, UploadUtil.SUBDIR_PRODUCTS, null);
     }
 
+    /** N'accepte que les images servies en http(s) ou les chemins internes. */
+    static boolean isSafeImageUrl(String url) {
+        if (url == null) return false;
+        String u = url.trim();
+        if (u.isEmpty() || u.length() > 500) return false;
+        String low = u.toLowerCase();
+        if (low.contains("<") || low.contains(">") || low.contains("\"")
+                || low.contains(" ") || low.contains("\\")) return false;
+        if (low.contains("javascript:") || low.contains("data:")
+                || low.contains("vbscript:")) return false;
+        if (u.startsWith("/")) return !u.startsWith("//");
+        if (low.contains("://")) {
+            return low.startsWith("http://") || low.startsWith("https://");
+        }
+        return true; // chemin relatif interne (uploads/...)
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("application/json");
@@ -59,7 +76,7 @@ public class ProductImageServlet extends HttpServlet {
             }
         } catch (Exception e) {
             resp.setStatus(500);
-            resp.getWriter().write("{\"error\":\"" + e.getMessage().replace("\"", "'") + "\"}");
+            com.ecommerce.util.ApiResponse.internalError(resp);
         }
     }
 
@@ -99,12 +116,19 @@ public class ProductImageServlet extends HttpServlet {
                 String url = (String) body.get("url");
                 boolean isPrimary = body.get("isPrimary") != null && (Boolean) body.get("isPrimary");
 
+                // URL externe : http(s) uniquement, jamais javascript:/data:.
+                if (!isSafeImageUrl(url)) {
+                    resp.setStatus(400);
+                    resp.getWriter().write("{\"error\":\"URL d'image invalide\"}");
+                    return;
+                }
+
                 productImageDAO.addImage(productId, url, isPrimary);
                 resp.getWriter().write("{\"success\":true,\"url\":\"" + url + "\"}");
             }
         } catch (Exception e) {
             resp.setStatus(500);
-            resp.getWriter().write("{\"error\":\"" + e.getMessage().replace("\"", "'") + "\"}");
+            com.ecommerce.util.ApiResponse.internalError(resp);
         }
     }
 
@@ -132,7 +156,7 @@ public class ProductImageServlet extends HttpServlet {
             }
         } catch (Exception e) {
             resp.setStatus(500);
-            resp.getWriter().write("{\"error\":\"" + e.getMessage().replace("\"", "'") + "\"}");
+            com.ecommerce.util.ApiResponse.internalError(resp);
         }
     }
 
@@ -147,7 +171,7 @@ public class ProductImageServlet extends HttpServlet {
             resp.getWriter().write("{\"success\":true}");
         } catch (Exception e) {
             resp.setStatus(500);
-            resp.getWriter().write("{\"error\":\"" + e.getMessage().replace("\"", "'") + "\"}");
+            com.ecommerce.util.ApiResponse.internalError(resp);
         }
     }
 }

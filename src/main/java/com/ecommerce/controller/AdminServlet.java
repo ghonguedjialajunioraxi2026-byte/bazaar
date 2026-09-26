@@ -31,7 +31,8 @@ public class AdminServlet extends HttpServlet {
     private String extractToken(HttpServletRequest req) {
         String token = req.getHeader("Authorization");
         if (token != null && token.startsWith("Bearer ")) return token.substring(7);
-        return req.getParameter("token");
+        // Header seul : le token en query (?token=) fuit dans logs/historique/Referer.
+        return null;
     }
 
     private int validateAndGetAdminId(HttpServletRequest req) {
@@ -148,7 +149,7 @@ public class AdminServlet extends HttpServlet {
             resp.getWriter().write(JsonUtil.toJson(getDashboard()));
         } catch (Exception e) {
             resp.setStatus(500);
-            resp.getWriter().write("{\"error\":\"" + e.getMessage().replace("\"", "'") + "\"}");
+            com.ecommerce.util.ApiResponse.internalError(resp);
         }
     }
 
@@ -170,6 +171,15 @@ public class AdminServlet extends HttpServlet {
                 String username = body.get("username");
                 String password = body.get("password");
 
+                // Anti brute-force : 5 échecs → 15 min (clé username + IP).
+                String attemptKey = com.ecommerce.service.LoginAttemptService.key(
+                    "admin", username, req.getRemoteAddr());
+                if (com.ecommerce.service.LoginAttemptService.get().isBlocked(attemptKey)) {
+                    resp.setStatus(429);
+                    resp.getWriter().write("{\"error\":\"Trop de tentatives. Réessayez dans 15 minutes.\"}");
+                    return;
+                }
+
                 Admin admin = adminService.login(username, password);
                 if (admin != null) {
                     String token = sessionDAO.createSession(
@@ -181,7 +191,9 @@ public class AdminServlet extends HttpServlet {
                     // Log activity
                     activityLogDAO.log(admin.getId(), "LOGIN", "admin", admin.getId(), "Connexion réussie", req.getRemoteAddr());
                     resp.getWriter().write("{\"token\":\"" + token + "\",\"username\":\"" + admin.getUsername() + "\",\"role\":\"" + admin.getRole() + "\"}");
+                    com.ecommerce.service.LoginAttemptService.get().recordSuccess(attemptKey);
                 } else {
+                    com.ecommerce.service.LoginAttemptService.get().recordFailure(attemptKey);
                     resp.setStatus(401);
                     resp.getWriter().write("{\"error\":\"Identifiants incorrects\"}");
                 }
@@ -368,7 +380,7 @@ public class AdminServlet extends HttpServlet {
             com.ecommerce.util.ApiResponse.fromException(resp, ae);
         } catch (Exception e) {
             resp.setStatus(500);
-            resp.getWriter().write("{\"error\":\"" + e.getMessage().replace("\"", "'") + "\"}");
+            com.ecommerce.util.ApiResponse.internalError(resp);
         }
     }
 
@@ -382,7 +394,7 @@ public class AdminServlet extends HttpServlet {
             resp.getWriter().write("{\"success\":true}");
         } catch (Exception e) {
             resp.setStatus(500);
-            resp.getWriter().write("{\"error\":\"" + e.getMessage().replace("\"", "'") + "\"}");
+            com.ecommerce.util.ApiResponse.internalError(resp);
         }
     }
 

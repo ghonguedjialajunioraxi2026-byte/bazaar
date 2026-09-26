@@ -63,7 +63,7 @@ public class NotificationServlet extends HttpServlet {
         try {
             if (com.ecommerce.util.AdminAuth.requireAdmin(req, resp) <= 0) return;
             String action = req.getParameter("action");
-            String role = validRole(req.getParameter("role"));
+            String role = sessionRole(req);
 
             if ("unread".equals(action)) {
                 resp.getWriter().write("{\"count\":" + notificationDAO.countUnread(role) + "}");
@@ -114,7 +114,7 @@ public class NotificationServlet extends HttpServlet {
             resp.getWriter().write(JsonUtil.toJson(result));
         } catch (Exception e) {
             resp.setStatus(500);
-            resp.getWriter().write("{\"error\":\"" + safe(e.getMessage()) + "\"}");
+            com.ecommerce.util.ApiResponse.internalError(resp);
         }
     }
 
@@ -179,7 +179,7 @@ public class NotificationServlet extends HttpServlet {
             resp.getWriter().write("{\"success\":true,\"ids\":" + JsonUtil.toJson(created) + "}");
         } catch (Exception e) {
             resp.setStatus(400);
-            resp.getWriter().write("{\"error\":\"" + safe(e.getMessage()) + "\"}");
+            com.ecommerce.util.ApiResponse.internalError(resp);
         }
     }
 
@@ -191,7 +191,7 @@ public class NotificationServlet extends HttpServlet {
         try {
             if (com.ecommerce.util.AdminAuth.requireAdmin(req, resp) <= 0) return;
             String action = req.getParameter("action");
-            String role = validRole(req.getParameter("role"));
+            String role = sessionRole(req);
             String idParam = req.getParameter("id");
             Map<String, Object> body = null;
 
@@ -245,7 +245,7 @@ public class NotificationServlet extends HttpServlet {
             resp.getWriter().write("{\"success\":true,\"unread\":" + notificationDAO.countUnread(role) + "}");
         } catch (Exception e) {
             resp.setStatus(400);
-            resp.getWriter().write("{\"error\":\"" + safe(e.getMessage()) + "\"}");
+            com.ecommerce.util.ApiResponse.internalError(resp);
         }
     }
 
@@ -255,9 +255,10 @@ public class NotificationServlet extends HttpServlet {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
         try {
-            if (com.ecommerce.util.AdminAuth.requireAdmin(req, resp) <= 0) return;
+            if (com.ecommerce.util.AdminRole.requireAction(req, resp,
+                    com.ecommerce.util.AdminRole.DESTRUCTIVE) <= 0) return;
             String action = req.getParameter("action");
-            String role = validRole(req.getParameter("role"));
+            String role = sessionRole(req);
             int deleted;
             if ("clearRead".equals(action)) {
                 deleted = notificationDAO.deleteRead(role);
@@ -277,11 +278,18 @@ public class NotificationServlet extends HttpServlet {
                     + ",\"unread\":" + notificationDAO.countUnread(role) + "}");
         } catch (Exception e) {
             resp.setStatus(400);
-            resp.getWriter().write("{\"error\":\"" + safe(e.getMessage()) + "\"}");
+            com.ecommerce.util.ApiResponse.internalError(resp);
         }
     }
 
     // ---------------- helpers ----------------
+
+    /** Rôle résolu serveur (session) : le paramètre client est ignoré (anti IDOR inter-rôles). */
+    private String sessionRole(jakarta.servlet.http.HttpServletRequest req) {
+        String r = com.ecommerce.util.AdminRole.resolveRole(req);
+        if (r != null && ("ADMIN".equals(r) || "SUPER_ADMIN".equals(r) || "GESTIONNAIRE".equals(r))) return r;
+        return "SUPER_ADMIN";
+    }
 
     private String validRole(String role) {
         if (role == null) return "SUPER_ADMIN";

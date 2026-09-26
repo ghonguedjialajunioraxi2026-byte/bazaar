@@ -44,10 +44,21 @@ public class UploadServlet extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
-        String contentType = getServletContext().getMimeType(file.getName());
-        if (contentType == null) contentType = Files.probeContentType(file.toPath());
-        if (contentType == null) contentType = "application/octet-stream";
-        resp.setContentType(contentType);
+        String name = file.getName().toLowerCase();
+        // Jamais de contenu actif : les SVG (anciens uploads) sont servis
+        // en texte brut, jamais exécutés.
+        if (name.endsWith(".svg")) {
+            resp.setContentType("text/plain; charset=UTF-8");
+        } else {
+            String contentType = getServletContext().getMimeType(file.getName());
+            if (contentType == null) contentType = Files.probeContentType(file.toPath());
+            if (contentType == null || !contentType.startsWith("image/")) {
+                contentType = "application/octet-stream";
+            }
+            resp.setContentType(contentType);
+        }
+        // Pas de sniffing MIME côté navigateur.
+        resp.setHeader("X-Content-Type-Options", "nosniff");
         resp.setContentLengthLong(file.length());
         // Cache navigateur 7 jours (les noms de fichiers sont UUID, donc immuables).
         resp.setHeader("Cache-Control", "public, max-age=604800");

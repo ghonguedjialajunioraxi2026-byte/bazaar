@@ -161,7 +161,7 @@ public class CategoryServlet extends HttpServlet {
             resp.getWriter().write(JsonUtil.toJson(result));
         } catch (Exception e) {
             resp.setStatus(500);
-            resp.getWriter().write("{\"error\":\"" + safe(e.getMessage()) + "\"}");
+            com.ecommerce.util.ApiResponse.internalError(resp);
         }
     }
 
@@ -211,7 +211,7 @@ public class CategoryServlet extends HttpServlet {
             resp.getWriter().write("{\"id\":" + id + ",\"success\":true}");
         } catch (Exception e) {
             resp.setStatus(400);
-            resp.getWriter().write("{\"error\":\"" + safe(e.getMessage()) + "\"}");
+            com.ecommerce.util.ApiResponse.internalError(resp);
         }
     }
 
@@ -234,7 +234,7 @@ public class CategoryServlet extends HttpServlet {
             resp.getWriter().write("{\"success\":true}");
         } catch (Exception e) {
             resp.setStatus(400);
-            resp.getWriter().write("{\"error\":\"" + safe(e.getMessage()) + "\"}");
+            com.ecommerce.util.ApiResponse.internalError(resp);
         }
     }
 
@@ -270,7 +270,7 @@ public class CategoryServlet extends HttpServlet {
             resp.getWriter().write("{\"success\":true}");
         } catch (Exception e) {
             resp.setStatus(400);
-            resp.getWriter().write("{\"error\":\"" + safe(e.getMessage()) + "\"}");
+            com.ecommerce.util.ApiResponse.internalError(resp);
         }
     }
 
@@ -294,7 +294,7 @@ public class CategoryServlet extends HttpServlet {
             resp.getWriter().write("{\"success\":true}");
         } catch (Exception e) {
             resp.setStatus(400);
-            resp.getWriter().write("{\"error\":\"" + safe(e.getMessage()) + "\"}");
+            com.ecommerce.util.ApiResponse.internalError(resp);
         }
     }
 

@@ -70,6 +70,14 @@ public class GoogleAuthUtil {
             throw new IOException("Jeton Google non destiné à cette application");
         }
 
+        // Émetteur : uniquement Google (anti issuer-confusion).
+        Object iss = info.get("iss");
+        String issuer = iss == null ? "" : String.valueOf(iss);
+        if (!"accounts.google.com".equals(issuer)
+                && !"https://accounts.google.com".equals(issuer)) {
+            throw new IOException("Émetteur du jeton Google invalide");
+        }
+
         // Expiration
         Object exp = info.get("exp");
         if (exp != null) {

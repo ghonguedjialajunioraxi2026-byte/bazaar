@@ -48,7 +48,7 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(8
       </div>
       <div class="mb-6">
         <label class="block text-sm font-medium text-slate-700 mb-1">Mot de passe</label>
-        <input id="loginPass" type="password" value="admin123" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-primary-500 transition text-sm">
+        <input id="loginPass" type="password" autocomplete="current-password" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-primary-500 transition text-sm">
       </div>
       <button type="submit" class="w-full py-3 bg-gradient-to-r from-primary-600 to-primary-500 text-white font-semibold rounded-xl hover:from-primary-700 hover:to-primary-600 transition shadow-lg">Se connecter</button>
       <p id="loginError" class="text-red-500 text-sm text-center mt-3 hidden">Identifiants incorrects</p>
@@ -1376,6 +1376,12 @@ async function loadProducts() {
 
 function searchProducts(q) { productSearch = q.toLowerCase(); renderProducts(); }
 
+function filterProductsById(catId) {
+  const c = findCategoryEverywhere(catId);
+  if (!c) return;
+  filterProductsByCategory(c.id, c.name, c.icon);
+}
+
 function filterProductsByCategory(catId, catName, catIcon) {
   productCategoryFilter = { id: catId, name: catName, icon: catIcon || 'bi-tag' };
   document.getElementById('catGridView').classList.add('hidden');
@@ -1417,7 +1423,7 @@ function renderProducts() {
     : `<table class="w-full text-sm"><thead><tr class="text-left text-slate-500 text-xs uppercase bg-slate-50"><th class="px-4 py-3">Produit</th><th class="px-4 py-3">Prix</th><th class="px-4 py-3">Images</th><th class="px-4 py-3">Actions</th></tr></thead><tbody>${filtered.map(p => {
       const promo = getPromoForProduct(p.id);
       return `<tr class="table-row border-t border-slate-50">
-        <td class="px-4 py-3"><div class="flex items-center gap-3"><img src="${(p.images && p.images[0]) || 'https://placehold.co/80x80/e2e8f0/94a3b8?text=Produit'}" class="w-10 h-10 rounded-lg object-cover bg-slate-100" onerror="this.src='https://placehold.co/80x80/e2e8f0/94a3b8?text=Produit'"><div><p class="font-medium">${p.name}</p><p class="text-xs text-slate-400">${p.brand || ''}</p></div></div></td>
+        <td class="px-4 py-3"><div class="flex items-center gap-3"><img src="${notifEsc((p.images && p.images[0]) || 'https://placehold.co/80x80/e2e8f0/94a3b8?text=Produit')}" class="w-10 h-10 rounded-lg object-cover bg-slate-100" onerror="this.src='https://placehold.co/80x80/e2e8f0/94a3b8?text=Produit'"><div><p class="font-medium">${notifEsc(p.name)}</p><p class="text-xs text-slate-400">${notifEsc(p.brand || '')}</p></div></div></td>
         <td class="px-4 py-3"><span class="font-semibold">${formatMoney(p.price)}</span>${promo ? `<br><span class="text-xs text-red-500">Promo: ${formatMoney(promo.promoPrice)}</span>` : ''}</td>
         <td class="px-4 py-3"><button onclick="openImageManager(${p.id})" class="text-xs text-primary-600 hover:underline font-medium"><i class="bi bi-images mr-1"></i>Gérer</button></td>
         <td class="px-4 py-3"><div class="flex gap-1">
@@ -1456,7 +1462,7 @@ function openProductModal(product) {
           <label class="block text-sm font-semibold text-slate-700 mb-1">Catégorie *</label>
           <select id="pCategory" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500" required>
             <option value="">— Choisir —</option>
-            ${categories.map(c => `<option value="${c.id}" ${(isEdit && product.categoryId == c.id) || (!isEdit && defaultCat == c.id) ? 'selected' : ''}>${c.name}</option>`).join('')}
+            ${categories.map(c => `<option value="${c.id}" ${(isEdit && product.categoryId == c.id) || (!isEdit && defaultCat == c.id) ? 'selected' : ''}>${notifEsc(c.name)}</option>`).join('')}
           </select>
         </div>
         <div>
@@ -1737,17 +1743,17 @@ function catCardHTML(c, depth) {
   return `<div class="bg-white rounded-xl p-5 shadow-sm border border-slate-100 stat-card ${c.active ? '' : 'opacity-70'}">
       <div class="flex items-center gap-3 mb-2">
         ${c.image
-          ? `<img src="${c.image}" alt="${c.name}" class="w-11 h-11 rounded-xl object-cover border border-slate-100" onerror="this.style.display='none'">`
-          : `<div class="w-11 h-11 rounded-xl flex items-center justify-center text-white text-lg" style="background:${color}"><i class="bi ${c.icon || 'bi-tag'}"></i></div>`}
+          ? `<img src="${notifEsc(c.image)}" alt="${notifEsc(c.name)}" class="w-11 h-11 rounded-xl object-cover border border-slate-100" onerror="this.style.display='none'">`
+          : `<div class="w-11 h-11 rounded-xl flex items-center justify-center text-white text-lg" style="background:${color}"><i class="bi ${notifEsc(c.icon || 'bi-tag')}"></i></div>`}
         <div class="flex-1 min-w-0">
-          <p class="font-semibold text-sm truncate">${c.name}</p>
-          <p class="text-xs text-slate-400">${count} produit(s)${parent ? ' · <span class="text-primary-500">' + parent + '</span>' : ''}</p>
+          <p class="font-semibold text-sm truncate">${notifEsc(c.name)}</p>
+          <p class="text-xs text-slate-400">${count} produit(s)${parent ? ' · <span class="text-primary-500">' + notifEsc(parent) + '</span>' : ''}</p>
         </div>
         ${statusChip}
       </div>
-      <p class="text-[11px] text-slate-400 mb-3">Ordre : ${c.displayOrder || 0} · <span class="font-mono">${c.slug || ''}</span></p>
+      <p class="text-[11px] text-slate-400 mb-3">Ordre : ${c.displayOrder || 0} · <span class="font-mono">${notifEsc(c.slug || '')}</span></p>
       <div class="flex gap-2">
-        <button onclick="filterProductsByCategory(${c.id}, '${c.name.replace(/'/g, "\\'")}', '${c.icon || 'bi-tag'}')" title="Voir les produits" class="flex-1 py-2 bg-primary-50 text-primary-600 rounded-lg text-xs font-medium hover:bg-primary-100 transition"><i class="bi bi-eye mr-1"></i>Voir</button>
+        <button onclick="filterProductsById(${c.id})" title="Voir les produits" class="flex-1 py-2 bg-primary-50 text-primary-600 rounded-lg text-xs font-medium hover:bg-primary-100 transition"><i class="bi bi-eye mr-1"></i>Voir</button>
         <button onclick="toggleCategoryStatus(${c.id})" title="${c.active ? 'Désactiver' : 'Activer'}" class="py-2 px-3 ${c.active ? 'bg-amber-50 text-amber-600 hover:bg-amber-100' : 'bg-green-50 text-green-600 hover:bg-green-100'} rounded-lg text-xs font-medium transition"><i class="bi ${c.active ? 'bi-eye-slash' : 'bi-eye'}"></i></button>
         <button onclick="editCategory(${c.id})" title="Modifier" class="py-2 px-3 bg-slate-50 text-slate-600 rounded-lg text-xs font-medium hover:bg-slate-100 transition"><i class="bi bi-pencil"></i></button>
         <button onclick="deleteCategory(${c.id})" title="Supprimer" class="py-2 px-3 bg-red-50 text-red-500 rounded-lg text-xs font-medium hover:bg-red-100 transition"><i class="bi bi-trash"></i></button>
@@ -1785,8 +1791,8 @@ function treeHTML(nodes, depth) {
         ${hasKids
           ? `<button onclick="document.getElementById('${nodeId}').classList.toggle('hidden');this.querySelector('i').classList.toggle('bi-chevron-down');this.querySelector('i').classList.toggle('bi-chevron-right')" class="text-slate-400 hover:text-slate-600"><i class="bi bi-chevron-down text-xs"></i></button>`
           : '<span class="w-4"></span>'}
-        <i class="bi ${n.icon || 'bi-tag'} text-primary-500 text-sm"></i>
-        <span class="text-sm font-medium flex-1 truncate">${n.name} <span class="text-xs text-slate-400 font-normal">(${count})</span></span>
+        <i class="bi ${notifEsc(n.icon || 'bi-tag')} text-primary-500 text-sm"></i>
+        <span class="text-sm font-medium flex-1 truncate">${notifEsc(n.name)} <span class="text-xs text-slate-400 font-normal">(${count})</span></span>
         ${n.active ? '' : '<span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 font-semibold">Inactive</span>'}
         <button onclick="toggleCategoryStatus(${n.id})" title="${n.active ? 'Désactiver' : 'Activer'}" class="text-xs px-2 py-1 rounded-lg ${n.active ? 'text-amber-600 hover:bg-amber-50' : 'text-green-600 hover:bg-green-50'}"><i class="bi ${n.active ? 'bi-eye-slash' : 'bi-eye'}"></i></button>
         <button onclick="editCategory(${n.id})" title="Modifier" class="text-xs px-2 py-1 rounded-lg text-slate-500 hover:bg-slate-100"><i class="bi bi-pencil"></i></button>
@@ -1814,7 +1820,7 @@ function parentOptionsHTML(excludeId) {
   const flat = catView === 'tree' ? flattenTree(categories) : (categories || []).map(c => ({ id: c.id, name: c.name, prefix: '' }));
   return '<option value="">— Catégorie principale —</option>' + flat
     .filter(o => !(excludeId && o.id == excludeId))
-    .map(o => `<option value="${o.id}">${o.prefix || ''}${o.name}</option>`).join('');
+    .map(o => `<option value="${o.id}">${notifEsc(o.prefix || '')}${notifEsc(o.name)}</option>`).join('');
 }
 
 function flattenTree(nodes, prefix, out) {
@@ -1992,7 +1998,7 @@ function openPromotionModal(promo) {
       <form onsubmit="savePromotion(event, ${isEdit ? promo.id : 'null'})" class="space-y-3">
         ${!isEdit ? `<select id="prProductId" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm" required>
           <option value="">— Sélectionner un produit —</option>
-          ${products.map(p => `<option value="${p.id}">${p.name} (${formatMoney(p.price)})</option>`).join('')}
+          ${products.map(p => `<option value="${p.id}">${notifEsc(p.name)} (${formatMoney(p.price)})</option>`).join('')}
         </select>` : ''}
         <div class="grid grid-cols-2 gap-3">
           <input id="prPrice" type="number" value="${isEdit ? promo.promoPrice : ''}" placeholder="Prix promo (FCFA)" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm">
@@ -2077,13 +2083,13 @@ function renderSuppliers() {
         <tr class="table-row border-t border-slate-50">
           <td class="px-4 py-3">
             <div class="flex items-center gap-2">
-              ${s.logo ? `<img src="${s.logo}" class="w-8 h-8 rounded-lg object-cover bg-slate-100" onerror="this.style.display='none'">` : `<div class="w-8 h-8 rounded-lg bg-primary-100 text-primary-600 flex items-center justify-center text-sm font-bold">${(s.name||'?').charAt(0).toUpperCase()}</div>`}
-              <span class="font-medium">${s.name || '—'}</span>
+              ${s.logo ? `<img src="${notifEsc(s.logo)}" class="w-8 h-8 rounded-lg object-cover bg-slate-100" onerror="this.style.display='none'">` : `<div class="w-8 h-8 rounded-lg bg-primary-100 text-primary-600 flex items-center justify-center text-sm font-bold">${notifEsc((s.name||'?').charAt(0).toUpperCase())}</div>`}
+              <span class="font-medium">${notifEsc(s.name || '—')}</span>
             </div>
           </td>
-          <td class="px-4 py-3">${s.contactName || '—'}<br><span class="text-xs text-slate-400">${s.phone || ''}</span></td>
-          <td class="px-4 py-3 text-slate-500">${s.email || '—'}</td>
-          <td class="px-4 py-3">${s.city || '—'}</td>
+          <td class="px-4 py-3">${notifEsc(s.contactName || '—')}<br><span class="text-xs text-slate-400">${notifEsc(s.phone || '')}</span></td>
+          <td class="px-4 py-3 text-slate-500">${notifEsc(s.email || '—')}</td>
+          <td class="px-4 py-3">${notifEsc(s.city || '—')}</td>
           <td class="px-4 py-3 font-semibold">${(s.commissionRate || 0)}%</td>
           <td class="px-4 py-3"><span class="px-2 py-1 rounded-full text-xs font-medium ${s.active ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-500'}">${s.active ? 'Actif' : 'Inactif'}</span></td>
           <td class="px-4 py-3"><div class="flex gap-1">
@@ -2205,10 +2211,10 @@ async function loadStats() {
       document.getElementById('statLowRotation').textContent = stats.lowRotationProducts || '0';
     }
     if (stats.topProducts && stats.topProducts.length > 0) {
-      document.getElementById('topProductsTable').innerHTML = `<table class="w-full text-sm"><thead><tr class="text-left text-slate-500 text-xs uppercase bg-slate-50"><th class="px-4 py-2">Produit</th><th class="px-4 py-2">Vendus</th><th class="px-4 py-2">Revenus</th></tr></thead><tbody>${stats.topProducts.map((p, i) => `<tr class="border-t border-slate-50"><td class="px-4 py-2 font-medium">${i+1}. ${p.name || 'Produit #' + p.productId}</td><td class="px-4 py-2">${p.totalSold || 0}</td><td class="px-4 py-2 font-semibold">${formatMoney(p.totalRevenue || 0)}</td></tr>`).join('')}</tbody></table>`;
+      document.getElementById('topProductsTable').innerHTML = `<table class="w-full text-sm"><thead><tr class="text-left text-slate-500 text-xs uppercase bg-slate-50"><th class="px-4 py-2">Produit</th><th class="px-4 py-2">Vendus</th><th class="px-4 py-2">Revenus</th></tr></thead><tbody>${stats.topProducts.map((p, i) => `<tr class="border-t border-slate-50"><td class="px-4 py-2 font-medium">${i+1}. ${notifEsc(p.name || 'Produit #' + p.productId)}</td><td class="px-4 py-2">${p.totalSold || 0}</td><td class="px-4 py-2 font-semibold">${formatMoney(p.totalRevenue || 0)}</td></tr>`).join('')}</tbody></table>`;
     }
     if (stats.topCities && stats.topCities.length > 0) {
-      document.getElementById('topCitiesTable').innerHTML = `<table class="w-full text-sm"><thead><tr class="text-left text-slate-500 text-xs uppercase bg-slate-50"><th class="px-4 py-2">Ville</th><th class="px-4 py-2">Commandes</th></tr></thead><tbody>${stats.topCities.map(c => `<tr class="border-t border-slate-50"><td class="px-4 py-2 font-medium">${c.city}</td><td class="px-4 py-2">${c.count || 0}</td></tr>`).join('')}</tbody></table>`;
+      document.getElementById('topCitiesTable').innerHTML = `<table class="w-full text-sm"><thead><tr class="text-left text-slate-500 text-xs uppercase bg-slate-50"><th class="px-4 py-2">Ville</th><th class="px-4 py-2">Commandes</th></tr></thead><tbody>${stats.topCities.map(c => `<tr class="border-t border-slate-50"><td class="px-4 py-2 font-medium">${notifEsc(c.city)}</td><td class="px-4 py-2">${c.count || 0}</td></tr>`).join('')}</tbody></table>`;
     }
     if (stats.ordersByMonth && stats.ordersByMonth.length > 0) {
       if (window._chartMonthly) window._chartMonthly.destroy();
@@ -2235,7 +2241,7 @@ async function loadFinance() {
   try {
     const rules = await api('/api/admin/monetization/rules');
     document.getElementById('rulesTable').innerHTML = `<div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="text-left text-slate-500 text-xs uppercase bg-slate-50"><th class="px-4 py-2">Règle</th><th class="px-4 py-2">Commission</th><th class="px-4 py-2">Frais fixes</th><th class="px-4 py-2">Statut</th><th class="px-4 py-2"></th></tr></thead><tbody>` +
-      rules.map(r => `<tr class="border-t border-slate-50"><td class="px-4 py-2 font-medium">${r.name}</td><td class="px-4 py-2 tabular-nums">${(r.commissionBps / 100).toFixed(2)} %</td><td class="px-4 py-2 tabular-nums">${formatMoney(r.fixedFee || 0)}</td><td class="px-4 py-2">${r.active ? '<span class="text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">ACTIVE</span>' : '<span class="text-xs font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">inactive</span>'}</td><td class="px-4 py-2 text-right">${isMoneyAllowed() ? `<button onclick="toggleRule(${r.id},${r.active ? 'false' : 'true'})" class="text-xs font-bold text-primary-700 hover:underline">${r.active ? 'Désactiver' : 'Activer'}</button>` : '<span class="text-xs text-slate-300">Lecture seule</span>'}</td></tr>`).join('') + `</tbody></table></div>`;
+      rules.map(r => `<tr class="border-t border-slate-50"><td class="px-4 py-2 font-medium">${notifEsc(r.name)}</td><td class="px-4 py-2 tabular-nums">${(r.commissionBps / 100).toFixed(2)} %</td><td class="px-4 py-2 tabular-nums">${formatMoney(r.fixedFee || 0)}</td><td class="px-4 py-2">${r.active ? '<span class="text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">ACTIVE</span>' : '<span class="text-xs font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">inactive</span>'}</td><td class="px-4 py-2 text-right">${isMoneyAllowed() ? `<button onclick="toggleRule(${r.id},${r.active ? 'false' : 'true'})" class="text-xs font-bold text-primary-700 hover:underline">${r.active ? 'Désactiver' : 'Activer'}</button>` : '<span class="text-xs text-slate-300">Lecture seule</span>'}</td></tr>`).join('') + `</tbody></table></div>`;
   } catch (e) { document.getElementById('rulesTable').innerHTML = '<p class="text-sm text-red-500">Chargement impossible.</p>'; }
 }
 async function toggleRule(id, active) {

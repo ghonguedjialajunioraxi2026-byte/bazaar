@@ -59,8 +59,21 @@ public class ReviewDAO {
         return list;
     }
 
-    public void approve(int id) throws SQLException {
-        String sql = "UPDATE reviews SET approved = 1 WHERE id = ?";
+    /** Anti-spam : avis récents sur un produit (fenêtre en minutes). */
+    public int countRecent(int productId, int minutes) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM reviews WHERE product_id = ? AND created_at >= NOW() - INTERVAL ? MINUTE";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, productId);
+            ps.setInt(2, Math.max(1, minutes));
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return rs.getInt(1);
+            }
+        }
+        return 0;
+    }
+
+    public void approve(int id) throws SQLException {        String sql = "UPDATE reviews SET approved = 1 WHERE id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);

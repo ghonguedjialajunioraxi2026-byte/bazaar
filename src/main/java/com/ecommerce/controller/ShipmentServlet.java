@@ -50,7 +50,7 @@ public class ShipmentServlet extends HttpServlet {
         try {
             String token = req.getHeader("Authorization");
             if (token != null && token.startsWith("Bearer ")) token = token.substring(7);
-            else token = req.getParameter("token");
+            else token = null; // header seul (cf. AdminAuth)
             if (token == null || token.isBlank()) return null;
             int id = supplierAuthService.validateToken(token);
             return id > 0 ? id : null;

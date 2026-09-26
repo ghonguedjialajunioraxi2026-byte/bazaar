@@ -66,11 +66,21 @@ public final class UploadUtil {
      */
     public static String saveImage(Part part, String subdir, HttpServletRequest req) throws IOException {
         String ext = extOf(part);
+        // Refus SVG : format actif (XSS stocké servi inline). Formats
+        // bitmap uniquement, avec vérification du contenu réel.
+        if (".svg".equals(ext)) {
+            throw new IOException("Format SVG non autorisé");
+        }
+        byte[] bytes = part.getInputStream().readAllBytes();
+        if (bytes.length == 0 || bytes.length > 10 * 1024 * 1024) {
+            throw new IOException("Fichier vide ou trop volumineux");
+        }
+        if (!contentMatches(bytes, ext)) {
+            throw new IOException("Contenu du fichier non conforme à son extension");
+        }
         String filename = UUID.randomUUID().toString().replace("-", "") + ext;
         Path target = Paths.get(subDir(subdir).getAbsolutePath(), filename);
-        try (InputStream in = part.getInputStream()) {
-            Files.copy(in, target, StandardCopyOption.REPLACE_EXISTING);
-        }
+        Files.write(target, bytes);
         // Copie de compatibilité dans le webapp déployé (best-effort).
         try {
             String realPath = req != null ? req.getServletContext().getRealPath("/") : null;
@@ -109,7 +119,29 @@ public final class UploadUtil {
                 }
             }
         }
-        if (!ext.matches("(?i)\\.(jpg|jpeg|png|gif|webp|svg)")) ext = ".jpg";
+        if (!ext.matches("(?i)\\.(jpg|jpeg|png|gif|webp)")) ext = ".jpg";
         return ext;
+    }
+
+    /**
+     * Vérifie la signature du contenu (magic bytes) contre l'extension.
+     * Ne remplace pas un antivirus, mais bloque les faux .jpg (scripts, HTML).
+     */
+    static boolean contentMatches(byte[] b, String ext) {
+        if (b == null || b.length < 12) return false;
+        switch (ext) {
+            case ".jpg":
+            case ".jpeg":
+                return b[0] == (byte) 0xFF && b[1] == (byte) 0xD8;
+            case ".png":
+                return b[0] == (byte) 0x89 && b[1] == 'P' && b[2] == 'N' && b[3] == 'G';
+            case ".gif":
+                return b[0] == 'G' && b[1] == 'I' && b[2] == 'F';
+            case ".webp":
+                return b[0] == 'R' && b[1] == 'I' && b[2] == 'F' && b[3] == 'F'
+                    && b[8] == 'W' && b[9] == 'E' && b[10] == 'B' && b[11] == 'P';
+            default:
+                return false;
+        }
     }
 }

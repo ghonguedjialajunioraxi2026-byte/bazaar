@@ -363,7 +363,7 @@ function showCompleteProfile() {
   if (SUPPLIER.name) document.getElementById('cpName').value = SUPPLIER.name;
   if (SUPPLIER.email) document.getElementById('cpGoogleEmail').textContent = SUPPLIER.email;
   if (SUPPLIER.logo) {
-    document.getElementById('cpAvatar').innerHTML = '<img src="' + SUPPLIER.logo + '" class="w-full h-full object-cover" onerror="this.style.display=\'none\'">';
+    document.getElementById('cpAvatar').innerHTML = '<img src="' + esc(SUPPLIER.logo) + '" class="w-full h-full object-cover" onerror="this.style.display=\'none\'">';
   }
   loadCompleteProfile();
 }
@@ -516,7 +516,7 @@ function showApp() {
   document.getElementById('supplierEmail').textContent = SUPPLIER.email || '';
   document.getElementById('shopNameHdr').textContent = SUPPLIER.name || '';
     if (SUPPLIER.logo) {
-      document.getElementById('avatarLogo').innerHTML = '<img loading="lazy" src="' + SUPPLIER.logo + '" class="w-full h-full object-cover rounded-full" onerror="this.style.display=\'none\'">';
+      document.getElementById('avatarLogo').innerHTML = '<img loading="lazy" src="' + esc(SUPPLIER.logo) + '" class="w-full h-full object-cover rounded-full" onerror="this.style.display=\'none\'">';
     }
   goView('dashboard');
   refreshBadges();
@@ -611,7 +611,7 @@ async function loadCategories() {
 let productFilter = '';
 let productStatusFilter = 'all';
 
-function emptyState(msg){ return '<div class="empty"><div class="text-4xl mb-3 opacity-40"><i class="bi bi-inbox"></i></div><p>'+msg+'</p></div>'; }
+function emptyState(msg){ msg = esc(msg); return '<div class="empty"><div class="text-4xl mb-3 opacity-40"><i class="bi bi-inbox"></i></div><p>'+msg+'</p></div>'; }
 function statusBadge(st) {
   const map = {PENDING:'bg-amber-100 text-amber-700',APPROVED:'bg-green-100 text-green-700',ACTIVE:'bg-green-100 text-green-700',REJECTED:'bg-red-100 text-red-700',INACTIVE:'bg-slate-200 text-slate-600'};
   const labels = {PENDING:'En attente',APPROVED:'Approuvé',ACTIVE:'Actif',REJECTED:'Refusé',INACTIVE:'Inactif'};
@@ -652,7 +652,7 @@ async function renderProductsTable() {
     if (list.length===0) { wrap.innerHTML = emptyState('Aucun produit trouvé'); return; }
     wrap.innerHTML = `<table class="table"><thead><tr><th>Produit</th><th>Catégorie</th><th>Prix</th><th>Stock</th><th>Statut</th><th class="text-right">Actions</th></tr></thead><tbody>
       ${list.map(p => `<tr>
-        <td><div class="flex items-center gap-3"><img src="${imgSrc(p)}" class="w-10 h-10 rounded-lg object-cover bg-slate-100" onerror="this.src='https://placehold.co/80x80/e2e8f0/64748b?text=+'">${esc(p.name)}<br><span class="text-xs text-slate-400">${esc(p.brand||'')}${p.reference?' · '+esc(p.reference):''}</span></div></td>
+        <td><div class="flex items-center gap-3"><img src="${esc(imgSrc(p))}" class="w-10 h-10 rounded-lg object-cover bg-slate-100" onerror="this.src='https://placehold.co/80x80/e2e8f0/64748b?text=+'">${esc(p.name)}<br><span class="text-xs text-slate-400">${esc(p.brand||'')}${p.reference?' · '+esc(p.reference):''}</span></div></td>
         <td class="text-slate-500">${esc(p.categoryName||'')}</td>
         <td class="font-semibold">${money(p.price)}</td>
         <td><button onclick="openStockModal(${p.id},${p.stock||0})" class="text-sm px-2 py-1 rounded-lg ${(p.stock||0)<=5?'bg-red-50 text-red-600':'bg-slate-100 text-slate-600'} hover:bg-slate-200 transition"><i class="bi bi-box-seam mr-1"></i>${p.stock||0}</button></td>
@@ -888,7 +888,7 @@ async function renderCommandes(){
         <td class="font-semibold">#${esc(o.orderNumber||o.id)}</td>
         <td>${esc(o.fullname||'')}<br><span class="text-xs text-slate-400">${esc(o.phone||'')} · ${esc(o.city||'')}</span></td>
         <td class="font-semibold">${money(o.total)}</td>
-        <td><span class="status-chip ${statusColor[o.status]||'bg-slate-100'}">${statusLabel[o.status]||o.status}</span></td>
+        <td><span class="status-chip ${statusColor[o.status]||'bg-slate-100'}">${esc(statusLabel[o.status]||o.status)}</span></td>
         <td class="text-slate-500">${fmtDate(o.createdAt)}</td>
         <td class="text-right"><button onclick="openOrderModal(${o.id})" class="btn btn-outline text-xs"><i class="bi bi-eye"></i> Détails</button></td>
       </tr>`).join(''):'<tr><td colspan="6">'+emptyState('Aucune commande')+'</td></tr>'}

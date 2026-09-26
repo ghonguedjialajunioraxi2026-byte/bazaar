@@ -60,6 +60,10 @@ public class ConversationService {
             if (product == null) {
                 throw new AppException(ErrorCodes.RESOURCE_NOT_FOUND, 404, "Produit introuvable");
             }
+            // Intégrité : le produit doit appartenir au fournisseur contacté.
+            if (product.getSupplierId() != supplierId) {
+                throw new AppException(ErrorCodes.OFFER_INVALID, 400, "Produit d'un autre vendeur");
+            }
         }
         List<Conversation> mine = listForGuest(phone.trim(), cid.trim());
         for (Conversation c : mine) {

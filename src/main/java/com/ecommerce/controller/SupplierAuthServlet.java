@@ -60,7 +60,7 @@ public class SupplierAuthServlet extends HttpServlet {
                     gu = GoogleAuthUtil.verify(idToken);
                 } catch (Exception e) {
                     resp.setStatus(401);
-                    resp.getWriter().write("{\"success\":false,\"message\":\"" + safe(e.getMessage()) + "\"}");
+                    resp.getWriter().write("{\"success\":false,\"message\":\"Impossible de traiter votre demande.\"}");
                     return;
                 }
                 Supplier gs;
@@ -68,7 +68,7 @@ public class SupplierAuthServlet extends HttpServlet {
                     gs = authService.loginWithGoogle(gu.sub, gu.email, gu.name, gu.picture);
                 } catch (SQLException e) {
                     resp.setStatus(403);
-                    resp.getWriter().write("{\"success\":false,\"message\":\"" + safe(e.getMessage()) + "\"}");
+                    resp.getWriter().write("{\"success\":false,\"message\":\"Impossible de traiter votre demande.\"}");
                     return;
                 }
                 String gtoken = authService.createSession(gs.getId(), req.getRemoteAddr(), req.getHeader("User-Agent"));
@@ -115,7 +115,7 @@ public class SupplierAuthServlet extends HttpServlet {
                     created = supplierService.register(s, password);
                 } catch (SQLException e) {
                     resp.setStatus(409);
-                    resp.getWriter().write("{\"success\":false,\"message\":\"" + safe(e.getMessage()) + "\"}");
+                    resp.getWriter().write("{\"success\":false,\"message\":\"Impossible de traiter votre demande.\"}");
                     return;
                 }
 
@@ -127,18 +127,29 @@ public class SupplierAuthServlet extends HttpServlet {
             String email = body.get("email");
             String password = body.get("password");
 
+            // Anti brute-force : 5 échecs → 15 min (clé email + IP).
+            String attemptKey = com.ecommerce.service.LoginAttemptService.key(
+                "supplier", email, req.getRemoteAddr());
+            if (com.ecommerce.service.LoginAttemptService.get().isBlocked(attemptKey)) {
+                resp.setStatus(429);
+                resp.getWriter().write("{\"success\":false,\"message\":\"Trop de tentatives. Réessayez dans 15 minutes.\"}");
+                return;
+            }
+
             Supplier s = authService.login(email, password);
             if (s == null) {
+                com.ecommerce.service.LoginAttemptService.get().recordFailure(attemptKey);
                 resp.setStatus(401);
                 resp.getWriter().write("{\"success\":false,\"message\":\"Email ou mot de passe incorrect\"}");
                 return;
             }
+            com.ecommerce.service.LoginAttemptService.get().recordSuccess(attemptKey);
 
             String token = authService.createSession(s.getId(), req.getRemoteAddr(), req.getHeader("User-Agent"));
             resp.getWriter().write(authJson(token, supplierService.getProfile(s.getId())));
         } catch (Exception e) {
             resp.setStatus(500);
-            resp.getWriter().write("{\"success\":false,\"message\":\"Erreur serveur\",\"error\":\"" + e.getMessage().replace("\"", "'") + "\"}");
+            resp.getWriter().write("{\"success\":false,\"message\":\"Impossible de traiter votre demande.\"}");
         }
     }
 

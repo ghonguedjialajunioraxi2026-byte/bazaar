@@ -24,6 +24,12 @@ public class SupplierAuthService {
         String hash = s.getPasswordHash();
         if (hash == null || hash.isEmpty()) return null;
         if (!PasswordUtil.verify(password, hash)) return null;
+        // Migration transparente vers PBKDF2 (comptes pré-Phase 15).
+        if (PasswordUtil.needsRehash(hash)) {
+            try {
+                supplierDAO.updatePassword(s.getId(), PasswordUtil.hash(password));
+            } catch (Exception ignored) {}
+        }
         supplierDAO.updateLastLogin(s.getId());
         return s;
     }

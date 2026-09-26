@@ -25,7 +25,7 @@ public final class AdminAuth {
         try {
             String token = req.getHeader("Authorization");
             if (token != null && token.startsWith("Bearer ")) token = token.substring(7);
-            if (token == null || token.isBlank()) token = req.getParameter("token");
+            // Tokens uniquement via header Authorization (le ?token= fuit dans logs/historique).
             if (token != null && !token.isBlank()) {
                 return new AdminSessionDAO().validateSession(token);
             }
@@ -42,7 +42,7 @@ public final class AdminAuth {
         try {
             String token = req.getHeader("Authorization");
             if (token != null && token.startsWith("Bearer ")) token = token.substring(7);
-            if (token == null || token.isBlank()) token = req.getParameter("token");
+            // Tokens uniquement via header Authorization (le ?token= fuit dans logs/historique).
             if (token != null && !token.isBlank()) {
                 adminId = new AdminSessionDAO().validateSession(token);
             }

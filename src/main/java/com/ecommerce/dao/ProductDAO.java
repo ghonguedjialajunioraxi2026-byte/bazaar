@@ -117,21 +117,24 @@ public class ProductDAO {
 
     private void enrichWithImages(List<Product> products) throws SQLException {
         if (products.isEmpty()) return;
-        StringBuilder ids = new StringBuilder();
+        // Placeholders liés (jamais de concaténation, même d'entiers).
+        StringBuilder in = new StringBuilder();
         for (int i = 0; i < products.size(); i++) {
-            if (i > 0) ids.append(",");
-            ids.append(products.get(i).getId());
+            if (i > 0) in.append(",");
+            in.append("?");
         }
-        String sql = "SELECT product_id, image_url, is_primary, sort_order FROM product_images WHERE product_id IN (" + ids + ") ORDER BY is_primary DESC, sort_order ASC";
+        String sql = "SELECT product_id, image_url, is_primary, sort_order FROM product_images WHERE product_id IN (" + in + ") ORDER BY is_primary DESC, sort_order ASC";
         java.util.Map<Integer, java.util.List<String>> imageMap = new java.util.LinkedHashMap<>();
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                int pid = rs.getInt("product_id");
-                String url = rs.getString("image_url");
-                if (url != null && !url.isEmpty()) {
-                    imageMap.computeIfAbsent(pid, k -> new ArrayList<>()).add(url);
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            for (int i = 0; i < products.size(); i++) ps.setInt(i + 1, products.get(i).getId());
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    int pid = rs.getInt("product_id");
+                    String url = rs.getString("image_url");
+                    if (url != null && !url.isEmpty()) {
+                        imageMap.computeIfAbsent(pid, k -> new ArrayList<>()).add(url);
+                    }
                 }
             }
         }
