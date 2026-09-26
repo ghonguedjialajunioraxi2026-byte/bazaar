@@ -3948,17 +3948,21 @@ function initTypewriter() {
   heroTypeSchedule(tick, holdFor(HERO_MESSAGES[0]));
 }
 
+/* Photos boutique en arrière-plan du hero (dossier « photo produit »). */
+const HERO_LOCAL = Array.from({ length: 31 }, (_, i) =>
+  'assets/img/hero/hero-' + String(i + 1).padStart(2, '0') + '.jpeg');
+
 function renderHeroFlow() {
   const flow = document.getElementById('hero-flow');
   if (!flow || flow.dataset.built) return;
-  const pool = [];
-  const seen = new Set();
+  const pool = HERO_LOCAL.slice();
+  const seen = new Set(pool);
   (CATEGORIES || []).forEach(c => {
     if (c.image && !seen.has(c.image)) { seen.add(c.image); pool.push(c.image); }
   });
   (PRODUCTS || []).forEach(p => {
     (p.gallery || []).slice(0, 2).forEach(img => {
-      if (img && !seen.has(img) && pool.length < 30) { seen.add(img); pool.push(img); }
+      if (img && !seen.has(img) && pool.length < 45) { seen.add(img); pool.push(img); }
     });
   });
   if (pool.length < 6) return; // pas assez d'images : hero sobre, sans flow
@@ -3996,6 +4000,7 @@ function renderHeroStats() {
 document.addEventListener('DOMContentLoaded', async () => {
   try { AOS.init({ duration: 600, once: true, offset: 40 }); } catch(e) {}
   initTypewriter();
+  renderHeroFlow(); // fond immédiat (photos locales), enrichi après chargement catalogue
   renderPopular(); renderBestSellers(); renderNew(); renderTrends(); renderAllProducts(); renderRecommendations();
   try { await Promise.all([loadProducts(), loadCategories(), loadSuppliers()]); } catch(e) { console.error(e); }
   // Secours ultime : si l'API n'a rien donné, catalogue intégré
