@@ -12,48 +12,48 @@
 <link rel="stylesheet" href="assets/css/tokens.css">
 <link rel="stylesheet" href="assets/css/components.css">
 <script>
-tailwind.config={theme:{extend:{colors:{primary:{50:'#1F1607',100:'#2A1D08',200:'#3D2A0B',300:'#5A3F10',400:'#FF9900',500:'#FF9900',600:'#FF9900',700:'#FF9900',800:'#E88B00',900:'#8A4D00'},accent:{50:'#241A08',100:'#31260B',200:'#4A3B15',400:'#FF9900',500:'#FF9900',600:'#FF9900',700:'#FF9900'},dark:{800:'#2D3A4B',900:'#232F3E'},mboa:{background:'#0F1111',surface:'#171A1A',navy:'#232F3E',primary:'#FF9900',primaryHover:'#E88B00',text:'#F2F2F2',secondary:'#A7A9AC',muted:'#6B7280',border:'#303437',success:'#067D62',error:'#C40000',warning:'#F0B323',info:'#2C6ECB'}},fontFamily:{sans:['Manrope','system-ui','sans-serif'],serif:['DM Serif Display','Georgia','serif']}}}}
+tailwind.config={theme:{extend:{colors:{primary:{50:'#FBEAEA',100:'#F7D4D4',200:'#EFA9A9',300:'#E07B7B',400:'#E00000',500:'#C40000',600:'#C40000',700:'#C40000',800:'#E00000',900:'#9E0000'},accent:{50:'#FBEAEA',100:'#F7D4D4',200:'#EFA9A9',400:'#E00000',500:'#C40000',600:'#C40000',700:'#C40000'},dark:{800:'#222222',900:'#0A0A0A'},mboa:{black:'#0A0A0A',surface:'#151515',secondary:'#222222',white:'#FFFFFF',whiteSoft:'#F5F5F5',red:'#C40000',redBright:'#E00000',redDark:'#9E0000',gray:'#6B6B6B',grayLight:'#E5E5E5',border:'#D9D9D9',borderDark:'#303030'}},fontFamily:{sans:['Manrope','system-ui','sans-serif'],serif:['DM Serif Display','Georgia','serif']}}}}
 </script>
 <style>
 /* ADMIN premium sombre : Black Navy + Emerald + Gold */
 *{scroll-behavior:smooth}
-body{font-family:'Manrope',system-ui,sans-serif;background:#0F1111;color:#F2F2F2}
-.admin-dark{background:#171A1A;color:#A7A9AC}
+body{font-family:'Manrope',system-ui,sans-serif;background:#0A0A0A;color:#0A0A0A}
+.admin-dark{background:#FFFFFF;color:#6B6B6B}
 .admin-dark .stat-card{background:rgba(255,255,255,0.04);border:1px solid rgba(240,179,35,0.18)}
-.admin-gold{color:#F0B323}
+.admin-gold{color:#C40000}
 .sidebar-link{transition:background 120ms ease-out,color 120ms ease-out}
-.sidebar-link:hover,.sidebar-link.active{background:rgba(255,153,0,0.12);color:#FF9900}
-.sidebar-link.active{border-right:3px solid #F0B323;font-weight:600}
+.sidebar-link:hover,.sidebar-link.active{background:rgba(196,0,0,0.12);color:#C40000}
+.sidebar-link.active{border-right:3px solid #C40000;font-weight:600}
 .stat-card{transition:transform 200ms ease-out,box-shadow 300ms ease-out}
 .stat-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.08)}
-.table-row:hover{background:#232F3E}
+.table-row:hover{background:#F5F5F5}
 .modal-overlay{background:rgba(0,0,0,0.6);backdrop-filter:blur(6px)}
 ::-webkit-scrollbar{width:6px}
-::-webkit-scrollbar-track{background:#171A1A}
-::-webkit-scrollbar-thumb{background:#303437;border-radius:3px}
-input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(255,153,0,0.25)}
+::-webkit-scrollbar-track{background:#FFFFFF}
+::-webkit-scrollbar-thumb{background:#D9D9D9;border-radius:3px}
+input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(196,0,0,0.25)}
 </style>
 </head>
-<body class="text-[#F2F2F2] antialiased" style="background-color:#0F1111;background-image:radial-gradient(900px 480px at 10% -80px,rgba(255,153,0,0.06),transparent 65%),radial-gradient(760px 420px at 90% 6%,rgba(255,153,0,0.04),transparent 65%);background-attachment:fixed">
+<body class="text-[#0A0A0A] antialiased" style="background-color:#0A0A0A;background-image:radial-gradient(900px 480px at 10% -80px,rgba(196,0,0,0.06),transparent 65%),radial-gradient(760px 420px at 90% 6%,rgba(196,0,0,0.04),transparent 65%);background-attachment:fixed">
 
 <!-- ========== LOGIN PAGE ========== -->
 <div id="loginPage" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-700 via-primary-600 to-primary-500 p-4">
-  <div class="bg-[#171A1A] rounded-2xl shadow-2xl w-full max-w-md p-8">
+  <div class="bg-[#FFFFFF] rounded-2xl shadow-2xl w-full max-w-md p-8">
     <div class="text-center mb-8">
       <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-600 to-primary-500 flex items-center justify-center mx-auto mb-4 shadow-lg">
         <svg class="w-9 h-9 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
       </div>
-      <h1 class="text-2xl font-bold text-[#F2F2F2]">MBOA STYLE</h1>
-      <p class="text-[#A7A9AC] text-sm mt-1">Panneau d'administration</p>
+      <h1 class="text-2xl font-bold text-[#0A0A0A]">MBOA STYLE</h1>
+      <p class="text-[#6B6B6B] text-sm mt-1">Panneau d'administration</p>
     </div>
     <form id="loginForm" onsubmit="handleLogin(event)">
       <div class="mb-4">
-        <label class="block text-sm font-medium text-[#F2F2F2] mb-1">Nom d'utilisateur</label>
-        <input id="loginUser" type="text" value="admin" class="w-full px-4 py-3 rounded-xl border border-[#303437] focus:border-primary-500 transition text-sm">
+        <label class="block text-sm font-medium text-[#0A0A0A] mb-1">Nom d'utilisateur</label>
+        <input id="loginUser" type="text" value="admin" class="w-full px-4 py-3 rounded-xl border border-[#E5E5E5] focus:border-primary-500 transition text-sm">
       </div>
       <div class="mb-6">
-        <label class="block text-sm font-medium text-[#F2F2F2] mb-1">Mot de passe</label>
-        <input id="loginPass" type="password" autocomplete="current-password" class="w-full px-4 py-3 rounded-xl border border-[#303437] focus:border-primary-500 transition text-sm">
+        <label class="block text-sm font-medium text-[#0A0A0A] mb-1">Mot de passe</label>
+        <input id="loginPass" type="password" autocomplete="current-password" class="w-full px-4 py-3 rounded-xl border border-[#E5E5E5] focus:border-primary-500 transition text-sm">
       </div>
       <button type="submit" class="w-full py-3 bg-gradient-to-r from-primary-600 to-primary-500 text-white font-semibold rounded-xl hover:from-primary-700 hover:to-primary-600 transition shadow-lg">Se connecter</button>
       <p id="loginError" class="text-[#C40000] text-sm text-center mt-3 hidden">Identifiants incorrects</p>
@@ -65,74 +65,74 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(2
 <div id="appShell" class="hidden min-h-screen">
 
   <!-- SIDEBAR -->
-  <aside id="sidebar" class="fixed top-0 left-0 bottom-0 w-64 bg-[#232F3E] border-r border-[#303437] z-40 transform transition-transform lg:translate-x-0 -translate-x-full" style="overflow-y:auto">
-    <div class="p-5 border-b border-[#303437]">
+  <aside id="sidebar" class="fixed top-0 left-0 bottom-0 w-64 bg-[#0A0A0A] border-r border-[#0A0A0A] z-40 transform transition-transform lg:translate-x-0 -translate-x-full" style="overflow-y:auto">
+    <div class="p-5 border-b border-[#E5E5E5]">
       <div class="flex items-center gap-2.5">
         <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-primary-600 to-primary-500 flex items-center justify-center">
           <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
         </div>
-        <span class="font-bold text-[#F2F2F2] tracking-tight">MBOA <span class="text-[#FF9900]">STYLE</span></span>
-        <span class="text-xs bg-primary-100 text-[#FF9900] px-2 py-0.5 rounded-full font-medium ml-auto">Admin</span>
+        <span class="font-bold text-[#0A0A0A] tracking-tight">MBOA <span class="text-[#C40000]">STYLE</span></span>
+        <span class="text-xs bg-primary-100 text-[#C40000] px-2 py-0.5 rounded-full font-medium ml-auto">Admin</span>
       </div>
     </div>
     <nav class="p-3" aria-label="Navigation administrative">
-      <p class="text-[10px] uppercase tracking-wider text-[#A7A9AC] font-semibold px-3 mb-2 mt-2">Accueil</p>
-      <a href="#" onclick="showPage('dashboard')" data-page="dashboard" class="sidebar-link active flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#A7A9AC]">
+      <p class="text-[10px] uppercase tracking-wider text-[#6B6B6B] font-semibold px-3 mb-2 mt-2">Accueil</p>
+      <a href="#" onclick="showPage('dashboard')" data-page="dashboard" class="sidebar-link active flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#6B6B6B]">
         <i class="bi bi-grid-1x2-fill text-base"></i> Vue générale
       </a>
-      <p class="text-[10px] uppercase tracking-wider text-[#A7A9AC] font-semibold px-3 mb-2 mt-5">Catalogue</p>
-      <a href="#" onclick="showPage('categories')" data-page="categories" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#A7A9AC]">
+      <p class="text-[10px] uppercase tracking-wider text-[#6B6B6B] font-semibold px-3 mb-2 mt-5">Catalogue</p>
+      <a href="#" onclick="showPage('categories')" data-page="categories" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#6B6B6B]">
         <i class="bi bi-tags text-base"></i> Catégories &amp; Produits
       </a>
-      <a href="#" onclick="showPage('promotions')" data-page="promotions" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#A7A9AC]">
+      <a href="#" onclick="showPage('promotions')" data-page="promotions" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#6B6B6B]">
         <i class="bi bi-percent text-base"></i> Promotions
       </a>
-      <p class="text-[10px] uppercase tracking-wider text-[#A7A9AC] font-semibold px-3 mb-2 mt-5">Marketplace</p>
-      <a href="#" onclick="showPage('orders')" data-page="orders" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#A7A9AC]">
+      <p class="text-[10px] uppercase tracking-wider text-[#6B6B6B] font-semibold px-3 mb-2 mt-5">Marketplace</p>
+      <a href="#" onclick="showPage('orders')" data-page="orders" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#6B6B6B]">
         <i class="bi bi-receipt text-base"></i> Commandes
       </a>
-      <a href="#" onclick="showPage('suppliers')" data-page="suppliers" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#A7A9AC]">
+      <a href="#" onclick="showPage('suppliers')" data-page="suppliers" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#6B6B6B]">
         <i class="bi bi-people text-base"></i> Fournisseurs
       </a>
-      <p class="text-[10px] uppercase tracking-wider text-[#A7A9AC] font-semibold px-3 mb-2 mt-5">Finances</p>
-      <a href="#" onclick="showPage('payments')" data-page="payments" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#A7A9AC]">
+      <p class="text-[10px] uppercase tracking-wider text-[#6B6B6B] font-semibold px-3 mb-2 mt-5">Finances</p>
+      <a href="#" onclick="showPage('payments')" data-page="payments" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#6B6B6B]">
         <i class="bi bi-credit-card text-base"></i> Paiements
-        <span id="payPageBadge" class="ml-auto min-w-[20px] h-5 px-1.5 bg-[rgba(240,179,35,0.12)]0 text-white text-[10px] rounded-full hidden items-center justify-center font-bold">0</span>
+        <span id="payPageBadge" class="ml-auto min-w-[20px] h-5 px-1.5 bg-[#C40000] text-white text-[10px] rounded-full hidden items-center justify-center font-bold">0</span>
       </a>
-      <p class="text-[10px] uppercase tracking-wider text-[#A7A9AC] font-semibold px-3 mb-2 mt-5">Livraison</p>
-      <a href="#" onclick="showPage('shipments')" data-page="shipments" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#A7A9AC]">
+      <p class="text-[10px] uppercase tracking-wider text-[#6B6B6B] font-semibold px-3 mb-2 mt-5">Livraison</p>
+      <a href="#" onclick="showPage('shipments')" data-page="shipments" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#6B6B6B]">
         <i class="bi bi-truck text-base"></i> Expéditions
-        <span id="shipPageBadge" class="ml-auto min-w-[20px] h-5 px-1.5 bg-[rgba(196,0,0,0.12)]0 text-white text-[10px] rounded-full hidden items-center justify-center font-bold">0</span>
+        <span id="shipPageBadge" class="ml-auto min-w-[20px] h-5 px-1.5 bg-[#C40000] text-white text-[10px] rounded-full hidden items-center justify-center font-bold">0</span>
       </a>
-      <p class="text-[10px] uppercase tracking-wider text-[#A7A9AC] font-semibold px-3 mb-2 mt-5">Communication</p>
-      <a href="#" onclick="showPage('messages')" data-page="messages" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#A7A9AC]">
+      <p class="text-[10px] uppercase tracking-wider text-[#6B6B6B] font-semibold px-3 mb-2 mt-5">Communication</p>
+      <a href="#" onclick="showPage('messages')" data-page="messages" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#6B6B6B]">
         <i class="bi bi-chat-dots text-base"></i> Messages
-        <span id="msgPageBadge" class="ml-auto min-w-[20px] h-5 px-1.5 bg-[rgba(44,110,203,0.12)]0 text-white text-[10px] rounded-full hidden items-center justify-center font-bold">0</span>
+        <span id="msgPageBadge" class="ml-auto min-w-[20px] h-5 px-1.5 bg-[#C40000] text-white text-[10px] rounded-full hidden items-center justify-center font-bold">0</span>
       </a>
-      <a href="#" onclick="showPage('notifications')" data-page="notifications" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#A7A9AC]">
+      <a href="#" onclick="showPage('notifications')" data-page="notifications" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#6B6B6B]">
         <i class="bi bi-bell text-base"></i> Notifications
-        <span id="notifPageBadge" class="ml-auto min-w-[20px] h-5 px-1.5 bg-[rgba(196,0,0,0.12)]0 text-white text-[10px] rounded-full hidden items-center justify-center font-bold">0</span>
+        <span id="notifPageBadge" class="ml-auto min-w-[20px] h-5 px-1.5 bg-[#C40000] text-white text-[10px] rounded-full hidden items-center justify-center font-bold">0</span>
       </a>
-      <p class="text-[10px] uppercase tracking-wider text-[#A7A9AC] font-semibold px-3 mb-2 mt-5">Modération</p>
-      <a href="#" onclick="showPage('reviews')" data-page="reviews" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#A7A9AC]">
+      <p class="text-[10px] uppercase tracking-wider text-[#6B6B6B] font-semibold px-3 mb-2 mt-5">Modération</p>
+      <a href="#" onclick="showPage('reviews')" data-page="reviews" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#6B6B6B]">
         <i class="bi bi-star text-base"></i> Avis
-        <span id="revPageBadge" class="ml-auto min-w-[20px] h-5 px-1.5 bg-[rgba(240,179,35,0.12)]0 text-white text-[10px] rounded-full hidden items-center justify-center font-bold">0</span>
+        <span id="revPageBadge" class="ml-auto min-w-[20px] h-5 px-1.5 bg-[#C40000] text-white text-[10px] rounded-full hidden items-center justify-center font-bold">0</span>
       </a>
-      <p class="text-[10px] uppercase tracking-wider text-[#A7A9AC] font-semibold px-3 mb-2 mt-5">Analyse</p>
-      <a href="#" onclick="showPage('stats')" data-page="stats" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#A7A9AC]">
+      <p class="text-[10px] uppercase tracking-wider text-[#6B6B6B] font-semibold px-3 mb-2 mt-5">Analyse</p>
+      <a href="#" onclick="showPage('stats')" data-page="stats" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#6B6B6B]">
         <i class="bi bi-graph-up text-base"></i> Statistiques
       </a>
-      <a href="#" onclick="showPage('visitors')" data-page="visitors" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#A7A9AC]">
+      <a href="#" onclick="showPage('visitors')" data-page="visitors" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#6B6B6B]">
         <i class="bi bi-bar-chart-line text-base"></i> Activité
       </a>
-      <p class="text-[10px] uppercase tracking-wider text-[#A7A9AC] font-semibold px-3 mb-2 mt-5">Système</p>
-      <a href="#" onclick="showPage('audit')" data-page="audit" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#A7A9AC]">
+      <p class="text-[10px] uppercase tracking-wider text-[#6B6B6B] font-semibold px-3 mb-2 mt-5">Système</p>
+      <a href="#" onclick="showPage('audit')" data-page="audit" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#6B6B6B]">
         <i class="bi bi-journal-text text-base"></i> Journal d'audit
       </a>
-      <a href="#" onclick="showPage('settings')" data-page="settings" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#A7A9AC]">
+      <a href="#" onclick="showPage('settings')" data-page="settings" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#6B6B6B]">
         <i class="bi bi-gear text-base"></i> Paramètres
       </a>
-      <a href="index.html" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#A7A9AC] mt-1">
+      <a href="index.html" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#6B6B6B] mt-1">
         <i class="bi bi-shop text-base"></i> Voir la boutique
       </a>
     </nav>
@@ -141,21 +141,21 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(2
   <!-- MAIN CONTENT -->
   <div class="lg:ml-64 min-h-screen">
     <!-- TOPBAR -->
-    <header class="sticky top-0 z-30 ms-glass border-b border-[#303437] px-6 py-3 flex items-center justify-between">
+    <header class="sticky top-0 z-30 ms-glass border-b border-[#E5E5E5] px-6 py-3 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <button onclick="toggleSidebar()" class="lg:hidden p-2 rounded-lg hover:bg-[#2D3A4B]"><i class="bi bi-list text-xl"></i></button>
-        <h2 id="pageTitle" class="text-lg font-semibold text-[#F2F2F2]">Tableau de bord</h2>
+        <button onclick="toggleSidebar()" class="lg:hidden p-2 rounded-lg hover:bg-[#F5F5F5]"><i class="bi bi-list text-xl"></i></button>
+        <h2 id="pageTitle" class="text-lg font-semibold text-[#0A0A0A]">Tableau de bord</h2>
       </div>
       <div class="flex items-center gap-3">
-        <button onclick="loadNotifications()" class="relative p-2 rounded-lg hover:bg-[#2D3A4B]" aria-label="Notifications" aria-haspopup="true" aria-expanded="false" id="notifBellBtn">
-          <i class="bi bi-bell text-lg text-[#A7A9AC]"></i>
-          <span id="notifBadge" class="absolute -top-0.5 -right-0.5 w-5 h-5 bg-[rgba(196,0,0,0.12)]0 text-white text-[10px] rounded-full flex items-center justify-center font-bold hidden" aria-label="Notifications non lues">0</span>
+        <button onclick="loadNotifications()" class="relative p-2 rounded-lg hover:bg-[#F5F5F5]" aria-label="Notifications" aria-haspopup="true" aria-expanded="false" id="notifBellBtn">
+          <i class="bi bi-bell text-lg text-[#6B6B6B]"></i>
+          <span id="notifBadge" class="absolute -top-0.5 -right-0.5 w-5 h-5 bg-[#C40000] text-white text-[10px] rounded-full flex items-center justify-center font-bold hidden" aria-label="Notifications non lues">0</span>
         </button>
-        <div class="flex items-center gap-2 pl-3 border-l border-[#303437]">
+        <div class="flex items-center gap-2 pl-3 border-l border-[#E5E5E5]">
           <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center text-white text-sm font-bold">A</div>
-          <span class="text-sm font-medium text-[#F2F2F2] hidden sm:block">Admin</span>
-          <span id="roleChip" class="hidden text-[10px] font-bold px-2 py-0.5 rounded-full bg-primary-100 text-[#FF9900]">ADMIN</span>
-          <button onclick="handleLogout()" class="p-1.5 rounded-lg hover:bg-[rgba(196,0,0,0.12)] text-[#A7A9AC] hover:text-[#C40000] transition" title="Déconnexion">
+          <span class="text-sm font-medium text-[#0A0A0A] hidden sm:block">Admin</span>
+          <span id="roleChip" class="hidden text-[10px] font-bold px-2 py-0.5 rounded-full bg-primary-100 text-[#C40000]">ADMIN</span>
+          <button onclick="handleLogout()" class="p-1.5 rounded-lg hover:bg-[rgba(196,0,0,0.12)] text-[#6B6B6B] hover:text-[#C40000] transition" title="Déconnexion">
             <i class="bi bi-box-arrow-right text-lg"></i>
           </button>
         </div>
@@ -167,20 +167,20 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(2
       <!-- DASHBOARD PAGE -->
       <div id="page-dashboard" class="page-content">
         <div id="dashStats" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-5 gap-4 mb-6"></div>
-        <h3 class="font-semibold text-[#F2F2F2] mb-3">Supervision <span class="text-xs font-normal text-[#A7A9AC]">(temps réel, toutes données réelles)</span></h3>
+        <h3 class="font-semibold text-[#0A0A0A] mb-3">Supervision <span class="text-xs font-normal text-[#6B6B6B]">(temps réel, toutes données réelles)</span></h3>
         <div id="overviewRow" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-6"></div>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-          <div class="bg-[#171A1A] rounded-xl p-5 shadow-sm border border-[#303437]">
-            <h3 class="font-semibold text-[#F2F2F2] mb-4">Commandes par statut</h3>
+          <div class="bg-[#FFFFFF] rounded-xl p-5 shadow-sm border border-[#E5E5E5]">
+            <h3 class="font-semibold text-[#0A0A0A] mb-4">Commandes par statut</h3>
             <canvas id="chartOrderStatus" height="200"></canvas>
           </div>
-          <div class="bg-[#171A1A] rounded-xl p-5 shadow-sm border border-[#303437]">
-            <h3 class="font-semibold text-[#F2F2F2] mb-4">Revenus (30 jours)</h3>
+          <div class="bg-[#FFFFFF] rounded-xl p-5 shadow-sm border border-[#E5E5E5]">
+            <h3 class="font-semibold text-[#0A0A0A] mb-4">Revenus (30 jours)</h3>
             <canvas id="chartRevenue" height="200"></canvas>
           </div>
         </div>
-        <div class="bg-[#171A1A] rounded-xl p-5 shadow-sm border border-[#303437]">
-          <h3 class="font-semibold text-[#F2F2F2] mb-4">Dernières commandes</h3>
+        <div class="bg-[#FFFFFF] rounded-xl p-5 shadow-sm border border-[#E5E5E5]">
+          <h3 class="font-semibold text-[#0A0A0A] mb-4">Dernières commandes</h3>
           <div id="recentOrdersTable" class="overflow-x-auto"></div>
         </div>
       </div>
@@ -188,18 +188,18 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(2
       <!-- ORDERS PAGE -->
       <div id="page-orders" class="page-content hidden">
         <div class="flex flex-wrap gap-2 mb-4">
-          <button onclick="filterOrders('', event)" class="order-filter active px-4 py-2 rounded-lg text-sm font-medium border border-[#303437] bg-primary-600 text-[#111111] transition">Toutes</button>
-          <button onclick="filterOrders('EN_ATTENTE', event)" class="order-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#303437] bg-[#171A1A] text-[#A7A9AC] transition">En attente</button>
-          <button onclick="filterOrders('CONFIRMEE', event)" class="order-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#303437] bg-[#171A1A] text-[#A7A9AC] transition">Confirmées</button>
-          <button onclick="filterOrders('EN_PREPARATION', event)" class="order-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#303437] bg-[#171A1A] text-[#A7A9AC] transition">En préparation</button>
-          <button onclick="filterOrders('EN_LIVRAISON', event)" class="order-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#303437] bg-[#171A1A] text-[#A7A9AC] transition">En livraison</button>
-          <button onclick="filterOrders('LIVREE', event)" class="order-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#303437] bg-[#171A1A] text-[#A7A9AC] transition">Livrées</button>
-          <button onclick="filterOrders('ANNULEE', event)" class="order-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#303437] bg-[#171A1A] text-[#A7A9AC] transition">Annulées</button>
+          <button onclick="filterOrders('', event)" class="order-filter active px-4 py-2 rounded-lg text-sm font-medium border border-[#E5E5E5] bg-primary-600 text-white transition">Toutes</button>
+          <button onclick="filterOrders('EN_ATTENTE', event)" class="order-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#E5E5E5] bg-[#FFFFFF] text-[#6B6B6B] transition">En attente</button>
+          <button onclick="filterOrders('CONFIRMEE', event)" class="order-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#E5E5E5] bg-[#FFFFFF] text-[#6B6B6B] transition">Confirmées</button>
+          <button onclick="filterOrders('EN_PREPARATION', event)" class="order-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#E5E5E5] bg-[#FFFFFF] text-[#6B6B6B] transition">En préparation</button>
+          <button onclick="filterOrders('EN_LIVRAISON', event)" class="order-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#E5E5E5] bg-[#FFFFFF] text-[#6B6B6B] transition">En livraison</button>
+          <button onclick="filterOrders('LIVREE', event)" class="order-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#E5E5E5] bg-[#FFFFFF] text-[#6B6B6B] transition">Livrées</button>
+          <button onclick="filterOrders('ANNULEE', event)" class="order-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#E5E5E5] bg-[#FFFFFF] text-[#6B6B6B] transition">Annulées</button>
         </div>
         <div class="mb-4">
-          <input id="orderSearch" type="text" placeholder="Rechercher par n°, nom, téléphone..." oninput="searchOrders(this.value)" class="w-full max-w-md px-4 py-2.5 rounded-xl border border-[#303437] text-sm">
+          <input id="orderSearch" type="text" placeholder="Rechercher par n°, nom, téléphone..." oninput="searchOrders(this.value)" class="w-full max-w-md px-4 py-2.5 rounded-xl border border-[#E5E5E5] text-sm">
         </div>
-        <div class="bg-[#171A1A] rounded-xl shadow-sm border border-[#303437] overflow-hidden">
+        <div class="bg-[#FFFFFF] rounded-xl shadow-sm border border-[#E5E5E5] overflow-hidden">
           <div id="ordersTable" class="overflow-x-auto"></div>
         </div>
       </div>
@@ -207,13 +207,13 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(2
       <!-- PAYMENTS PAGE -->
       <div id="page-payments" class="page-content hidden">
         <div class="flex flex-wrap gap-2 mb-4" role="group" aria-label="Filtrer les paiements">
-          <button onclick="filterPayments('', event)" class="pay-filter active px-4 py-2 rounded-lg text-sm font-medium border border-[#303437] bg-primary-600 text-[#111111] transition">Tous</button>
-          <button onclick="filterPayments('EN_ATTENTE', event)" class="pay-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#303437] bg-[#171A1A] text-[#A7A9AC] transition">En attente</button>
-          <button onclick="filterPayments('REUSSIE', event)" class="pay-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#303437] bg-[#171A1A] text-[#A7A9AC] transition">Réussis</button>
-          <button onclick="filterPayments('ECHOUEE', event)" class="pay-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#303437] bg-[#171A1A] text-[#A7A9AC] transition">Échoués</button>
-          <button onclick="filterPayments('ANNULEE', event)" class="pay-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#303437] bg-[#171A1A] text-[#A7A9AC] transition">Remboursés</button>
+          <button onclick="filterPayments('', event)" class="pay-filter active px-4 py-2 rounded-lg text-sm font-medium border border-[#E5E5E5] bg-primary-600 text-white transition">Tous</button>
+          <button onclick="filterPayments('EN_ATTENTE', event)" class="pay-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#E5E5E5] bg-[#FFFFFF] text-[#6B6B6B] transition">En attente</button>
+          <button onclick="filterPayments('REUSSIE', event)" class="pay-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#E5E5E5] bg-[#FFFFFF] text-[#6B6B6B] transition">Réussis</button>
+          <button onclick="filterPayments('ECHOUEE', event)" class="pay-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#E5E5E5] bg-[#FFFFFF] text-[#6B6B6B] transition">Échoués</button>
+          <button onclick="filterPayments('ANNULEE', event)" class="pay-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#E5E5E5] bg-[#FFFFFF] text-[#6B6B6B] transition">Remboursés</button>
         </div>
-        <div class="bg-[#171A1A] rounded-xl shadow-sm border border-[#303437] overflow-hidden">
+        <div class="bg-[#FFFFFF] rounded-xl shadow-sm border border-[#E5E5E5] overflow-hidden">
           <div id="paymentsTable" class="overflow-x-auto"></div>
         </div>
         <div id="payPagination" class="flex justify-center gap-2 mt-5"></div>
@@ -222,11 +222,11 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(2
       <!-- SHIPMENTS PAGE -->
       <div id="page-shipments" class="page-content hidden">
         <div class="flex flex-wrap gap-2 mb-4" role="group" aria-label="Filtrer les expéditions">
-          <button onclick="filterShipments('active', event)" class="ship-filter active px-4 py-2 rounded-lg text-sm font-medium border border-[#303437] bg-primary-600 text-[#111111] transition">En cours</button>
-          <button onclick="filterShipments('incidents', event)" class="ship-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#303437] bg-[#171A1A] text-[#A7A9AC] transition">Incidents</button>
-          <button onclick="filterShipments('all', event)" class="ship-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#303437] bg-[#171A1A] text-[#A7A9AC] transition">Toutes</button>
+          <button onclick="filterShipments('active', event)" class="ship-filter active px-4 py-2 rounded-lg text-sm font-medium border border-[#E5E5E5] bg-primary-600 text-white transition">En cours</button>
+          <button onclick="filterShipments('incidents', event)" class="ship-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#E5E5E5] bg-[#FFFFFF] text-[#6B6B6B] transition">Incidents</button>
+          <button onclick="filterShipments('all', event)" class="ship-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#E5E5E5] bg-[#FFFFFF] text-[#6B6B6B] transition">Toutes</button>
         </div>
-        <div class="bg-[#171A1A] rounded-xl shadow-sm border border-[#303437] overflow-hidden">
+        <div class="bg-[#FFFFFF] rounded-xl shadow-sm border border-[#E5E5E5] overflow-hidden">
           <div id="shipmentsTable" class="overflow-x-auto"></div>
         </div>
       </div>
@@ -235,24 +235,24 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(2
       <div id="page-notifications" class="page-content hidden">
         <div class="flex flex-wrap justify-between items-center gap-3 mb-4">
           <div class="flex items-center gap-3">
-            <h3 class="font-semibold text-[#F2F2F2]">Centre de notifications</h3>
+            <h3 class="font-semibold text-[#0A0A0A]">Centre de notifications</h3>
             <span id="notifUnreadChip" class="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-[rgba(196,0,0,0.12)] text-[#C40000] hidden">0 non lue(s)</span>
           </div>
           <div class="flex flex-wrap items-center gap-2">
-            <button onclick="openNotifCompose()" data-money class="px-4 py-2 bg-primary-600 text-[#111111] rounded-xl text-sm font-semibold hover:bg-primary-700 transition flex items-center gap-2">
+            <button onclick="openNotifCompose()" data-money class="px-4 py-2 bg-primary-600 text-white rounded-xl text-sm font-semibold hover:bg-primary-700 transition flex items-center gap-2">
               <i class="bi bi-megaphone"></i> Nouveau message
             </button>
-            <button onclick="notifReadAll()" class="px-4 py-2 bg-[rgba(6,125,98,0.12)] text-[#067D62] rounded-xl text-sm font-semibold hover:bg-[rgba(6,125,98,0.12)] transition flex items-center gap-2">
+            <button onclick="notifReadAll()" class="px-4 py-2 bg-[#0A0A0A] text-white rounded-xl text-sm font-semibold hover:bg-[#222222] transition flex items-center gap-2">
               <i class="bi bi-check-all"></i> Tout marquer comme lues
             </button>
-            <button onclick="notifClearRead()" class="px-4 py-2 bg-[#232F3E] text-[#A7A9AC] rounded-xl text-sm font-semibold hover:bg-[#303437] transition flex items-center gap-2">
+            <button onclick="notifClearRead()" class="px-4 py-2 bg-[#F5F5F5] text-[#0A0A0A] rounded-xl text-sm font-semibold hover:bg-[#E5E5E5] transition flex items-center gap-2">
               <i class="bi bi-trash"></i> Supprimer les lues
             </button>
           </div>
         </div>
         <div class="flex flex-wrap items-center gap-2 mb-4">
-          <input id="notifSearch" type="text" placeholder="Rechercher (titre, message)..." oninput="notifPage=1;loadNotifCenter()" class="px-4 py-2 rounded-xl border border-[#303437] text-sm w-64">
-          <select id="notifTypeFilter" onchange="notifPage=1;loadNotifCenter()" class="px-3 py-2 rounded-xl border border-[#303437] text-sm" aria-label="Filtrer par catégorie">
+          <input id="notifSearch" type="text" placeholder="Rechercher (titre, message)..." oninput="notifPage=1;loadNotifCenter()" class="px-4 py-2 rounded-xl border border-[#E5E5E5] text-sm w-64">
+          <select id="notifTypeFilter" onchange="notifPage=1;loadNotifCenter()" class="px-3 py-2 rounded-xl border border-[#E5E5E5] text-sm" aria-label="Filtrer par catégorie">
             <option value="">Tous types</option>
             <option value="ORDER">Commandes</option>
             <option value="PAYMENT">Paiements</option>
@@ -265,39 +265,39 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(2
             <option value="SECURITY">Sécurité</option>
             <option value="SYSTEM">Système</option>
           </select>
-          <select id="notifStatusFilter" onchange="notifPage=1;loadNotifCenter()" class="px-3 py-2 rounded-xl border border-[#303437] text-sm">
+          <select id="notifStatusFilter" onchange="notifPage=1;loadNotifCenter()" class="px-3 py-2 rounded-xl border border-[#E5E5E5] text-sm">
             <option value="">Toutes</option>
             <option value="unread">Non lues</option>
             <option value="read">Lues</option>
           </select>
         </div>
         <div id="notifBulkBar" class="hidden items-center gap-3 mb-3 px-4 py-2.5 bg-primary-50 border border-primary-100 rounded-xl text-sm">
-          <span id="notifBulkCount" class="font-semibold text-[#FF9900]">0 sélectionnée(s)</span>
-          <button onclick="notifBulkRead()" class="px-3 py-1.5 bg-[#171A1A] border border-primary-200 text-[#FF9900] rounded-lg text-xs font-semibold hover:bg-primary-100">Marquer comme lues</button>
-          <button onclick="notifBulkDelete()" class="px-3 py-1.5 bg-[#171A1A] border border-[rgba(196,0,0,0.35)] text-[#C40000] rounded-lg text-xs font-semibold hover:bg-[rgba(196,0,0,0.12)]">Supprimer</button>
-          <button onclick="notifBulkClear()" class="ml-auto text-xs text-[#A7A9AC] hover:text-[#F2F2F2]">Désélectionner</button>
+          <span id="notifBulkCount" class="font-semibold text-[#C40000]">0 sélectionnée(s)</span>
+          <button onclick="notifBulkRead()" class="px-3 py-1.5 bg-[#FFFFFF] border border-primary-200 text-[#C40000] rounded-lg text-xs font-semibold hover:bg-primary-100">Marquer comme lues</button>
+          <button onclick="notifBulkDelete()" class="px-3 py-1.5 bg-[#FFFFFF] border border-[rgba(196,0,0,0.35)] text-[#C40000] rounded-lg text-xs font-semibold hover:bg-[rgba(196,0,0,0.12)]">Supprimer</button>
+          <button onclick="notifBulkClear()" class="ml-auto text-xs text-[#6B6B6B] hover:text-[#0A0A0A]">Désélectionner</button>
         </div>
-        <div class="bg-[#171A1A] rounded-xl shadow-sm border border-[#303437] overflow-hidden">
-          <div class="flex items-center gap-3 px-4 py-2.5 border-b border-[#303437] text-xs text-[#A7A9AC]">
+        <div class="bg-[#FFFFFF] rounded-xl shadow-sm border border-[#E5E5E5] overflow-hidden">
+          <div class="flex items-center gap-3 px-4 py-2.5 border-b border-[#E5E5E5] text-xs text-[#6B6B6B]">
             <input id="notifCheckAll" type="checkbox" onchange="notifToggleAll(this.checked)" class="w-4 h-4 accent-primary-600">
             <span>Tout sélectionner</span>
             <span id="notifTotal" class="ml-auto"></span>
           </div>
-          <div id="notifCenterList" class="divide-y divide-[#303437]"></div>
+          <div id="notifCenterList" class="divide-y divide-[#E5E5E5]"></div>
         </div>
         <div id="notifPagination" class="flex justify-center gap-2 mt-5"></div>
       </div>
 
       <!-- MESSAGES PAGE (supervision lecture seule, contenus masqués) -->
       <div id="page-messages" class="page-content hidden">
-        <p class="text-xs text-[#A7A9AC] mb-4">Supervision : volumes et non-lus uniquement. Le contenu des messages reste privé (téléphones masqués).</p>
+        <p class="text-xs text-[#6B6B6B] mb-4">Supervision : volumes et non-lus uniquement. Le contenu des messages reste privé (téléphones masqués).</p>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6" id="msgStatCards"></div>
-        <div class="bg-[#171A1A] rounded-xl shadow-sm border border-[#303437] overflow-hidden mb-6">
+        <div class="bg-[#FFFFFF] rounded-xl shadow-sm border border-[#E5E5E5] overflow-hidden mb-6">
           <div id="convosTable" class="overflow-x-auto"></div>
         </div>
         <div id="convoPagination" class="flex justify-center gap-2 mt-5"></div>
-        <h3 class="font-semibold text-[#F2F2F2] mt-8 mb-3">Offres en attente (toutes conversations)</h3>
-        <div class="bg-[#171A1A] rounded-xl shadow-sm border border-[#303437] overflow-hidden">
+        <h3 class="font-semibold text-[#0A0A0A] mt-8 mb-3">Offres en attente (toutes conversations)</h3>
+        <div class="bg-[#FFFFFF] rounded-xl shadow-sm border border-[#E5E5E5] overflow-hidden">
           <div id="pendingOffersTable" class="overflow-x-auto"></div>
         </div>
       </div>
@@ -307,44 +307,44 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(2
         <!-- Vue grille catégories -->
         <div id="catGridView">
           <div class="flex flex-wrap justify-between items-center gap-3 mb-4">
-            <h3 class="font-semibold text-[#F2F2F2]">Gestion des catégories</h3>
+            <h3 class="font-semibold text-[#0A0A0A]">Gestion des catégories</h3>
             <div class="flex flex-wrap items-center gap-2">
-              <input id="catSearch" type="text" placeholder="Rechercher..." oninput="loadCategories()" class="px-4 py-2 rounded-xl border border-[#303437] text-sm w-48">
-              <select id="catStatusFilter" onchange="loadCategories()" class="px-3 py-2 rounded-xl border border-[#303437] text-sm">
+              <input id="catSearch" type="text" placeholder="Rechercher..." oninput="loadCategories()" class="px-4 py-2 rounded-xl border border-[#E5E5E5] text-sm w-48">
+              <select id="catStatusFilter" onchange="loadCategories()" class="px-3 py-2 rounded-xl border border-[#E5E5E5] text-sm">
                 <option value="">Tous statuts</option>
                 <option value="active">Actives</option>
                 <option value="inactive">Inactives</option>
               </select>
-              <div class="flex bg-[#232F3E] rounded-xl p-1">
-                <button id="catViewGrid" onclick="setCatView('grid')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#171A1A] text-[#FF9900] shadow-sm"><i class="bi bi-grid"></i></button>
-                <button id="catViewTree" onclick="setCatView('tree')" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-[#A7A9AC]"><i class="bi bi-diagram-3"></i></button>
+              <div class="flex bg-[#F5F5F5] rounded-xl p-1">
+                <button id="catViewGrid" onclick="setCatView('grid')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#FFFFFF] text-[#C40000] shadow-sm"><i class="bi bi-grid"></i></button>
+                <button id="catViewTree" onclick="setCatView('tree')" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-[#6B6B6B]"><i class="bi bi-diagram-3"></i></button>
               </div>
-              <button onclick="openCategoryModal()" class="px-5 py-2 bg-primary-600 text-[#111111] rounded-xl text-sm font-semibold hover:bg-primary-700 transition flex items-center gap-2">
+              <button onclick="openCategoryModal()" class="px-5 py-2 bg-primary-600 text-white rounded-xl text-sm font-semibold hover:bg-primary-700 transition flex items-center gap-2">
                 <i class="bi bi-plus-lg"></i> Ajouter
               </button>
             </div>
           </div>
           <div id="categoriesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4"></div>
-          <div id="categoriesTree" class="hidden bg-[#171A1A] rounded-xl border border-[#303437] shadow-sm p-4"></div>
+          <div id="categoriesTree" class="hidden bg-[#FFFFFF] rounded-xl border border-[#E5E5E5] shadow-sm p-4"></div>
         </div>
         <!-- Vue produits d'une catégorie -->
         <div id="catProductsView" class="hidden">
           <div class="flex flex-wrap items-center gap-3 mb-4">
-            <button onclick="backToCatGrid()" class="px-4 py-2 bg-[#232F3E] text-[#A7A9AC] rounded-xl text-sm font-semibold hover:bg-[#303437] transition flex items-center gap-2">
+            <button onclick="backToCatGrid()" class="px-4 py-2 bg-[#F5F5F5] text-[#0A0A0A] rounded-xl text-sm font-semibold hover:bg-[#E5E5E5] transition flex items-center gap-2">
               <i class="bi bi-arrow-left"></i> Retour
             </button>
             <div class="flex items-center gap-2">
               <div id="catProductIcon" class="w-9 h-9 rounded-xl flex items-center justify-center text-white text-sm"></div>
               <div>
-                <h3 id="catProductTitle" class="font-bold text-[#F2F2F2] text-lg"></h3>
-                <p id="catProductCount" class="text-xs text-[#A7A9AC]"></p>
+                <h3 id="catProductTitle" class="font-bold text-[#0A0A0A] text-lg"></h3>
+                <p id="catProductCount" class="text-xs text-[#6B6B6B]"></p>
               </div>
             </div>
           </div>
           <div class="mb-3">
-            <input id="productSearch" type="text" placeholder="Rechercher un produit..." oninput="searchProducts(this.value)" class="w-full max-w-sm px-4 py-2.5 rounded-xl border border-[#303437] text-sm">
+            <input id="productSearch" type="text" placeholder="Rechercher un produit..." oninput="searchProducts(this.value)" class="w-full max-w-sm px-4 py-2.5 rounded-xl border border-[#E5E5E5] text-sm">
           </div>
-          <div class="bg-[#171A1A] rounded-xl shadow-sm border border-[#303437] overflow-hidden">
+          <div class="bg-[#FFFFFF] rounded-xl shadow-sm border border-[#E5E5E5] overflow-hidden">
             <div id="productsTable" class="overflow-x-auto"></div>
           </div>
         </div>
@@ -353,12 +353,12 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(2
       <!-- PROMOTIONS PAGE -->
       <div id="page-promotions" class="page-content hidden">
         <div class="flex justify-between items-center mb-4">
-          <h3 class="font-semibold text-[#F2F2F2]">Gestion des promotions</h3>
-          <button onclick="openPromotionModal()" class="px-5 py-2.5 bg-primary-600 text-[#111111] rounded-xl text-sm font-semibold hover:bg-primary-700 transition flex items-center gap-2">
+          <h3 class="font-semibold text-[#0A0A0A]">Gestion des promotions</h3>
+          <button onclick="openPromotionModal()" class="px-5 py-2.5 bg-primary-600 text-white rounded-xl text-sm font-semibold hover:bg-primary-700 transition flex items-center gap-2">
             <i class="bi bi-plus-lg"></i> Ajouter
           </button>
         </div>
-        <div class="bg-[#171A1A] rounded-xl shadow-sm border border-[#303437] overflow-hidden">
+        <div class="bg-[#FFFFFF] rounded-xl shadow-sm border border-[#E5E5E5] overflow-hidden">
           <div id="promotionsTable" class="overflow-x-auto"></div>
         </div>
       </div>
@@ -366,13 +366,13 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(2
       <!-- SUPPLIERS PAGE -->
       <div id="page-suppliers" class="page-content hidden">
         <div class="flex justify-between items-center mb-4">
-          <h3 class="font-semibold text-[#F2F2F2]">Gestion des fournisseurs</h3>
-          <button onclick="openSupplierModal()" class="px-5 py-2.5 bg-primary-600 text-[#111111] rounded-xl text-sm font-semibold hover:bg-primary-700 transition flex items-center gap-2">
+          <h3 class="font-semibold text-[#0A0A0A]">Gestion des fournisseurs</h3>
+          <button onclick="openSupplierModal()" class="px-5 py-2.5 bg-primary-600 text-white rounded-xl text-sm font-semibold hover:bg-primary-700 transition flex items-center gap-2">
             <i class="bi bi-plus-lg"></i> Ajouter
           </button>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6" id="supplierStatCards"></div>
-        <div class="bg-[#171A1A] rounded-xl shadow-sm border border-[#303437] overflow-hidden">
+        <div class="bg-[#FFFFFF] rounded-xl shadow-sm border border-[#E5E5E5] overflow-hidden">
           <div id="suppliersTable" class="overflow-x-auto"></div>
         </div>
       </div>
@@ -380,38 +380,38 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(2
       <!-- REVIEWS PAGE -->
       <div id="page-reviews" class="page-content hidden">
         <div class="flex flex-wrap gap-2 mb-4" role="group" aria-label="Filtrer les avis">
-          <button onclick="filterReviews('pending', event)" class="rev-filter active px-4 py-2 rounded-lg text-sm font-medium border border-[#303437] bg-primary-600 text-[#111111] transition">En attente</button>
-          <button onclick="filterReviews('all', event)" class="rev-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#303437] bg-[#171A1A] text-[#A7A9AC] transition">Tous</button>
+          <button onclick="filterReviews('pending', event)" class="rev-filter active px-4 py-2 rounded-lg text-sm font-medium border border-[#E5E5E5] bg-primary-600 text-white transition">En attente</button>
+          <button onclick="filterReviews('all', event)" class="rev-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#E5E5E5] bg-[#FFFFFF] text-[#6B6B6B] transition">Tous</button>
         </div>
-        <div class="bg-[#171A1A] rounded-xl shadow-sm border border-[#303437] overflow-hidden">
+        <div class="bg-[#FFFFFF] rounded-xl shadow-sm border border-[#E5E5E5] overflow-hidden">
           <div id="reviewsTable" class="overflow-x-auto"></div>
         </div>
       </div>
 
       <!-- VISITORS PAGE : aucune mesure d'audience côté plateforme (honnêteté : pas de faux chiffres) -->
       <div id="page-visitors" class="page-content hidden">
-        <p class="text-xs text-[#A7A9AC] mb-4">Aucun système de mesure d'audience n'est installé : cette page montre l'activité commandes réelle, pas des visites.</p>
+        <p class="text-xs text-[#6B6B6B] mb-4">Aucun système de mesure d'audience n'est installé : cette page montre l'activité commandes réelle, pas des visites.</p>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-          <div class="bg-[#171A1A] rounded-xl p-5 shadow-sm border border-[#303437]">
-            <p class="text-sm text-[#A7A9AC]">Commandes aujourd'hui</p>
-            <p class="text-3xl font-bold text-[#F2F2F2] mt-1" id="visitorsToday">—</p>
+          <div class="bg-[#FFFFFF] rounded-xl p-5 shadow-sm border border-[#E5E5E5]">
+            <p class="text-sm text-[#6B6B6B]">Commandes aujourd'hui</p>
+            <p class="text-3xl font-bold text-[#0A0A0A] mt-1" id="visitorsToday">—</p>
           </div>
-          <div class="bg-[#171A1A] rounded-xl p-5 shadow-sm border border-[#303437]">
-            <p class="text-sm text-[#A7A9AC]">Commandes (7 jours)</p>
-            <p class="text-3xl font-bold text-[#F2F2F2] mt-1" id="visitorsWeek">—</p>
+          <div class="bg-[#FFFFFF] rounded-xl p-5 shadow-sm border border-[#E5E5E5]">
+            <p class="text-sm text-[#6B6B6B]">Commandes (7 jours)</p>
+            <p class="text-3xl font-bold text-[#0A0A0A] mt-1" id="visitorsWeek">—</p>
           </div>
-          <div class="bg-[#171A1A] rounded-xl p-5 shadow-sm border border-[#303437]">
-            <p class="text-sm text-[#A7A9AC]">Commandes (total)</p>
-            <p class="text-3xl font-bold text-[#F2F2F2] mt-1" id="visitorsMonth">—</p>
+          <div class="bg-[#FFFFFF] rounded-xl p-5 shadow-sm border border-[#E5E5E5]">
+            <p class="text-sm text-[#6B6B6B]">Commandes (total)</p>
+            <p class="text-3xl font-bold text-[#0A0A0A] mt-1" id="visitorsMonth">—</p>
           </div>
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-          <div class="bg-[#171A1A] rounded-xl p-5 shadow-sm border border-[#303437]">
-            <h3 class="font-semibold text-[#F2F2F2] mb-4">Commandes quotidiennes (7j)</h3>
+          <div class="bg-[#FFFFFF] rounded-xl p-5 shadow-sm border border-[#E5E5E5]">
+            <h3 class="font-semibold text-[#0A0A0A] mb-4">Commandes quotidiennes (7j)</h3>
             <canvas id="chartVisitorsDay" height="200"></canvas>
           </div>
-          <div class="bg-[#171A1A] rounded-xl p-5 shadow-sm border border-[#303437]">
-            <h3 class="font-semibold text-[#F2F2F2] mb-4">Revenus quotidiens (7j)</h3>
+          <div class="bg-[#FFFFFF] rounded-xl p-5 shadow-sm border border-[#E5E5E5]">
+            <h3 class="font-semibold text-[#0A0A0A] mb-4">Revenus quotidiens (7j)</h3>
             <canvas id="chartPagesVsVisitors" height="200"></canvas>
           </div>
         </div>
@@ -420,55 +420,55 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(2
       <!-- STATS PAGE -->
       <div id="page-stats" class="page-content hidden">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <div class="bg-[#171A1A] rounded-xl p-5 shadow-sm border border-[#303437] stat-card">
-            <p class="text-sm text-[#A7A9AC]">Chiffre d'affaires total</p>
-            <p class="text-2xl font-bold text-[#F2F2F2] mt-1" id="statRevenue">—</p>
+          <div class="bg-[#FFFFFF] rounded-xl p-5 shadow-sm border border-[#E5E5E5] stat-card">
+            <p class="text-sm text-[#6B6B6B]">Chiffre d'affaires total</p>
+            <p class="text-2xl font-bold text-[#0A0A0A] mt-1" id="statRevenue">—</p>
           </div>
-          <div class="bg-[#171A1A] rounded-xl p-5 shadow-sm border border-[#303437] stat-card">
-            <p class="text-sm text-[#A7A9AC]">Panier moyen</p>
-            <p class="text-2xl font-bold text-[#F2F2F2] mt-1" id="statAvgCart">—</p>
+          <div class="bg-[#FFFFFF] rounded-xl p-5 shadow-sm border border-[#E5E5E5] stat-card">
+            <p class="text-sm text-[#6B6B6B]">Panier moyen</p>
+            <p class="text-2xl font-bold text-[#0A0A0A] mt-1" id="statAvgCart">—</p>
           </div>
-          <div class="bg-[#171A1A] rounded-xl p-5 shadow-sm border border-[#303437] stat-card">
-            <p class="text-sm text-[#A7A9AC]">Taux d'annulation</p>
+          <div class="bg-[#FFFFFF] rounded-xl p-5 shadow-sm border border-[#E5E5E5] stat-card">
+            <p class="text-sm text-[#6B6B6B]">Taux d'annulation</p>
             <p class="text-2xl font-bold text-[#C40000] mt-1" id="statCancelRate">—</p>
           </div>
-          <div class="bg-[#171A1A] rounded-xl p-5 shadow-sm border border-[#303437] stat-card">
-            <p class="text-sm text-[#A7A9AC]">Produits à rotation nulle</p>
-            <p class="text-2xl font-bold text-[#F0B323] mt-1" id="statLowRotation">—</p>
+          <div class="bg-[#FFFFFF] rounded-xl p-5 shadow-sm border border-[#E5E5E5] stat-card">
+            <p class="text-sm text-[#6B6B6B]">Produits à rotation nulle</p>
+            <p class="text-2xl font-bold text-[#C40000] mt-1" id="statLowRotation">—</p>
           </div>
         </div>
-        <div class="bg-[#171A1A] rounded-xl p-5 shadow-sm border border-[#303437] mb-6">
+        <div class="bg-[#FFFFFF] rounded-xl p-5 shadow-sm border border-[#E5E5E5] mb-6">
           <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
-            <h3 class="font-semibold text-[#F2F2F2]">Finance plateforme <span class="text-xs font-normal text-[#A7A9AC]">(GMV ≠ revenus MBOA)</span></h3>
-            <span class="text-xs text-[#A7A9AC]">Comptabilisé au passage en LIVREE</span>
+            <h3 class="font-semibold text-[#0A0A0A]">Finance plateforme <span class="text-xs font-normal text-[#6B6B6B]">(GMV ≠ revenus MBOA)</span></h3>
+            <span class="text-xs text-[#6B6B6B]">Comptabilisé au passage en LIVREE</span>
           </div>
           <div class="grid grid-cols-2 lg:grid-cols-4 gap-4" id="financeCards">
-            <div class="rounded-xl bg-[#171A1A] p-4"><p class="text-xs text-[#A7A9AC]">Volume brut (GMV)</p><p class="text-xl font-bold tabular-nums" id="finGmv">—</p></div>
-            <div class="rounded-xl bg-primary-50 p-4"><p class="text-xs text-[#A7A9AC]">Revenus MBOA</p><p class="text-xl font-bold text-[#FF9900] tabular-nums" id="finPlatform">—</p></div>
-            <div class="rounded-xl bg-[#171A1A] p-4"><p class="text-xs text-[#A7A9AC]">Reversé fournisseurs</p><p class="text-xl font-bold tabular-nums" id="finSuppliers">—</p></div>
-            <div class="rounded-xl bg-[#171A1A] p-4"><p class="text-xs text-[#A7A9AC]">Commandes comptabilisées</p><p class="text-xl font-bold tabular-nums" id="finOrders">—</p></div>
+            <div class="rounded-xl bg-[#FFFFFF] p-4"><p class="text-xs text-[#6B6B6B]">Volume brut (GMV)</p><p class="text-xl font-bold tabular-nums" id="finGmv">—</p></div>
+            <div class="rounded-xl bg-primary-50 p-4"><p class="text-xs text-[#6B6B6B]">Revenus MBOA</p><p class="text-xl font-bold text-[#C40000] tabular-nums" id="finPlatform">—</p></div>
+            <div class="rounded-xl bg-[#FFFFFF] p-4"><p class="text-xs text-[#6B6B6B]">Reversé fournisseurs</p><p class="text-xl font-bold tabular-nums" id="finSuppliers">—</p></div>
+            <div class="rounded-xl bg-[#FFFFFF] p-4"><p class="text-xs text-[#6B6B6B]">Commandes comptabilisées</p><p class="text-xl font-bold tabular-nums" id="finOrders">—</p></div>
           </div>
         </div>
-        <div class="bg-[#171A1A] rounded-xl p-5 shadow-sm border border-[#303437] mb-6">
+        <div class="bg-[#FFFFFF] rounded-xl p-5 shadow-sm border border-[#E5E5E5] mb-6">
           <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
-            <h3 class="font-semibold text-[#F2F2F2]">Règles de commission</h3>
-            <button data-money onclick="openRuleModal()" class="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-[#111111] text-xs font-bold rounded-xl transition">+ Nouvelle règle</button>
+            <h3 class="font-semibold text-[#0A0A0A]">Règles de commission</h3>
+            <button data-money onclick="openRuleModal()" class="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white text-xs font-bold rounded-xl transition">+ Nouvelle règle</button>
           </div>
-          <p class="text-xs text-[#A7A9AC] mb-3">Le taux est figé par commande au moment de la vente : changer de règle ne modifie jamais l'historique.</p>
+          <p class="text-xs text-[#6B6B6B] mb-3">Le taux est figé par commande au moment de la vente : changer de règle ne modifie jamais l'historique.</p>
           <div id="rulesTable"></div>
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-          <div class="bg-[#171A1A] rounded-xl p-5 shadow-sm border border-[#303437]">
-            <h3 class="font-semibold text-[#F2F2F2] mb-4">Top 10 produits vendus</h3>
+          <div class="bg-[#FFFFFF] rounded-xl p-5 shadow-sm border border-[#E5E5E5]">
+            <h3 class="font-semibold text-[#0A0A0A] mb-4">Top 10 produits vendus</h3>
             <div id="topProductsTable" class="overflow-x-auto"></div>
           </div>
-          <div class="bg-[#171A1A] rounded-xl p-5 shadow-sm border border-[#303437]">
-            <h3 class="font-semibold text-[#F2F2F2] mb-4">Revenus par mois</h3>
+          <div class="bg-[#FFFFFF] rounded-xl p-5 shadow-sm border border-[#E5E5E5]">
+            <h3 class="font-semibold text-[#0A0A0A] mb-4">Revenus par mois</h3>
             <canvas id="chartMonthlyRevenue" height="250"></canvas>
           </div>
         </div>
-        <div class="bg-[#171A1A] rounded-xl p-5 shadow-sm border border-[#303437]">
-          <h3 class="font-semibold text-[#F2F2F2] mb-4">Top villes</h3>
+        <div class="bg-[#FFFFFF] rounded-xl p-5 shadow-sm border border-[#E5E5E5]">
+          <h3 class="font-semibold text-[#0A0A0A] mb-4">Top villes</h3>
           <div id="topCitiesTable"></div>
         </div>
       </div>
@@ -476,9 +476,9 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(2
       <!-- AUDIT PAGE -->
       <div id="page-audit" class="page-content hidden">
         <div class="flex flex-wrap items-center gap-2 mb-4">
-          <input id="auditSearch" type="text" placeholder="Filtrer par action (ex. ORDER_REFUNDED)..." oninput="auditPage=1;loadAudit()" aria-label="Filtrer par action" class="px-4 py-2 rounded-xl border border-[#303437] text-sm w-72">
+          <input id="auditSearch" type="text" placeholder="Filtrer par action (ex. ORDER_REFUNDED)..." oninput="auditPage=1;loadAudit()" aria-label="Filtrer par action" class="px-4 py-2 rounded-xl border border-[#E5E5E5] text-sm w-72">
         </div>
-        <div class="bg-[#171A1A] rounded-xl shadow-sm border border-[#303437] overflow-hidden">
+        <div class="bg-[#FFFFFF] rounded-xl shadow-sm border border-[#E5E5E5] overflow-hidden">
           <div id="auditTable" class="overflow-x-auto"></div>
         </div>
         <div id="auditPagination" class="flex justify-center gap-2 mt-5"></div>
@@ -487,37 +487,37 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(2
       <!-- SETTINGS PAGE -->
       <div id="page-settings" class="page-content hidden">
         <div class="max-w-2xl space-y-6">
-          <div class="bg-[#171A1A] rounded-xl p-6 shadow-sm border border-[#303437]">
-            <h3 class="font-semibold text-[#F2F2F2] mb-1">Profil administrateur</h3>
-            <p class="text-xs text-[#A7A9AC] mb-4">Identité résolue par le serveur depuis votre session.</p>
+          <div class="bg-[#FFFFFF] rounded-xl p-6 shadow-sm border border-[#E5E5E5]">
+            <h3 class="font-semibold text-[#0A0A0A] mb-1">Profil administrateur</h3>
+            <p class="text-xs text-[#6B6B6B] mb-4">Identité résolue par le serveur depuis votre session.</p>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label class="block text-sm font-medium text-[#A7A9AC] mb-1" for="setUsername">Nom d'utilisateur</label>
-                <input id="setUsername" type="text" value="—" class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm" disabled>
+                <label class="block text-sm font-medium text-[#6B6B6B] mb-1" for="setUsername">Nom d'utilisateur</label>
+                <input id="setUsername" type="text" value="—" class="w-full px-4 py-2.5 rounded-xl border border-[#E5E5E5] text-sm" disabled>
               </div>
               <div>
-                <label class="block text-sm font-medium text-[#A7A9AC] mb-1" for="setRole">Rôle</label>
-                <input id="setRole" type="text" value="—" class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm" disabled>
+                <label class="block text-sm font-medium text-[#6B6B6B] mb-1" for="setRole">Rôle</label>
+                <input id="setRole" type="text" value="—" class="w-full px-4 py-2.5 rounded-xl border border-[#E5E5E5] text-sm" disabled>
               </div>
             </div>
-            <div id="permMatrix" class="mt-4 text-xs text-[#A7A9AC]"></div>
+            <div id="permMatrix" class="mt-4 text-xs text-[#6B6B6B]"></div>
           </div>
-          <div class="bg-[#171A1A] rounded-xl p-6 shadow-sm border border-[#303437]">
-            <h3 class="font-semibold text-[#F2F2F2] mb-4">Modifier mon mot de passe</h3>
+          <div class="bg-[#FFFFFF] rounded-xl p-6 shadow-sm border border-[#E5E5E5]">
+            <h3 class="font-semibold text-[#0A0A0A] mb-4">Modifier mon mot de passe</h3>
             <form onsubmit="return saveAdminPassword(event)" class="space-y-3">
-              <label class="block text-xs font-medium text-[#A7A9AC]" for="apCurrent">Mot de passe actuel</label>
-              <input id="apCurrent" type="password" required autocomplete="current-password" class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm">
-              <label class="block text-xs font-medium text-[#A7A9AC]" for="apNew">Nouveau mot de passe (min 8 caractères)</label>
-              <input id="apNew" type="password" required minlength="8" autocomplete="new-password" class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm">
-              <button class="px-5 py-2.5 bg-primary-600 text-[#111111] rounded-xl text-sm font-semibold hover:bg-primary-700 transition">Mettre à jour</button>
+              <label class="block text-xs font-medium text-[#6B6B6B]" for="apCurrent">Mot de passe actuel</label>
+              <input id="apCurrent" type="password" required autocomplete="current-password" class="w-full px-4 py-2.5 rounded-xl border border-[#E5E5E5] text-sm">
+              <label class="block text-xs font-medium text-[#6B6B6B]" for="apNew">Nouveau mot de passe (min 8 caractères)</label>
+              <input id="apNew" type="password" required minlength="8" autocomplete="new-password" class="w-full px-4 py-2.5 rounded-xl border border-[#E5E5E5] text-sm">
+              <button class="px-5 py-2.5 bg-primary-600 text-white rounded-xl text-sm font-semibold hover:bg-primary-700 transition">Mettre à jour</button>
             </form>
           </div>
-          <div class="bg-[#171A1A] rounded-xl p-6 shadow-sm border border-[#303437]">
-            <h3 class="font-semibold text-[#F2F2F2] mb-1">Clients</h3>
-            <p class="text-sm text-[#A7A9AC]">MBOA STYLE n'a pas de comptes clients : les acheteurs sont des <strong>invités</strong> identifiés par téléphone (commandes, messages, suivi). Aucune donnée à administrer ici — voir Commandes et Messages.</p>
+          <div class="bg-[#FFFFFF] rounded-xl p-6 shadow-sm border border-[#E5E5E5]">
+            <h3 class="font-semibold text-[#0A0A0A] mb-1">Clients</h3>
+            <p class="text-sm text-[#6B6B6B]">MBOA STYLE n'a pas de comptes clients : les acheteurs sont des <strong>invités</strong> identifiés par téléphone (commandes, messages, suivi). Aucune donnée à administrer ici — voir Commandes et Messages.</p>
           </div>
-          <div class="bg-[#171A1A] rounded-xl p-6 shadow-sm border border-[#303437]">
-            <h3 class="font-semibold text-[#F2F2F2] mb-4">Journal d'activité récent</h3>
+          <div class="bg-[#FFFFFF] rounded-xl p-6 shadow-sm border border-[#E5E5E5]">
+            <h3 class="font-semibold text-[#0A0A0A] mb-4">Journal d'activité récent</h3>
             <div id="activityLogs" class="space-y-2 max-h-64 overflow-y-auto"></div>
           </div>
         </div>
@@ -528,30 +528,30 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(2
 
 <!-- ========== MODALS ========== -->
 <div id="modalOverlay" class="fixed inset-0 z-50 modal-overlay hidden flex items-center justify-center p-4" onclick="if(event.target===this)closeModal()">
-  <div id="modalContent" class="bg-[#171A1A] rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto"></div>
+  <div id="modalContent" class="bg-[#FFFFFF] rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto"></div>
 </div>
 
 <!-- ========== NOTIFICATION PANEL ========== -->
-<div id="notifPanel" class="fixed top-14 right-6 w-96 max-w-[92vw] bg-[#171A1A] rounded-xl shadow-xl border border-[#303437] z-50 hidden" style="max-height:480px;overflow-y:auto">
-  <div class="p-4 border-b border-[#303437] flex justify-between items-center sticky top-0 bg-[#171A1A]">
+<div id="notifPanel" class="fixed top-14 right-6 w-96 max-w-[92vw] bg-[#FFFFFF] rounded-xl shadow-xl border border-[#E5E5E5] z-50 hidden" style="max-height:480px;overflow-y:auto">
+  <div class="p-4 border-b border-[#E5E5E5] flex justify-between items-center sticky top-0 bg-[#FFFFFF]">
     <h4 class="font-semibold text-sm">Notifications</h4>
     <div class="flex items-center gap-2">
-      <button onclick="notifReadAll();event.stopPropagation()" title="Tout marquer comme lues" class="text-xs font-medium text-[#067D62] hover:text-[#067D62]"><i class="bi bi-check-all"></i></button>
-      <button onclick="document.getElementById('notifPanel').classList.add('hidden');showPage('notifications')" title="Voir tout" class="text-xs font-medium text-[#FF9900] hover:text-[#FF9900]">Voir tout</button>
-      <button onclick="document.getElementById('notifPanel').classList.add('hidden')" class="text-[#A7A9AC] hover:text-[#A7A9AC]"><i class="bi bi-x-lg"></i></button>
+      <button onclick="notifReadAll();event.stopPropagation()" title="Tout marquer comme lues" class="text-xs font-medium text-[#C40000] hover:text-[#E00000]"><i class="bi bi-check-all"></i></button>
+      <button onclick="document.getElementById('notifPanel').classList.add('hidden');showPage('notifications')" title="Voir tout" class="text-xs font-medium text-[#C40000] hover:text-[#C40000]">Voir tout</button>
+      <button onclick="document.getElementById('notifPanel').classList.add('hidden')" class="text-[#6B6B6B] hover:text-[#6B6B6B]"><i class="bi bi-x-lg"></i></button>
     </div>
   </div>
-  <div id="notifList" class="divide-y divide-[#303437]"></div>
+  <div id="notifList" class="divide-y divide-[#E5E5E5]"></div>
 </div>
 
 <!-- Toast nouveautés -->
-<div id="notifToast" class="fixed bottom-6 right-6 z-[90] hidden items-center gap-3 bg-[#171A1A] text-white pl-4 pr-3 py-3 rounded-xl shadow-2xl cursor-pointer max-w-sm" role="status" aria-live="polite" onclick="showPage('notifications');this.classList.add('hidden');this.classList.remove('flex')">
+<div id="notifToast" class="fixed bottom-6 right-6 z-[90] hidden items-center gap-3 bg-[#0A0A0A] text-white pl-4 pr-3 py-3 rounded-xl shadow-2xl cursor-pointer max-w-sm" role="status" aria-live="polite" onclick="showPage('notifications');this.classList.add('hidden');this.classList.remove('flex')">
   <i class="bi bi-bell-fill text-amber-400 text-lg"></i>
   <div class="flex-1">
     <p id="notifToastTitle" class="text-sm font-semibold">Nouvelles notifications</p>
-    <p id="notifToastText" class="text-xs text-[#A7A9AC]"></p>
+    <p id="notifToastText" class="text-xs text-[#6B6B6B]"></p>
   </div>
-  <i class="bi bi-x text-[#A7A9AC]" onclick="event.stopPropagation();document.getElementById('notifToast').classList.add('hidden');document.getElementById('notifToast').classList.remove('flex')"></i>
+  <i class="bi bi-x text-[#6B6B6B]" onclick="event.stopPropagation();document.getElementById('notifToast').classList.add('hidden');document.getElementById('notifToast').classList.remove('flex')"></i>
 </div>
 <!-- Toast générique (remplace les notifyMsg() natifs) -->
 <div id="adminToast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[95] hidden items-center gap-2.5 text-white pl-4 pr-5 py-3 rounded-xl shadow-2xl max-w-md text-sm font-medium"></div>
@@ -578,7 +578,7 @@ function notifyMsg(msg, type) {
   if (!t) return;
   type = type || 'error';
   t.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 z-[95] flex items-center gap-2.5 text-white pl-4 pr-5 py-3 rounded-xl shadow-2xl max-w-md text-sm font-medium ' +
-    (type === 'success' ? 'bg-primary-700' : type === 'info' ? 'bg-[#232F3E]' : 'bg-[#C40000]');
+    (type === 'success' ? 'bg-[#0A0A0A]' : type === 'info' ? 'bg-[#0A0A0A]' : 'bg-[#C40000]');
   t.innerHTML = '<i class="bi ' + (type === 'success' ? 'bi-check-circle' : type === 'info' ? 'bi-info-circle' : 'bi-exclamation-triangle') + '"></i><span></span>';
   t.querySelector('span').textContent = msg;
   if (adminToastTimer) clearTimeout(adminToastTimer);
@@ -715,23 +715,23 @@ function notifEsc(s) {
 
 function notifTypeMeta(type) {
   switch ((type || 'SYSTEM').toUpperCase()) {
-    case 'ORDER': return { icon: 'bi-receipt', color: 'text-[#2C6ECB]', bg: 'bg-[rgba(44,110,203,0.12)]', label: 'Commande' };
-    case 'PAYMENT': return { icon: 'bi-credit-card', color: 'text-[#067D62]', bg: 'bg-[rgba(6,125,98,0.12)]', label: 'Paiement' };
-    case 'DELIVERY': return { icon: 'bi-truck', color: 'text-[#2C6ECB]', bg: 'bg-[rgba(44,110,203,0.12)]', label: 'Livraison' };
-    case 'MESSAGE': return { icon: 'bi-chat-dots', color: 'text-[#2C6ECB]', bg: 'bg-[rgba(44,110,203,0.12)]', label: 'Message' };
-    case 'NEGOTIATION': return { icon: 'bi-arrow-left-right', color: 'text-[#2C6ECB]', bg: 'bg-[rgba(44,110,203,0.12)]', label: 'Offre' };
-    case 'PRODUCT': return { icon: 'bi-box-seam', color: 'text-[#F0B323]', bg: 'bg-[rgba(240,179,35,0.12)]', label: 'Produit' };
-    case 'STOCK': return { icon: 'bi-boxes', color: 'text-[#F0B323]', bg: 'bg-[rgba(240,179,35,0.12)]', label: 'Stock' };
-    case 'SUPPLIER': return { icon: 'bi-people', color: 'text-[#2C6ECB]', bg: 'bg-[rgba(44,110,203,0.12)]', label: 'Fournisseur' };
+    case 'ORDER': return { icon: 'bi-receipt', color: 'text-[#C40000]', bg: 'bg-[rgba(196,0,0,0.08)]', label: 'Commande' };
+    case 'PAYMENT': return { icon: 'bi-credit-card', color: 'text-white', bg: 'bg-[#0A0A0A]', label: 'Paiement' };
+    case 'DELIVERY': return { icon: 'bi-truck', color: 'text-[#0A0A0A]', bg: 'bg-[#E5E5E5]', label: 'Livraison' };
+    case 'MESSAGE': return { icon: 'bi-chat-dots', color: 'text-[#0A0A0A]', bg: 'bg-[#E5E5E5]', label: 'Message' };
+    case 'NEGOTIATION': return { icon: 'bi-arrow-left-right', color: 'text-[#C40000]', bg: 'bg-[rgba(196,0,0,0.08)]', label: 'Offre' };
+    case 'PRODUCT': return { icon: 'bi-box-seam', color: 'text-[#0A0A0A]', bg: 'bg-[#E5E5E5]', label: 'Produit' };
+    case 'STOCK': return { icon: 'bi-boxes', color: 'text-[#C40000]', bg: 'bg-[rgba(196,0,0,0.08)]', label: 'Stock' };
+    case 'SUPPLIER': return { icon: 'bi-people', color: 'text-[#0A0A0A]', bg: 'bg-[#E5E5E5]', label: 'Fournisseur' };
     case 'SECURITY': return { icon: 'bi-shield-lock', color: 'text-[#C40000]', bg: 'bg-[rgba(196,0,0,0.12)]', label: 'Sécurité' };
-    case 'MARKETING': return { icon: 'bi-megaphone', color: 'text-[#2C6ECB]', bg: 'bg-[rgba(44,110,203,0.12)]', label: 'Promo' };
-    default: return { icon: 'bi-info-circle', color: 'text-[#A7A9AC]', bg: 'bg-[#232F3E]', label: 'Système' };
+    case 'MARKETING': return { icon: 'bi-megaphone', color: 'text-white', bg: 'bg-[#C40000]', label: 'Promo' };
+    default: return { icon: 'bi-info-circle', color: 'text-[#6B6B6B]', bg: 'bg-[#F5F5F5]', label: 'Système' };
   }
 }
 
 function notifPriorityChip(p) {
   if (p === 'URGENT') return '<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[rgba(196,0,0,0.12)] text-[#C40000]">URGENT</span>';
-  if (p === 'HIGH') return '<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[rgba(44,110,203,0.12)] text-[#2C6ECB]">Important</span>';
+  if (p === 'HIGH') return '<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#E5E5E5] text-[#0A0A0A]">Important</span>';
   return '';
 }
 
@@ -785,7 +785,7 @@ async function loadNotifPanel() {
     const notifs = res && res.data ? res.data : (Array.isArray(res) ? res : []);
     const list = document.getElementById('notifList');
     if (!notifs.length) {
-      list.innerHTML = '<p class="p-4 text-sm text-[#A7A9AC] text-center">Aucune notification</p>';
+      list.innerHTML = '<p class="p-4 text-sm text-[#6B6B6B] text-center">Aucune notification</p>';
     } else {
       list.innerHTML = notifs.map(n => notifItemHTML(n, false)).join('');
     }
@@ -801,30 +801,30 @@ function notifItemHTML(n, withCheckbox) {
   if (m) {
     actions = `
       <div class="flex gap-2 mt-2">
-        <button onclick="event.stopPropagation();validateProduct(${m[1]}, true, ${n.id})" class="text-xs font-medium bg-green-600 text-white px-2.5 py-1 rounded-md hover:bg-green-700">Ajouter à la boutique</button>
+        <button onclick="event.stopPropagation();validateProduct(${m[1]}, true, ${n.id})" class="text-xs font-medium bg-[#C40000] text-white px-2.5 py-1 rounded-md hover:bg-[#E00000]">Ajouter à la boutique</button>
         <button onclick="event.stopPropagation();validateProduct(${m[1]}, false, ${n.id})" class="text-xs font-medium bg-[#C40000] text-white px-2.5 py-1 rounded-md hover:bg-[#C40000]">Refuser</button>
       </div>`;
   }
   return `
-  <div class="p-3 hover:bg-[#171A1A] transition flex gap-3 ${n.read ? '' : 'bg-primary-50/40'} cursor-pointer" onclick="notifOpen(${n.id})">
+  <div class="p-3 hover:bg-[#FFFFFF] transition flex gap-3 ${n.read ? '' : 'bg-primary-50/40'} cursor-pointer" onclick="notifOpen(${n.id})">
     ${withCheckbox ? `<input type="checkbox" ${notifSelected.has(n.id) ? 'checked' : ''} onclick="event.stopPropagation();notifToggleSelect(${n.id}, this.checked)" class="w-4 h-4 mt-1 accent-primary-600 shrink-0">` : ''}
     <div class="w-9 h-9 rounded-xl ${meta.bg} ${meta.color} flex items-center justify-center shrink-0"><i class="bi ${meta.icon}"></i></div>
     <div class="flex-1 min-w-0">
       <div class="flex items-center gap-2">
         ${n.read ? '' : '<span class="w-2 h-2 rounded-full bg-primary-500 shrink-0"></span>'}
-        <p class="text-sm ${n.read ? 'font-medium text-[#A7A9AC]' : 'font-semibold text-[#F2F2F2]'} truncate">${notifEsc(n.title) || 'Notification'}</p>
+        <p class="text-sm ${n.read ? 'font-medium text-[#6B6B6B]' : 'font-semibold text-[#0A0A0A]'} truncate">${notifEsc(n.title) || 'Notification'}</p>
       </div>
-      <p class="text-xs text-[#A7A9AC] mt-0.5 line-clamp-2">${notifEsc(n.message) || ''}</p>
+      <p class="text-xs text-[#6B6B6B] mt-0.5 line-clamp-2">${notifEsc(n.message) || ''}</p>
       <div class="flex items-center gap-2 mt-1">
         <span class="text-[10px] px-1.5 py-0.5 rounded ${meta.bg} ${meta.color} font-semibold">${meta.label}</span>
         ${notifPriorityChip(n.priority)}
-        <span class="text-[10px] text-[#A7A9AC]">${timeAgo(n.createdAt)}</span>
+        <span class="text-[10px] text-[#6B6B6B]">${timeAgo(n.createdAt)}</span>
       </div>
       ${actions}
     </div>
     <div class="flex flex-col gap-1 shrink-0">
-      <button onclick="event.stopPropagation();notifToggleRead(${n.id}, ${n.read})" title="${n.read ? 'Marquer comme non lue' : 'Marquer comme lue'}" class="text-[#A7A9AC] hover:text-[#FF9900]"><i class="bi ${n.read ? 'bi-envelope-open' : 'bi-envelope-fill text-primary-500'} text-sm"></i></button>
-      <button onclick="event.stopPropagation();notifDelete(${n.id})" title="Supprimer" class="text-[#A7A9AC] hover:text-[#C40000]"><i class="bi bi-trash text-sm"></i></button>
+      <button onclick="event.stopPropagation();notifToggleRead(${n.id}, ${n.read})" title="${n.read ? 'Marquer comme non lue' : 'Marquer comme lue'}" class="text-[#6B6B6B] hover:text-[#C40000]"><i class="bi ${n.read ? 'bi-envelope-open' : 'bi-envelope-fill text-primary-500'} text-sm"></i></button>
+      <button onclick="event.stopPropagation();notifDelete(${n.id})" title="Supprimer" class="text-[#6B6B6B] hover:text-[#C40000]"><i class="bi bi-trash text-sm"></i></button>
     </div>
   </div>`;
 }
@@ -909,7 +909,7 @@ async function loadNotifCenter() {
     const list = document.getElementById('notifCenterList');
     list.innerHTML = data.length
       ? data.map(n => notifItemHTML(n, true)).join('')
-      : '<p class="p-10 text-sm text-[#A7A9AC] text-center">Aucune notification pour ces critères.<br><span class="text-xs">Les commandes, stocks faibles, paiements et demandes fournisseurs apparaîtront ici.</span></p>';
+      : '<p class="p-10 text-sm text-[#6B6B6B] text-center">Aucune notification pour ces critères.<br><span class="text-xs">Les commandes, stocks faibles, paiements et demandes fournisseurs apparaîtront ici.</span></p>';
 
     document.getElementById('notifTotal').textContent = total + ' notification(s)';
     renderNotifPagination(total);
@@ -926,15 +926,15 @@ function renderNotifPagination(total) {
   if (notifPage > pages) notifPage = pages;
   const el = document.getElementById('notifPagination');
   if (pages <= 1) { el.innerHTML = ''; return; }
-  let html = `<button onclick="notifGoto(${notifPage - 1})" ${notifPage === 1 ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg border border-[#303437] text-sm bg-[#171A1A] disabled:opacity-40">Précédent</button>`;
+  let html = `<button onclick="notifGoto(${notifPage - 1})" ${notifPage === 1 ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg border border-[#E5E5E5] text-sm bg-[#FFFFFF] disabled:opacity-40">Précédent</button>`;
   for (let i = 1; i <= pages; i++) {
     if (i === 1 || i === pages || Math.abs(i - notifPage) <= 1) {
-      html += `<button onclick="notifGoto(${i})" class="w-9 h-9 rounded-lg text-sm font-medium ${i === notifPage ? 'bg-primary-600 text-[#111111]' : 'bg-[#171A1A] border border-[#303437] text-[#A7A9AC]'}">${i}</button>`;
+      html += `<button onclick="notifGoto(${i})" class="w-9 h-9 rounded-lg text-sm font-medium ${i === notifPage ? 'bg-primary-600 text-white' : 'bg-[#FFFFFF] border border-[#E5E5E5] text-[#6B6B6B]'}">${i}</button>`;
     } else if (!html.endsWith('…</span>')) {
-      html += '<span class="text-[#A7A9AC] px-1">…</span>';
+      html += '<span class="text-[#6B6B6B] px-1">…</span>';
     }
   }
-  html += `<button onclick="notifGoto(${notifPage + 1})" ${notifPage === pages ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg border border-[#303437] text-sm bg-[#171A1A] disabled:opacity-40">Suivant</button>`;
+  html += `<button onclick="notifGoto(${notifPage + 1})" ${notifPage === pages ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg border border-[#E5E5E5] text-sm bg-[#FFFFFF] disabled:opacity-40">Suivant</button>`;
   el.innerHTML = html;
 }
 
@@ -1001,17 +1001,17 @@ function openNotifCompose() {
       <h3 class="text-lg font-bold mb-4">Nouveau message</h3>
       <div class="space-y-3">
         <div>
-          <label class="text-xs font-medium text-[#A7A9AC] mb-1 block">Titre *</label>
-          <input id="ncTitle" maxlength="200" placeholder="Ex : Maintenance prévue dimanche" class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm">
+          <label class="text-xs font-medium text-[#6B6B6B] mb-1 block">Titre *</label>
+          <input id="ncTitle" maxlength="200" placeholder="Ex : Maintenance prévue dimanche" class="w-full px-4 py-2.5 rounded-xl border border-[#E5E5E5] text-sm">
         </div>
         <div>
-          <label class="text-xs font-medium text-[#A7A9AC] mb-1 block">Message *</label>
-          <textarea id="ncMessage" rows="3" placeholder="Contenu du message..." class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm"></textarea>
+          <label class="text-xs font-medium text-[#6B6B6B] mb-1 block">Message *</label>
+          <textarea id="ncMessage" rows="3" placeholder="Contenu du message..." class="w-full px-4 py-2.5 rounded-xl border border-[#E5E5E5] text-sm"></textarea>
         </div>
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="text-xs font-medium text-[#A7A9AC] mb-1 block">Type</label>
-            <select id="ncType" class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm">
+            <label class="text-xs font-medium text-[#6B6B6B] mb-1 block">Type</label>
+            <select id="ncType" class="w-full px-4 py-2.5 rounded-xl border border-[#E5E5E5] text-sm">
               <option value="SYSTEM">Système</option>
               <option value="ORDER">Commande</option>
               <option value="PAYMENT">Paiement</option>
@@ -1025,8 +1025,8 @@ function openNotifCompose() {
             </select>
           </div>
           <div>
-            <label class="text-xs font-medium text-[#A7A9AC] mb-1 block">Priorité</label>
-            <select id="ncPriority" class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm">
+            <label class="text-xs font-medium text-[#6B6B6B] mb-1 block">Priorité</label>
+            <select id="ncPriority" class="w-full px-4 py-2.5 rounded-xl border border-[#E5E5E5] text-sm">
               <option value="LOW">Basse</option>
               <option value="NORMAL" selected>Normale</option>
               <option value="HIGH">Importante</option>
@@ -1035,22 +1035,22 @@ function openNotifCompose() {
           </div>
         </div>
         <div>
-          <label class="text-xs font-medium text-[#A7A9AC] mb-1 block">Destinataires *</label>
+          <label class="text-xs font-medium text-[#6B6B6B] mb-1 block">Destinataires *</label>
           <div class="flex flex-wrap gap-2">
-            <label class="text-xs px-3 py-1.5 rounded-lg border border-[#303437] cursor-pointer"><input type="checkbox" class="ncRole" value="SUPER_ADMIN" checked> Super admin</label>
-            <label class="text-xs px-3 py-1.5 rounded-lg border border-[#303437] cursor-pointer"><input type="checkbox" class="ncRole" value="ADMIN"> Admin</label>
-            <label class="text-xs px-3 py-1.5 rounded-lg border border-[#303437] cursor-pointer"><input type="checkbox" class="ncRole" value="GESTIONNAIRE"> Gestionnaire</label>
-            <label class="text-xs px-3 py-1.5 rounded-lg border border-[#303437] cursor-pointer"><input type="checkbox" class="ncRole" value="SUPPLIER"> Fournisseurs</label>
-            <label class="text-xs px-3 py-1.5 rounded-lg border border-[#303437] cursor-pointer"><input type="checkbox" class="ncRole" value="CLIENT"> Clients</label>
+            <label class="text-xs px-3 py-1.5 rounded-lg border border-[#E5E5E5] cursor-pointer"><input type="checkbox" class="ncRole" value="SUPER_ADMIN" checked> Super admin</label>
+            <label class="text-xs px-3 py-1.5 rounded-lg border border-[#E5E5E5] cursor-pointer"><input type="checkbox" class="ncRole" value="ADMIN"> Admin</label>
+            <label class="text-xs px-3 py-1.5 rounded-lg border border-[#E5E5E5] cursor-pointer"><input type="checkbox" class="ncRole" value="GESTIONNAIRE"> Gestionnaire</label>
+            <label class="text-xs px-3 py-1.5 rounded-lg border border-[#E5E5E5] cursor-pointer"><input type="checkbox" class="ncRole" value="SUPPLIER"> Fournisseurs</label>
+            <label class="text-xs px-3 py-1.5 rounded-lg border border-[#E5E5E5] cursor-pointer"><input type="checkbox" class="ncRole" value="CLIENT"> Clients</label>
           </div>
         </div>
         <div>
-          <label class="text-xs font-medium text-[#A7A9AC] mb-1 block">Lien (optionnel)</label>
-          <input id="ncLink" placeholder="Ex : /products/12/validate" class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm">
+          <label class="text-xs font-medium text-[#6B6B6B] mb-1 block">Lien (optionnel)</label>
+          <input id="ncLink" placeholder="Ex : /products/12/validate" class="w-full px-4 py-2.5 rounded-xl border border-[#E5E5E5] text-sm">
         </div>
         <div class="flex gap-3 pt-2">
-          <button onclick="submitNotifCompose()" class="flex-1 py-2.5 bg-primary-600 text-[#111111] rounded-xl text-sm font-semibold hover:bg-primary-700 transition">Envoyer</button>
-          <button onclick="closeModal()" class="px-6 py-2.5 bg-[#232F3E] text-[#A7A9AC] rounded-xl text-sm font-semibold hover:bg-[#303437] transition">Annuler</button>
+          <button onclick="submitNotifCompose()" class="flex-1 py-2.5 bg-primary-600 text-white rounded-xl text-sm font-semibold hover:bg-primary-700 transition">Envoyer</button>
+          <button onclick="closeModal()" class="px-6 py-2.5 bg-[#F5F5F5] text-[#0A0A0A] rounded-xl text-sm font-semibold hover:bg-[#E5E5E5] transition">Annuler</button>
         </div>
       </div>
     </div>`);
@@ -1134,23 +1134,23 @@ async function loadDashboardData() {
 
 function renderDashStats() {
   document.getElementById('dashStats').innerHTML = `
-    <div class="bg-[#171A1A] rounded-xl p-5 shadow-sm border border-[#303437] stat-card">
-      <div class="flex items-center justify-between mb-3"><p class="text-sm text-[#A7A9AC]">Produits</p><div class="w-10 h-10 rounded-xl bg-primary-50 flex items-center justify-center"><i class="bi bi-box-seam text-[#FF9900]"></i></div></div>
-      <p class="text-2xl font-bold text-[#F2F2F2]">${dashboard.totalProducts || 0}</p>
+    <div class="bg-[#FFFFFF] rounded-xl p-5 shadow-sm border border-[#E5E5E5] stat-card">
+      <div class="flex items-center justify-between mb-3"><p class="text-sm text-[#6B6B6B]">Produits</p><div class="w-10 h-10 rounded-xl bg-primary-50 flex items-center justify-center"><i class="bi bi-box-seam text-[#C40000]"></i></div></div>
+      <p class="text-2xl font-bold text-[#0A0A0A]">${dashboard.totalProducts || 0}</p>
     </div>
-    <div class="bg-[#171A1A] rounded-xl p-5 shadow-sm border border-[#303437] stat-card">
-      <div class="flex items-center justify-between mb-3"><p class="text-sm text-[#A7A9AC]">Commandes</p><div class="w-10 h-10 rounded-xl bg-[rgba(44,110,203,0.12)] flex items-center justify-center"><i class="bi bi-receipt text-[#2C6ECB]"></i></div></div>
-      <p class="text-2xl font-bold text-[#F2F2F2]">${dashboard.totalOrders || 0}</p>
-      <p class="text-xs text-[#A7A9AC] mt-1">${dashboard.pendingOrders || 0} en attente · ${dashboard.todayOrders || 0} aujourd'hui</p>
+    <div class="bg-[#FFFFFF] rounded-xl p-5 shadow-sm border border-[#E5E5E5] stat-card">
+      <div class="flex items-center justify-between mb-3"><p class="text-sm text-[#6B6B6B]">Commandes</p><div class="w-10 h-10 rounded-xl bg-[rgba(196,0,0,0.08)] flex items-center justify-center"><i class="bi bi-receipt text-[#C40000]"></i></div></div>
+      <p class="text-2xl font-bold text-[#0A0A0A]">${dashboard.totalOrders || 0}</p>
+      <p class="text-xs text-[#6B6B6B] mt-1">${dashboard.pendingOrders || 0} en attente · ${dashboard.todayOrders || 0} aujourd'hui</p>
     </div>
-    <div class="bg-[#171A1A] rounded-xl p-5 shadow-sm border border-[#303437] stat-card">
-      <div class="flex items-center justify-between mb-3"><p class="text-sm text-[#A7A9AC]">Revenus</p><div class="w-10 h-10 rounded-xl bg-[rgba(6,125,98,0.12)] flex items-center justify-center"><i class="bi bi-cash-stack text-[#067D62]"></i></div></div>
-      <p class="text-2xl font-bold text-[#F2F2F2]">${formatMoney(dashboard.totalRevenue || 0)}</p>
-      <p class="text-xs text-[#A7A9AC] mt-1">Aujourd'hui: ${formatMoney(dashboard.todayRevenue || 0)}</p>
+    <div class="bg-[#FFFFFF] rounded-xl p-5 shadow-sm border border-[#E5E5E5] stat-card">
+      <div class="flex items-center justify-between mb-3"><p class="text-sm text-[#6B6B6B]">Revenus</p><div class="w-10 h-10 rounded-xl bg-[rgba(196,0,0,0.08)] text-[#C40000] flex items-center justify-center"><i class="bi bi-cash-stack"></i></div></div>
+      <p class="text-2xl font-bold text-[#0A0A0A]">${formatMoney(dashboard.totalRevenue || 0)}</p>
+      <p class="text-xs text-[#6B6B6B] mt-1">Aujourd'hui: ${formatMoney(dashboard.todayRevenue || 0)}</p>
     </div>
-    <div class="bg-[#171A1A] rounded-xl p-5 shadow-sm border border-[#303437] stat-card">
-      <div class="flex items-center justify-between mb-3"><p class="text-sm text-[#A7A9AC]">Catégories</p><div class="w-10 h-10 rounded-xl bg-[rgba(44,110,203,0.12)] flex items-center justify-center"><i class="bi bi-tags text-[#2C6ECB]"></i></div></div>
-      <p class="text-2xl font-bold text-[#F2F2F2]">${dashboard.totalCategories || 0}</p>
+    <div class="bg-[#FFFFFF] rounded-xl p-5 shadow-sm border border-[#E5E5E5] stat-card">
+      <div class="flex items-center justify-between mb-3"><p class="text-sm text-[#6B6B6B]">Catégories</p><div class="w-10 h-10 rounded-xl bg-[rgba(196,0,0,0.08)] flex items-center justify-center"><i class="bi bi-tags text-[#C40000]"></i></div></div>
+      <p class="text-2xl font-bold text-[#0A0A0A]">${dashboard.totalCategories || 0}</p>
     </div>`;
 }
 
@@ -1163,10 +1163,10 @@ function renderDashCharts() {
       if (window._chartStatus) window._chartStatus.destroy();
       const labels = stats.ordersByStatus.map(s => s.status);
       const data = stats.ordersByStatus.map(s => s.count);
-      const colors = { EN_ATTENTE:'#F0B323', CONFIRMEE:'#2C6ECB', EN_PREPARATION:'#FF9900', EN_LIVRAISON:'#2C6ECB', LIVREE:'#067D62', ANNULEE:'#C40000' };
+      const colors = { EN_ATTENTE:'#C40000', CONFIRMEE:'#6B6B6B', EN_PREPARATION:'#0A0A0A', EN_LIVRAISON:'#E00000', LIVREE:'#222222', ANNULEE:'#9E0000' };
       window._chartStatus = new Chart(statusCtx, {
         type: 'doughnut',
-        data: { labels, datasets: [{ data, backgroundColor: labels.map(l => colors[l] || '#6B7280') }] },
+        data: { labels, datasets: [{ data, backgroundColor: labels.map(l => colors[l] || '#6B6B6B') }] },
         options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } } }
       });
     }
@@ -1178,7 +1178,7 @@ function renderDashCharts() {
         type: 'line',
         data: {
           labels: stats.ordersByDay.map(d => d.day),
-          datasets: [{ label: 'Revenus', data: stats.ordersByDay.map(d => d.revenue || 0), borderColor: '#FF9900', backgroundColor: 'rgba(255,153,0,0.12)', fill: true, tension: 0.4 }]
+          datasets: [{ label: 'Revenus', data: stats.ordersByDay.map(d => d.revenue || 0), borderColor: '#C40000', backgroundColor: 'rgba(196,0,0,0.12)', fill: true, tension: 0.4 }]
         },
         options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
       });
@@ -1191,15 +1191,15 @@ async function renderRecentOrders() {
     const ords = await api('/api/orders');
     const recent = (Array.isArray(ords) ? ords : []).slice(0, 5);
     document.getElementById('recentOrdersTable').innerHTML = recent.length === 0
-      ? '<p class="p-4 text-sm text-[#A7A9AC] text-center">Aucune commande</p>'
-      : `<table class="w-full text-sm"><thead><tr class="text-left text-[#A7A9AC] text-xs uppercase bg-[#171A1A]"><th class="px-4 py-2">N°</th><th class="px-4 py-2">Client</th><th class="px-4 py-2">Total</th><th class="px-4 py-2">Statut</th></tr></thead><tbody>${recent.map(o => `
+      ? '<p class="p-4 text-sm text-[#6B6B6B] text-center">Aucune commande</p>'
+      : `<table class="w-full text-sm"><thead><tr class="text-left text-[#6B6B6B] text-xs uppercase bg-[#FFFFFF]"><th class="px-4 py-2">N°</th><th class="px-4 py-2">Client</th><th class="px-4 py-2">Total</th><th class="px-4 py-2">Statut</th></tr></thead><tbody>${recent.map(o => `
         <tr class="border-t border-[rgba(255,255,255,0.06)]"><td class="px-4 py-2 font-mono text-xs">${o.orderNumber || '—'}</td><td class="px-4 py-2">${o.fullname || '—'}</td><td class="px-4 py-2 font-semibold">${formatMoney(o.total)}</td><td class="px-4 py-2"><span class="px-2 py-1 rounded-full text-xs font-medium ${statusClass(o.status)}">${statusLabel(o.status)}</span></td></tr>`).join('')}</tbody></table>`;
   } catch {}
 }
 
 function statusClass(s) {
-  const m = { EN_ATTENTE:'bg-[rgba(240,179,35,0.12)] text-[#F0B323]', CONFIRMEE:'bg-[rgba(44,110,203,0.12)] text-[#2C6ECB]', EN_PREPARATION:'bg-[rgba(255,153,0,0.12)] text-[#FF9900]', EN_LIVRAISON:'bg-[rgba(44,110,203,0.12)] text-[#2C6ECB]', LIVREE:'bg-[rgba(6,125,98,0.12)] text-[#067D62]', ANNULEE:'bg-[rgba(196,0,0,0.12)] text-[#C40000]' };
-  return m[s] || 'bg-[#232F3E] text-[#A7A9AC]';
+  const m = { EN_ATTENTE:'bg-[#C40000] text-white', CONFIRMEE:'bg-[#E5E5E5] text-[#0A0A0A]', EN_PREPARATION:'bg-[#E5E5E5] text-[#0A0A0A]', EN_LIVRAISON:'bg-[#E5E5E5] text-[#0A0A0A]', LIVREE:'bg-[#0A0A0A] text-white', ANNULEE:'bg-[#9E0000] text-white' };
+  return m[s] || 'bg-[#F5F5F5] text-[#0A0A0A]';
 }
 function statusLabel(s) {
   const m = { EN_ATTENTE:'En attente', CONFIRMEE:'Confirmée', EN_PREPARATION:'En préparation', EN_LIVRAISON:'En livraison', LIVREE:'Livrée', ANNULEE:'Annulée' };
@@ -1229,9 +1229,9 @@ function filterOrders(status, ev) {
   orderSearch = '';
   document.getElementById('orderSearch').value = '';
   document.querySelectorAll('.order-filter').forEach(b => {
-    b.className = 'order-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#303437] bg-[#171A1A] text-[#A7A9AC] transition';
+    b.className = 'order-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#E5E5E5] bg-[#FFFFFF] text-[#6B6B6B] transition';
   });
-  if (ev && ev.target) ev.target.className = 'order-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#303437] bg-primary-600 text-white transition';
+  if (ev && ev.target) ev.target.className = 'order-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#E5E5E5] bg-primary-600 text-white transition';
   loadOrders();
 }
 
@@ -1239,8 +1239,8 @@ function searchOrders(q) { orderSearch = q; orderFilter = ''; loadOrders(); }
 
 function renderOrders() {
   document.getElementById('ordersTable').innerHTML = orders.length === 0
-    ? '<p class="p-6 text-sm text-[#A7A9AC] text-center">Aucune commande</p>'
-    : `<table class="w-full text-sm"><thead><tr class="text-left text-[#A7A9AC] text-xs uppercase bg-[#171A1A]"><th class="px-4 py-3">N°</th><th class="px-4 py-3">Client</th><th class="px-4 py-3">Téléphone</th><th class="px-4 py-3">Ville</th><th class="px-4 py-3">Total</th><th class="px-4 py-3">Paiement</th><th class="px-4 py-3">Statut</th><th class="px-4 py-3">Date</th><th class="px-4 py-3">Actions</th></tr></thead><tbody>${orders.map(o => `
+    ? '<p class="p-6 text-sm text-[#6B6B6B] text-center">Aucune commande</p>'
+    : `<table class="w-full text-sm"><thead><tr class="text-left text-[#6B6B6B] text-xs uppercase bg-[#FFFFFF]"><th class="px-4 py-3">N°</th><th class="px-4 py-3">Client</th><th class="px-4 py-3">Téléphone</th><th class="px-4 py-3">Ville</th><th class="px-4 py-3">Total</th><th class="px-4 py-3">Paiement</th><th class="px-4 py-3">Statut</th><th class="px-4 py-3">Date</th><th class="px-4 py-3">Actions</th></tr></thead><tbody>${orders.map(o => `
       <tr class="table-row border-t border-[rgba(255,255,255,0.06)]">
         <td class="px-4 py-3 font-mono text-xs">${o.orderNumber || '—'}</td>
         <td class="px-4 py-3 font-medium">${o.fullname || '—'}</td>
@@ -1249,10 +1249,10 @@ function renderOrders() {
         <td class="px-4 py-3 font-semibold">${formatMoney(o.total)}</td>
         <td class="px-4 py-3 text-xs">${paymentLabel(o.paymentMethod)}</td>
         <td class="px-4 py-3"><span class="px-2 py-1 rounded-full text-xs font-medium ${statusClass(o.status)}">${statusLabel(o.status)}</span></td>
-        <td class="px-4 py-3 text-xs text-[#A7A9AC]">${formatDate(o.createdAt)}</td>
+        <td class="px-4 py-3 text-xs text-[#6B6B6B]">${formatDate(o.createdAt)}</td>
         <td class="px-4 py-3"><div class="flex gap-1">
-          <button onclick="viewOrder(${o.id})" class="p-1.5 rounded-lg hover:bg-[#2D3A4B] text-[#2C6ECB]" title="Voir"><i class="bi bi-eye text-sm"></i></button>
-          ${o.status !== 'LIVREE' && o.status !== 'ANNULEE' ? `<button onclick="advanceOrder(${o.id})" class="p-1.5 rounded-lg hover:bg-[rgba(6,125,98,0.12)] text-[#067D62]" title="Avancer"><i class="bi bi-arrow-right-circle text-sm"></i></button>` : ''}
+          <button onclick="viewOrder(${o.id})" class="p-1.5 rounded-lg hover:bg-[#F5F5F5] text-[#0A0A0A]" title="Voir"><i class="bi bi-eye text-sm"></i></button>
+          ${o.status !== 'LIVREE' && o.status !== 'ANNULEE' ? `<button onclick="advanceOrder(${o.id})" class="p-1.5 rounded-lg hover:bg-[#0A0A0A] text-white" title="Avancer"><i class="bi bi-arrow-right-circle text-sm"></i></button>` : ''}
           ${o.status !== 'LIVREE' && o.status !== 'ANNULEE' ? `<button onclick="cancelOrder(${o.id})" class="p-1.5 rounded-lg hover:bg-[rgba(196,0,0,0.12)] text-[#C40000]" title="Annuler"><i class="bi bi-x-circle text-sm"></i></button>` : ''}
         </div></td>
       </tr>`).join('')}</tbody></table>`;
@@ -1264,17 +1264,17 @@ async function viewOrder(id) {
   window._currentOrderId = id;
   openModal(`
     <div class="p-6">
-      <div class="flex justify-between items-start mb-4"><h3 class="text-lg font-bold">Commande ${o.orderNumber || ''}</h3><button onclick="closeModal()" class="text-[#A7A9AC] hover:text-[#A7A9AC]"><i class="bi bi-x-lg"></i></button></div>
+      <div class="flex justify-between items-start mb-4"><h3 class="text-lg font-bold">Commande ${o.orderNumber || ''}</h3><button onclick="closeModal()" class="text-[#6B6B6B] hover:text-[#6B6B6B]"><i class="bi bi-x-lg"></i></button></div>
       <div class="space-y-3 text-sm">
-        <div class="grid grid-cols-2 gap-3"><div><p class="text-[#A7A9AC] text-xs">Client</p><p class="font-medium">${o.fullname}</p></div><div><p class="text-[#A7A9AC] text-xs">Téléphone</p><p class="font-medium">${o.phone}</p></div></div>
-        <div class="grid grid-cols-2 gap-3"><div><p class="text-[#A7A9AC] text-xs">Ville</p><p class="font-medium">${o.city || '—'}</p></div><div><p class="text-[#A7A9AC] text-xs">Quartier</p><p class="font-medium">${o.district || '—'}</p></div></div>
-        <div><p class="text-[#A7A9AC] text-xs">Adresse</p><p class="font-medium">${o.address || '—'}</p></div>
-        <div class="grid grid-cols-2 gap-3"><div><p class="text-[#A7A9AC] text-xs">Total</p><p class="font-bold text-lg">${formatMoney(o.total)}</p></div><div><p class="text-[#A7A9AC] text-xs">Paiement</p><p class="font-medium">${paymentLabel(o.paymentMethod)}</p></div></div>
-        <div id="adminPayBox"><div class="text-xs text-[#A7A9AC]">Chargement du paiement…</div></div>
-        <div class="grid grid-cols-2 gap-3"><div><p class="text-[#A7A9AC] text-xs">Statut</p><span class="px-2 py-1 rounded-full text-xs font-medium ${statusClass(o.status)}">${statusLabel(o.status)}</span></div><div><p class="text-[#A7A9AC] text-xs">Date</p><p class="font-medium">${formatDate(o.createdAt)}</p></div></div>
-        ${o.items && o.items.length > 0 ? `<div><p class="text-[#A7A9AC] text-xs mb-1">Articles</p><div class="space-y-1">${o.items.map(i => `<div class="flex justify-between bg-[#171A1A] rounded-lg px-3 py-2"><span>${i.name || 'Produit #' + i.productId} × ${i.qty}</span><span class="font-medium">${formatMoney(i.unitPrice || i.price)}</span></div>`).join('')}</div></div>` : ''}
-        <div id="adminShipBox"><p class="text-xs text-[#A7A9AC]">Chargement livraison…</p></div>
-        ${o.comment ? `<div><p class="text-[#A7A9AC] text-xs">Commentaire</p><p class="bg-[#171A1A] rounded-lg px-3 py-2">${o.comment}</p></div>` : ''}
+        <div class="grid grid-cols-2 gap-3"><div><p class="text-[#6B6B6B] text-xs">Client</p><p class="font-medium">${o.fullname}</p></div><div><p class="text-[#6B6B6B] text-xs">Téléphone</p><p class="font-medium">${o.phone}</p></div></div>
+        <div class="grid grid-cols-2 gap-3"><div><p class="text-[#6B6B6B] text-xs">Ville</p><p class="font-medium">${o.city || '—'}</p></div><div><p class="text-[#6B6B6B] text-xs">Quartier</p><p class="font-medium">${o.district || '—'}</p></div></div>
+        <div><p class="text-[#6B6B6B] text-xs">Adresse</p><p class="font-medium">${o.address || '—'}</p></div>
+        <div class="grid grid-cols-2 gap-3"><div><p class="text-[#6B6B6B] text-xs">Total</p><p class="font-bold text-lg">${formatMoney(o.total)}</p></div><div><p class="text-[#6B6B6B] text-xs">Paiement</p><p class="font-medium">${paymentLabel(o.paymentMethod)}</p></div></div>
+        <div id="adminPayBox"><div class="text-xs text-[#6B6B6B]">Chargement du paiement…</div></div>
+        <div class="grid grid-cols-2 gap-3"><div><p class="text-[#6B6B6B] text-xs">Statut</p><span class="px-2 py-1 rounded-full text-xs font-medium ${statusClass(o.status)}">${statusLabel(o.status)}</span></div><div><p class="text-[#6B6B6B] text-xs">Date</p><p class="font-medium">${formatDate(o.createdAt)}</p></div></div>
+        ${o.items && o.items.length > 0 ? `<div><p class="text-[#6B6B6B] text-xs mb-1">Articles</p><div class="space-y-1">${o.items.map(i => `<div class="flex justify-between bg-[#FFFFFF] rounded-lg px-3 py-2"><span>${i.name || 'Produit #' + i.productId} × ${i.qty}</span><span class="font-medium">${formatMoney(i.unitPrice || i.price)}</span></div>`).join('')}</div></div>` : ''}
+        <div id="adminShipBox"><p class="text-xs text-[#6B6B6B]">Chargement livraison…</p></div>
+        ${o.comment ? `<div><p class="text-[#6B6B6B] text-xs">Commentaire</p><p class="bg-[#FFFFFF] rounded-lg px-3 py-2">${o.comment}</p></div>` : ''}
       </div>
     </div>`);
   loadAdminShipment(o.id);
@@ -1286,11 +1286,11 @@ async function loadAdminShipment(orderId) {
   try {
     const d = await api('/api/shipments/order/' + orderId);
     const s = d && d.shipment;
-    if (!s) { box.innerHTML = '<p class="text-xs text-[#A7A9AC]">Aucune expédition (créée par le vendeur après confirmation).</p>'; return; }
+    if (!s) { box.innerHTML = '<p class="text-xs text-[#6B6B6B]">Aucune expédition (créée par le vendeur après confirmation).</p>'; return; }
     const ev = (d.events || []).slice(-3);
-    box.innerHTML = `<div class="rounded-xl border border-[#303437] bg-[#171A1A]/70 p-3 text-sm space-y-1">
-      <div class="flex items-center justify-between gap-2"><p class="font-mono font-bold text-[#FF9900]">${s.trackingNumber}</p><span class="text-xs font-bold">${s.status}</span></div>
-      ${ev.map(e => `<p class="text-xs text-[#A7A9AC]">${e.label || e.status} · ${e.createdAt || ''}</p>`).join('')}
+    box.innerHTML = `<div class="rounded-xl border border-[#E5E5E5] bg-[#FFFFFF]/70 p-3 text-sm space-y-1">
+      <div class="flex items-center justify-between gap-2"><p class="font-mono font-bold text-[#C40000]">${s.trackingNumber}</p><span class="text-xs font-bold">${s.status}</span></div>
+      ${ev.map(e => `<p class="text-xs text-[#6B6B6B]">${e.label || e.status} · ${e.createdAt || ''}</p>`).join('')}
     </div>`;
   } catch (e) { box.innerHTML = '<p class="text-xs text-[#C40000]">Livraison illisible.</p>'; }
 }
@@ -1300,18 +1300,18 @@ async function loadAdminPayment(orderId) {
   if (!box) return;
   try {
     const p = await api('/api/payments?action=find&orderId=' + orderId);
-    if (!p) { box.innerHTML = '<p class="text-xs text-[#A7A9AC]">Aucune ligne de paiement.</p>'; return; }
+    if (!p) { box.innerHTML = '<p class="text-xs text-[#6B6B6B]">Aucune ligne de paiement.</p>'; return; }
     const badge = p.status === 'REUSSIE'
-      ? '<span class="text-xs font-bold text-[#067D62] bg-[rgba(6,125,98,0.12)] px-2 py-0.5 rounded-full">Confirmé</span>'
+      ? '<span class="text-xs font-bold text-white bg-[#0A0A0A] px-2 py-0.5 rounded-full">Confirmé</span>'
       : p.status === 'EN_ATTENTE'
-        ? '<span class="text-xs font-bold text-[#F0B323] bg-[rgba(240,179,35,0.12)] px-2 py-0.5 rounded-full">En attente</span>'
-        : `<span class="text-xs font-bold text-[#A7A9AC] bg-[#232F3E] px-2 py-0.5 rounded-full">${p.status}</span>`;
-    box.innerHTML = `<div class="rounded-xl border border-[#303437] p-3 space-y-1.5">
-      <div class="flex items-center justify-between gap-2"><p class="text-xs font-bold uppercase tracking-wider text-[#A7A9AC]">Paiement ${formatMoney(p.amount)}</p>${badge}</div>
-      ${p.transactionRef ? `<p class="text-xs">Référence : <strong>${p.transactionRef}</strong></p>` : '<p class="text-xs text-[#A7A9AC]">Aucune référence transmise.</p>'}
+        ? '<span class="text-xs font-bold text-white bg-[#C40000] px-2 py-0.5 rounded-full">En attente</span>'
+        : `<span class="text-xs font-bold text-[#6B6B6B] bg-[#F5F5F5] px-2 py-0.5 rounded-full">${p.status}</span>`;
+    box.innerHTML = `<div class="rounded-xl border border-[#E5E5E5] p-3 space-y-1.5">
+      <div class="flex items-center justify-between gap-2"><p class="text-xs font-bold uppercase tracking-wider text-[#6B6B6B]">Paiement ${formatMoney(p.amount)}</p>${badge}</div>
+      ${p.transactionRef ? `<p class="text-xs">Référence : <strong>${p.transactionRef}</strong></p>` : '<p class="text-xs text-[#6B6B6B]">Aucune référence transmise.</p>'}
       ${p.status === 'EN_ATTENTE' && isMoneyAllowed() ? `<div class="flex gap-2 pt-1">
-        <button onclick="verifyPayment(${p.id})" class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-xs font-bold rounded-lg transition">Vérifier</button>
-        <button onclick="failPayment(${p.id})" class="px-3 py-1.5 border border-[#303437] hover:border-[rgba(196,0,0,0.35)] hover:text-[#C40000] text-xs font-bold rounded-lg transition">Rejeter</button>
+        <button onclick="verifyPayment(${p.id})" class="px-3 py-1.5 bg-[#C40000] hover:bg-[#E00000] text-white text-xs font-bold rounded-lg transition">Vérifier</button>
+        <button onclick="failPayment(${p.id})" class="px-3 py-1.5 border border-[#E5E5E5] hover:border-[rgba(196,0,0,0.35)] hover:text-[#C40000] text-xs font-bold rounded-lg transition">Rejeter</button>
       </div>` : ''}
     </div>`;
   } catch (e) { box.innerHTML = '<p class="text-xs text-[#C40000]">Paiement illisible.</p>'; }
@@ -1326,11 +1326,11 @@ async function failPayment(id) {
   openModal(`
     <div class="p-6">
       <h3 class="text-lg font-bold mb-2">Rejeter ce paiement ?</h3>
-      <p class="text-sm text-[#A7A9AC] mb-3">Le paiement sera marqué ÉCHOUÉ. Le client pourra soumettre une nouvelle référence.</p>
-      <label class="block text-xs font-medium text-[#A7A9AC] mb-1">Motif (optionnel)</label>
-      <input id="failReason" maxlength="255" placeholder="Ex : référence introuvable" class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm mb-4">
+      <p class="text-sm text-[#6B6B6B] mb-3">Le paiement sera marqué ÉCHOUÉ. Le client pourra soumettre une nouvelle référence.</p>
+      <label class="block text-xs font-medium text-[#6B6B6B] mb-1">Motif (optionnel)</label>
+      <input id="failReason" maxlength="255" placeholder="Ex : référence introuvable" class="w-full px-4 py-2.5 rounded-xl border border-[#E5E5E5] text-sm mb-4">
       <div class="flex gap-3">
-        <button onclick="closeModal()" class="flex-1 py-2.5 bg-[#232F3E] text-[#A7A9AC] rounded-xl text-sm font-semibold hover:bg-[#303437] transition">Annuler</button>
+        <button onclick="closeModal()" class="flex-1 py-2.5 bg-[#F5F5F5] text-[#0A0A0A] rounded-xl text-sm font-semibold hover:bg-[#E5E5E5] transition">Annuler</button>
         <button id="failGo" class="flex-1 py-2.5 bg-[#C40000] hover:bg-[#C40000] text-white rounded-xl text-sm font-semibold transition">Rejeter</button>
       </div>
     </div>`);
@@ -1392,7 +1392,7 @@ function filterProductsByCategory(catId, catName, catIcon) {
   document.getElementById('catGridView').classList.add('hidden');
   document.getElementById('catProductsView').classList.remove('hidden');
   document.getElementById('pageTitle').textContent = catName;
-  const colors = ['#ec4899','#6366f1','#F0B323','#FF9900','#8b5cf6','#06b6d4','#ef4444','#FF9900'];
+  const colors = ['#C40000','#0A0A0A','#6B6B6B','#E5E5E5','#9E0000','#E00000','#222222','#D9D9D9'];
   const color = colors[(catId - 1) % colors.length];
   document.getElementById('catProductIcon').style.background = color;
   document.getElementById('catProductIcon').innerHTML = `<i class="bi ${productCategoryFilter.icon}"></i>`;
@@ -1424,15 +1424,15 @@ function renderProducts() {
   if (productSearch) filtered = filtered.filter(p => (p.name || '').toLowerCase().includes(productSearch) || (p.brand || '').toLowerCase().includes(productSearch));
 
   document.getElementById('productsTable').innerHTML = filtered.length === 0
-    ? '<p class="p-6 text-sm text-[#A7A9AC] text-center">Aucun produit dans cette catégorie</p>'
-    : `<table class="w-full text-sm"><thead><tr class="text-left text-[#A7A9AC] text-xs uppercase bg-[#171A1A]"><th class="px-4 py-3">Produit</th><th class="px-4 py-3">Prix</th><th class="px-4 py-3">Images</th><th class="px-4 py-3">Actions</th></tr></thead><tbody>${filtered.map(p => {
+    ? '<p class="p-6 text-sm text-[#6B6B6B] text-center">Aucun produit dans cette catégorie</p>'
+    : `<table class="w-full text-sm"><thead><tr class="text-left text-[#6B6B6B] text-xs uppercase bg-[#FFFFFF]"><th class="px-4 py-3">Produit</th><th class="px-4 py-3">Prix</th><th class="px-4 py-3">Images</th><th class="px-4 py-3">Actions</th></tr></thead><tbody>${filtered.map(p => {
       const promo = getPromoForProduct(p.id);
       return `<tr class="table-row border-t border-[rgba(255,255,255,0.06)]">
-        <td class="px-4 py-3"><div class="flex items-center gap-3"><img src="${notifEsc((p.images && p.images[0]) || 'https://placehold.co/80x80/e2e8f0/94a3b8?text=Produit')}" class="w-10 h-10 rounded-lg object-cover bg-[#232F3E]" onerror="this.src='https://placehold.co/80x80/e2e8f0/94a3b8?text=Produit'"><div><p class="font-medium">${notifEsc(p.name)}</p><p class="text-xs text-[#A7A9AC]">${notifEsc(p.brand || '')}</p></div></div></td>
+        <td class="px-4 py-3"><div class="flex items-center gap-3"><img src="${notifEsc((p.images && p.images[0]) || 'https://placehold.co/80x80/e2e8f0/94a3b8?text=Produit')}" class="w-10 h-10 rounded-lg object-cover bg-[#F5F5F5]" onerror="this.src='https://placehold.co/80x80/e2e8f0/94a3b8?text=Produit'"><div><p class="font-medium">${notifEsc(p.name)}</p><p class="text-xs text-[#6B6B6B]">${notifEsc(p.brand || '')}</p></div></div></td>
         <td class="px-4 py-3"><span class="font-semibold">${formatMoney(p.price)}</span>${promo ? `<br><span class="text-xs text-[#C40000]">Promo: ${formatMoney(promo.promoPrice)}</span>` : ''}</td>
-        <td class="px-4 py-3"><button onclick="openImageManager(${p.id})" class="text-xs text-[#FF9900] hover:underline font-medium"><i class="bi bi-images mr-1"></i>Gérer</button></td>
+        <td class="px-4 py-3"><button onclick="openImageManager(${p.id})" class="text-xs text-[#C40000] hover:underline font-medium"><i class="bi bi-images mr-1"></i>Gérer</button></td>
         <td class="px-4 py-3"><div class="flex gap-1">
-          <button onclick="editProduct(${p.id})" class="p-1.5 rounded-lg hover:bg-[rgba(44,110,203,0.12)] text-[#2C6ECB]" title="Modifier"><i class="bi bi-pencil text-sm"></i></button>
+          <button onclick="editProduct(${p.id})" class="p-1.5 rounded-lg hover:bg-[#E5E5E5] text-[#0A0A0A]" title="Modifier"><i class="bi bi-pencil text-sm"></i></button>
           <button onclick="deleteProduct(${p.id})" class="p-1.5 rounded-lg hover:bg-[rgba(196,0,0,0.12)] text-[#C40000]" title="Supprimer"><i class="bi bi-trash text-sm"></i></button>
         </div></td>
       </tr>`;
@@ -1450,42 +1450,42 @@ function openProductModal(product) {
       <h3 class="text-lg font-bold mb-4">${isEdit ? 'Modifier' : 'Ajouter'} un produit</h3>
       <form onsubmit="saveProduct(event, ${isEdit ? product.id : 'null'})" class="space-y-4">
         <div>
-          <label class="block text-sm font-semibold text-[#F2F2F2] mb-1">Nom du produit *</label>
-          <input id="pName" value="${isEdit ? (product.name || '') : ''}" placeholder="Ex: Nike Air Max 90, Galaxy S54..." required class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+          <label class="block text-sm font-semibold text-[#0A0A0A] mb-1">Nom du produit *</label>
+          <input id="pName" value="${isEdit ? (product.name || '') : ''}" placeholder="Ex: Nike Air Max 90, Galaxy S54..." required class="w-full px-4 py-2.5 rounded-xl border border-[#E5E5E5] text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
         </div>
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-sm font-semibold text-[#F2F2F2] mb-1">Marque *</label>
-            <input id="pBrand" value="${isEdit ? (product.brand || '') : ''}" placeholder="Ex: Nike, Samsung..." required class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+            <label class="block text-sm font-semibold text-[#0A0A0A] mb-1">Marque *</label>
+            <input id="pBrand" value="${isEdit ? (product.brand || '') : ''}" placeholder="Ex: Nike, Samsung..." required class="w-full px-4 py-2.5 rounded-xl border border-[#E5E5E5] text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
           </div>
           <div>
-            <label class="block text-sm font-semibold text-[#F2F2F2] mb-1">Prix (FCFA) *</label>
-            <input id="pPrice" type="number" value="${isEdit ? product.price : ''}" placeholder="Ex: 25000" required class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+            <label class="block text-sm font-semibold text-[#0A0A0A] mb-1">Prix (FCFA) *</label>
+            <input id="pPrice" type="number" value="${isEdit ? product.price : ''}" placeholder="Ex: 25000" required class="w-full px-4 py-2.5 rounded-xl border border-[#E5E5E5] text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
           </div>
         </div>
         <div>
-          <label class="block text-sm font-semibold text-[#F2F2F2] mb-1">Catégorie *</label>
-          <select id="pCategory" class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500" required>
+          <label class="block text-sm font-semibold text-[#0A0A0A] mb-1">Catégorie *</label>
+          <select id="pCategory" class="w-full px-4 py-2.5 rounded-xl border border-[#E5E5E5] text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500" required>
             <option value="">— Choisir —</option>
             ${categories.map(c => `<option value="${c.id}" ${(isEdit && product.categoryId == c.id) || (!isEdit && defaultCat == c.id) ? 'selected' : ''}>${notifEsc(c.name)}</option>`).join('')}
           </select>
         </div>
         <div>
-          <label class="block text-sm font-semibold text-[#F2F2F2] mb-1">Photos du produit</label>
-          <div id="pFilesDrop" class="relative border-2 border-dashed border-[#303437] rounded-xl p-4 text-center hover:border-primary-400 hover:bg-primary-50/30 transition cursor-pointer" onclick="document.getElementById('pFiles').click()">
-            <i class="bi bi-cloud-arrow-up text-2xl text-[#A7A9AC]"></i>
-            <p class="text-sm text-[#A7A9AC] mt-1">Cliquez ou glissez vos photos ici</p>
-            <p class="text-xs text-[#A7A9AC] mt-0.5">JPG, PNG, WebP — Max 10 Mo — Première photo = principale</p>
+          <label class="block text-sm font-semibold text-[#0A0A0A] mb-1">Photos du produit</label>
+          <div id="pFilesDrop" class="relative border-2 border-dashed border-[#E5E5E5] rounded-xl p-4 text-center hover:border-primary-400 hover:bg-primary-50/30 transition cursor-pointer" onclick="document.getElementById('pFiles').click()">
+            <i class="bi bi-cloud-arrow-up text-2xl text-[#6B6B6B]"></i>
+            <p class="text-sm text-[#6B6B6B] mt-1">Cliquez ou glissez vos photos ici</p>
+            <p class="text-xs text-[#6B6B6B] mt-0.5">JPG, PNG, WebP — Max 10 Mo — Première photo = principale</p>
             <input id="pFiles" type="file" accept="image/*" multiple class="hidden" onchange="previewProductFiles(this)">
           </div>
           <div id="pFilesPreview" class="flex flex-wrap gap-2 mt-2"></div>
         </div>
         <div class="flex gap-3 pt-2">
-          <button type="submit" class="flex-1 py-2.5 bg-primary-600 text-[#111111] rounded-xl text-sm font-semibold hover:bg-primary-700 transition flex items-center justify-center gap-2" id="pSubmitBtn">
+          <button type="submit" class="flex-1 py-2.5 bg-primary-600 text-white rounded-xl text-sm font-semibold hover:bg-primary-700 transition flex items-center justify-center gap-2" id="pSubmitBtn">
             <span id="pSubmitText">${isEdit ? 'Enregistrer' : 'Ajouter le produit'}</span>
             <span id="pSubmitSpinner" class="hidden"><i class="bi bi-arrow-repeat animate-spin"></i></span>
           </button>
-          <button type="button" onclick="closeModal()" class="px-6 py-2.5 bg-[#232F3E] text-[#A7A9AC] rounded-xl text-sm font-semibold hover:bg-[#303437] transition">Annuler</button>
+          <button type="button" onclick="closeModal()" class="px-6 py-2.5 bg-[#F5F5F5] text-[#0A0A0A] rounded-xl text-sm font-semibold hover:bg-[#E5E5E5] transition">Annuler</button>
         </div>
       </form>
     </div>`);
@@ -1499,13 +1499,13 @@ function previewProductFiles(input) {
     const reader = new FileReader();
     reader.onload = e => {
       const div = document.createElement('div');
-      div.className = 'relative w-16 h-16 rounded-lg overflow-hidden border-2 border-[#303437] group';
+      div.className = 'relative w-16 h-16 rounded-lg overflow-hidden border-2 border-[#E5E5E5] group';
       div.innerHTML = `
         <img src="${e.target.result}" class="w-full h-full object-cover">
         <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
           <button type="button" onclick="removeProductFile(${i})" class="text-white text-xs"><i class="bi bi-trash"></i></button>
         </div>
-        ${i === 0 ? '<span class="absolute top-0.5 left-0.5 bg-primary-600 text-[#111111] text-[9px] px-1 rounded font-bold">PRINCIPALE</span>' : ''}`;
+        ${i === 0 ? '<span class="absolute top-0.5 left-0.5 bg-primary-600 text-white text-[9px] px-1 rounded font-bold">PRINCIPALE</span>' : ''}`;
       container.appendChild(div);
     };
     reader.readAsDataURL(file);
@@ -1621,32 +1621,32 @@ function renderImageManager(product, images) {
       <div class="flex justify-between items-start mb-4">
         <div>
           <h3 class="text-lg font-bold">Images — ${product.name}</h3>
-          <p class="text-sm text-[#A7A9AC] mt-0.5">${images.length} photo(s) — La première est la photo principale</p>
+          <p class="text-sm text-[#6B6B6B] mt-0.5">${images.length} photo(s) — La première est la photo principale</p>
         </div>
-        <button onclick="closeModal()" class="text-[#A7A9AC] hover:text-[#A7A9AC]"><i class="bi bi-x-lg"></i></button>
+        <button onclick="closeModal()" class="text-[#6B6B6B] hover:text-[#6B6B6B]"><i class="bi bi-x-lg"></i></button>
       </div>
 
-      <div class="bg-[#171A1A] rounded-xl p-4 mb-4 border border-dashed border-[#303437]">
+      <div class="bg-[#FFFFFF] rounded-xl p-4 mb-4 border border-dashed border-[#E5E5E5]">
         <div class="flex flex-col gap-2">
-          <input type="file" id="imgFileInput" accept="image/*" multiple class="w-full text-sm text-[#A7A9AC] file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-[#FF9900] hover:file:bg-primary-100">
-          <button onclick="uploadProductImages(${product.id})" class="self-end px-4 py-2 bg-primary-600 text-[#111111] rounded-lg text-sm font-semibold hover:bg-primary-700 transition flex items-center gap-1">
+          <input type="file" id="imgFileInput" accept="image/*" multiple class="w-full text-sm text-[#6B6B6B] file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-[#C40000] hover:file:bg-primary-100">
+          <button onclick="uploadProductImages(${product.id})" class="self-end px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-semibold hover:bg-primary-700 transition flex items-center gap-1">
             <i class="bi bi-upload"></i> Téléverser
           </button>
         </div>
         <div class="mt-2 flex gap-2">
-          <input id="imgUrlInput" placeholder="... ou saisir une URL" class="flex-1 px-3 py-2 rounded-lg border border-[#303437] text-sm">
-          <button onclick="addProductImageUrl(${product.id})" class="px-4 py-2 bg-[#303437] text-white rounded-lg text-sm font-semibold hover:bg-[#2D3A4B] transition">URL</button>
+          <input id="imgUrlInput" placeholder="... ou saisir une URL" class="flex-1 px-3 py-2 rounded-lg border border-[#E5E5E5] text-sm">
+          <button onclick="addProductImageUrl(${product.id})" class="px-4 py-2 bg-[#0A0A0A] text-white rounded-lg text-sm font-semibold hover:bg-[#222222] transition">URL</button>
         </div>
       </div>
 
       <div id="imageGrid" class="grid grid-cols-3 gap-3">
-        ${images.length === 0 ? '<p class="col-span-3 text-sm text-[#A7A9AC] text-center py-6">Aucune photo. Ajoutez-en une ci-dessus.</p>' : images.map((img, idx) => `
-          <div class="relative group bg-[#232F3E] rounded-xl overflow-hidden aspect-square" data-id="${img.id}">
+        ${images.length === 0 ? '<p class="col-span-3 text-sm text-[#6B6B6B] text-center py-6">Aucune photo. Ajoutez-en une ci-dessus.</p>' : images.map((img, idx) => `
+          <div class="relative group bg-[#F5F5F5] rounded-xl overflow-hidden aspect-square" data-id="${img.id}">
             <img src="${img.url}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/200x200/e2e8f0/94a3b8?text=Erreur'">
-            ${img.isPrimary ? '<span class="absolute top-1 left-1 bg-primary-600 text-[#111111] text-[9px] px-1.5 py-0.5 rounded font-bold shadow">PRINCIPALE</span>' : ''}
+            ${img.isPrimary ? '<span class="absolute top-1 left-1 bg-primary-600 text-white text-[9px] px-1.5 py-0.5 rounded font-bold shadow">PRINCIPALE</span>' : ''}
             <div class="absolute inset-0 bg-black/40 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition">
               ${!img.isPrimary ? `<button onclick="setImagePrimary(${product.id}, ${img.id})" class="w-8 h-8 bg-primary-500 text-white rounded-full flex items-center justify-center text-xs" title="Définir principale"><i class="bi bi-star"></i></button>` : ''}
-              <button onclick="deleteProductImage(${product.id}, ${img.id})" class="w-8 h-8 bg-[rgba(196,0,0,0.12)]0 text-white rounded-full flex items-center justify-center text-xs" title="Supprimer"><i class="bi bi-trash"></i></button>
+              <button onclick="deleteProductImage(${product.id}, ${img.id})" class="w-8 h-8 bg-[#C40000] text-white rounded-full flex items-center justify-center text-xs" title="Supprimer"><i class="bi bi-trash"></i></button>
             </div>
           </div>
         `).join('')}
@@ -1711,8 +1711,8 @@ async function apiStrict(url, options) {
 
 function setCatView(v) {
   catView = v;
-  document.getElementById('catViewGrid').className = 'px-3 py-1.5 rounded-lg text-xs font-semibold ' + (v === 'grid' ? 'bg-[#171A1A] text-[#FF9900] shadow-sm' : 'text-[#A7A9AC]');
-  document.getElementById('catViewTree').className = 'px-3 py-1.5 rounded-lg text-xs font-semibold ' + (v === 'tree' ? 'bg-[#171A1A] text-[#FF9900] shadow-sm' : 'text-[#A7A9AC]');
+  document.getElementById('catViewGrid').className = 'px-3 py-1.5 rounded-lg text-xs font-semibold ' + (v === 'grid' ? 'bg-[#FFFFFF] text-[#C40000] shadow-sm' : 'text-[#6B6B6B]');
+  document.getElementById('catViewTree').className = 'px-3 py-1.5 rounded-lg text-xs font-semibold ' + (v === 'tree' ? 'bg-[#FFFFFF] text-[#C40000] shadow-sm' : 'text-[#6B6B6B]');
   loadCategories();
 }
 
@@ -1739,28 +1739,28 @@ async function loadCategories() {
 
 function catCardHTML(c, depth) {
   const count = c.totalProductCount != null ? c.totalProductCount : (c.count || 0);
-  const colors = ['#ec4899','#6366f1','#F0B323','#FF9900','#8b5cf6','#06b6d4','#ef4444','#FF9900'];
+  const colors = ['#C40000','#0A0A0A','#6B6B6B','#E5E5E5','#9E0000','#E00000','#222222','#D9D9D9'];
   const color = colors[(c.id - 1) % colors.length];
   const statusChip = c.active
-    ? '<span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[rgba(6,125,98,0.12)] text-[#067D62]">Active</span>'
-    : '<span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#232F3E] text-[#A7A9AC]">Inactive</span>';
+    ? '<span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#0A0A0A] text-white">Active</span>'
+    : '<span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#F5F5F5] text-[#0A0A0A]">Inactive</span>';
   const parent = c.parentId ? (categories.find(x => x.id == c.parentId) || {}).name : null;
-  return `<div class="bg-[#171A1A] rounded-xl p-5 shadow-sm border border-[#303437] stat-card ${c.active ? '' : 'opacity-70'}">
+  return `<div class="bg-[#FFFFFF] rounded-xl p-5 shadow-sm border border-[#E5E5E5] stat-card ${c.active ? '' : 'opacity-70'}">
       <div class="flex items-center gap-3 mb-2">
         ${c.image
-          ? `<img src="${notifEsc(c.image)}" alt="${notifEsc(c.name)}" class="w-11 h-11 rounded-xl object-cover border border-[#303437]" onerror="this.style.display='none'">`
+          ? `<img src="${notifEsc(c.image)}" alt="${notifEsc(c.name)}" class="w-11 h-11 rounded-xl object-cover border border-[#E5E5E5]" onerror="this.style.display='none'">`
           : `<div class="w-11 h-11 rounded-xl flex items-center justify-center text-white text-lg" style="background:${color}"><i class="bi ${notifEsc(c.icon || 'bi-tag')}"></i></div>`}
         <div class="flex-1 min-w-0">
           <p class="font-semibold text-sm truncate">${notifEsc(c.name)}</p>
-          <p class="text-xs text-[#A7A9AC]">${count} produit(s)${parent ? ' · <span class="text-primary-500">' + notifEsc(parent) + '</span>' : ''}</p>
+          <p class="text-xs text-[#6B6B6B]">${count} produit(s)${parent ? ' · <span class="text-primary-500">' + notifEsc(parent) + '</span>' : ''}</p>
         </div>
         ${statusChip}
       </div>
-      <p class="text-[11px] text-[#A7A9AC] mb-3">Ordre : ${c.displayOrder || 0} · <span class="font-mono">${notifEsc(c.slug || '')}</span></p>
+      <p class="text-[11px] text-[#6B6B6B] mb-3">Ordre : ${c.displayOrder || 0} · <span class="font-mono">${notifEsc(c.slug || '')}</span></p>
       <div class="flex gap-2">
-        <button onclick="filterProductsById(${c.id})" title="Voir les produits" class="flex-1 py-2 bg-primary-50 text-[#FF9900] rounded-lg text-xs font-medium hover:bg-primary-100 transition"><i class="bi bi-eye mr-1"></i>Voir</button>
-        <button onclick="toggleCategoryStatus(${c.id})" title="${c.active ? 'Désactiver' : 'Activer'}" class="py-2 px-3 ${c.active ? 'bg-[rgba(240,179,35,0.12)] text-[#F0B323] hover:bg-[rgba(240,179,35,0.12)]' : 'bg-[rgba(6,125,98,0.12)] text-[#067D62] hover:bg-[rgba(6,125,98,0.12)]'} rounded-lg text-xs font-medium transition"><i class="bi ${c.active ? 'bi-eye-slash' : 'bi-eye'}"></i></button>
-        <button onclick="editCategory(${c.id})" title="Modifier" class="py-2 px-3 bg-[#171A1A] text-[#A7A9AC] rounded-lg text-xs font-medium hover:bg-[#2D3A4B] transition"><i class="bi bi-pencil"></i></button>
+        <button onclick="filterProductsById(${c.id})" title="Voir les produits" class="flex-1 py-2 bg-primary-50 text-[#C40000] rounded-lg text-xs font-medium hover:bg-primary-100 transition"><i class="bi bi-eye mr-1"></i>Voir</button>
+        <button onclick="toggleCategoryStatus(${c.id})" title="${c.active ? 'Désactiver' : 'Activer'}" class="py-2 px-3 ${c.active ? 'bg-[#C40000] text-white hover:bg-[#9E0000]' : 'bg-[#0A0A0A] text-white hover:bg-[#222222]'} rounded-lg text-xs font-medium transition"><i class="bi ${c.active ? 'bi-eye-slash' : 'bi-eye'}"></i></button>
+        <button onclick="editCategory(${c.id})" title="Modifier" class="py-2 px-3 bg-[#FFFFFF] text-[#6B6B6B] rounded-lg text-xs font-medium hover:bg-[#F5F5F5] transition"><i class="bi bi-pencil"></i></button>
         <button onclick="deleteCategory(${c.id})" title="Supprimer" class="py-2 px-3 bg-[rgba(196,0,0,0.12)] text-[#C40000] rounded-lg text-xs font-medium hover:bg-[rgba(196,0,0,0.12)] transition"><i class="bi bi-trash"></i></button>
       </div>
     </div>`;
@@ -1774,7 +1774,7 @@ function renderCategories() {
   const grid = document.getElementById('categoriesGrid');
   grid.innerHTML = categories.length
     ? categories.map(c => catCardHTML(c)).join('')
-    : '<p class="text-sm text-[#A7A9AC] col-span-full text-center py-8">Aucune catégorie trouvée.</p>';
+    : '<p class="text-sm text-[#6B6B6B] col-span-full text-center py-8">Aucune catégorie trouvée.</p>';
 }
 
 function renderCategoriesTree() {
@@ -1783,24 +1783,24 @@ function renderCategoriesTree() {
   document.getElementById('categoriesGrid').classList.add('hidden');
   const treeEl = document.getElementById('categoriesTree');
   treeEl.classList.remove('hidden');
-  treeEl.innerHTML = categories.length ? treeHTML(categories, 0) : '<p class="text-sm text-[#A7A9AC] text-center py-8">Aucune catégorie.</p>';
+  treeEl.innerHTML = categories.length ? treeHTML(categories, 0) : '<p class="text-sm text-[#6B6B6B] text-center py-8">Aucune catégorie.</p>';
 }
 
 function treeHTML(nodes, depth) {
-  return '<ul class="' + (depth > 0 ? 'ml-5 mt-1 border-l border-[#303437] pl-3 space-y-1' : 'space-y-1') + '">' + nodes.map(n => {
+  return '<ul class="' + (depth > 0 ? 'ml-5 mt-1 border-l border-[#E5E5E5] pl-3 space-y-1' : 'space-y-1') + '">' + nodes.map(n => {
     const count = n.totalProductCount != null ? n.totalProductCount : (n.count || 0);
     const hasKids = n.children && n.children.length;
     const nodeId = 'treenode-' + n.id;
     return `<li>
-      <div class="flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-[#171A1A] ${n.active ? '' : 'opacity-60'}">
+      <div class="flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-[#FFFFFF] ${n.active ? '' : 'opacity-60'}">
         ${hasKids
-          ? `<button onclick="document.getElementById('${nodeId}').classList.toggle('hidden');this.querySelector('i').classList.toggle('bi-chevron-down');this.querySelector('i').classList.toggle('bi-chevron-right')" class="text-[#A7A9AC] hover:text-[#A7A9AC]"><i class="bi bi-chevron-down text-xs"></i></button>`
+          ? `<button onclick="document.getElementById('${nodeId}').classList.toggle('hidden');this.querySelector('i').classList.toggle('bi-chevron-down');this.querySelector('i').classList.toggle('bi-chevron-right')" class="text-[#6B6B6B] hover:text-[#6B6B6B]"><i class="bi bi-chevron-down text-xs"></i></button>`
           : '<span class="w-4"></span>'}
         <i class="bi ${notifEsc(n.icon || 'bi-tag')} text-primary-500 text-sm"></i>
-        <span class="text-sm font-medium flex-1 truncate">${notifEsc(n.name)} <span class="text-xs text-[#A7A9AC] font-normal">(${count})</span></span>
-        ${n.active ? '' : '<span class="text-[10px] px-2 py-0.5 rounded-full bg-[#232F3E] text-[#A7A9AC] font-semibold">Inactive</span>'}
-        <button onclick="toggleCategoryStatus(${n.id})" title="${n.active ? 'Désactiver' : 'Activer'}" class="text-xs px-2 py-1 rounded-lg ${n.active ? 'text-[#F0B323] hover:bg-[rgba(240,179,35,0.12)]' : 'text-[#067D62] hover:bg-[rgba(6,125,98,0.12)]'}"><i class="bi ${n.active ? 'bi-eye-slash' : 'bi-eye'}"></i></button>
-        <button onclick="editCategory(${n.id})" title="Modifier" class="text-xs px-2 py-1 rounded-lg text-[#A7A9AC] hover:bg-[#2D3A4B]"><i class="bi bi-pencil"></i></button>
+        <span class="text-sm font-medium flex-1 truncate">${notifEsc(n.name)} <span class="text-xs text-[#6B6B6B] font-normal">(${count})</span></span>
+        ${n.active ? '' : '<span class="text-[10px] px-2 py-0.5 rounded-full bg-[#F5F5F5] text-[#0A0A0A] font-semibold">Inactive</span>'}
+        <button onclick="toggleCategoryStatus(${n.id})" title="${n.active ? 'Désactiver' : 'Activer'}" class="text-xs px-2 py-1 rounded-lg ${n.active ? 'text-[#C40000] hover:bg-[rgba(196,0,0,0.08)]' : 'text-[#0A0A0A] hover:bg-[#F5F5F5]'}"><i class="bi ${n.active ? 'bi-eye-slash' : 'bi-eye'}"></i></button>
+        <button onclick="editCategory(${n.id})" title="Modifier" class="text-xs px-2 py-1 rounded-lg text-[#6B6B6B] hover:bg-[#F5F5F5]"><i class="bi bi-pencil"></i></button>
         <button onclick="deleteCategory(${n.id})" title="Supprimer" class="text-xs px-2 py-1 rounded-lg text-[#C40000] hover:bg-[rgba(196,0,0,0.12)]"><i class="bi bi-trash"></i></button>
       </div>
       ${hasKids ? `<div id="${nodeId}">${treeHTML(n.children, depth + 1)}</div>` : ''}
@@ -1844,42 +1844,42 @@ function openCategoryModal(cat) {
       <h3 class="text-lg font-bold mb-4">${isEdit ? 'Modifier' : 'Ajouter'} une catégorie</h3>
       <form onsubmit="saveCategory(event, ${isEdit ? cat.id : 'null'})" class="space-y-3">
         <div>
-          <label class="text-xs font-medium text-[#A7A9AC] mb-1 block">Nom de la catégorie *</label>
-          <input id="cName" value="${isEdit ? (cat.name || '').replace(/"/g, '&quot;') : ''}" placeholder="Ex: Montres connectées" required class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm">
+          <label class="text-xs font-medium text-[#6B6B6B] mb-1 block">Nom de la catégorie *</label>
+          <input id="cName" value="${isEdit ? (cat.name || '').replace(/"/g, '&quot;') : ''}" placeholder="Ex: Montres connectées" required class="w-full px-4 py-2.5 rounded-xl border border-[#E5E5E5] text-sm">
         </div>
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="text-xs font-medium text-[#A7A9AC] mb-1 block">Catégorie parent</label>
-            <select id="cParent" class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm">${parentOptionsHTML(isEdit ? cat.id : null)}</select>
+            <label class="text-xs font-medium text-[#6B6B6B] mb-1 block">Catégorie parent</label>
+            <select id="cParent" class="w-full px-4 py-2.5 rounded-xl border border-[#E5E5E5] text-sm">${parentOptionsHTML(isEdit ? cat.id : null)}</select>
           </div>
           <div>
-            <label class="text-xs font-medium text-[#A7A9AC] mb-1 block">Ordre d'affichage</label>
-            <input id="cOrder" type="number" min="0" value="${isEdit ? (cat.displayOrder || 0) : 0}" class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm">
+            <label class="text-xs font-medium text-[#6B6B6B] mb-1 block">Ordre d'affichage</label>
+            <input id="cOrder" type="number" min="0" value="${isEdit ? (cat.displayOrder || 0) : 0}" class="w-full px-4 py-2.5 rounded-xl border border-[#E5E5E5] text-sm">
           </div>
         </div>
         <div>
-          <label class="text-xs font-medium text-[#A7A9AC] mb-1 block">Description</label>
-          <textarea id="cDesc" rows="2" placeholder="Description courte..." class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm">${isEdit ? (cat.description || '') : ''}</textarea>
+          <label class="text-xs font-medium text-[#6B6B6B] mb-1 block">Description</label>
+          <textarea id="cDesc" rows="2" placeholder="Description courte..." class="w-full px-4 py-2.5 rounded-xl border border-[#E5E5E5] text-sm">${isEdit ? (cat.description || '') : ''}</textarea>
         </div>
         <div>
-          <label class="text-xs font-medium text-[#A7A9AC] mb-1 block">Image de la catégorie</label>
+          <label class="text-xs font-medium text-[#6B6B6B] mb-1 block">Image de la catégorie</label>
           <div class="flex items-center gap-3">
-            <input type="file" id="cImageInput" accept="image/*" class="w-full text-sm text-[#A7A9AC] file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-[#FF9900] hover:file:bg-primary-100" onchange="previewCategoryImage(this)">
-            <img id="cImagePreview" src="${isEdit && cat.image ? cat.image : ''}" class="w-16 h-16 rounded-xl object-cover bg-[#232F3E] ${isEdit && cat.image ? '' : 'hidden'}">
+            <input type="file" id="cImageInput" accept="image/*" class="w-full text-sm text-[#6B6B6B] file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-[#C40000] hover:file:bg-primary-100" onchange="previewCategoryImage(this)">
+            <img id="cImagePreview" src="${isEdit && cat.image ? cat.image : ''}" class="w-16 h-16 rounded-xl object-cover bg-[#F5F5F5] ${isEdit && cat.image ? '' : 'hidden'}">
           </div>
           <input type="hidden" id="cImage" value="${isEdit && cat.image ? cat.image : ''}">
-          <p class="text-xs text-[#A7A9AC] mt-1">JPG, PNG ou GIF (max 10 Mo)</p>
+          <p class="text-xs text-[#6B6B6B] mt-1">JPG, PNG ou GIF (max 10 Mo)</p>
         </div>
         <div class="grid grid-cols-2 gap-3">
-          <input id="cIcon" value="${isEdit ? (cat.icon || '') : ''}" placeholder="Icône Bootstrap (ex: bi-handbag)" class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm">
-          <input id="cSlug" value="${isEdit ? (cat.slug || '') : ''}" placeholder="Slug (auto-généré si vide)" class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm">
+          <input id="cIcon" value="${isEdit ? (cat.icon || '') : ''}" placeholder="Icône Bootstrap (ex: bi-handbag)" class="w-full px-4 py-2.5 rounded-xl border border-[#E5E5E5] text-sm">
+          <input id="cSlug" value="${isEdit ? (cat.slug || '') : ''}" placeholder="Slug (auto-généré si vide)" class="w-full px-4 py-2.5 rounded-xl border border-[#E5E5E5] text-sm">
         </div>
-        <label class="flex items-center gap-2 text-sm text-[#A7A9AC]">
+        <label class="flex items-center gap-2 text-sm text-[#6B6B6B]">
           <input id="cActive" type="checkbox" ${!isEdit || cat.active ? 'checked' : ''} class="w-4 h-4 accent-primary-600"> Catégorie active (visible sur le site)
         </label>
         <div class="flex gap-3 pt-2">
-          <button type="submit" class="flex-1 py-2.5 bg-primary-600 text-[#111111] rounded-xl text-sm font-semibold hover:bg-primary-700 transition">${isEdit ? 'Enregistrer' : 'Ajouter'}</button>
-          <button type="button" onclick="closeModal()" class="px-6 py-2.5 bg-[#232F3E] text-[#A7A9AC] rounded-xl text-sm font-semibold hover:bg-[#303437] transition">Annuler</button>
+          <button type="submit" class="flex-1 py-2.5 bg-primary-600 text-white rounded-xl text-sm font-semibold hover:bg-primary-700 transition">${isEdit ? 'Enregistrer' : 'Ajouter'}</button>
+          <button type="button" onclick="closeModal()" class="px-6 py-2.5 bg-[#F5F5F5] text-[#0A0A0A] rounded-xl text-sm font-semibold hover:bg-[#E5E5E5] transition">Annuler</button>
         </div>
       </form>
     </div>`);
@@ -1976,8 +1976,8 @@ async function loadPromotions() {
 
 function renderPromotions() {
   document.getElementById('promotionsTable').innerHTML = promotions.length === 0
-    ? '<p class="p-6 text-sm text-[#A7A9AC] text-center">Aucune promotion</p>'
-    : `<table class="w-full text-sm"><thead><tr class="text-left text-[#A7A9AC] text-xs uppercase bg-[#171A1A]"><th class="px-4 py-3">Produit</th><th class="px-4 py-3">Prix promo</th><th class="px-4 py-3">Réduction</th><th class="px-4 py-3">Début</th><th class="px-4 py-3">Fin</th><th class="px-4 py-3">Statut</th><th class="px-4 py-3">Actions</th></tr></thead><tbody>${promotions.map(p => {
+    ? '<p class="p-6 text-sm text-[#6B6B6B] text-center">Aucune promotion</p>'
+    : `<table class="w-full text-sm"><thead><tr class="text-left text-[#6B6B6B] text-xs uppercase bg-[#FFFFFF]"><th class="px-4 py-3">Produit</th><th class="px-4 py-3">Prix promo</th><th class="px-4 py-3">Réduction</th><th class="px-4 py-3">Début</th><th class="px-4 py-3">Fin</th><th class="px-4 py-3">Statut</th><th class="px-4 py-3">Actions</th></tr></thead><tbody>${promotions.map(p => {
       const prod = products.find(x => x.id == p.productId);
       const isActive = p.active && new Date(p.startDate) <= new Date() && new Date(p.endDate) >= new Date();
       return `<tr class="table-row border-t border-[rgba(255,255,255,0.06)]">
@@ -1986,9 +1986,9 @@ function renderPromotions() {
         <td class="px-4 py-3">${p.promoPercent || 0}%</td>
         <td class="px-4 py-3 text-xs">${formatDate(p.startDate)}</td>
         <td class="px-4 py-3 text-xs">${formatDate(p.endDate)}</td>
-        <td class="px-4 py-3"><span class="px-2 py-1 rounded-full text-xs font-medium ${isActive ? 'bg-[rgba(6,125,98,0.12)] text-[#067D62]' : 'bg-[#232F3E] text-[#A7A9AC]'}">${isActive ? 'Active' : 'Inactive'}</span></td>
+        <td class="px-4 py-3"><span class="px-2 py-1 rounded-full text-xs font-medium ${isActive ? 'bg-[#0A0A0A] text-white' : 'bg-[#F5F5F5] text-[#0A0A0A]'}">${isActive ? 'Active' : 'Inactive'}</span></td>
         <td class="px-4 py-3"><div class="flex gap-1">
-          <button onclick="editPromotion(${p.id})" class="p-1.5 rounded-lg hover:bg-[rgba(44,110,203,0.12)] text-[#2C6ECB]" title="Modifier"><i class="bi bi-pencil text-sm"></i></button>
+          <button onclick="editPromotion(${p.id})" class="p-1.5 rounded-lg hover:bg-[#E5E5E5] text-[#0A0A0A]" title="Modifier"><i class="bi bi-pencil text-sm"></i></button>
           <button onclick="deletePromotion(${p.id})" class="p-1.5 rounded-lg hover:bg-[rgba(196,0,0,0.12)] text-[#C40000]" title="Supprimer"><i class="bi bi-trash text-sm"></i></button>
         </div></td>
       </tr>`;
@@ -2001,21 +2001,21 @@ function openPromotionModal(promo) {
     <div class="p-6">
       <h3 class="text-lg font-bold mb-4">${isEdit ? 'Modifier' : 'Ajouter'} une promotion</h3>
       <form onsubmit="savePromotion(event, ${isEdit ? promo.id : 'null'})" class="space-y-3">
-        ${!isEdit ? `<select id="prProductId" class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm" required>
+        ${!isEdit ? `<select id="prProductId" class="w-full px-4 py-2.5 rounded-xl border border-[#E5E5E5] text-sm" required>
           <option value="">— Sélectionner un produit —</option>
           ${products.map(p => `<option value="${p.id}">${notifEsc(p.name)} (${formatMoney(p.price)})</option>`).join('')}
         </select>` : ''}
         <div class="grid grid-cols-2 gap-3">
-          <input id="prPrice" type="number" value="${isEdit ? promo.promoPrice : ''}" placeholder="Prix promo (FCFA)" required class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm">
-          <input id="prPercent" type="number" value="${isEdit ? (promo.promoPercent || '') : ''}" placeholder="% Réduction" class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm">
+          <input id="prPrice" type="number" value="${isEdit ? promo.promoPrice : ''}" placeholder="Prix promo (FCFA)" required class="w-full px-4 py-2.5 rounded-xl border border-[#E5E5E5] text-sm">
+          <input id="prPercent" type="number" value="${isEdit ? (promo.promoPercent || '') : ''}" placeholder="% Réduction" class="w-full px-4 py-2.5 rounded-xl border border-[#E5E5E5] text-sm">
         </div>
         <div class="grid grid-cols-2 gap-3">
-          <div><label class="block text-xs text-[#A7A9AC] mb-1">Début</label><input id="prStart" type="date" value="${isEdit ? (promo.startDate || '').slice(0,10) : ''}" required class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm"></div>
-          <div><label class="block text-xs text-[#A7A9AC] mb-1">Fin</label><input id="prEnd" type="date" value="${isEdit ? (promo.endDate || '').slice(0,10) : ''}" required class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm"></div>
+          <div><label class="block text-xs text-[#6B6B6B] mb-1">Début</label><input id="prStart" type="date" value="${isEdit ? (promo.startDate || '').slice(0,10) : ''}" required class="w-full px-4 py-2.5 rounded-xl border border-[#E5E5E5] text-sm"></div>
+          <div><label class="block text-xs text-[#6B6B6B] mb-1">Fin</label><input id="prEnd" type="date" value="${isEdit ? (promo.endDate || '').slice(0,10) : ''}" required class="w-full px-4 py-2.5 rounded-xl border border-[#E5E5E5] text-sm"></div>
         </div>
         <div class="flex gap-3 pt-2">
-          <button type="submit" class="flex-1 py-2.5 bg-primary-600 text-[#111111] rounded-xl text-sm font-semibold hover:bg-primary-700 transition">${isEdit ? 'Enregistrer' : 'Ajouter'}</button>
-          <button type="button" onclick="closeModal()" class="px-6 py-2.5 bg-[#232F3E] text-[#A7A9AC] rounded-xl text-sm font-semibold hover:bg-[#303437] transition">Annuler</button>
+          <button type="submit" class="flex-1 py-2.5 bg-primary-600 text-white rounded-xl text-sm font-semibold hover:bg-primary-700 transition">${isEdit ? 'Enregistrer' : 'Ajouter'}</button>
+          <button type="button" onclick="closeModal()" class="px-6 py-2.5 bg-[#F5F5F5] text-[#0A0A0A] rounded-xl text-sm font-semibold hover:bg-[#E5E5E5] transition">Annuler</button>
         </div>
       </form>
     </div>`);
@@ -2067,38 +2067,38 @@ function renderSuppliers() {
   const actifs = suppliersList.filter(s => s.active).length;
   const inactifs = suppliersList.filter(s => !s.active).length;
   document.getElementById('supplierStatCards').innerHTML = `
-    <div class="bg-[#171A1A] rounded-xl p-5 shadow-sm border border-[#303437]">
-      <p class="text-sm text-[#A7A9AC]">Total fournisseurs</p>
-      <p class="text-3xl font-bold text-[#F2F2F2] mt-1">${suppliersList.length}</p>
+    <div class="bg-[#FFFFFF] rounded-xl p-5 shadow-sm border border-[#E5E5E5]">
+      <p class="text-sm text-[#6B6B6B]">Total fournisseurs</p>
+      <p class="text-3xl font-bold text-[#0A0A0A] mt-1">${suppliersList.length}</p>
     </div>
-    <div class="bg-[#171A1A] rounded-xl p-5 shadow-sm border border-[#303437]">
-      <p class="text-sm text-[#A7A9AC]">Actifs</p>
-      <p class="text-3xl font-bold text-[#067D62] mt-1">${actifs}</p>
+    <div class="bg-[#FFFFFF] rounded-xl p-5 shadow-sm border border-[#E5E5E5]">
+      <p class="text-sm text-[#6B6B6B]">Actifs</p>
+      <p class="text-3xl font-bold text-[#0A0A0A] mt-1">${actifs}</p>
     </div>
-    <div class="bg-[#171A1A] rounded-xl p-5 shadow-sm border border-[#303437]">
-      <p class="text-sm text-[#A7A9AC]">Inactifs</p>
+    <div class="bg-[#FFFFFF] rounded-xl p-5 shadow-sm border border-[#E5E5E5]">
+      <p class="text-sm text-[#6B6B6B]">Inactifs</p>
       <p class="text-3xl font-bold text-[#C40000] mt-1">${inactifs}</p>
     </div>`;
 
   document.getElementById('suppliersTable').innerHTML = suppliersList.length === 0
-    ? '<p class="p-6 text-sm text-[#A7A9AC] text-center">Aucun fournisseur inscrit</p>'
-    : `<table class="w-full text-sm"><thead><tr class="text-left text-[#A7A9AC] text-xs uppercase bg-[#171A1A]">
+    ? '<p class="p-6 text-sm text-[#6B6B6B] text-center">Aucun fournisseur inscrit</p>'
+    : `<table class="w-full text-sm"><thead><tr class="text-left text-[#6B6B6B] text-xs uppercase bg-[#FFFFFF]">
         <th class="px-4 py-3">Boutique</th><th class="px-4 py-3">Contact</th><th class="px-4 py-3">Email</th><th class="px-4 py-3">Ville</th><th class="px-4 py-3">Commission</th><th class="px-4 py-3">Statut</th><th class="px-4 py-3">Actions</th>
       </tr></thead><tbody>${suppliersList.map(s => `
         <tr class="table-row border-t border-[rgba(255,255,255,0.06)]">
           <td class="px-4 py-3">
             <div class="flex items-center gap-2">
-              ${s.logo ? `<img src="${notifEsc(s.logo)}" class="w-8 h-8 rounded-lg object-cover bg-[#232F3E]" onerror="this.style.display='none'">` : `<div class="w-8 h-8 rounded-lg bg-primary-100 text-[#FF9900] flex items-center justify-center text-sm font-bold">${notifEsc((s.name||'?').charAt(0).toUpperCase())}</div>`}
+              ${s.logo ? `<img src="${notifEsc(s.logo)}" class="w-8 h-8 rounded-lg object-cover bg-[#F5F5F5]" onerror="this.style.display='none'">` : `<div class="w-8 h-8 rounded-lg bg-primary-100 text-[#C40000] flex items-center justify-center text-sm font-bold">${notifEsc((s.name||'?').charAt(0).toUpperCase())}</div>`}
               <span class="font-medium">${notifEsc(s.name || '—')}</span>
             </div>
           </td>
-          <td class="px-4 py-3">${notifEsc(s.contactName || '—')}<br><span class="text-xs text-[#A7A9AC]">${notifEsc(s.phone || '')}</span></td>
-          <td class="px-4 py-3 text-[#A7A9AC]">${notifEsc(s.email || '—')}</td>
+          <td class="px-4 py-3">${notifEsc(s.contactName || '—')}<br><span class="text-xs text-[#6B6B6B]">${notifEsc(s.phone || '')}</span></td>
+          <td class="px-4 py-3 text-[#6B6B6B]">${notifEsc(s.email || '—')}</td>
           <td class="px-4 py-3">${notifEsc(s.city || '—')}</td>
           <td class="px-4 py-3 font-semibold">${(s.commissionRate || 0)}%</td>
-          <td class="px-4 py-3"><span class="px-2 py-1 rounded-full text-xs font-medium ${s.active ? 'bg-[rgba(6,125,98,0.12)] text-[#067D62]' : 'bg-[#232F3E] text-[#A7A9AC]'}">${s.active ? 'Actif' : 'Inactif'}</span></td>
+          <td class="px-4 py-3"><span class="px-2 py-1 rounded-full text-xs font-medium ${s.active ? 'bg-[#0A0A0A] text-white' : 'bg-[#F5F5F5] text-[#0A0A0A]'}">${s.active ? 'Actif' : 'Inactif'}</span></td>
           <td class="px-4 py-3"><div class="flex gap-1">
-            <button onclick="toggleSupplier(${s.id}, ${s.active ? 'false' : 'true'})" class="p-1.5 rounded-lg hover:bg-[rgba(240,179,35,0.12)] text-[#F0B323]" title="${s.active ? 'Suspendre' : 'Activer'}"><i class="bi ${s.active ? 'bi-pause-circle' : 'bi-play-circle'} text-sm"></i></button>
+            <button onclick="toggleSupplier(${s.id}, ${s.active ? 'false' : 'true'})" class="p-1.5 rounded-lg hover:bg-[#C40000] text-white" title="${s.active ? 'Suspendre' : 'Activer'}"><i class="bi ${s.active ? 'bi-pause-circle' : 'bi-play-circle'} text-sm"></i></button>
             ${isDestructiveAllowed() ? `<button onclick="deleteSupplier(${s.id})" class="p-1.5 rounded-lg hover:bg-[rgba(196,0,0,0.12)] text-[#C40000]" title="Supprimer"><i class="bi bi-trash text-sm"></i></button>` : ''}
           </div></td>
         </tr>`).join('')}</tbody></table>`;
@@ -2109,20 +2109,20 @@ function openSupplierModal() {
     <div class="p-6">
       <h3 class="text-lg font-bold mb-4">Ajouter un fournisseur</h3>
       <form onsubmit="saveSupplier(event)" class="space-y-3">
-        <input id="supName" required placeholder="Nom de la boutique" class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm">
+        <input id="supName" required placeholder="Nom de la boutique" class="w-full px-4 py-2.5 rounded-xl border border-[#E5E5E5] text-sm">
         <div class="grid grid-cols-2 gap-3">
-          <input id="supName2" placeholder="Contact (responsable)" class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm">
-          <input id="supCity" placeholder="Ville" class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm">
+          <input id="supName2" placeholder="Contact (responsable)" class="w-full px-4 py-2.5 rounded-xl border border-[#E5E5E5] text-sm">
+          <input id="supCity" placeholder="Ville" class="w-full px-4 py-2.5 rounded-xl border border-[#E5E5E5] text-sm">
         </div>
-        <input id="supEmail" type="email" required placeholder="Email" class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm">
+        <input id="supEmail" type="email" required placeholder="Email" class="w-full px-4 py-2.5 rounded-xl border border-[#E5E5E5] text-sm">
         <div class="grid grid-cols-2 gap-3">
-          <input id="supPhone" placeholder="Téléphone / WhatsApp" class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm">
-          <input id="supAddress" placeholder="Adresse" class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm">
+          <input id="supPhone" placeholder="Téléphone / WhatsApp" class="w-full px-4 py-2.5 rounded-xl border border-[#E5E5E5] text-sm">
+          <input id="supAddress" placeholder="Adresse" class="w-full px-4 py-2.5 rounded-xl border border-[#E5E5E5] text-sm">
         </div>
-        <input id="supPass" type="password" placeholder="Mot de passe (pour se connecter)" class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm">
+        <input id="supPass" type="password" placeholder="Mot de passe (pour se connecter)" class="w-full px-4 py-2.5 rounded-xl border border-[#E5E5E5] text-sm">
         <div class="flex gap-3 pt-2">
-          <button type="submit" class="flex-1 py-2.5 bg-primary-600 text-[#111111] rounded-xl text-sm font-semibold hover:bg-primary-700 transition">Ajouter</button>
-          <button type="button" onclick="closeModal()" class="px-6 py-2.5 bg-[#232F3E] text-[#A7A9AC] rounded-xl text-sm font-semibold hover:bg-[#303437] transition">Annuler</button>
+          <button type="submit" class="flex-1 py-2.5 bg-primary-600 text-white rounded-xl text-sm font-semibold hover:bg-primary-700 transition">Ajouter</button>
+          <button type="button" onclick="closeModal()" class="px-6 py-2.5 bg-[#F5F5F5] text-[#0A0A0A] rounded-xl text-sm font-semibold hover:bg-[#E5E5E5] transition">Annuler</button>
         </div>
       </form>
     </div>`);
@@ -2186,13 +2186,13 @@ function loadVisitors() {
       if (window._chartVisitorsDay) window._chartVisitorsDay.destroy();
       window._chartVisitorsDay = new Chart(document.getElementById('chartVisitorsDay'), {
         type: 'bar',
-        data: { labels: last7.map(d => d.day), datasets: [{ label: 'Commandes', data: last7.map(d => d.count || 0), backgroundColor: '#FF9900' }] },
+        data: { labels: last7.map(d => d.day), datasets: [{ label: 'Commandes', data: last7.map(d => d.count || 0), backgroundColor: '#C40000' }] },
         options: { responsive: true, plugins: { legend: { display: false } } }
       });
       if (window._chartPagesVsVisitors) window._chartPagesVsVisitors.destroy();
       window._chartPagesVsVisitors = new Chart(document.getElementById('chartPagesVsVisitors'), {
         type: 'line',
-        data: { labels: last7.map(d => d.day), datasets: [{ label: 'Revenus', data: last7.map(d => d.revenue || 0), borderColor: '#F0B323', backgroundColor: 'rgba(240,179,35,0.12)', fill: true, tension: 0.4 }] },
+        data: { labels: last7.map(d => d.day), datasets: [{ label: 'Revenus', data: last7.map(d => d.revenue || 0), borderColor: '#0A0A0A', backgroundColor: 'rgba(10,10,10,0.06)', fill: true, tension: 0.4 }] },
         options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
       });
     }).catch(() => {});
@@ -2216,16 +2216,16 @@ async function loadStats() {
       document.getElementById('statLowRotation').textContent = stats.lowRotationProducts || '0';
     }
     if (stats.topProducts && stats.topProducts.length > 0) {
-      document.getElementById('topProductsTable').innerHTML = `<table class="w-full text-sm"><thead><tr class="text-left text-[#A7A9AC] text-xs uppercase bg-[#171A1A]"><th class="px-4 py-2">Produit</th><th class="px-4 py-2">Vendus</th><th class="px-4 py-2">Revenus</th></tr></thead><tbody>${stats.topProducts.map((p, i) => `<tr class="border-t border-[rgba(255,255,255,0.06)]"><td class="px-4 py-2 font-medium">${i+1}. ${notifEsc(p.name || 'Produit #' + p.productId)}</td><td class="px-4 py-2">${p.totalSold || 0}</td><td class="px-4 py-2 font-semibold">${formatMoney(p.totalRevenue || 0)}</td></tr>`).join('')}</tbody></table>`;
+      document.getElementById('topProductsTable').innerHTML = `<table class="w-full text-sm"><thead><tr class="text-left text-[#6B6B6B] text-xs uppercase bg-[#FFFFFF]"><th class="px-4 py-2">Produit</th><th class="px-4 py-2">Vendus</th><th class="px-4 py-2">Revenus</th></tr></thead><tbody>${stats.topProducts.map((p, i) => `<tr class="border-t border-[rgba(255,255,255,0.06)]"><td class="px-4 py-2 font-medium">${i+1}. ${notifEsc(p.name || 'Produit #' + p.productId)}</td><td class="px-4 py-2">${p.totalSold || 0}</td><td class="px-4 py-2 font-semibold">${formatMoney(p.totalRevenue || 0)}</td></tr>`).join('')}</tbody></table>`;
     }
     if (stats.topCities && stats.topCities.length > 0) {
-      document.getElementById('topCitiesTable').innerHTML = `<table class="w-full text-sm"><thead><tr class="text-left text-[#A7A9AC] text-xs uppercase bg-[#171A1A]"><th class="px-4 py-2">Ville</th><th class="px-4 py-2">Commandes</th></tr></thead><tbody>${stats.topCities.map(c => `<tr class="border-t border-[rgba(255,255,255,0.06)]"><td class="px-4 py-2 font-medium">${notifEsc(c.city)}</td><td class="px-4 py-2">${c.count || 0}</td></tr>`).join('')}</tbody></table>`;
+      document.getElementById('topCitiesTable').innerHTML = `<table class="w-full text-sm"><thead><tr class="text-left text-[#6B6B6B] text-xs uppercase bg-[#FFFFFF]"><th class="px-4 py-2">Ville</th><th class="px-4 py-2">Commandes</th></tr></thead><tbody>${stats.topCities.map(c => `<tr class="border-t border-[rgba(255,255,255,0.06)]"><td class="px-4 py-2 font-medium">${notifEsc(c.city)}</td><td class="px-4 py-2">${c.count || 0}</td></tr>`).join('')}</tbody></table>`;
     }
     if (stats.ordersByMonth && stats.ordersByMonth.length > 0) {
       if (window._chartMonthly) window._chartMonthly.destroy();
       window._chartMonthly = new Chart(document.getElementById('chartMonthlyRevenue'), {
         type: 'bar',
-        data: { labels: stats.ordersByMonth.map(m => m.month), datasets: [{ label: 'Revenus', data: stats.ordersByMonth.map(m => m.revenue || 0), backgroundColor: '#FF9900' }] },
+        data: { labels: stats.ordersByMonth.map(m => m.month), datasets: [{ label: 'Revenus', data: stats.ordersByMonth.map(m => m.revenue || 0), backgroundColor: '#C40000' }] },
         options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
       });
     }
@@ -2245,8 +2245,8 @@ async function loadFinance() {
   } catch (e) { console.error('Finance error:', e); }
   try {
     const rules = await api('/api/admin/monetization/rules');
-    document.getElementById('rulesTable').innerHTML = `<div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="text-left text-[#A7A9AC] text-xs uppercase bg-[#171A1A]"><th class="px-4 py-2">Règle</th><th class="px-4 py-2">Commission</th><th class="px-4 py-2">Frais fixes</th><th class="px-4 py-2">Statut</th><th class="px-4 py-2"></th></tr></thead><tbody>` +
-      rules.map(r => `<tr class="border-t border-[rgba(255,255,255,0.06)]"><td class="px-4 py-2 font-medium">${notifEsc(r.name)}</td><td class="px-4 py-2 tabular-nums">${(r.commissionBps / 100).toFixed(2)} %</td><td class="px-4 py-2 tabular-nums">${formatMoney(r.fixedFee || 0)}</td><td class="px-4 py-2">${r.active ? '<span class="text-xs font-bold text-[#067D62] bg-[rgba(6,125,98,0.12)] px-2 py-0.5 rounded-full">ACTIVE</span>' : '<span class="text-xs font-bold text-[#A7A9AC] bg-[#232F3E] px-2 py-0.5 rounded-full">inactive</span>'}</td><td class="px-4 py-2 text-right">${isMoneyAllowed() ? `<button onclick="toggleRule(${r.id},${r.active ? 'false' : 'true'})" class="text-xs font-bold text-[#FF9900] hover:underline">${r.active ? 'Désactiver' : 'Activer'}</button>` : '<span class="text-xs text-[#A7A9AC]">Lecture seule</span>'}</td></tr>`).join('') + `</tbody></table></div>`;
+    document.getElementById('rulesTable').innerHTML = `<div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="text-left text-[#6B6B6B] text-xs uppercase bg-[#FFFFFF]"><th class="px-4 py-2">Règle</th><th class="px-4 py-2">Commission</th><th class="px-4 py-2">Frais fixes</th><th class="px-4 py-2">Statut</th><th class="px-4 py-2"></th></tr></thead><tbody>` +
+      rules.map(r => `<tr class="border-t border-[rgba(255,255,255,0.06)]"><td class="px-4 py-2 font-medium">${notifEsc(r.name)}</td><td class="px-4 py-2 tabular-nums">${(r.commissionBps / 100).toFixed(2)} %</td><td class="px-4 py-2 tabular-nums">${formatMoney(r.fixedFee || 0)}</td><td class="px-4 py-2">${r.active ? '<span class="text-xs font-bold text-white bg-[#0A0A0A] px-2 py-0.5 rounded-full">ACTIVE</span>' : '<span class="text-xs font-bold text-[#6B6B6B] bg-[#F5F5F5] px-2 py-0.5 rounded-full">inactive</span>'}</td><td class="px-4 py-2 text-right">${isMoneyAllowed() ? `<button onclick="toggleRule(${r.id},${r.active ? 'false' : 'true'})" class="text-xs font-bold text-[#C40000] hover:underline">${r.active ? 'Désactiver' : 'Activer'}</button>` : '<span class="text-xs text-[#6B6B6B]">Lecture seule</span>'}</td></tr>`).join('') + `</tbody></table></div>`;
   } catch (e) { document.getElementById('rulesTable').innerHTML = '<p class="text-sm text-[#C40000]">Chargement impossible.</p>'; }
 }
 async function toggleRule(id, active) {
@@ -2258,12 +2258,12 @@ async function toggleRule(id, active) {
 function openRuleModal() {
   openModal(`<h3 class="font-bold text-lg mb-4">Nouvelle règle de commission</h3>
     <form onsubmit="return saveRule(event)" class="space-y-3">
-      <div><label class="block text-sm font-medium text-[#A7A9AC] mb-1">Nom</label><input id="ruleName" required maxlength="120" class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm" placeholder="Standard 12 %"></div>
+      <div><label class="block text-sm font-medium text-[#6B6B6B] mb-1">Nom</label><input id="ruleName" required maxlength="120" class="w-full px-4 py-2.5 rounded-xl border border-[#E5E5E5] text-sm" placeholder="Standard 12 %"></div>
       <div class="grid grid-cols-2 gap-3">
-        <div><label class="block text-sm font-medium text-[#A7A9AC] mb-1">Commission (bps, 1000 = 10 %)</label><input id="ruleBps" type="number" min="0" max="10000" value="1000" required class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm"></div>
-        <div><label class="block text-sm font-medium text-[#A7A9AC] mb-1">Frais fixes (FCFA)</label><input id="ruleFee" type="number" min="0" value="0" class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm"></div>
+        <div><label class="block text-sm font-medium text-[#6B6B6B] mb-1">Commission (bps, 1000 = 10 %)</label><input id="ruleBps" type="number" min="0" max="10000" value="1000" required class="w-full px-4 py-2.5 rounded-xl border border-[#E5E5E5] text-sm"></div>
+        <div><label class="block text-sm font-medium text-[#6B6B6B] mb-1">Frais fixes (FCFA)</label><input id="ruleFee" type="number" min="0" value="0" class="w-full px-4 py-2.5 rounded-xl border border-[#E5E5E5] text-sm"></div>
       </div>
-      <button class="w-full py-3 bg-primary-600 hover:bg-primary-700 text-[#111111] text-sm font-bold rounded-xl transition">Créer (inactive par défaut)</button>
+      <button class="w-full py-3 bg-primary-600 hover:bg-primary-700 text-white text-sm font-bold rounded-xl transition">Créer (inactive par défaut)</button>
     </form>`);
 }
 async function saveRule(e) {
@@ -2321,10 +2321,10 @@ function confirmAction(title, text, confirmLabel, onConfirm, danger) {
   openModal(`
     <div class="p-6">
       <h3 class="text-lg font-bold mb-2">${title}</h3>
-      <p class="text-sm text-[#A7A9AC] mb-6">${text}</p>
+      <p class="text-sm text-[#6B6B6B] mb-6">${text}</p>
       <div class="flex gap-3">
-        <button onclick="closeModal()" class="flex-1 py-2.5 bg-[#232F3E] text-[#A7A9AC] rounded-xl text-sm font-semibold hover:bg-[#303437] transition">Annuler</button>
-        <button id="confirmGo" class="flex-1 py-2.5 ${danger ? 'bg-[#C40000] hover:bg-[#C40000] text-white' : 'bg-primary-600 hover:bg-primary-700 text-[#111111]'} rounded-xl text-sm font-semibold transition">${confirmLabel}</button>
+        <button onclick="closeModal()" class="flex-1 py-2.5 bg-[#F5F5F5] text-[#0A0A0A] rounded-xl text-sm font-semibold hover:bg-[#E5E5E5] transition">Annuler</button>
+        <button id="confirmGo" class="flex-1 py-2.5 ${danger ? 'bg-[#C40000] hover:bg-[#C40000] text-white' : 'bg-primary-600 hover:bg-primary-700 text-white'} rounded-xl text-sm font-semibold transition">${confirmLabel}</button>
       </div>
     </div>`);
   document.getElementById('confirmGo').onclick = async () => { closeModal(); await onConfirm(); };
@@ -2333,11 +2333,11 @@ function confirmAction(title, text, confirmLabel, onConfirm, danger) {
 function setFilterButtons(cls, btn) {
   document.querySelectorAll('.' + cls).forEach(b => {
     b.classList.remove('bg-primary-600', 'text-white', 'active');
-    b.classList.add('bg-[#171A1A]', 'text-[#A7A9AC]');
+    b.classList.add('bg-[#FFFFFF]', 'text-[#6B6B6B]');
   });
   if (btn) {
     btn.classList.add('bg-primary-600', 'text-white', 'active');
-    btn.classList.remove('bg-[#171A1A]', 'text-[#A7A9AC]');
+    btn.classList.remove('bg-[#FFFFFF]', 'text-[#6B6B6B]');
   }
 }
 
@@ -2355,18 +2355,18 @@ async function loadOverview() {
     overview = await api('/api/admin/overview');
     if (!overview) return;
     const card = (label, val, sub, color) => `
-      <div class="bg-[#171A1A] rounded-xl p-4 shadow-sm border border-[#303437]">
-        <p class="text-xs text-[#A7A9AC]">${label}</p>
-        <p class="text-2xl font-bold mt-1 ${color || 'text-[#F2F2F2]'}">${val}</p>
-        ${sub ? `<p class="text-[11px] text-[#A7A9AC] mt-0.5">${sub}</p>` : ''}
+      <div class="bg-[#FFFFFF] rounded-xl p-4 shadow-sm border border-[#E5E5E5]">
+        <p class="text-xs text-[#6B6B6B]">${label}</p>
+        <p class="text-2xl font-bold mt-1 ${color || 'text-[#0A0A0A]'}">${val}</p>
+        ${sub ? `<p class="text-[11px] text-[#6B6B6B] mt-0.5">${sub}</p>` : ''}
       </div>`;
     document.getElementById('overviewRow').innerHTML =
       card('Clients (tél. uniques)', overview.distinctClients || 0, 'invités, sans comptes') +
-      card('Messages non lus', overview.unreadMessages || 0, (overview.conversations || 0) + ' conversations', (overview.unreadMessages || 0) ? 'text-[#2C6ECB]' : '') +
+      card('Messages non lus', overview.unreadMessages || 0, (overview.conversations || 0) + ' conversations', (overview.unreadMessages || 0) ? 'text-[#C40000]' : '') +
       card('Offres en attente', overview.pendingOffers || 0, 'négociations') +
       card('Paiements en attente', overview.pendingPayments || 0, (overview.failedPayments || 0) + ' échoués', (overview.failedPayments || 0) ? 'text-[#C40000]' : '') +
       card('Expéditions en cours', overview.activeShipments || 0, (overview.shipmentIncidents || 0) + ' incident(s)', (overview.shipmentIncidents || 0) ? 'text-[#C40000]' : '') +
-      card('À modérer', (overview.pendingReviews || 0) + (overview.pendingProducts || 0), 'avis + produits', ((overview.pendingReviews || 0) + (overview.pendingProducts || 0)) ? 'text-[#F0B323]' : '');
+      card('À modérer', (overview.pendingReviews || 0) + (overview.pendingProducts || 0), 'avis + produits', ((overview.pendingReviews || 0) + (overview.pendingProducts || 0)) ? 'text-[#C40000]' : '');
     sideBadge('payPageBadge', overview.pendingPayments || 0);
     sideBadge('shipPageBadge', overview.shipmentIncidents || 0);
     sideBadge('msgPageBadge', overview.unreadMessages || 0);
@@ -2377,14 +2377,14 @@ async function loadOverview() {
 /* ---------- Paiements ---------- */
 async function loadPayments() {
   const box = document.getElementById('paymentsTable');
-  box.innerHTML = '<p class="p-6 text-sm text-[#A7A9AC] text-center">Chargement des paiements…</p>';
+  box.innerHTML = '<p class="p-6 text-sm text-[#6B6B6B] text-center">Chargement des paiements…</p>';
   try {
     const res = await api('/api/admin/payments?status=' + encodeURIComponent(payFilter) + '&page=' + payPage + '&limit=' + payLimit);
     const data = (res && res.data) || [];
     const total = (res && res.total) || 0;
     box.innerHTML = data.length === 0
-      ? '<p class="p-6 text-sm text-[#A7A9AC] text-center">Aucun paiement pour ce statut</p>'
-      : `<table class="w-full text-sm"><thead><tr class="text-left text-[#A7A9AC] text-xs uppercase bg-[#171A1A]">
+      ? '<p class="p-6 text-sm text-[#6B6B6B] text-center">Aucun paiement pour ce statut</p>'
+      : `<table class="w-full text-sm"><thead><tr class="text-left text-[#6B6B6B] text-xs uppercase bg-[#FFFFFF]">
           <th class="px-4 py-3">Commande</th><th class="px-4 py-3">Client</th><th class="px-4 py-3">Montant</th>
           <th class="px-4 py-3">Méthode</th><th class="px-4 py-3">Référence</th><th class="px-4 py-3">Statut</th><th class="px-4 py-3">Date</th>
         </tr></thead><tbody>${data.map(p => `
@@ -2394,11 +2394,11 @@ async function loadPayments() {
           <td class="px-4 py-3 font-semibold tabular-nums">${formatMoney(p.amount)}</td>
           <td class="px-4 py-3 text-xs">${notifEsc(p.method || '—')}</td>
           <td class="px-4 py-3 font-mono text-xs">${notifEsc(p.transactionRef || '—')}</td>
-          <td class="px-4 py-3">${p.status === 'REUSSIE' ? '<span class="px-2 py-1 rounded-full text-xs font-medium bg-[rgba(6,125,98,0.12)] text-[#067D62]">Réussi</span>'
-            : p.status === 'EN_ATTENTE' ? '<span class="px-2 py-1 rounded-full text-xs font-medium bg-[rgba(240,179,35,0.12)] text-[#F0B323]">En attente</span>'
+          <td class="px-4 py-3">${p.status === 'REUSSIE' ? '<span class="px-2 py-1 rounded-full text-xs font-medium bg-[#0A0A0A] text-white">Réussi</span>'
+            : p.status === 'EN_ATTENTE' ? '<span class="px-2 py-1 rounded-full text-xs font-medium bg-[#C40000] text-white">En attente</span>'
             : p.status === 'ECHOUEE' ? '<span class="px-2 py-1 rounded-full text-xs font-medium bg-[rgba(196,0,0,0.12)] text-[#C40000]">Échoué</span>'
-            : '<span class="px-2 py-1 rounded-full text-xs font-medium bg-[#232F3E] text-[#A7A9AC]">Remboursé</span>'}</td>
-          <td class="px-4 py-3 text-xs text-[#A7A9AC]">${formatDate(p.createdAt)}</td>
+            : '<span class="px-2 py-1 rounded-full text-xs font-medium bg-[#F5F5F5] text-[#0A0A0A]">Remboursé</span>'}</td>
+          <td class="px-4 py-3 text-xs text-[#6B6B6B]">${formatDate(p.createdAt)}</td>
         </tr>`).join('')}</tbody></table>`;
     renderPayPagination(total);
   } catch (e) {
@@ -2411,31 +2411,31 @@ function renderPayPagination(total) {
   const pages = Math.max(1, Math.ceil(total / payLimit));
   const el = document.getElementById('payPagination');
   if (pages <= 1) { el.innerHTML = ''; return; }
-  el.innerHTML = `<button onclick="payGoto(${payPage - 1})" ${payPage === 1 ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg border border-[#303437] text-sm bg-[#171A1A] disabled:opacity-40">Précédent</button>
-    <span class="text-sm text-[#A7A9AC] self-center">Page ${payPage} / ${pages} · ${total} paiement(s)</span>
-    <button onclick="payGoto(${payPage + 1})" ${payPage === pages ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg border border-[#303437] text-sm bg-[#171A1A] disabled:opacity-40">Suivant</button>`;
+  el.innerHTML = `<button onclick="payGoto(${payPage - 1})" ${payPage === 1 ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg border border-[#E5E5E5] text-sm bg-[#FFFFFF] disabled:opacity-40">Précédent</button>
+    <span class="text-sm text-[#6B6B6B] self-center">Page ${payPage} / ${pages} · ${total} paiement(s)</span>
+    <button onclick="payGoto(${payPage + 1})" ${payPage === pages ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg border border-[#E5E5E5] text-sm bg-[#FFFFFF] disabled:opacity-40">Suivant</button>`;
 }
 
 /* ---------- Expéditions ---------- */
 async function loadShipments() {
   const box = document.getElementById('shipmentsTable');
-  box.innerHTML = '<p class="p-6 text-sm text-[#A7A9AC] text-center">Chargement des expéditions…</p>';
+  box.innerHTML = '<p class="p-6 text-sm text-[#6B6B6B] text-center">Chargement des expéditions…</p>';
   try {
     const res = await api('/api/admin/shipments?filter=' + encodeURIComponent(shipFilter) + '&limit=100');
     const data = (res && res.data) || [];
     box.innerHTML = data.length === 0
-      ? '<p class="p-6 text-sm text-[#A7A9AC] text-center">Aucune expédition dans cette catégorie</p>'
-      : `<table class="w-full text-sm"><thead><tr class="text-left text-[#A7A9AC] text-xs uppercase bg-[#171A1A]">
+      ? '<p class="p-6 text-sm text-[#6B6B6B] text-center">Aucune expédition dans cette catégorie</p>'
+      : `<table class="w-full text-sm"><thead><tr class="text-left text-[#6B6B6B] text-xs uppercase bg-[#FFFFFF]">
           <th class="px-4 py-3">Suivi</th><th class="px-4 py-3">Commande</th><th class="px-4 py-3">Client</th>
           <th class="px-4 py-3">Destination</th><th class="px-4 py-3">Statut</th><th class="px-4 py-3">Motif</th>
         </tr></thead><tbody>${data.map(s => `
         <tr class="table-row border-t border-[rgba(255,255,255,0.06)]">
-          <td class="px-4 py-3 font-mono text-xs font-bold text-[#FF9900]">${notifEsc(s.trackingNumber || '—')}</td>
+          <td class="px-4 py-3 font-mono text-xs font-bold text-[#C40000]">${notifEsc(s.trackingNumber || '—')}</td>
           <td class="px-4 py-3 font-mono text-xs">${notifEsc(s.orderNumber || ('#' + s.orderId))}</td>
           <td class="px-4 py-3">${notifEsc(s.customer || '—')}</td>
           <td class="px-4 py-3">${notifEsc(s.city || '—')}</td>
-          <td class="px-4 py-3"><span class="px-2 py-1 rounded-full text-xs font-medium ${s.status === 'DELIVERED' ? 'bg-[rgba(6,125,98,0.12)] text-[#067D62]' : (s.status === 'FAILED' || s.status === 'RETURNED') ? 'bg-[rgba(196,0,0,0.12)] text-[#C40000]' : 'bg-[rgba(44,110,203,0.12)] text-[#2C6ECB]'}">${notifEsc(s.status)}</span></td>
-          <td class="px-4 py-3 text-xs text-[#A7A9AC]">${notifEsc(s.failureReason || '—')}</td>
+          <td class="px-4 py-3"><span class="px-2 py-1 rounded-full text-xs font-medium ${s.status === 'DELIVERED' ? 'bg-[#0A0A0A] text-white' : (s.status === 'FAILED' || s.status === 'RETURNED') ? 'bg-[rgba(196,0,0,0.12)] text-[#C40000]' : 'bg-[#E5E5E5] text-[#0A0A0A]'}">${notifEsc(s.status)}</span></td>
+          <td class="px-4 py-3 text-xs text-[#6B6B6B]">${notifEsc(s.failureReason || '—')}</td>
         </tr>`).join('')}</tbody></table>`;
   } catch (e) {
     box.innerHTML = '<p class="p-6 text-sm text-[#C40000] text-center">Impossible de charger les expéditions. <button onclick="loadShipments()" class="font-semibold underline">Réessayer</button></p>';
@@ -2446,7 +2446,7 @@ function filterShipments(f, ev) { shipFilter = f; setFilterButtons('ship-filter'
 /* ---------- Messages (supervision) ---------- */
 async function loadMessages() {
   const box = document.getElementById('convosTable');
-  box.innerHTML = '<p class="p-6 text-sm text-[#A7A9AC] text-center">Chargement des conversations…</p>';
+  box.innerHTML = '<p class="p-6 text-sm text-[#6B6B6B] text-center">Chargement des conversations…</p>';
   try {
     const [res, offers] = await Promise.all([
       api('/api/admin/conversations?page=' + convoPage + '&limit=' + convoLimit),
@@ -2455,42 +2455,42 @@ async function loadMessages() {
     const data = (res && res.data) || [];
     const total = (res && res.total) || 0;
     document.getElementById('msgStatCards').innerHTML = `
-      <div class="bg-[#171A1A] rounded-xl p-5 shadow-sm border border-[#303437]"><p class="text-sm text-[#A7A9AC]">Conversations</p><p class="text-3xl font-bold text-[#F2F2F2] mt-1">${total}</p></div>
-      <div class="bg-[#171A1A] rounded-xl p-5 shadow-sm border border-[#303437]"><p class="text-sm text-[#A7A9AC]">Messages non lus</p><p class="text-3xl font-bold ${((res && res.unread) || 0) ? 'text-[#2C6ECB]' : 'text-[#F2F2F2]'} mt-1">${(res && res.unread) || 0}</p></div>
-      <div class="bg-[#171A1A] rounded-xl p-5 shadow-sm border border-[#303437]"><p class="text-sm text-[#A7A9AC]">Offres en attente</p><p class="text-3xl font-bold text-[#F2F2F2] mt-1">${(offers && offers.total) || 0}</p></div>`;
+      <div class="bg-[#FFFFFF] rounded-xl p-5 shadow-sm border border-[#E5E5E5]"><p class="text-sm text-[#6B6B6B]">Conversations</p><p class="text-3xl font-bold text-[#0A0A0A] mt-1">${total}</p></div>
+      <div class="bg-[#FFFFFF] rounded-xl p-5 shadow-sm border border-[#E5E5E5]"><p class="text-sm text-[#6B6B6B]">Messages non lus</p><p class="text-3xl font-bold ${((res && res.unread) || 0) ? 'text-[#C40000]' : 'text-[#0A0A0A]'} mt-1">${(res && res.unread) || 0}</p></div>
+      <div class="bg-[#FFFFFF] rounded-xl p-5 shadow-sm border border-[#E5E5E5]"><p class="text-sm text-[#6B6B6B]">Offres en attente</p><p class="text-3xl font-bold text-[#0A0A0A] mt-1">${(offers && offers.total) || 0}</p></div>`;
     box.innerHTML = data.length === 0
-      ? '<p class="p-6 text-sm text-[#A7A9AC] text-center">Aucune conversation</p>'
-      : `<table class="w-full text-sm"><thead><tr class="text-left text-[#A7A9AC] text-xs uppercase bg-[#171A1A]">
+      ? '<p class="p-6 text-sm text-[#6B6B6B] text-center">Aucune conversation</p>'
+      : `<table class="w-full text-sm"><thead><tr class="text-left text-[#6B6B6B] text-xs uppercase bg-[#FFFFFF]">
           <th class="px-4 py-3">#</th><th class="px-4 py-3">Boutique</th><th class="px-4 py-3">Client</th><th class="px-4 py-3">Sujet</th>
           <th class="px-4 py-3">Messages</th><th class="px-4 py-3">Non lus</th><th class="px-4 py-3">Statut</th>
         </tr></thead><tbody>${data.map(c => `
         <tr class="table-row border-t border-[rgba(255,255,255,0.06)]">
           <td class="px-4 py-3 font-mono text-xs">${c.id}</td>
           <td class="px-4 py-3 font-medium">${notifEsc(c.supplierName || ('#' + c.supplierId))}</td>
-          <td class="px-4 py-3">${notifEsc(c.clientName || 'Client')} <span class="text-xs text-[#A7A9AC]">${notifEsc(c.clientPhone || '')}</span></td>
-          <td class="px-4 py-3 text-[#A7A9AC]">${notifEsc(c.subject || '—')}</td>
+          <td class="px-4 py-3">${notifEsc(c.clientName || 'Client')} <span class="text-xs text-[#6B6B6B]">${notifEsc(c.clientPhone || '')}</span></td>
+          <td class="px-4 py-3 text-[#6B6B6B]">${notifEsc(c.subject || '—')}</td>
           <td class="px-4 py-3 tabular-nums">${c.messageCount || 0}</td>
-          <td class="px-4 py-3">${(c.unreadCount || 0) ? `<span class="px-2 py-1 rounded-full text-xs font-bold bg-[rgba(44,110,203,0.12)] text-[#2C6ECB]">${c.unreadCount}</span>` : '<span class="text-[#A7A9AC]">0</span>'}</td>
-          <td class="px-4 py-3"><span class="px-2 py-1 rounded-full text-xs font-medium ${c.status === 'OPEN' ? 'bg-[rgba(6,125,98,0.12)] text-[#067D62]' : 'bg-[#232F3E] text-[#A7A9AC]'}">${c.status}</span></td>
+          <td class="px-4 py-3">${(c.unreadCount || 0) ? `<span class="px-2 py-1 rounded-full text-xs font-bold bg-[#E5E5E5] text-[#0A0A0A]">${c.unreadCount}</span>` : '<span class="text-[#6B6B6B]">0</span>'}</td>
+          <td class="px-4 py-3"><span class="px-2 py-1 rounded-full text-xs font-medium ${c.status === 'OPEN' ? 'bg-[#0A0A0A] text-white' : 'bg-[#F5F5F5] text-[#0A0A0A]'}">${c.status}</span></td>
         </tr>`).join('')}</tbody></table>`;
     const pages = Math.max(1, Math.ceil(total / convoLimit));
     document.getElementById('convoPagination').innerHTML = pages <= 1 ? '' :
-      `<button onclick="convoGoto(${convoPage - 1})" ${convoPage === 1 ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg border border-[#303437] text-sm bg-[#171A1A] disabled:opacity-40">Précédent</button>
-       <span class="text-sm text-[#A7A9AC] self-center">Page ${convoPage} / ${pages}</span>
-       <button onclick="convoGoto(${convoPage + 1})" ${convoPage === pages ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg border border-[#303437] text-sm bg-[#171A1A] disabled:opacity-40">Suivant</button>`;
+      `<button onclick="convoGoto(${convoPage - 1})" ${convoPage === 1 ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg border border-[#E5E5E5] text-sm bg-[#FFFFFF] disabled:opacity-40">Précédent</button>
+       <span class="text-sm text-[#6B6B6B] self-center">Page ${convoPage} / ${pages}</span>
+       <button onclick="convoGoto(${convoPage + 1})" ${convoPage === pages ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg border border-[#E5E5E5] text-sm bg-[#FFFFFF] disabled:opacity-40">Suivant</button>`;
     const offs = (offers && offers.data) || [];
     document.getElementById('pendingOffersTable').innerHTML = offs.length === 0
-      ? '<p class="p-6 text-sm text-[#A7A9AC] text-center">Aucune offre en attente</p>'
-      : `<table class="w-full text-sm"><thead><tr class="text-left text-[#A7A9AC] text-xs uppercase bg-[#171A1A]">
+      ? '<p class="p-6 text-sm text-[#6B6B6B] text-center">Aucune offre en attente</p>'
+      : `<table class="w-full text-sm"><thead><tr class="text-left text-[#6B6B6B] text-xs uppercase bg-[#FFFFFF]">
           <th class="px-4 py-3">Produit</th><th class="px-4 py-3">Boutique</th><th class="px-4 py-3">Proposé</th><th class="px-4 py-3">Catalogue</th><th class="px-4 py-3">Par</th><th class="px-4 py-3">Date</th>
         </tr></thead><tbody>${offs.map(o => `
         <tr class="table-row border-t border-[rgba(255,255,255,0.06)]">
-          <td class="px-4 py-3 font-medium">${notifEsc(o.productName || ('Produit #' + o.productId))} <span class="text-xs text-[#A7A9AC]">× ${o.qty}</span></td>
+          <td class="px-4 py-3 font-medium">${notifEsc(o.productName || ('Produit #' + o.productId))} <span class="text-xs text-[#6B6B6B]">× ${o.qty}</span></td>
           <td class="px-4 py-3">${notifEsc(o.supplierName || '—')}</td>
           <td class="px-4 py-3 font-semibold tabular-nums">${formatMoney(o.unitPrice)}</td>
-          <td class="px-4 py-3 text-[#A7A9AC] tabular-nums">${formatMoney(o.catalogPrice)}</td>
+          <td class="px-4 py-3 text-[#6B6B6B] tabular-nums">${formatMoney(o.catalogPrice)}</td>
           <td class="px-4 py-3 text-xs">${o.createdBy === 'CLIENT' ? 'Client' : 'Vendeur'}</td>
-          <td class="px-4 py-3 text-xs text-[#A7A9AC]">${formatDate(o.createdAt)}</td>
+          <td class="px-4 py-3 text-xs text-[#6B6B6B]">${formatDate(o.createdAt)}</td>
         </tr>`).join('')}</tbody></table>`;
   } catch (e) {
     box.innerHTML = '<p class="p-6 text-sm text-[#C40000] text-center">Impossible de charger. <button onclick="loadMessages()" class="font-semibold underline">Réessayer</button></p>';
@@ -2501,24 +2501,24 @@ function convoGoto(p) { convoPage = Math.max(1, p); loadMessages(); }
 /* ---------- Avis ---------- */
 async function loadReviews() {
   const box = document.getElementById('reviewsTable');
-  box.innerHTML = '<p class="p-6 text-sm text-[#A7A9AC] text-center">Chargement des avis…</p>';
+  box.innerHTML = '<p class="p-6 text-sm text-[#6B6B6B] text-center">Chargement des avis…</p>';
   try {
     const data = await api('/api/admin/reviews?status=' + encodeURIComponent(revFilter));
     const list = Array.isArray(data) ? data : [];
     box.innerHTML = list.length === 0
-      ? '<p class="p-6 text-sm text-[#A7A9AC] text-center">Aucun avis dans cette catégorie</p>'
-      : `<table class="w-full text-sm"><thead><tr class="text-left text-[#A7A9AC] text-xs uppercase bg-[#171A1A]">
+      ? '<p class="p-6 text-sm text-[#6B6B6B] text-center">Aucun avis dans cette catégorie</p>'
+      : `<table class="w-full text-sm"><thead><tr class="text-left text-[#6B6B6B] text-xs uppercase bg-[#FFFFFF]">
           <th class="px-4 py-3">Produit</th><th class="px-4 py-3">Auteur</th><th class="px-4 py-3">Note</th>
           <th class="px-4 py-3">Commentaire</th><th class="px-4 py-3">Statut</th><th class="px-4 py-3">Actions</th>
         </tr></thead><tbody>${list.map(r => `
         <tr class="table-row border-t border-[rgba(255,255,255,0.06)]">
           <td class="px-4 py-3 font-mono text-xs">Produit #${r.productId}</td>
           <td class="px-4 py-3">${notifEsc(r.fullname || '—')}</td>
-          <td class="px-4 py-3 font-bold text-[#F0B323]">${'★'.repeat(Math.max(0, Math.min(5, r.rating || 0)))}<span class="text-[#A7A9AC]">${'★'.repeat(5 - Math.max(0, Math.min(5, r.rating || 0)))}</span></td>
-          <td class="px-4 py-3 text-[#A7A9AC] max-w-xs truncate">${notifEsc(r.comment || '—')}</td>
-          <td class="px-4 py-3">${r.approved ? '<span class="px-2 py-1 rounded-full text-xs font-medium bg-[rgba(6,125,98,0.12)] text-[#067D62]">Approuvé</span>' : '<span class="px-2 py-1 rounded-full text-xs font-medium bg-[rgba(240,179,35,0.12)] text-[#F0B323]">En attente</span>'}</td>
+          <td class="px-4 py-3 font-bold text-[#C40000]">${'★'.repeat(Math.max(0, Math.min(5, r.rating || 0)))}<span class="text-[#6B6B6B]">${'★'.repeat(5 - Math.max(0, Math.min(5, r.rating || 0)))}</span></td>
+          <td class="px-4 py-3 text-[#6B6B6B] max-w-xs truncate">${notifEsc(r.comment || '—')}</td>
+          <td class="px-4 py-3">${r.approved ? '<span class="px-2 py-1 rounded-full text-xs font-medium bg-[#0A0A0A] text-white">Approuvé</span>' : '<span class="px-2 py-1 rounded-full text-xs font-medium bg-[#C40000] text-white">En attente</span>'}</td>
           <td class="px-4 py-3"><div class="flex gap-1">
-            ${r.approved ? '' : `<button onclick="approveReview(${r.id})" class="p-1.5 rounded-lg hover:bg-[rgba(6,125,98,0.12)] text-[#067D62]" title="Approuver"><i class="bi bi-check-circle text-sm"></i></button>`}
+            ${r.approved ? '' : `<button onclick="approveReview(${r.id})" class="p-1.5 rounded-lg hover:bg-[#0A0A0A] text-white" title="Approuver"><i class="bi bi-check-circle text-sm"></i></button>`}
             <button onclick="deleteReview(${r.id})" class="p-1.5 rounded-lg hover:bg-[rgba(196,0,0,0.12)] text-[#C40000]" title="Supprimer"><i class="bi bi-trash text-sm"></i></button>
           </div></td>
         </tr>`).join('')}</tbody></table>`;
@@ -2543,31 +2543,31 @@ async function deleteReview(id) {
 /* ---------- Journal d'audit ---------- */
 async function loadAudit() {
   const box = document.getElementById('auditTable');
-  box.innerHTML = '<p class="p-6 text-sm text-[#A7A9AC] text-center">Chargement du journal…</p>';
+  box.innerHTML = '<p class="p-6 text-sm text-[#6B6B6B] text-center">Chargement du journal…</p>';
   try {
     const q = (document.getElementById('auditSearch') || {}).value || '';
     const res = await api('/api/admin/audit?action=' + encodeURIComponent(q.trim()) + '&page=' + auditPage + '&limit=' + auditLimit);
     const data = (res && res.data) || [];
     const total = (res && res.total) || 0;
     box.innerHTML = data.length === 0
-      ? '<p class="p-6 text-sm text-[#A7A9AC] text-center">Aucune entrée d\'audit</p>'
-      : `<table class="w-full text-sm"><thead><tr class="text-left text-[#A7A9AC] text-xs uppercase bg-[#171A1A]">
+      ? '<p class="p-6 text-sm text-[#6B6B6B] text-center">Aucune entrée d\'audit</p>'
+      : `<table class="w-full text-sm"><thead><tr class="text-left text-[#6B6B6B] text-xs uppercase bg-[#FFFFFF]">
           <th class="px-4 py-3">Date</th><th class="px-4 py-3">Admin</th><th class="px-4 py-3">Action</th>
           <th class="px-4 py-3">Entité</th><th class="px-4 py-3">Détail</th><th class="px-4 py-3">IP</th>
         </tr></thead><tbody>${data.map(l => `
         <tr class="table-row border-t border-[rgba(255,255,255,0.06)]">
-          <td class="px-4 py-3 text-xs text-[#A7A9AC] whitespace-nowrap">${notifEsc(l.createdAt || '—')}</td>
+          <td class="px-4 py-3 text-xs text-[#6B6B6B] whitespace-nowrap">${notifEsc(l.createdAt || '—')}</td>
           <td class="px-4 py-3 font-medium">${notifEsc(l.username || ('#' + (l.adminId || '?')))}</td>
-          <td class="px-4 py-3"><span class="px-2 py-1 rounded-full text-xs font-semibold bg-[#232F3E] text-[#A7A9AC]">${notifEsc(l.action || '')}</span></td>
+          <td class="px-4 py-3"><span class="px-2 py-1 rounded-full text-xs font-semibold bg-[#F5F5F5] text-[#0A0A0A]">${notifEsc(l.action || '')}</span></td>
           <td class="px-4 py-3 font-mono text-xs">${notifEsc(l.entityType || '')} ${l.entityId ? '#' + l.entityId : ''}</td>
-          <td class="px-4 py-3 text-[#A7A9AC] max-w-xs truncate">${notifEsc(l.details || '—')}</td>
-          <td class="px-4 py-3 font-mono text-xs text-[#A7A9AC]">${notifEsc(l.ip || '—')}</td>
+          <td class="px-4 py-3 text-[#6B6B6B] max-w-xs truncate">${notifEsc(l.details || '—')}</td>
+          <td class="px-4 py-3 font-mono text-xs text-[#6B6B6B]">${notifEsc(l.ip || '—')}</td>
         </tr>`).join('')}</tbody></table>`;
     const pages = Math.max(1, Math.ceil(total / auditLimit));
-    document.getElementById('auditPagination').innerHTML = pages <= 1 ? `<span class="text-sm text-[#A7A9AC]">${total} entrée(s)</span>` :
-      `<button onclick="auditGoto(${auditPage - 1})" ${auditPage === 1 ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg border border-[#303437] text-sm bg-[#171A1A] disabled:opacity-40">Précédent</button>
-       <span class="text-sm text-[#A7A9AC] self-center">Page ${auditPage} / ${pages} · ${total} entrée(s)</span>
-       <button onclick="auditGoto(${auditPage + 1})" ${auditPage === pages ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg border border-[#303437] text-sm bg-[#171A1A] disabled:opacity-40">Suivant</button>`;
+    document.getElementById('auditPagination').innerHTML = pages <= 1 ? `<span class="text-sm text-[#6B6B6B]">${total} entrée(s)</span>` :
+      `<button onclick="auditGoto(${auditPage - 1})" ${auditPage === 1 ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg border border-[#E5E5E5] text-sm bg-[#FFFFFF] disabled:opacity-40">Précédent</button>
+       <span class="text-sm text-[#6B6B6B] self-center">Page ${auditPage} / ${pages} · ${total} entrée(s)</span>
+       <button onclick="auditGoto(${auditPage + 1})" ${auditPage === pages ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg border border-[#E5E5E5] text-sm bg-[#FFFFFF] disabled:opacity-40">Suivant</button>`;
   } catch (e) {
     box.innerHTML = '<p class="p-6 text-sm text-[#C40000] text-center">Impossible de charger le journal. <button onclick="loadAudit()" class="font-semibold underline">Réessayer</button></p>';
   }
@@ -2593,15 +2593,15 @@ async function loadSettings() {
     const logs = await api('/api/admin/logs?limit=20');
     const list = document.getElementById('activityLogs');
     if (!Array.isArray(logs) || logs.length === 0) {
-      list.innerHTML = '<p class="text-sm text-[#A7A9AC] text-center">Aucune activité</p>';
+      list.innerHTML = '<p class="text-sm text-[#6B6B6B] text-center">Aucune activité</p>';
       return;
     }
     list.innerHTML = logs.map(l => `
-      <div class="flex items-start gap-2 p-2 rounded-lg hover:bg-[#171A1A]">
+      <div class="flex items-start gap-2 p-2 rounded-lg hover:bg-[#FFFFFF]">
         <div class="w-2 h-2 rounded-full bg-primary-400 mt-1.5 shrink-0"></div>
         <div>
-          <p class="text-sm text-[#F2F2F2]">${l.action || ''} ${l.details || ''}</p>
-          <p class="text-[10px] text-[#A7A9AC]">${formatDate(l.createdAt)} · ${l.adminUsername || 'System'}</p>
+          <p class="text-sm text-[#0A0A0A]">${l.action || ''} ${l.details || ''}</p>
+          <p class="text-[10px] text-[#6B6B6B]">${formatDate(l.createdAt)} · ${l.adminUsername || 'System'}</p>
         </div>
       </div>
     `).join('');
