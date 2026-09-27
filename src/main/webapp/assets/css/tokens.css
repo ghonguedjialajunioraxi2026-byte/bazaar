@@ -1,133 +1,193 @@
 /* =========================================================
-   MBOA STYLE — Design tokens officiels (Phase 0)
+   MBOA STYLE — Design tokens officiels
+   Direction artistique : AMAZON DARK PREMIUM (fond #0F1111,
+   orange #FF9900, navy #232F3E, identité MBOA STYLE).
    Source unique de vérité visuelle. Préfixe ms-*.
-   Utilisé avec Tailwind CDN (structure), jamais contre lui.
+   Adapté à l'architecture réelle (tokens + Tailwind),
+   sans système parallèle.
    ========================================================= */
 :root {
-  /* ---------- Premium light background ---------- */
-  --ms-bg-app: #F4F6F5;
-  --ms-bg-2: #F8FAF9;
-  --ms-bg-3: #EEF2F0;
-  --ms-bg-4: #E8EEEB;
-  /* ---------- Primary (teal) ---------- */
-  --ms-primary-50: #E8F5EF;
-  --ms-primary-100: #D3F0E0;
-  --ms-primary-200: #A9E2C3;
-  --ms-primary-300: #6FCE9D;
-  --ms-primary-400: #2BB673;
-  --ms-primary-500: #0F9D5C;
-  --ms-primary-600: #087443;
-  --ms-primary-700: #065C36;
-  --ms-primary-800: #05492C;
-  --ms-primary-900: #043B24;
-  --ms-primary: var(--ms-primary-600);
-  --ms-primary-hover: var(--ms-primary-700);
-  --ms-primary-active: var(--ms-primary-800);
+  /* ---------- PALETTE AMAZON DARK PREMIUM (§2-12) ---------- */
+  --color-background: #0F1111;
+  --color-surface: #171A1A;
+  --color-surface-secondary: #232F3E;
+  --color-primary: #FF9900;
+  --color-primary-hover: #E88B00;
+  --color-text-primary: #F2F2F2;
+  --color-text-secondary: #A7A9AC;
+  --color-text-muted: #6B7280;
+  --color-border: #303437;
+  --color-success: #067D62;
+  --color-error: #C40000;
+  --color-warning: #F0B323;
+  --color-info: #2C6ECB;
+  --mboa-bg: #0F1111;
+  --mboa-bg-secondary: #171A1A;
+  --mboa-surface: #171A1A;
+  --mboa-surface-elevated: #232F3E;
+  --mboa-primary: #FF9900;
+  --mboa-primary-hover: #E88B00;
+  --mboa-primary-dark: #E88B00;
+  --mboa-primary-soft: rgba(255,153,0,0.12);
+  --mboa-gold: #F0B323;
+  --mboa-text: #F2F2F2;
+  --mboa-text-secondary: #A7A9AC;
+  --mboa-text-muted: #6B7280;
+  --mboa-border: #303437;
+  --mboa-border-faint: rgba(255,255,255,0.06);
+  --mboa-success: #067D62;
+  --mboa-warning: #F0B323;
+  --mboa-error: #C40000;
+  --mboa-info: #2C6ECB;
+  --ms-green: #FF9900;          /* PRIMARY — actions importantes uniquement */
+  --ms-green-deep: #E88B00;     /* PRIMARY HOVER */
+  --ms-green-light: #FF9900;    /* PRIMARY HOVER (accents lumineux) */
+  --ms-gold-champagne: #F0B323; /* CHAMPAGNE — rare, premium uniquement */
+  --ms-navy: #232F3E;           /* SURFACE SECONDAIRE (nav, sidebar) */
+  --ms-background: #0F1111;     /* BACKGROUND PRINCIPAL */
+  --ms-surface: #171A1A;        /* SURFACE (cartes, menus, modales) */
+  --ms-text: #F2F2F2;           /* Texte principal */
+  --ms-text-2: #A7A9AC;         /* Texte secondaire */
+  --ms-border-color: #303437;   /* Border */
+  --ms-success: #067D62;
+  --ms-warning: #F0B323;
+  --ms-error: #C40000;
 
-  /* ---------- Secondary / Accent ---------- */
-  --ms-secondary: #0f172a;
-  --ms-secondary-hover: #1e293b;
-  --ms-accent-400: #fbbf24;
-  --ms-accent-500: #f59e0b;
-  --ms-accent-600: #d97706;
+  /* ---------- Dark backgrounds ---------- */
+  --ms-bg-app: #0F1111;
+  --ms-bg-2: #171A1A;
+  --ms-bg-3: #171A1A;
+  --ms-bg-4: #241A08;
+  /* ---------- Primary (Vert MBOA + déclinaisons dark) ---------- */
+  --ms-primary-50: #241A08;
+  --ms-primary-100: #2A1D08;
+  --ms-primary-200: #3D2A0B;
+  --ms-primary-300: #5A3F10;
+  --ms-primary-400: #FF9900;
+  --ms-primary-500: #FF9900;
+  --ms-primary-600: #FF9900;
+  --ms-primary-700: #FF9900;
+  --ms-primary-800: #E88B00;
+  --ms-primary-900: #8A4D00;
+  --ms-primary: var(--ms-green);
+  --ms-primary-hover: #E88B00;
+  --ms-primary-active: #E88B00;
+
+  /* ---------- Secondary (surface élevée, dark) ---------- */
+  --ms-secondary: #232F3E;
+  --ms-secondary-hover: #2D3A4B;
+  --ms-accent-400: #F0B323;
+  --ms-accent-500: #F0B323;
+  --ms-accent-600: #F0B323;
   --ms-accent: var(--ms-accent-500);
 
-  /* ---------- Gold (premium / distinction — rare) ---------- */
-  --ms-gold-50: #FBF6E9;
-  --ms-gold-100: #F6EBCB;
-  --ms-gold-200: #EDDA9E;
-  --ms-gold-400: #DEB84E;
-  --ms-gold-500: #D4A72C;
-  --ms-gold-600: #B08A22;
-  --ms-gold-700: #8A6D1C;
+  /* ---------- Gold (champagne rare — premium uniquement) ---------- */
+  --ms-gold-50: #1E1A0E;
+  --ms-gold-100: #2A2311;
+  --ms-gold-200: #4A3B15;
+  --ms-gold-400: #F0B323;
+  --ms-gold-500: #F0B323;
+  --ms-gold-600: #F0B323;
+  --ms-gold-700: #F0B323;
 
   /* ---------- Backgrounds / Surfaces ---------- */
-  --ms-bg: #ffffff;
-  --ms-bg-secondary: #f8fafc;
-  --ms-surface: #ffffff;
-  --ms-surface-elevated: #ffffff;
-  --ms-surface-glass: rgba(255, 255, 255, 0.82);
+  --ms-bg: #0F1111;
+  --ms-bg-secondary: #171A1A;
+  --ms-surface-elevated: #232F3E;
+  --ms-surface-glass: rgba(255, 255, 255, 0.03);
 
   /* ---------- Text ---------- */
-  --ms-text-primary: #111827;
-  --ms-text-secondary: #667085;
-  --ms-text-muted: #98A2B3;
-  --ms-text-disabled: #cbd5e1;
-  --ms-text-on-primary: #ffffff;
+  --ms-text-primary: #F2F2F2;
+  --ms-text-secondary: #A7A9AC;
+  --ms-text-muted: #6B7280;
+  --ms-text-disabled: #6B7280;
+  --ms-text-on-primary: #111111;
 
-  /* ---------- Borders ---------- */
-  --ms-border-subtle: #f1f5f9;
-  --ms-border: rgba(15, 23, 42, 0.08);
-  --ms-border-strong: rgba(15, 23, 42, 0.16);
+  /* ---------- Borders (jamais trop visibles) ---------- */
+  --ms-border-subtle: rgba(255,255,255,0.06);
+  --ms-border: #303437;
+  --ms-border-strong: #33413B;
 
-  /* ---------- Semantic ---------- */
-  --ms-success: #059669;
-  --ms-success-bg: #ecfdf5;
-  --ms-warning: #d97706;
-  --ms-warning-bg: #fffbeb;
-  --ms-error: #dc2626;
-  --ms-error-bg: #fef2f2;
-  --ms-info: #0284c7;
-  --ms-info-bg: #f0f9ff;
-  --ms-overlay: rgba(15, 23, 42, 0.6);
+  /* ---------- Semantic (cohérentes dark) ---------- */
+  --ms-success-bg: rgba(6,125,98,0.12);
+  --ms-warning-bg: rgba(240,179,35,0.12);
+  --ms-error-bg: rgba(196,0,0,0.12);
+  --ms-info: #2C6ECB;
+  --ms-info-bg: rgba(44,110,203,0.12);
+  --ms-overlay: rgba(0, 0, 0, 0.65);
 
-  /* ---------- Typography ---------- */
+  /* ---------- §2 TYPOGRAPHIE : Manrope (UI) + DM Serif Display (éditorial) ---------- */
   --ms-font-sans: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --ms-font-editorial: 'DM Serif Display', Georgia, serif;
-  --ms-display-size: 2.5rem;   --ms-display-weight: 800; --ms-display-lh: 1.1;  --ms-display-ls: -0.02em;
-  --ms-h1-size: 1.875rem;      --ms-h1-weight: 800;      --ms-h1-lh: 1.2;       --ms-h1-ls: -0.015em;
-  --ms-h2-size: 1.5rem;        --ms-h2-weight: 700;      --ms-h2-lh: 1.25;      --ms-h2-ls: -0.01em;
-  --ms-h3-size: 1.25rem;       --ms-h3-weight: 700;      --ms-h3-lh: 1.3;       --ms-h3-ls: 0;
+  /* Display */
+  --ms-display-size: clamp(2rem, 4.5vw, 3.25rem); --ms-display-weight: 800; --ms-display-lh: 1.1; --ms-display-ls: -0.02em;
+  /* H1 */ --ms-h1-size: 1.875rem; --ms-h1-weight: 800; --ms-h1-lh: 1.2; --ms-h1-ls: -0.015em;
+  /* H2 */ --ms-h2-size: 1.5rem;  --ms-h2-weight: 700;  --ms-h2-lh: 1.25; --ms-h2-ls: -0.01em;
+  /* H3 */ --ms-h3-size: 1.25rem; --ms-h3-weight: 700;  --ms-h3-lh: 1.3;  --ms-h3-ls: 0;
   --ms-h4-size: 1.0625rem;     --ms-h4-weight: 600;      --ms-h4-lh: 1.35;      --ms-h4-ls: 0;
-  --ms-body-lg-size: 1rem;     --ms-body-lg-lh: 1.6;
-  --ms-body-size: 0.9375rem;   --ms-body-lh: 1.6;
-  --ms-body-sm-size: 0.875rem; --ms-body-sm-lh: 1.55;
-  --ms-caption-size: 0.75rem;  --ms-caption-lh: 1.45;
-  --ms-label-size: 0.75rem;    --ms-label-weight: 600;   --ms-label-ls: 0.04em;
-  --ms-price-weight: 800;
+  /* Body Large */ --ms-body-lg-size: 1.0625rem; --ms-body-lg-lh: 1.6; --ms-body-lg-weight: 400;
+  /* Body */ --ms-body-size: 0.9375rem; --ms-body-lh: 1.6; --ms-body-weight: 400;
+  /* Body Small */ --ms-body-sm-size: 0.875rem; --ms-body-sm-lh: 1.55;
+  /* Caption */ --ms-caption-size: 0.75rem; --ms-caption-lh: 1.45; --ms-caption-weight: 500;
+  /* Button */ --ms-btn-size: 0.875rem; --ms-btn-weight: 700; --ms-btn-ls: 0.01em;
+  /* Price */ --ms-price-size: 1.0625rem; --ms-price-weight: 800;
+  /* Label */ --ms-label-size: 0.75rem; --ms-label-weight: 600; --ms-label-ls: 0.04em;
 
-  /* ---------- Spacing (base 4px) ---------- */
+  /* ---------- Spacing (base 4px — §16) ---------- */
   --ms-space-1: 0.25rem;
   --ms-space-2: 0.5rem;
   --ms-space-3: 0.75rem;
   --ms-space-4: 1rem;
+  --ms-space-5: 1.25rem;
   --ms-space-6: 1.5rem;
   --ms-space-8: 2rem;
+  --ms-space-10: 2.5rem;
   --ms-space-12: 3rem;
   --ms-space-16: 4rem;
+  --ms-space-20: 5rem;
 
-  /* ---------- Radius ---------- */
+  /* ---------- Radius (§16) ---------- */
   --ms-radius-sm: 0.5rem;
   --ms-radius-md: 0.875rem;
   --ms-radius-lg: 1.25rem;
   --ms-radius-xl: 1.75rem;
   --ms-radius-pill: 9999px;
 
-  /* ---------- Shadows (discrets) ---------- */
-  --ms-shadow-sm: 0 4px 16px rgba(15, 23, 42, 0.06);
-  --ms-shadow-md: 0 12px 30px rgba(15, 23, 42, 0.10);
-  --ms-shadow-lg: 0 10px 40px -12px rgba(15, 23, 42, 0.12);
-  --ms-shadow-xl: 0 20px 50px -12px rgba(6, 92, 54, 0.22);
+  /* ---------- Shadows dark + glows rares (§23-24) ---------- */
+  --ms-shadow-sm: 0 1px 2px rgba(0,0,0,0.5);
+  --ms-shadow-md: 0 8px 24px rgba(0,0,0,0.45);
+  --ms-shadow-lg: 0 8px 24px rgba(0,0,0,0.45);
+  --ms-shadow-xl: 0 12px 32px rgba(0,0,0,0.5);
+  --ms-glow-green: 0 0 30px rgba(255,153,0,0.12);
+  --ms-glow-gold: 0 0 25px rgba(240,179,35,0.10);
 
-  /* ---------- Glass ---------- */
-  --ms-glass-light-bg: rgba(255, 255, 255, 0.65);
+  /* ---------- Glass subtil (§23) ---------- */
+  --ms-glass-light-bg: rgba(255, 255, 255, 0.03);
   --ms-glass-light-blur: blur(8px);
-  --ms-glass-bg: rgba(255, 255, 255, 0.82);
+  --ms-glass-bg: rgba(255, 255, 255, 0.03);
   --ms-glass-blur: blur(16px);
-  --ms-glass-strong-bg: rgba(255, 255, 255, 0.92);
+  --ms-glass-strong-bg: rgba(23,32,28,0.85);
   --ms-glass-strong-blur: blur(24px);
-  --ms-glass-border: rgba(255, 255, 255, 0.6);
+  --ms-glass-border: rgba(255, 255, 255, 0.06);
 
-  /* ---------- Motion ---------- */
-  --ms-motion-fast: 150ms ease-out;
-  --ms-motion-base: 250ms ease-out;
-  --ms-motion-slow: 350ms ease-out;
+  /* ---------- Motion EMERALD LUXURY : 120 micro / 200 hover / 300 composants / 500 majeures ---------- */
+  --ms-motion-micro: 120ms ease-out;
+  --ms-motion-fast: 120ms ease-out;
+  --ms-motion-hover: 200ms ease-out;
+  --ms-motion-base: 300ms ease-out;
+  --ms-motion-slow: 500ms ease-out;
 
-  /* ---------- Breakpoints (rappel) ---------- */
+  /* ---------- Breakpoints (§15) : 320 360 390 430 768 1024 1280 1440 1920 2560 ---------- */
+  --ms-bp-xs: 320px;
+  --ms-bp-sm: 360px;
   --ms-bp-mobile: 390px;
+  --ms-bp-mobile-lg: 430px;
   --ms-bp-tablet: 768px;
-  --ms-bp-desktop: 1366px;
+  --ms-bp-laptop: 1024px;
+  --ms-bp-desktop: 1280px;
+  --ms-bp-desktop-lg: 1440px;
   --ms-bp-wide: 1920px;
+  --ms-bp-ultra: 2560px;
 
   /* ---------- Z-index ---------- */
   --ms-z-dropdown: 40;

@@ -7,14 +7,15 @@
 <meta name="robots" content="noindex, nofollow">
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
-/* Config Tailwind dédiée (cohérence Phase 0 : vert MBOA + or champagne) */
+/* Config Tailwind EMERALD LUXURY : Deep Emerald + Luxury Gold + Black Navy */
 tailwind.config = { theme: { extend: {
   colors: {
-    primary: { 50:'#E8F5EF',100:'#D3F0E0',200:'#A9E2C3',300:'#6FCE9D',400:'#2BB673',500:'#0F9D5C',600:'#087443',700:'#065C36',800:'#05492C',900:'#043B24' },
-    accent: { 50:'#FBF6E9',100:'#F6EBCB',200:'#EDDA9E',400:'#DEB84E',500:'#D4A72C',600:'#B08A22',700:'#8A6D1C' },
-    dark: { 800:'#1e293b',900:'#0f172a' }
+    primary: { 50:'#1F1607',100:'#2A1D08',200:'#3D2A0B',300:'#5A3F10',400:'#FF9900',500:'#FF9900',600:'#FF9900',700:'#FF9900',800:'#E88B00',900:'#8A4D00' },
+    accent: { 50:'#241A08',100:'#31260B',200:'#4A3B15',400:'#FF9900',500:'#FF9900',600:'#FF9900',700:'#FF9900' },
+    dark: { 800:'#2D3A4B',900:'#232F3E' },
+    mboa: { background:'#0F1111', surface:'#171A1A', navy:'#232F3E', primary:'#FF9900', primaryHover:'#E88B00', text:'#F2F2F2', secondary:'#A7A9AC', muted:'#6B7280', border:'#303437', success:'#067D62', error:'#C40000', warning:'#F0B323', info:'#2C6ECB' }
   },
-  fontFamily: { sans:['Manrope','system-ui','sans-serif'] }
+  fontFamily: { sans:['Manrope','system-ui','sans-serif'], serif:['DM Serif Display','Georgia','serif'] }
 }}};
 </script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -24,184 +25,186 @@ tailwind.config = { theme: { extend: {
 <link rel="stylesheet" href="assets/css/tokens.css">
 <link rel="stylesheet" href="assets/css/components.css">
 <style>
-  :root { --brand:#087443; --brand-dark:#065C36; }
+  :root { --brand:#FF9900; --brand-dark:#E88B00; --gold:#F0B323; --navy:#232F3E; }
   * { font-family:'Manrope','Segoe UI',system-ui,sans-serif; }
-  body { background-color:#F4F6F5;background-image:radial-gradient(900px 480px at 10% -80px,rgba(8,116,67,0.06),transparent 65%),radial-gradient(760px 420px at 90% 6%,rgba(8,116,67,0.04),transparent 65%);background-attachment:fixed; }
+  body { background-color:#0F1111;color:#F2F2F2;background-image:radial-gradient(1000px 520px at 12% -80px,rgba(255,153,0,0.06),transparent 65%),radial-gradient(820px 460px at 88% 4%,rgba(240,179,35,0.05),transparent 65%);background-attachment:fixed; }
   ::-webkit-scrollbar{width:8px;height:8px}
-  ::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:8px}
-  .login-bg{background:linear-gradient(135deg,#065C36,#043B24 60%,#087443)}
-  .card{background:#fff;border:1px solid #e2e8f0;border-radius:1rem;box-shadow:0 1px 2px rgba(0,0,0,.04)}
-  .stat-card{transition:.2s}
-  .stat-card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(8,116,67,.12);border-color:#A9E2C3}
-  .nav-link{display:flex;align-items:center;gap:.75rem;padding:.65rem .9rem;border-radius:.75rem;color:#cbd5e1;font-weight:500;font-size:.9rem;cursor:pointer;transition:.15s}
+  ::-webkit-scrollbar-thumb{background:#303437;border-radius:8px}
+  .login-bg{background:linear-gradient(135deg,#241A08,#0F1111 60%,#241A08)}
+  .card{background:#171A1A;border:1px solid #303437;border-radius:1.25rem;box-shadow:0 4px 24px -8px rgba(0,0,0,0.08)}
+  .stat-card{transition:transform 200ms ease-out,box-shadow 300ms ease-out}
+  .stat-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.45);border-color:rgba(255,153,0,0.35)}
+  .nav-link{display:flex;align-items:center;gap:.75rem;padding:.65rem .9rem;border-radius:.75rem;color:#A7A9AC;font-weight:500;font-size:.9rem;cursor:pointer;transition:background 120ms ease-out,color 120ms ease-out}
   .nav-link:hover{background:rgba(255,255,255,.08);color:#fff}
-  .nav-link.active{background:#087443;color:#fff;box-shadow:0 4px 12px rgba(8,116,67,.35)}
+  .nav-link.active{background:#FF9900;color:#111111;box-shadow:0 4px 12px rgba(255,153,0,.35)}
+  .storefront-premium{background:linear-gradient(180deg,#171A1A,#241A08);color:#fff;border-radius:1.5rem}
+  .gold-badge{background:rgba(255,153,0,0.12);color:#FF9900;border:1px solid rgba(255,153,0,0.35)}
   .nav-link .bi{margin-right:.2rem}
   .badge{display:inline-flex;align-items:center;padding:.2rem .55rem;border-radius:9999px;font-size:.7rem;font-weight:600}
   .btn{display:inline-flex;align-items:center;gap:.4rem;font-weight:600;border-radius:.7rem;padding:.6rem 1rem;transition:.15s;cursor:pointer;font-size:.875rem}
-  .btn-primary{background:var(--brand);color:#fff}
+  .btn-primary{background:var(--brand);color:#111111}
   .btn-primary:hover{background:var(--brand-dark)}
-  .btn-outline{border:1px solid #e2e8f0;color:#475569;background:#fff}
-  .btn-outline:hover{background:#f8fafc}
-  .btn-danger{background:#fef2f2;color:#dc2626}
-  .btn-danger:hover{background:#fee2e2}
-  .input,.select,textarea.input{width:100%;padding:.6rem .8rem;border:1px solid #e2e8f0;border-radius:.7rem;font-size:.875rem;background:#fff}
-  .input:focus,.select:focus,textarea.input:focus{outline:none;border-color:var(--brand);ring:2px solid rgba(8,116,67,.2);box-shadow:0 0 0 3px rgba(8,116,67,.12)}
+  .btn-outline{border:1px solid #303437;color:#F2F2F2;background:#171A1A}
+  .btn-outline:hover{background:#232F3E}
+  .btn-danger{background:rgba(196,0,0,0.12);color:#C40000}
+  .btn-danger:hover{background:rgba(196,0,0,0.12)}
+  .input,.select,textarea.input{width:100%;padding:.6rem .8rem;border:1px solid #303437;border-radius:.7rem;font-size:.875rem;background:#171A1A;color:#F2F2F2}
+  .input:focus,.select:focus,textarea.input:focus{outline:none;border-color:var(--brand);ring:2px solid rgba(255,153,0,.2);box-shadow:0 0 0 3px rgba(255,153,0,.12)}
   .table{width:100%;border-collapse:collapse;font-size:.85rem}
-  .table th{text-align:left;padding:.7rem 1rem;color:#64748b;font-size:.72rem;text-transform:uppercase;letter-spacing:.04em}
-  .table td{padding:.75rem 1rem;border-top:1px solid #f1f5f9;vertical-align:middle}
-  .table tr:hover td{background:#f8fafc}
-  .empty{padding:3rem;text-align:center;color:#94a3b8}
-  .skeleton{animation:pulse 1.5s infinite;background:#e2e8f0;border-radius:.5rem}
+  .table th{text-align:left;padding:.7rem 1rem;color:#A7A9AC;font-size:.72rem;text-transform:uppercase;letter-spacing:.04em}
+  .table td{padding:.75rem 1rem;border-top:1px solid #303437;color:#F2F2F2;vertical-align:middle}
+  .table tr:hover td{background:#232F3E}
+  .empty{padding:3rem;text-align:center;color:#6B7280}
+  .skeleton{animation:pulse 1.5s infinite;background:#303437;border-radius:.5rem}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
-  .modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.55);backdrop-filter:blur(2px);z-index:60;display:none;align-items:center;justify-content:center;padding:1rem}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(2px);z-index:60;display:none;align-items:center;justify-content:center;padding:1rem}
   .modal-overlay.show{display:flex}
-  .modal{background:#fff;border-radius:1.25rem;padding:1.5rem;width:100%;max-width:560px;max-height:90vh;overflow-y:auto}
+  .modal{background:#171A1A;color:#F2F2F2;border-radius:1.25rem;padding:1.5rem;width:100%;max-width:560px;max-height:90vh;overflow-y:auto}
   .chat-body{display:flex;flex-direction:column;gap:.5rem}
   .msg{max-width:75%;padding:.6rem .9rem;border-radius:1rem;font-size:.85rem;line-height:1.4;white-space:pre-wrap;word-break:break-word}
-  .msg.mine{background:var(--brand);color:#fff;align-self:flex-end;border-bottom-right-radius:.25rem}
-  .msg.theirs{background:#f1f5f9;color:#1e293b;align-self:flex-start;border-bottom-left-radius:.25rem}
+  .msg.mine{background:rgba(255,153,0,0.14);color:#F2F2F2;align-self:flex-end;border-bottom-right-radius:.25rem}
+  .msg.theirs{background:#232F3E;color:#F2F2F2;align-self:flex-start;border-bottom-left-radius:.25rem}
   .tab-content{display:none}
   .tab-content.active{display:block}
   .convo-list-item{display:flex;gap:.75rem;padding:.75rem;border-radius:.75rem;cursor:pointer;transition:.15s}
-  .convo-list-item:hover{background:#f8fafc}
-  .convo-list-item.active{background:#D3F0E0}
-  .toast{position:fixed;bottom:1.25rem;right:1.25rem;z-index:80;background:#1e293b;color:#fff;padding:.85rem 1.2rem;border-radius:.75rem;font-size:.875rem;margin-top:.5rem;box-shadow:0 8px 24px rgba(0,0,0,.2);opacity:0;transform:translateY(10px);transition:.25s}
+  .convo-list-item:hover{background:#232F3E}
+  .convo-list-item.active{background:rgba(255,153,0,0.12)}
+  .toast{position:fixed;bottom:1.25rem;right:1.25rem;z-index:80;background:#232F3E;color:#fff;padding:.85rem 1.2rem;border-radius:.75rem;font-size:.875rem;margin-top:.5rem;box-shadow:0 8px 24px rgba(0,0,0,.2);opacity:0;transform:translateY(10px);transition:.25s}
   .toast.show{opacity:1;transform:translateY(0)}
-  .toast.success{background:#087443}
-  .toast.error{background:#dc2626}
+  .toast.success{background:#FF9900}
+  .toast.error{background:#C40000}
   #sidebar{transition:transform .25s}
   @media(max-width:900px){#sidebar{position:fixed;left:0;top:0;height:100%;z-index:50;transform:translateX(-100%)}#sidebar.open{transform:translateX(0)}}
   .grid-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
   .status-chip{font-weight:600;padding:.25rem .7rem;border-radius:9999px;font-size:.72rem}
 </style>
 </head>
-<body class="text-slate-800">
+<body class="text-[#F2F2F2]">
 
 <!-- ===================== LOGIN / INSCRIPTION ===================== -->
 <div id="loginView" class="login-bg min-h-screen flex items-center justify-center p-4">
-  <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
+  <div class="bg-[#171A1A] rounded-2xl shadow-2xl p-8 w-full max-w-md">
     <div class="text-center mb-6">
-      <div class="w-16 h-16 mx-auto rounded-2xl bg-primary-600 text-white flex items-center justify-center text-3xl shadow-lg shadow-primary-600/30 mb-3"><i class="bi bi-box-seam"></i></div>
-      <h1 class="text-2xl font-bold text-slate-800">Espace Fournisseur</h1>
-      <p class="text-sm text-slate-500 mt-1">MBOA STYLE — Votre boutique en ligne</p>
+      <div class="w-16 h-16 mx-auto rounded-2xl bg-primary-600 text-[#111111] flex items-center justify-center text-3xl shadow-lg shadow-primary-600/30 mb-3"><i class="bi bi-box-seam"></i></div>
+      <h1 class="text-2xl font-bold text-[#F2F2F2]">Espace Fournisseur</h1>
+      <p class="text-sm text-[#A7A9AC] mt-1">MBOA STYLE — Votre boutique en ligne</p>
     </div>
 
-    <div class="flex bg-slate-100 rounded-xl p-1 mb-6">
-      <button id="tabLogin" onclick="switchAuthTab('login')" class="flex-1 py-2.5 rounded-lg text-sm font-semibold bg-white text-primary-700 shadow-sm">Connexion</button>
-      <button id="tabRegister" onclick="switchAuthTab('register')" class="flex-1 py-2.5 rounded-lg text-sm font-semibold text-slate-500">Inscription</button>
+    <div class="flex bg-[#232F3E] rounded-xl p-1 mb-6">
+      <button id="tabLogin" onclick="switchAuthTab('login')" class="flex-1 py-2.5 rounded-lg text-sm font-semibold bg-[#171A1A] text-[#FF9900] shadow-sm">Connexion</button>
+      <button id="tabRegister" onclick="switchAuthTab('register')" class="flex-1 py-2.5 rounded-lg text-sm font-semibold text-[#A7A9AC]">Inscription</button>
     </div>
 
     <form id="loginForm" class="space-y-4">
       <div>
-        <label class="block text-sm font-medium text-slate-600 mb-1">Email</label>
+        <label class="block text-sm font-medium text-[#A7A9AC] mb-1">Email</label>
         <input id="loginEmail" type="email" required class="input" placeholder="votre@email.com">
       </div>
       <div>
-        <label class="block text-sm font-medium text-slate-600 mb-1">Mot de passe</label>
+        <label class="block text-sm font-medium text-[#A7A9AC] mb-1">Mot de passe</label>
         <input id="loginPassword" type="password" required class="input" placeholder="••••••••">
       </div>
       <button type="submit" id="loginBtn" class="btn btn-primary w-full justify-center py-3 text-base">Se connecter</button>
-      <p class="text-xs text-slate-400 text-center">Vos accès sont confidentiels. Chaque fournisseur ne voit que ses données.</p>
+      <p class="text-xs text-[#A7A9AC] text-center">Vos accès sont confidentiels. Chaque fournisseur ne voit que ses données.</p>
     </form>
 
     <form id="registerForm" class="space-y-3 hidden">
       <div>
-        <label class="block text-sm font-medium text-slate-600 mb-1">Nom de la boutique *</label>
+        <label class="block text-sm font-medium text-[#A7A9AC] mb-1">Nom de la boutique *</label>
         <input id="regName" required class="input" placeholder="Ex : Boutique Moderne">
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
-          <label class="block text-sm font-medium text-slate-600 mb-1">Responsable</label>
+          <label class="block text-sm font-medium text-[#A7A9AC] mb-1">Responsable</label>
           <input id="regContact" class="input" placeholder="Votre nom">
         </div>
         <div>
-          <label class="block text-sm font-medium text-slate-600 mb-1">Ville</label>
+          <label class="block text-sm font-medium text-[#A7A9AC] mb-1">Ville</label>
           <input id="regCity" class="input" placeholder="Ex : Douala">
         </div>
       </div>
       <div>
-        <label class="block text-sm font-medium text-slate-600 mb-1">Email *</label>
+        <label class="block text-sm font-medium text-[#A7A9AC] mb-1">Email *</label>
         <input id="regEmail" type="email" required class="input" placeholder="votre@email.com">
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
-          <label class="block text-sm font-medium text-slate-600 mb-1">Téléphone</label>
+          <label class="block text-sm font-medium text-[#A7A9AC] mb-1">Téléphone</label>
           <input id="regPhone" class="input" placeholder="+237 6XX XX XX XX">
         </div>
         <div>
-          <label class="block text-sm font-medium text-slate-600 mb-1">Adresse</label>
+          <label class="block text-sm font-medium text-[#A7A9AC] mb-1">Adresse</label>
           <input id="regAddress" class="input" placeholder="Quartier, rue...">
         </div>
       </div>
       <div>
-        <label class="block text-sm font-medium text-slate-600 mb-1">Mot de passe * (min 6 caractères)</label>
+        <label class="block text-sm font-medium text-[#A7A9AC] mb-1">Mot de passe * (min 6 caractères)</label>
         <input id="regPassword" type="password" minlength="6" required class="input" placeholder="••••••••">
       </div>
       <button type="submit" id="regBtn" class="btn btn-primary w-full justify-center py-3 text-base">Créer mon compte</button>
-      <p class="text-xs text-slate-400 text-center">Votre boutique est activée immédiatement après l'inscription.</p>
+      <p class="text-xs text-[#A7A9AC] text-center">Votre boutique est activée immédiatement après l'inscription.</p>
     </form>
 
     <div class="flex items-center gap-3 my-5">
-      <div class="flex-1 h-px bg-slate-200"></div>
-      <span class="text-xs font-medium text-slate-400">ou</span>
-      <div class="flex-1 h-px bg-slate-200"></div>
+      <div class="flex-1 h-px bg-[#303437]"></div>
+      <span class="text-xs font-medium text-[#A7A9AC]">ou</span>
+      <div class="flex-1 h-px bg-[#303437]"></div>
     </div>
 
     <div id="googleBtnContainer" class="flex justify-center"></div>
-    <p class="text-xs text-slate-400 text-center mt-3">Première connexion avec Google ? Votre boutique est créée, il restera juste à compléter ses infos.</p>
+    <p class="text-xs text-[#A7A9AC] text-center mt-3">Première connexion avec Google ? Votre boutique est créée, il restera juste à compléter ses infos.</p>
   </div>
 </div>
 
 <!-- ===================== FINALISATION BOUTIQUE (après Google) ===================== -->
 <div id="completeView" class="login-bg min-h-screen hidden items-center justify-center p-4">
-  <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-lg">
+  <div class="bg-[#171A1A] rounded-2xl shadow-2xl p-8 w-full max-w-lg">
     <div class="flex items-center justify-center gap-2 mb-2">
-      <span class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-primary-100 text-primary-700">Étape 2/2</span>
-      <span class="text-[11px] font-medium text-slate-400">Finalisation</span>
+      <span class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-primary-100 text-[#FF9900]">Étape 2/2</span>
+      <span class="text-[11px] font-medium text-[#A7A9AC]">Finalisation</span>
     </div>
     <div class="text-center mb-5">
-      <div id="cpAvatar" class="w-16 h-16 mx-auto rounded-full bg-primary-600 text-white flex items-center justify-center text-2xl shadow-lg shadow-primary-600/30 mb-3 overflow-hidden"><i class="bi bi-shop"></i></div>
-      <h1 class="text-2xl font-bold text-slate-800">Finalisez votre boutique</h1>
-      <p class="text-sm text-slate-500 mt-1">Connecté avec Google en tant que <span id="cpGoogleEmail" class="font-semibold text-slate-700"></span></p>
+      <div id="cpAvatar" class="w-16 h-16 mx-auto rounded-full bg-primary-600 text-[#111111] flex items-center justify-center text-2xl shadow-lg shadow-primary-600/30 mb-3 overflow-hidden"><i class="bi bi-shop"></i></div>
+      <h1 class="text-2xl font-bold text-[#F2F2F2]">Finalisez votre boutique</h1>
+      <p class="text-sm text-[#A7A9AC] mt-1">Connecté avec Google en tant que <span id="cpGoogleEmail" class="font-semibold text-[#F2F2F2]"></span></p>
     </div>
 
     <form id="completeForm" class="space-y-3">
       <div>
-        <label class="block text-sm font-medium text-slate-600 mb-1">Nom de la boutique *</label>
+        <label class="block text-sm font-medium text-[#A7A9AC] mb-1">Nom de la boutique *</label>
         <input id="cpName" required class="input" placeholder="Ex : Boutique Moderne">
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
-          <label class="block text-sm font-medium text-slate-600 mb-1">Ville *</label>
+          <label class="block text-sm font-medium text-[#A7A9AC] mb-1">Ville *</label>
           <input id="cpCity" required class="input" placeholder="Ex : Douala">
         </div>
         <div>
-          <label class="block text-sm font-medium text-slate-600 mb-1">Responsable</label>
+          <label class="block text-sm font-medium text-[#A7A9AC] mb-1">Responsable</label>
           <input id="cpContact" class="input" placeholder="Votre nom">
         </div>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
-          <label class="block text-sm font-medium text-slate-600 mb-1">Téléphone *</label>
+          <label class="block text-sm font-medium text-[#A7A9AC] mb-1">Téléphone *</label>
           <input id="cpPhone" required class="input" placeholder="+237 6XX XX XX XX">
         </div>
         <div>
-          <label class="block text-sm font-medium text-slate-600 mb-1">WhatsApp</label>
+          <label class="block text-sm font-medium text-[#A7A9AC] mb-1">WhatsApp</label>
           <input id="cpWhatsapp" class="input" placeholder="+237 6XX XX XX XX">
         </div>
       </div>
       <div>
-        <label class="block text-sm font-medium text-slate-600 mb-1">Adresse *</label>
+        <label class="block text-sm font-medium text-[#A7A9AC] mb-1">Adresse *</label>
         <input id="cpAddress" required class="input" placeholder="Quartier, rue...">
       </div>
       <div>
-        <label class="block text-sm font-medium text-slate-600 mb-1">Description (optionnel)</label>
+        <label class="block text-sm font-medium text-[#A7A9AC] mb-1">Description (optionnel)</label>
         <textarea id="cpDesc" rows="2" class="input" placeholder="Décrivez votre boutique en quelques mots..."></textarea>
       </div>
       <button type="submit" id="cpBtn" class="btn btn-primary w-full justify-center py-3 text-base">Finaliser et accéder à ma boutique</button>
-      <p class="text-xs text-slate-400 text-center">Ces informations seront visibles par vos clients.</p>
-      <p class="text-center"><button type="button" onclick="logout()" class="text-xs text-slate-400 hover:text-slate-600 underline">Se déconnecter</button></p>
+      <p class="text-xs text-[#A7A9AC] text-center">Ces informations seront visibles par vos clients.</p>
+      <p class="text-center"><button type="button" onclick="logout()" class="text-xs text-[#A7A9AC] hover:text-[#A7A9AC] underline">Se déconnecter</button></p>
     </form>
   </div>
 </div>
@@ -210,19 +213,19 @@ tailwind.config = { theme: { extend: {
 <div id="appView" class="hidden">
   <div class="flex min-h-screen">
     <!-- SIDEBAR -->
-    <aside id="sidebar" class="w-64 shrink-0 bg-slate-900 flex flex-col">
+    <aside id="sidebar" class="w-64 shrink-0 bg-[#232F3E] flex flex-col">
       <div class="flex items-center gap-3 p-5">
-        <div class="w-10 h-10 rounded-xl text-white flex items-center justify-center text-lg shadow-lg" style="background:linear-gradient(135deg,#087443,#05492C)"><i class="bi bi-box-seam"></i></div>
+        <div class="w-10 h-10 rounded-xl text-white flex items-center justify-center text-lg shadow-lg" style="background:linear-gradient(135deg,#FF9900,#E88B00)"><i class="bi bi-box-seam"></i></div>
         <div>
-          <p class="text-white font-bold leading-tight tracking-tight">MBOA <span style="color:#6FCE9D">STYLE</span></p>
-          <p class="text-slate-400 text-xs">Espace Fournisseur Pro</p>
+          <p class="text-white font-bold leading-tight tracking-tight">MBOA <span style="color:#FF9900">STYLE</span></p>
+          <p class="text-[#A7A9AC] text-xs">Espace Fournisseur Pro</p>
         </div>
       </div>
-      <div class="flex items-center gap-3 px-5 pb-4 border-b border-slate-800">
-        <div id="avatarLogo" class="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-primary-400 font-bold"><i class="bi bi-shop"></i></div>
+      <div class="flex items-center gap-3 px-5 pb-4 border-b border-[#303437]">
+        <div id="avatarLogo" class="w-10 h-10 rounded-full bg-[#232F3E] flex items-center justify-center text-primary-400 font-bold"><i class="bi bi-shop"></i></div>
         <div class="min-w-0">
           <p id="supplierName" class="text-white text-sm font-semibold truncate">—</p>
-          <p class="text-slate-400 text-xs truncate" id="supplierEmail">—</p>
+          <p class="text-[#A7A9AC] text-xs truncate" id="supplierEmail">—</p>
         </div>
       </div>
       <nav class="mt-2 p-3 space-y-1 flex-1 overflow-auto">
@@ -232,22 +235,22 @@ tailwind.config = { theme: { extend: {
         <a class="nav-link" data-view="revenus"><i class="bi bi-currency-exchange"></i>Revenus</a>
         <a class="nav-link" data-view="statistiques"><i class="bi bi-graph-up-arrow"></i>Statistiques</a>
         <a class="nav-link" data-view="paiements"><i class="bi bi-wallet2"></i>Paiements</a>
-        <a class="nav-link" data-view="messages"><i class="bi bi-chat-dots"></i>Messages<span id="badgeMsgs" class="ml-auto bg-red-500 text-white text-[10px] rounded-full px-2 py-0.5 hidden">0</span></a>
-        <a class="nav-link" data-view="negociations"><i class="bi bi-tag"></i>Négociations<span id="badgeNegos" class="ml-auto bg-amber-500 text-white text-[10px] rounded-full px-2 py-0.5 hidden">0</span></a>
-        <a class="nav-link" data-view="notifications" aria-label="Notifications"><i class="bi bi-bell"></i>Notifications<span id="badgeNotifs" role="status" class="ml-auto bg-red-500 text-white text-[10px] rounded-full px-2 py-0.5 hidden">0</span></a>
+        <a class="nav-link" data-view="messages"><i class="bi bi-chat-dots"></i>Messages<span id="badgeMsgs" class="ml-auto bg-[rgba(196,0,0,0.12)]0 text-white text-[10px] rounded-full px-2 py-0.5 hidden">0</span></a>
+        <a class="nav-link" data-view="negociations"><i class="bi bi-tag"></i>Négociations<span id="badgeNegos" class="ml-auto bg-[rgba(240,179,35,0.12)]0 text-white text-[10px] rounded-full px-2 py-0.5 hidden">0</span></a>
+        <a class="nav-link" data-view="notifications" aria-label="Notifications"><i class="bi bi-bell"></i>Notifications<span id="badgeNotifs" role="status" class="ml-auto bg-[rgba(196,0,0,0.12)]0 text-white text-[10px] rounded-full px-2 py-0.5 hidden">0</span></a>
         <a class="nav-link" data-view="profil"><i class="bi bi-person-circle"></i>Mon profil</a>
       </nav>
-      <div class="p-4 border-t border-slate-800">
+      <div class="p-4 border-t border-[#303437]">
         <button onclick="logout()" class="nav-link w-full text-left"><i class="bi bi-box-arrow-right"></i>Déconnexion</button>
       </div>
     </aside>
 
     <!-- MAIN -->
     <div class="flex-1 flex flex-col min-w-0">
-      <header class="ms-glass border-b border-slate-200 px-6 py-3 flex items-center gap-4 sticky top-0 z-40">
+      <header class="ms-glass border-b border-[#303437] px-6 py-3 flex items-center gap-4 sticky top-0 z-40">
         <button class="lg:hidden btn-outline btn" onclick="document.getElementById('sidebar').classList.toggle('open')"><i class="bi bi-list"></i></button>
-        <h1 id="pageTitle" class="text-lg font-bold text-slate-800 flex-1">Tableau de bord</h1>
-        <span class="text-sm text-slate-500 hidden sm:block"><i class="bi bi-shop mr-1"></i><span id="shopNameHdr">—</span></span>
+        <h1 id="pageTitle" class="text-lg font-bold text-[#F2F2F2] flex-1">Tableau de bord</h1>
+        <span class="text-sm text-[#A7A9AC] hidden sm:block"><i class="bi bi-shop mr-1"></i><span id="shopNameHdr">—</span></span>
       </header>
       <main class="p-4 sm:p-6 2xl:px-10 flex-1 overflow-auto" id="mainContent">
         <!-- views injected here -->
@@ -451,13 +454,13 @@ function switchAuthTab(tab) {
   if (tab === 'register') {
     loginForm.classList.add('hidden');
     regForm.classList.remove('hidden');
-    tr.className = 'flex-1 py-2.5 rounded-lg text-sm font-semibold bg-white text-primary-700 shadow-sm';
-    tb.className = 'flex-1 py-2.5 rounded-lg text-sm font-semibold text-slate-500';
+    tr.className = 'flex-1 py-2.5 rounded-lg text-sm font-semibold bg-[#171A1A] text-[#FF9900] shadow-sm';
+    tb.className = 'flex-1 py-2.5 rounded-lg text-sm font-semibold text-[#A7A9AC]';
   } else {
     regForm.classList.add('hidden');
     loginForm.classList.remove('hidden');
-    tb.className = 'flex-1 py-2.5 rounded-lg text-sm font-semibold bg-white text-primary-700 shadow-sm';
-    tr.className = 'flex-1 py-2.5 rounded-lg text-sm font-semibold text-slate-500';
+    tb.className = 'flex-1 py-2.5 rounded-lg text-sm font-semibold bg-[#171A1A] text-[#FF9900] shadow-sm';
+    tr.className = 'flex-1 py-2.5 rounded-lg text-sm font-semibold text-[#A7A9AC]';
   }
 }
 
@@ -586,19 +589,19 @@ async function renderDashboard() {
     const d = (await api('/dashboard')).data;
     content.innerHTML = `
       <div class="grid-cards mb-6">
-        <div class="card p-5 stat-card"><div class="flex items-center justify-between"><div><p class="text-xs text-slate-400 font-medium">Produits</p><p class="text-2xl font-bold mt-1">${d.totalProducts}</p><p class="text-xs text-primary-600 mt-1">${d.activeProducts} actifs · ${d.pendingProducts} en attente</p></div><div class="w-11 h-11 rounded-xl bg-primary-50 text-primary-600 flex items-center justify-center text-xl"><i class="bi bi-box-seam"></i></div></div></div>
-        <div class="card p-5 stat-card"><div class="flex items-center justify-between"><div><p class="text-xs text-slate-400 font-medium">Commandes</p><p class="text-2xl font-bold mt-1">${d.totalOrders}</p><p class="text-xs text-amber-600 mt-1">${d.pendingOrders} en attente</p></div><div class="w-11 h-11 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl"><i class="bi bi-cart-check"></i></div></div></div>
-        <div class="card p-5 stat-card"><div class="flex items-center justify-between"><div><p class="text-xs text-slate-400 font-medium">Chiffre d'affaires</p><p class="text-2xl font-bold mt-1 text-primary-700">${money(d.revenueGross)}</p><p class="text-xs text-slate-400 mt-1">${d.deliveredOrders} livrées</p></div><div class="w-11 h-11 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center text-xl"><i class="bi bi-currency-exchange"></i></div></div></div>
-        <div class="card p-5 stat-card"><div class="flex items-center justify-between"><div><p class="text-xs text-slate-400 font-medium">Solde disponible</p><p class="text-2xl font-bold mt-1">${money(d.balance)}</p><p class="text-xs text-slate-400 mt-1">${money(d.pendingBalance)} en attente</p></div><div class="w-11 h-11 rounded-xl bg-green-50 text-green-600 flex items-center justify-center text-xl"><i class="bi bi-wallet2"></i></div></div></div>
+        <div class="card p-5 stat-card"><div class="flex items-center justify-between"><div><p class="text-xs text-[#A7A9AC] font-medium">Produits</p><p class="text-2xl font-bold mt-1">${d.totalProducts}</p><p class="text-xs text-[#FF9900] mt-1">${d.activeProducts} actifs · ${d.pendingProducts} en attente</p></div><div class="w-11 h-11 rounded-xl bg-primary-50 text-[#FF9900] flex items-center justify-center text-xl"><i class="bi bi-box-seam"></i></div></div></div>
+        <div class="card p-5 stat-card"><div class="flex items-center justify-between"><div><p class="text-xs text-[#A7A9AC] font-medium">Commandes</p><p class="text-2xl font-bold mt-1">${d.totalOrders}</p><p class="text-xs text-[#F0B323] mt-1">${d.pendingOrders} en attente</p></div><div class="w-11 h-11 rounded-xl bg-[rgba(240,179,35,0.12)] text-[#F0B323] flex items-center justify-center text-xl"><i class="bi bi-cart-check"></i></div></div></div>
+        <div class="card p-5 stat-card"><div class="flex items-center justify-between"><div><p class="text-xs text-[#A7A9AC] font-medium">Chiffre d'affaires</p><p class="text-2xl font-bold mt-1 text-[#FF9900]">${money(d.revenueGross)}</p><p class="text-xs text-[#A7A9AC] mt-1">${d.deliveredOrders} livrées</p></div><div class="w-11 h-11 rounded-xl bg-[rgba(44,110,203,0.12)] text-[#2C6ECB] flex items-center justify-center text-xl"><i class="bi bi-currency-exchange"></i></div></div></div>
+        <div class="card p-5 stat-card"><div class="flex items-center justify-between"><div><p class="text-xs text-[#A7A9AC] font-medium">Solde disponible</p><p class="text-2xl font-bold mt-1">${money(d.balance)}</p><p class="text-xs text-[#A7A9AC] mt-1">${money(d.pendingBalance)} en attente</p></div><div class="w-11 h-11 rounded-xl bg-[rgba(6,125,98,0.12)] text-[#067D62] flex items-center justify-center text-xl"><i class="bi bi-wallet2"></i></div></div></div>
       </div>
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div class="card p-5"><h3 class="font-semibold text-slate-700 mb-3"><i class="bi bi-graph-up-arrow mr-1"></i>CA des 7 derniers jours</h3><canvas id="dashDaily" height="120"></canvas></div>
-        <div class="card p-5"><h3 class="font-semibold text-slate-700 mb-3"><i class="bi bi-box-seam mr-1"></i>Produits les plus vendus</h3><canvas id="dashTop" height="120"></canvas></div>
+        <div class="card p-5"><h3 class="font-semibold text-[#F2F2F2] mb-3"><i class="bi bi-graph-up-arrow mr-1"></i>CA des 7 derniers jours</h3><canvas id="dashDaily" height="120"></canvas></div>
+        <div class="card p-5"><h3 class="font-semibold text-[#F2F2F2] mb-3"><i class="bi bi-box-seam mr-1"></i>Produits les plus vendus</h3><canvas id="dashTop" height="120"></canvas></div>
       </div>`;
     // load stats for charts
     const stats = (await api('/statistics')).data;
     new Chart(document.getElementById('dashDaily'), {type:'bar',
-      data:{labels:stats.dailyLabels,datasets:[{label:'CA (FCFA)',data:stats.dailyValues,backgroundColor:'#087443',borderRadius:6}]},
+      data:{labels:stats.dailyLabels,datasets:[{label:'CA (FCFA)',data:stats.dailyValues,backgroundColor:'#FF9900',borderRadius:6}]},
       options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});
     new Chart(document.getElementById('dashTop'), {type:'bar',
       data:{labels:stats.topProducts.map(p=>p.name),datasets:[{label:'Vendus',data:stats.topProducts.map(p=>p.qty),backgroundColor:'#6366f1',borderRadius:6}]},
@@ -618,9 +621,9 @@ let productStatusFilter = 'all';
 
 function emptyState(msg){ msg = esc(msg); return '<div class="empty"><div class="text-4xl mb-3 opacity-40"><i class="bi bi-inbox"></i></div><p>'+msg+'</p></div>'; }
 function statusBadge(st) {
-  const map = {PENDING:'bg-amber-100 text-amber-700',APPROVED:'bg-green-100 text-green-700',ACTIVE:'bg-green-100 text-green-700',REJECTED:'bg-red-100 text-red-700',INACTIVE:'bg-slate-200 text-slate-600'};
+  const map = {PENDING:'bg-[rgba(240,179,35,0.12)] text-[#F0B323]',APPROVED:'bg-[rgba(6,125,98,0.12)] text-[#067D62]',ACTIVE:'bg-[rgba(6,125,98,0.12)] text-[#067D62]',REJECTED:'bg-[rgba(196,0,0,0.12)] text-[#C40000]',INACTIVE:'bg-[#303437] text-[#A7A9AC]'};
   const labels = {PENDING:'En attente',APPROVED:'Approuvé',ACTIVE:'Actif',REJECTED:'Refusé',INACTIVE:'Inactif'};
-  return '<span class="badge '+(map[st]||'bg-slate-100 text-slate-600')+'">'+(labels[st]||st||'Actif')+'</span>';
+  return '<span class="badge '+(map[st]||'bg-[#232F3E] text-[#A7A9AC]')+'">'+(labels[st]||st||'Actif')+'</span>';
 }
 
 async function renderProduits() {
@@ -657,17 +660,17 @@ async function renderProductsTable() {
     if (list.length===0) { wrap.innerHTML = emptyState('Aucun produit trouvé'); return; }
     wrap.innerHTML = `<table class="table"><thead><tr><th>Produit</th><th>Catégorie</th><th>Prix</th><th>Stock</th><th>Statut</th><th class="text-right">Actions</th></tr></thead><tbody>
       ${list.map(p => `<tr>
-        <td><div class="flex items-center gap-3"><img src="${esc(imgSrc(p))}" class="w-10 h-10 rounded-lg object-cover bg-slate-100" onerror="this.src='https://placehold.co/80x80/e2e8f0/64748b?text=+'">${esc(p.name)}<br><span class="text-xs text-slate-400">${esc(p.brand||'')}${p.reference?' · '+esc(p.reference):''}</span></div></td>
-        <td class="text-slate-500">${esc(p.categoryName||'')}</td>
+        <td><div class="flex items-center gap-3"><img src="${esc(imgSrc(p))}" class="w-10 h-10 rounded-lg object-cover bg-[#232F3E]" onerror="this.src='https://placehold.co/80x80/e2e8f0/64748b?text=+'">${esc(p.name)}<br><span class="text-xs text-[#A7A9AC]">${esc(p.brand||'')}${p.reference?' · '+esc(p.reference):''}</span></div></td>
+        <td class="text-[#A7A9AC]">${esc(p.categoryName||'')}</td>
         <td class="font-semibold">${money(p.price)}</td>
-        <td><button onclick="openStockModal(${p.id},${p.stock||0})" class="text-sm px-2 py-1 rounded-lg ${(p.stock||0)<=5?'bg-red-50 text-red-600':'bg-slate-100 text-slate-600'} hover:bg-slate-200 transition"><i class="bi bi-box-seam mr-1"></i>${p.stock||0}</button></td>
+        <td><button onclick="openStockModal(${p.id},${p.stock||0})" class="text-sm px-2 py-1 rounded-lg ${(p.stock||0)<=5?'bg-[rgba(196,0,0,0.12)] text-[#C40000]':'bg-[#232F3E] text-[#A7A9AC]'} hover:bg-[#303437] transition"><i class="bi bi-box-seam mr-1"></i>${p.stock||0}</button></td>
         <td>${statusBadge(p.status)}</td>
         <td class="text-right whitespace-nowrap">
-          <button onclick="openProductModal(${p.id})" class="p-2 hover:bg-blue-50 text-blue-500 rounded-lg" title="Modifier"><i class="bi bi-pencil"></i></button>
+          <button onclick="openProductModal(${p.id})" class="p-2 hover:bg-[rgba(44,110,203,0.12)] text-[#2C6ECB] rounded-lg" title="Modifier"><i class="bi bi-pencil"></i></button>
           <td>
-          ${isActivable(p) ? `<button onclick="toggleProduct(${p.id},${(p.status!=='ACTIVE')})" class="p-2 hover:bg-green-50 text-green-600 rounded-lg" title="Activer/Désactiver"><i class="bi bi-power"></i></button>`
-          : `<span class="p-2 inline-block text-slate-300 rounded-lg" title="Validé par l'administrateur d'abord"><i class="bi bi-power"></i></span>`}
-          <button onclick="deleteProduct(${p.id})" class="p-2 hover:bg-red-50 text-red-500 rounded-lg" title="Supprimer"><i class="bi bi-trash"></i></button>
+          ${isActivable(p) ? `<button onclick="toggleProduct(${p.id},${(p.status!=='ACTIVE')})" class="p-2 hover:bg-[rgba(6,125,98,0.12)] text-[#067D62] rounded-lg" title="Activer/Désactiver"><i class="bi bi-power"></i></button>`
+          : `<span class="p-2 inline-block text-[#A7A9AC] rounded-lg" title="Validé par l'administrateur d'abord"><i class="bi bi-power"></i></span>`}
+          <button onclick="deleteProduct(${p.id})" class="p-2 hover:bg-[rgba(196,0,0,0.12)] text-[#C40000] rounded-lg" title="Supprimer"><i class="bi bi-trash"></i></button>
         </td></tr>`).join('')}</tbody></table>`;
   } catch(e){ toast(e.message,'error'); }
 }
@@ -724,45 +727,45 @@ async function openProductModal(id) {
   }
   openModal(`
     <div class="p-6">
-      <div class="flex items-center justify-between mb-4"><h3 class="text-lg font-bold">${id?'Modifier':'Ajouter'} un produit</h3><button onclick="closeModal()" class="text-slate-400 hover:text-slate-600"><i class="bi bi-x-lg"></i></button></div>
+      <div class="flex items-center justify-between mb-4"><h3 class="text-lg font-bold">${id?'Modifier':'Ajouter'} un produit</h3><button onclick="closeModal()" class="text-[#A7A9AC] hover:text-[#A7A9AC]"><i class="bi bi-x-lg"></i></button></div>
       <form onsubmit="saveProduct(event,${id||'null'})" class="space-y-4">
         <div>
-          <label class="block text-sm font-semibold text-slate-700 mb-1">Nom du produit *</label>
-          <input id="pName" value="${esc(p.name||'')}" placeholder="Ex: Nike Air Max 90, Galaxy S54..." required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+          <label class="block text-sm font-semibold text-[#F2F2F2] mb-1">Nom du produit *</label>
+          <input id="pName" value="${esc(p.name||'')}" placeholder="Ex: Nike Air Max 90, Galaxy S54..." required class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
         </div>
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-sm font-semibold text-slate-700 mb-1">Marque *</label>
-            <input id="pBrand" value="${esc(p.brand||'')}" placeholder="Ex: Nike, Samsung..." required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+            <label class="block text-sm font-semibold text-[#F2F2F2] mb-1">Marque *</label>
+            <input id="pBrand" value="${esc(p.brand||'')}" placeholder="Ex: Nike, Samsung..." required class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
           </div>
           <div>
-            <label class="block text-sm font-semibold text-slate-700 mb-1">Prix (FCFA) *</label>
-            <input id="pPrice" type="number" value="${p.price||''}" placeholder="Ex: 25000" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+            <label class="block text-sm font-semibold text-[#F2F2F2] mb-1">Prix (FCFA) *</label>
+            <input id="pPrice" type="number" value="${p.price||''}" placeholder="Ex: 25000" required class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
           </div>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label class="block text-sm font-semibold text-slate-700 mb-1">Catégorie *</label>
-            <select id="pCategoryParent" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500" required onchange="updateSubCategoryOptions()">
+            <label class="block text-sm font-semibold text-[#F2F2F2] mb-1">Catégorie *</label>
+            <select id="pCategoryParent" class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500" required onchange="updateSubCategoryOptions()">
               <option value="">— Choisir —</option>
               ${parentCatOptions(selParentId)}
             </select>
-            <p class="text-[11px] text-slate-400 mt-1">Ex : Mode &amp; Vêtements</p>
+            <p class="text-[11px] text-[#A7A9AC] mt-1">Ex : Mode &amp; Vêtements</p>
           </div>
           <div>
-            <label class="block text-sm font-semibold text-slate-700 mb-1">Sous-catégorie *</label>
-            <select id="pCategory" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500" required>
+            <label class="block text-sm font-semibold text-[#F2F2F2] mb-1">Sous-catégorie *</label>
+            <select id="pCategory" class="w-full px-4 py-2.5 rounded-xl border border-[#303437] text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500" required>
               <option value="">— Choisir d'abord une catégorie —</option>
             </select>
-            <p class="text-[11px] text-slate-400 mt-1">Ex : Polo</p>
+            <p class="text-[11px] text-[#A7A9AC] mt-1">Ex : Polo</p>
           </div>
         </div>
         <div>
-          <label class="block text-sm font-semibold text-slate-700 mb-1">Photos du produit</label>
-          <div id="pFilesDrop" class="relative border-2 border-dashed border-slate-300 rounded-xl p-4 text-center hover:border-primary-400 hover:bg-primary-50/30 transition cursor-pointer" onclick="document.getElementById('pFiles').click()" ondragover="event.preventDefault();this.classList.add('border-primary-400')" ondragleave="this.classList.remove('border-primary-400')" ondrop="handleFilesDrop(event)">
-            <i class="bi bi-cloud-arrow-up text-2xl text-slate-400"></i>
-            <p class="text-sm text-slate-500 mt-1">Cliquez ou glissez vos photos ici</p>
-            <p class="text-xs text-slate-400 mt-0.5">JPG, PNG, WebP — Max 10 Mo — Première photo = principale</p>
+          <label class="block text-sm font-semibold text-[#F2F2F2] mb-1">Photos du produit</label>
+          <div id="pFilesDrop" class="relative border-2 border-dashed border-[#303437] rounded-xl p-4 text-center hover:border-primary-400 hover:bg-primary-50/30 transition cursor-pointer" onclick="document.getElementById('pFiles').click()" ondragover="event.preventDefault();this.classList.add('border-primary-400')" ondragleave="this.classList.remove('border-primary-400')" ondrop="handleFilesDrop(event)">
+            <i class="bi bi-cloud-arrow-up text-2xl text-[#A7A9AC]"></i>
+            <p class="text-sm text-[#A7A9AC] mt-1">Cliquez ou glissez vos photos ici</p>
+            <p class="text-xs text-[#A7A9AC] mt-0.5">JPG, PNG, WebP — Max 10 Mo — Première photo = principale</p>
             <input id="pFiles" type="file" accept="image/*" multiple class="hidden">
           </div>
           <div id="imgPreview" class="flex flex-wrap gap-2 mt-2"></div>
@@ -771,7 +774,7 @@ async function openProductModal(id) {
           <button type="submit" class="btn btn-primary flex-1 justify-center" id="pSubmitBtn">${id?'Enregistrer':'Ajouter le produit'}</button>
           <button type="button" class="btn btn-outline" onclick="closeModal()">Annuler</button>
         </div>
-        <p class="text-xs text-amber-600"><i class="bi bi-info-circle mr-1"></i>Votre produit sera soumis à validation de l'administrateur avant d'apparaître sur la boutique.</p>
+        <p class="text-xs text-[#F0B323]"><i class="bi bi-info-circle mr-1"></i>Votre produit sera soumis à validation de l'administrateur avant d'apparaître sur la boutique.</p>
       </form>
     </div>`);
   window._pimages = (p.images||[]).slice();
@@ -818,8 +821,8 @@ function handleFilesDrop(e) {
 function renderImgPreview() {
   const box=document.getElementById('imgPreview'); if(!box) return;
   let html='';
-  (window._pimages||[]).forEach((u,i)=>{ html+=`<div class="relative">${i===0?'<span class="absolute -top-2 -left-2 bg-primary-600 text-white text-[9px] px-1 rounded-full z-10">PRINCIPALE</span>':''}<img src="${u}" class="w-16 h-16 rounded-lg object-cover border"><button type="button" onclick="removeImg(${i})" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 text-xs">&times;</button></div>`; });
-  (window._pendingImgs||[]).forEach((p,i)=>{ html+=`<div class="relative">${(window._pimages||[]).length===0&&i===0?'<span class="absolute -top-2 -left-2 bg-primary-600 text-white text-[9px] px-1 rounded-full z-10">PRINCIPALE</span>':''}<img src="${p.data}" class="w-16 h-16 rounded-lg object-cover border opacity-70"><button type="button" onclick="removePending(${i})" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 text-xs">&times;</button></div>`; });
+  (window._pimages||[]).forEach((u,i)=>{ html+=`<div class="relative">${i===0?'<span class="absolute -top-2 -left-2 bg-primary-600 text-[#111111] text-[9px] px-1 rounded-full z-10">PRINCIPALE</span>':''}<img src="${u}" class="w-16 h-16 rounded-lg object-cover border"><button type="button" onclick="removeImg(${i})" class="absolute -top-2 -right-2 bg-[rgba(196,0,0,0.12)]0 text-white rounded-full w-5 h-5 text-xs">&times;</button></div>`; });
+  (window._pendingImgs||[]).forEach((p,i)=>{ html+=`<div class="relative">${(window._pimages||[]).length===0&&i===0?'<span class="absolute -top-2 -left-2 bg-primary-600 text-[#111111] text-[9px] px-1 rounded-full z-10">PRINCIPALE</span>':''}<img src="${p.data}" class="w-16 h-16 rounded-lg object-cover border opacity-70"><button type="button" onclick="removePending(${i})" class="absolute -top-2 -right-2 bg-[rgba(196,0,0,0.12)]0 text-white rounded-full w-5 h-5 text-xs">&times;</button></div>`; });
   box.innerHTML=html;
 }
 function removeImg(i){ window._pimages.splice(i,1); renderImgPreview(); }
@@ -863,7 +866,7 @@ function openStockModal(id,stock){
   openModal(`
     <h3 class="text-lg font-bold mb-4">Gérer le stock</h3>
     <form onsubmit="saveStock(event,${id})" class="space-y-3">
-      <div><label class="text-xs font-semibold text-slate-600">Quantité en stock</label><input id="stockVal" type="number" min="0" class="input" value="${stock||0}"></div>
+      <div><label class="text-xs font-semibold text-[#A7A9AC]">Quantité en stock</label><input id="stockVal" type="number" min="0" class="input" value="${stock||0}"></div>
       <div class="flex gap-3 pt-2"><button class="btn btn-primary flex-1 justify-center">Enregistrer</button><button type="button" class="btn btn-outline" onclick="closeModal()">Annuler</button></div>
     </form>`);
 }
@@ -881,7 +884,7 @@ async function deleteProduct(id){
 /* ==================== COMMANDES ==================== */
 const STATUSES = ['EN_ATTENTE','CONFIRMEE','EN_PREPARATION','EN_LIVRAISON','LIVREE','ANNULEE'];
 const statusLabel = {EN_ATTENTE:'En attente',CONFIRMEE:'Confirmée',EN_PREPARATION:'En préparation',EN_LIVRAISON:'En livraison',LIVREE:'Livrée',ANNULEE:'Annulée'};
-const statusColor = {EN_ATTENTE:'bg-amber-100 text-amber-700',CONFIRMEE:'bg-sky-100 text-sky-700',EN_PREPARATION:'bg-indigo-100 text-indigo-700',EN_LIVRAISON:'bg-purple-100 text-purple-700',LIVREE:'bg-green-100 text-green-700',ANNULEE:'bg-red-100 text-red-700'};
+const statusColor = {EN_ATTENTE:'bg-[rgba(240,179,35,0.12)] text-[#F0B323]',CONFIRMEE:'bg-[rgba(44,110,203,0.12)] text-[#2C6ECB]',EN_PREPARATION:'bg-[rgba(255,153,0,0.12)] text-[#FF9900]',EN_LIVRAISON:'bg-[rgba(44,110,203,0.12)] text-[#2C6ECB]',LIVREE:'bg-[rgba(6,125,98,0.12)] text-[#067D62]',ANNULEE:'bg-[rgba(196,0,0,0.12)] text-[#C40000]'};
 
 async function renderCommandes(){
   const content=document.getElementById('mainContent');
@@ -891,10 +894,10 @@ async function renderCommandes(){
     content.innerHTML=`<div class="card overflow-hidden"><table class="table"><thead><tr><th>N° Commande</th><th>Client</th><th>Total</th><th>Statut</th><th>Date</th><th class="text-right">Action</th></tr></thead><tbody>
       ${orders.length?orders.map(o=>`<tr>
         <td class="font-semibold">#${esc(o.orderNumber||o.id)}</td>
-        <td>${esc(o.fullname||'')}<br><span class="text-xs text-slate-400">${esc(o.phone||'')} · ${esc(o.city||'')}</span></td>
+        <td>${esc(o.fullname||'')}<br><span class="text-xs text-[#A7A9AC]">${esc(o.phone||'')} · ${esc(o.city||'')}</span></td>
         <td class="font-semibold">${money(o.total)}</td>
-        <td><span class="status-chip ${statusColor[o.status]||'bg-slate-100'}">${esc(statusLabel[o.status]||o.status)}</span></td>
-        <td class="text-slate-500">${fmtDate(o.createdAt)}</td>
+        <td><span class="status-chip ${statusColor[o.status]||'bg-[#232F3E]'}">${esc(statusLabel[o.status]||o.status)}</span></td>
+        <td class="text-[#A7A9AC]">${fmtDate(o.createdAt)}</td>
         <td class="text-right"><button onclick="openOrderModal(${o.id})" class="btn btn-outline text-xs"><i class="bi bi-eye"></i> Détails</button></td>
       </tr>`).join(''):'<tr><td colspan="6">'+emptyState('Aucune commande')+'</td></tr>'}
     </tbody></table></div>`;
@@ -906,20 +909,20 @@ async function openOrderModal(id){
     window._shipOrderId = id;
     const o=(await api('/orders/'+id)).data;
     openModal(`
-      <div class="flex items-center justify-between mb-4"><h3 class="text-lg font-bold">Commande #${esc(o.orderNumber||o.id)}</h3><button onclick="closeModal()" class="text-slate-400 hover:text-slate-600"><i class="bi bi-x-lg"></i></button></div>
+      <div class="flex items-center justify-between mb-4"><h3 class="text-lg font-bold">Commande #${esc(o.orderNumber||o.id)}</h3><button onclick="closeModal()" class="text-[#A7A9AC] hover:text-[#A7A9AC]"><i class="bi bi-x-lg"></i></button></div>
       <div class="grid grid-cols-2 gap-3 mb-4 text-sm">
-        <div class="bg-slate-50 p-3 rounded-lg"><p class="text-xs text-slate-400">Client</p><p class="font-semibold">${esc(o.fullname)}</p><p>${esc(o.phone)}</p></div>
-        <div class="bg-slate-50 p-3 rounded-lg"><p class="text-xs text-slate-400">Adresse</p><p>${esc(o.city)}${o.district?', '+esc(o.district):''}</p><p>${esc(o.address||'')}</p></div>
-        <div class="bg-slate-50 p-3 rounded-lg"><p class="text-xs text-slate-400">Paiement</p><p class="font-semibold">${esc(o.paymentMethod||'WHATSAPP')}</p><p class="text-xs mt-1">${o.paymentStatus==='REUSSIE'?'<span class="badge bg-green-50 text-green-600">Payé</span>':o.paymentStatus==='EN_ATTENTE'?'<span class="badge bg-amber-50 text-amber-700">En attente</span>':o.paymentStatus?`<span class="badge bg-slate-100 text-slate-500">${esc(o.paymentStatus)}</span>`:''}</p></div>
-        <div class="bg-slate-50 p-3 rounded-lg"><p class="text-xs text-slate-400">Date</p><p>${fmtDate(o.createdAt)}</p></div>
+        <div class="bg-[#171A1A] p-3 rounded-lg"><p class="text-xs text-[#A7A9AC]">Client</p><p class="font-semibold">${esc(o.fullname)}</p><p>${esc(o.phone)}</p></div>
+        <div class="bg-[#171A1A] p-3 rounded-lg"><p class="text-xs text-[#A7A9AC]">Adresse</p><p>${esc(o.city)}${o.district?', '+esc(o.district):''}</p><p>${esc(o.address||'')}</p></div>
+        <div class="bg-[#171A1A] p-3 rounded-lg"><p class="text-xs text-[#A7A9AC]">Paiement</p><p class="font-semibold">${esc(o.paymentMethod||'WHATSAPP')}</p><p class="text-xs mt-1">${o.paymentStatus==='REUSSIE'?'<span class="badge bg-[rgba(6,125,98,0.12)] text-[#067D62]">Payé</span>':o.paymentStatus==='EN_ATTENTE'?'<span class="badge bg-[rgba(240,179,35,0.12)] text-[#F0B323]">En attente</span>':o.paymentStatus?`<span class="badge bg-[#232F3E] text-[#A7A9AC]">${esc(o.paymentStatus)}</span>`:''}</p></div>
+        <div class="bg-[#171A1A] p-3 rounded-lg"><p class="text-xs text-[#A7A9AC]">Date</p><p>${fmtDate(o.createdAt)}</p></div>
       </div>
       <table class="table mb-3"><thead><tr><th>Produit</th><th>Qté</th><th>Prix</th></tr></thead><tbody>
-        ${(o.items||[]).map(i=>`<tr><td>Produit #${i.productId}</td><td>${i.qty}</td><td>${money(i.unitPrice*i.qty)}</td></tr>`).join('')||'<tr><td colspan="3" class="text-slate-400 text-center">Aucun détail</td></tr>'}
+        ${(o.items||[]).map(i=>`<tr><td>Produit #${i.productId}</td><td>${i.qty}</td><td>${money(i.unitPrice*i.qty)}</td></tr>`).join('')||'<tr><td colspan="3" class="text-[#A7A9AC] text-center">Aucun détail</td></tr>'}
       </tbody></table>
-      <div id="supShipBox" class="mb-3"><p class="text-xs text-slate-400">Chargement livraison…</p></div>
+      <div id="supShipBox" class="mb-3"><p class="text-xs text-[#A7A9AC]">Chargement livraison…</p></div>
       <div class="flex items-center justify-between border-t pt-3">
-        <div><p class="text-sm text-slate-500">Total</p><p class="text-xl font-bold text-primary-700">${money(o.total)}</p></div>
-        <div><label class="text-xs font-semibold text-slate-600 mr-2">Statut</label>
+        <div><p class="text-sm text-[#A7A9AC]">Total</p><p class="text-xl font-bold text-[#FF9900]">${money(o.total)}</p></div>
+        <div><label class="text-xs font-semibold text-[#A7A9AC] mr-2">Statut</label>
           <select id="orderStatus" class="select inline w-48">${STATUSES.map(s=>`<option value="${s}" ${o.status===s?'selected':''}>${statusLabel[s]}</option>`).join('')}</select>
           <button onclick="updateOrderStatus(${o.id})" class="btn btn-primary ml-2"><i class="bi bi-check2"></i></button>
         </div>
@@ -936,19 +939,19 @@ async function renderSupplierShipment(orderId) {
     const d = await api('/shipments/order/' + orderId);
     const s = d && d.shipment;
     if (!s) {
-      box.innerHTML = `<button onclick="createShipment(${orderId})" class="w-full py-2.5 border border-dashed border-primary-300 text-primary-700 text-sm font-bold rounded-xl hover:bg-primary-50 transition"><i class="bi bi-truck"></i> Créer l'expédition</button>`;
+      box.innerHTML = `<button onclick="createShipment(${orderId})" class="w-full py-2.5 border border-dashed border-primary-300 text-[#FF9900] text-sm font-bold rounded-xl hover:bg-primary-50 transition"><i class="bi bi-truck"></i> Créer l'expédition</button>`;
       return;
     }
     const nexts = SHIP_NEXT[s.status] || [];
-    box.innerHTML = `<div class="rounded-xl border border-slate-100 bg-slate-50/70 p-3 text-sm space-y-2">
+    box.innerHTML = `<div class="rounded-xl border border-[#303437] bg-[#171A1A]/70 p-3 text-sm space-y-2">
       <div class="flex items-center justify-between gap-2">
-        <p class="font-mono font-bold text-primary-700">${esc(s.trackingNumber)}</p>
-        <span class="badge ${s.status==='DELIVERED'?'bg-green-50 text-green-600':['FAILED','RETURNED','CANCELLED'].includes(s.status)?'bg-red-50 text-red-600':'bg-primary-50 text-primary-700'}">${SHIP_LABEL[s.status]||s.status}</span>
+        <p class="font-mono font-bold text-[#FF9900]">${esc(s.trackingNumber)}</p>
+        <span class="badge ${s.status==='DELIVERED'?'bg-[rgba(6,125,98,0.12)] text-[#067D62]':['FAILED','RETURNED','CANCELLED'].includes(s.status)?'bg-[rgba(196,0,0,0.12)] text-[#C40000]':'bg-primary-50 text-[#FF9900]'}">${SHIP_LABEL[s.status]||s.status}</span>
       </div>
-      ${nexts.length ? `<div class="flex flex-wrap gap-2">${nexts.map(n => `<button onclick="advanceShipment(${s.id},'${n}')" class="px-3 py-1.5 bg-dark-900 hover:bg-slate-700 text-white text-xs font-bold rounded-lg transition">→ ${SHIP_LABEL[n]}</button>`).join('')}
-      ${['IN_TRANSIT','OUT_FOR_DELIVERY','PICKED_UP'].includes(s.status) ? `<button onclick="failShipment(${s.id})" class="px-3 py-1.5 border border-red-200 text-red-600 text-xs font-bold rounded-lg hover:bg-red-50 transition">Échec</button>` : ''}</div>` : ''}
+      ${nexts.length ? `<div class="flex flex-wrap gap-2">${nexts.map(n => `<button onclick="advanceShipment(${s.id},'${n}')" class="px-3 py-1.5 bg-[#FF9900] hover:bg-[#E88B00] text-[#111111] text-xs font-bold rounded-lg transition">→ ${SHIP_LABEL[n]}</button>`).join('')}
+      ${['IN_TRANSIT','OUT_FOR_DELIVERY','PICKED_UP'].includes(s.status) ? `<button onclick="failShipment(${s.id})" class="px-3 py-1.5 border border-[rgba(196,0,0,0.35)] text-[#C40000] text-xs font-bold rounded-lg hover:bg-[rgba(196,0,0,0.12)] transition">Échec</button>` : ''}</div>` : ''}
     </div>`;
-  } catch (e) { box.innerHTML = '<p class="text-xs text-red-500">Livraison illisible.</p>'; }
+  } catch (e) { box.innerHTML = '<p class="text-xs text-[#C40000]">Livraison illisible.</p>'; }
 }
 async function createShipment(orderId) {
   try { await api('/shipments', { method: 'POST', body: JSON.stringify({ orderId }) }); toast('Expédition créée'); openOrderModal(orderId); } catch (e) { toast(e.message, 'error'); }
@@ -974,31 +977,31 @@ async function renderRevenus(){
     const r=(await api('/revenue')).data;
     content.innerHTML=`
       <div class="grid-cards mb-6">
-        <div class="card p-5"><p class="text-xs text-slate-400">CA aujourd'hui</p><p class="text-xl font-bold mt-1">${money(r.grossToday)}</p></div>
-        <div class="card p-5"><p class="text-xs text-slate-400">CA cette semaine</p><p class="text-xl font-bold mt-1">${money(r.grossWeek)}</p></div>
-        <div class="card p-5"><p class="text-xs text-slate-400">CA ce mois</p><p class="text-xl font-bold mt-1">${money(r.grossMonth)}</p></div>
-        <div class="card p-5"><p class="text-xs text-slate-400">CA annuel</p><p class="text-xl font-bold mt-1">${money(r.grossYear)}</p></div>
+        <div class="card p-5"><p class="text-xs text-[#A7A9AC]">CA aujourd'hui</p><p class="text-xl font-bold mt-1">${money(r.grossToday)}</p></div>
+        <div class="card p-5"><p class="text-xs text-[#A7A9AC]">CA cette semaine</p><p class="text-xl font-bold mt-1">${money(r.grossWeek)}</p></div>
+        <div class="card p-5"><p class="text-xs text-[#A7A9AC]">CA ce mois</p><p class="text-xl font-bold mt-1">${money(r.grossMonth)}</p></div>
+        <div class="card p-5"><p class="text-xs text-[#A7A9AC]">CA annuel</p><p class="text-xl font-bold mt-1">${money(r.grossYear)}</p></div>
       </div>
       <div class="card p-6 mb-6">
-        <h3 class="font-bold text-slate-800 mb-3">Détail du CA</h3>
+        <h3 class="font-bold text-[#F2F2F2] mb-3">Détail du CA</h3>
         <div class="space-y-3">
-          <div class="flex justify-between border-b pb-2"><span class="text-slate-500">CA brut (total)</span><span class="font-semibold">${money(r.grossTotal)}</span></div>
-          <div class="flex justify-between border-b pb-2"><span class="text-slate-500">Commission MBOA STYLE (${r.commissionRate}%)</span><span class="text-red-600 font-semibold">- ${money(r.commissionTotal)}</span></div>
-          <div class="flex justify-between border-b pb-2"><span class="text-slate-500">Autres frais</span><span class="text-red-600 font-semibold">- ${money(r.otherFees)}</span></div>
-          <div class="flex justify-between pt-2"><span class="font-bold">Revenu net total</span><span class="font-bold text-primary-700 text-lg">${money(r.netTotal)}</span></div>
+          <div class="flex justify-between border-b pb-2"><span class="text-[#A7A9AC]">CA brut (total)</span><span class="font-semibold">${money(r.grossTotal)}</span></div>
+          <div class="flex justify-between border-b pb-2"><span class="text-[#A7A9AC]">Commission MBOA STYLE (${r.commissionRate}%)</span><span class="text-[#C40000] font-semibold">- ${money(r.commissionTotal)}</span></div>
+          <div class="flex justify-between border-b pb-2"><span class="text-[#A7A9AC]">Autres frais</span><span class="text-[#C40000] font-semibold">- ${money(r.otherFees)}</span></div>
+          <div class="flex justify-between pt-2"><span class="font-bold">Revenu net total</span><span class="font-bold text-[#FF9900] text-lg">${money(r.netTotal)}</span></div>
         </div>
-        <p class="text-xs text-slate-400 mt-3"><i class="bi bi-info-circle mr-1"></i>Seules les commandes livrées sont comptabilisées. Les commandes annulées (${money(r.cancelledAmount)}) sont exclues.</p>
+        <p class="text-xs text-[#A7A9AC] mt-3"><i class="bi bi-info-circle mr-1"></i>Seules les commandes livrées sont comptabilisées. Les commandes annulées (${money(r.cancelledAmount)}) sont exclues.</p>
       </div>
       <div class="card p-6 mb-6">
-        <h3 class="font-bold text-slate-800 mb-1">Écritures comptables</h3>
-        <p class="text-xs text-slate-400 mb-3">Chaque vente livrée génère une écriture figée (taux du jour). Les annulations génèrent des contre-passations.</p>
+        <h3 class="font-bold text-[#F2F2F2] mb-1">Écritures comptables</h3>
+        <p class="text-xs text-[#A7A9AC] mb-3">Chaque vente livrée génère une écriture figée (taux du jour). Les annulations génèrent des contre-passations.</p>
         <div id="ledgerTable"><div class="skeleton h-24"></div></div>
       </div>
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div class="card p-5"><h3 class="font-semibold mb-3">Revenu net du mois</h3><canvas id="revMonth"></canvas></div>
       </div>`;
     const stats=(await api('/statistics')).data;
-    new Chart(document.getElementById('revMonth'),{type:'bar',data:{labels:Object.keys(stats.monthly),datasets:[{label:'Revenus (FCFA)',data:Object.values(stats.monthly),backgroundColor:'#087443',borderRadius:6}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});
+    new Chart(document.getElementById('revMonth'),{type:'bar',data:{labels:Object.keys(stats.monthly),datasets:[{label:'Revenus (FCFA)',data:Object.values(stats.monthly),backgroundColor:'#FF9900',borderRadius:6}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});
     renderLedger();
   }catch(e){ content.innerHTML=emptyState('Erreur: '+e.message); }
 }
@@ -1007,10 +1010,10 @@ async function renderLedger(){
   if(!box) return;
   try{
     const list=(await api('/ledger?limit=20')).data||[];
-    if(!list.length){ box.innerHTML='<p class="text-sm text-slate-400">Aucune écriture pour le moment. Les ventes livrées apparaîtront ici.</p>'; return; }
+    if(!list.length){ box.innerHTML='<p class="text-sm text-[#A7A9AC]">Aucune écriture pour le moment. Les ventes livrées apparaîtront ici.</p>'; return; }
     box.innerHTML=`<div class="overflow-x-auto"><table class="table"><thead><tr><th>Référence</th><th>Commande</th><th>Brut</th><th>Commission</th><th>Net</th><th>Statut</th></tr></thead><tbody>`+
-      list.map(e=>`<tr><td class="font-mono text-xs">${esc(e.reference)}</td><td>#${e.orderId}</td><td>${money(e.gross)}</td><td class="text-red-600">- ${money(e.commission + (e.fixedFee||0))}</td><td class="font-semibold ${e.supplierEarnings<0?'text-red-600':'text-primary-700'}">${money(e.supplierEarnings)}</td><td>${e.status==='EARNED'?'<span class="badge bg-green-50 text-green-600">Comptabilisé</span>':'<span class="badge bg-slate-100 text-slate-500">Contre-passé</span>'}</td></tr>`).join('')+`</tbody></table></div>`;
-  }catch(e){ box.innerHTML='<p class="text-sm text-red-500">Chargement impossible.</p>'; }
+      list.map(e=>`<tr><td class="font-mono text-xs">${esc(e.reference)}</td><td>#${e.orderId}</td><td>${money(e.gross)}</td><td class="text-[#C40000]">- ${money(e.commission + (e.fixedFee||0))}</td><td class="font-semibold ${e.supplierEarnings<0?'text-[#C40000]':'text-[#FF9900]'}">${money(e.supplierEarnings)}</td><td>${e.status==='EARNED'?'<span class="badge bg-[rgba(6,125,98,0.12)] text-[#067D62]">Comptabilisé</span>':'<span class="badge bg-[#232F3E] text-[#A7A9AC]">Contre-passé</span>'}</td></tr>`).join('')+`</tbody></table></div>`;
+  }catch(e){ box.innerHTML='<p class="text-sm text-[#C40000]">Chargement impossible.</p>'; }
 }
 
 /* ==================== STATISTIQUES ==================== */
@@ -1021,10 +1024,10 @@ async function renderStatistiques(){
     const s=(await api('/statistics')).data;
     content.innerHTML=`
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <div class="card p-4"><p class="text-xs text-slate-400">Commandes valides</p><p class="text-xl font-bold mt-1">${s.totalOrders}</p></div>
-        <div class="card p-4"><p class="text-xs text-slate-400">Taux d'annulation</p><p class="text-xl font-bold mt-1">${s.cancellationRate}%</p></div>
-        <div class="card p-4"><p class="text-xs text-slate-400">Panier moyen</p><p class="text-xl font-bold mt-1">${money(s.averageBasket)}</p></div>
-        <div class="card p-4"><p class="text-xs text-slate-400">Annulées</p><p class="text-xl font-bold mt-1 text-red-500">${s.cancelledOrders}</p></div>
+        <div class="card p-4"><p class="text-xs text-[#A7A9AC]">Commandes valides</p><p class="text-xl font-bold mt-1">${s.totalOrders}</p></div>
+        <div class="card p-4"><p class="text-xs text-[#A7A9AC]">Taux d'annulation</p><p class="text-xl font-bold mt-1">${s.cancellationRate}%</p></div>
+        <div class="card p-4"><p class="text-xs text-[#A7A9AC]">Panier moyen</p><p class="text-xl font-bold mt-1">${money(s.averageBasket)}</p></div>
+        <div class="card p-4"><p class="text-xs text-[#A7A9AC]">Annulées</p><p class="text-xl font-bold mt-1 text-[#C40000]">${s.cancelledOrders}</p></div>
       </div>
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <div class="card p-5"><h3 class="font-semibold mb-3">Ventes des 7 derniers jours</h3><canvas id="stDaily"></canvas></div>
@@ -1034,10 +1037,10 @@ async function renderStatistiques(){
         <div class="card p-5"><h3 class="font-semibold mb-3">Produits les plus vendus</h3><div id="stTop"></div></div>
         <div class="card p-5"><h3 class="font-semibold mb-3">Produits les moins vendus</h3><div id="stLow"></div></div>
       </div>`;
-    new Chart(document.getElementById('stDaily'),{type:'line',data:{labels:s.dailyLabels,datasets:[{label:'CA',data:s.dailyValues,borderColor:'#087443',backgroundColor:'rgba(8,116,67,.1)',fill:true,tension:.3}]},options:{responsive:true,plugins:{legend:{display:false}}}});
+    new Chart(document.getElementById('stDaily'),{type:'line',data:{labels:s.dailyLabels,datasets:[{label:'CA',data:s.dailyValues,borderColor:'#FF9900',backgroundColor:'rgba(255,153,0,.1)',fill:true,tension:.3}]},options:{responsive:true,plugins:{legend:{display:false}}}});
     new Chart(document.getElementById('stMonthly'),{type:'bar',data:{labels:Object.keys(s.monthly),datasets:[{label:'CA',data:Object.values(s.monthly),backgroundColor:'#6366f1',borderRadius:6}]},options:{responsive:true,plugins:{legend:{display:false}}}});
-    document.getElementById('stTop').innerHTML = s.topProducts.length ? s.topProducts.map((p,i)=>`<div class="flex items-center justify-between py-2 border-b"><span class="font-medium">${i+1}. ${esc(p.name)}</span><span class="font-bold text-primary-700">${p.qty} u. · ${money(p.revenue)}</span></div>`).join('') : emptyState('Aucune vente');
-    document.getElementById('stLow').innerHTML = s.lowProducts.length ? s.lowProducts.map((p,i)=>`<div class="flex items-center justify-between py-2 border-b"><span class="font-medium">${i+1}. ${esc(p.name)}</span><span class="text-slate-500">${p.qty} u.</span></div>`).join('') : emptyState('Aucune donnée');
+    document.getElementById('stTop').innerHTML = s.topProducts.length ? s.topProducts.map((p,i)=>`<div class="flex items-center justify-between py-2 border-b"><span class="font-medium">${i+1}. ${esc(p.name)}</span><span class="font-bold text-[#FF9900]">${p.qty} u. · ${money(p.revenue)}</span></div>`).join('') : emptyState('Aucune vente');
+    document.getElementById('stLow').innerHTML = s.lowProducts.length ? s.lowProducts.map((p,i)=>`<div class="flex items-center justify-between py-2 border-b"><span class="font-medium">${i+1}. ${esc(p.name)}</span><span class="text-[#A7A9AC]">${p.qty} u.</span></div>`).join('') : emptyState('Aucune donnée');
   }catch(e){ content.innerHTML=emptyState('Erreur: '+e.message); }
 }
 
@@ -1049,13 +1052,13 @@ async function renderPaiements(){
     const p=(await api('/payments')).data;
     content.innerHTML=`
       <div class="grid-cards mb-6">
-        <div class="card p-5"><p class="text-xs text-slate-400">Solde disponible</p><p class="text-2xl font-bold mt-1 text-primary-700">${money(p.available)}</p></div>
-        <div class="card p-5"><p class="text-xs text-slate-400">En attente</p><p class="text-2xl font-bold mt-1 text-amber-600">${money(p.pending)}</p></div>
-        <div class="card p-5"><p class="text-xs text-slate-400">Déjà payé</p><p class="text-2xl font-bold mt-1 text-green-600">${money(p.paid)}</p></div>
-        <div class="card p-5"><p class="text-xs text-slate-400">Solde total</p><p class="text-2xl font-bold mt-1">${money(p.balance)}</p></div>
+        <div class="card p-5"><p class="text-xs text-[#A7A9AC]">Solde disponible</p><p class="text-2xl font-bold mt-1 text-[#FF9900]">${money(p.available)}</p></div>
+        <div class="card p-5"><p class="text-xs text-[#A7A9AC]">En attente</p><p class="text-2xl font-bold mt-1 text-[#F0B323]">${money(p.pending)}</p></div>
+        <div class="card p-5"><p class="text-xs text-[#A7A9AC]">Déjà payé</p><p class="text-2xl font-bold mt-1 text-[#067D62]">${money(p.paid)}</p></div>
+        <div class="card p-5"><p class="text-xs text-[#A7A9AC]">Solde total</p><p class="text-2xl font-bold mt-1">${money(p.balance)}</p></div>
       </div>
       <div class="card p-5 mb-6 flex flex-wrap items-center justify-between gap-3">
-        <div><h3 class="font-bold">Demander un paiement</h3><p class="text-xs text-slate-400">Minimal : <b>${money(1000)}</b> · Disponible : <b>${money(p.available)}</b></p></div>
+        <div><h3 class="font-bold">Demander un paiement</h3><p class="text-xs text-[#A7A9AC]">Minimal : <b>${money(1000)}</b> · Disponible : <b>${money(p.available)}</b></p></div>
         <div class="flex gap-2">
           <input id="payAmount" type="number" min="1000" class="input w-40" placeholder="Montant">
           <select id="payMethod" class="select">
@@ -1074,7 +1077,7 @@ async function renderPaiements(){
       </div>`;
   }catch(e){ content.innerHTML=emptyState('Erreur: '+e.message); }
 }
-function payStatus(s){ const m={PENDING:'bg-amber-100 text-amber-700',PROCESSING:'bg-sky-100 text-sky-700',PAID:'bg-green-100 text-green-700',FAILED:'bg-red-100 text-red-700'}; return '<span class="status-chip '+(m[s]||'')+'">'+(s||'—')+'</span>'; }
+function payStatus(s){ const m={PENDING:'bg-[rgba(240,179,35,0.12)] text-[#F0B323]',PROCESSING:'bg-[rgba(44,110,203,0.12)] text-[#2C6ECB]',PAID:'bg-[rgba(6,125,98,0.12)] text-[#067D62]',FAILED:'bg-[rgba(196,0,0,0.12)] text-[#C40000]'}; return '<span class="status-chip '+(m[s]||'')+'">'+(s||'—')+'</span>'; }
 async function requestPayment(){
   const amount=parseInt(document.getElementById('payAmount').value)||0;
   const method=document.getElementById('payMethod').value;
@@ -1092,8 +1095,8 @@ async function renderMessages(){
       <div id="convosList" class="flex-1 overflow-auto"></div>
     </div>
     <div id="chatPanel" class="flex-1 flex flex-col">
-      <div class="p-3 border-b flex items-center gap-3" id="chatHeader"><p class="text-slate-400 text-sm">Sélectionnez une conversation</p></div>
-      <div id="chatMessages" class="flex-1 overflow-auto p-4 chat-body bg-slate-50"></div>
+      <div class="p-3 border-b flex items-center gap-3" id="chatHeader"><p class="text-[#A7A9AC] text-sm">Sélectionnez une conversation</p></div>
+      <div id="chatMessages" class="flex-1 overflow-auto p-4 chat-body bg-[#171A1A]"></div>
       <div class="p-3 border-t flex gap-2" id="chatInputWrap">
         <textarea id="chatInput" class="input flex-1 h-10" placeholder="Votre message..."></textarea>
         <button class="btn btn-primary" onclick="sendMessage()"><i class="bi bi-send"></i></button>
@@ -1111,12 +1114,12 @@ function filterConvos(q){
   const list=convos.filter(c=>(c.clientName||'').toLowerCase().includes((q||'').toLowerCase()));
   document.getElementById('convosList').innerHTML = list.length?list.map(c=>`
     <div class="convo-list-item ${currentConvo&&currentConvo.id===c.id?'active':''}" onclick="openConvo(${c.id})">
-      <div class="w-10 h-10 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center shrink-0"><i class="bi bi-person-fill"></i></div>
+      <div class="w-10 h-10 rounded-full bg-primary-100 text-[#FF9900] flex items-center justify-center shrink-0"><i class="bi bi-person-fill"></i></div>
       <div class="min-w-0 flex-1">
-        <div class="flex justify-between"><p class="font-semibold text-sm truncate">${esc(c.clientName||'Client')}</p>${c.unreadCount>0?'<span class="badge bg-red-500 text-white">'+c.unreadCount+'</span>':''}</div>
-        <p class="text-xs text-slate-400 truncate">${esc(c.lastMessage||'')}</p>
+        <div class="flex justify-between"><p class="font-semibold text-sm truncate">${esc(c.clientName||'Client')}</p>${c.unreadCount>0?'<span class="badge bg-[rgba(196,0,0,0.12)]0 text-white">'+c.unreadCount+'</span>':''}</div>
+        <p class="text-xs text-[#A7A9AC] truncate">${esc(c.lastMessage||'')}</p>
       </div>
-    </div>`).join(''):'<p class="text-center text-slate-400 text-sm p-4">Aucune conversation</p>';
+    </div>`).join(''):'<p class="text-center text-[#A7A9AC] text-sm p-4">Aucune conversation</p>';
 }
 function escMsg(m){ return esc(m).replace(/\n/g,'<br>'); }
 async function openConvo(id){
@@ -1124,7 +1127,7 @@ async function openConvo(id){
     const d=(await api('/conversations/'+id)).data;
     currentConvo=d.conversation;
     await api('/conversations/'+id+'/read',{method:'PATCH'});
-    document.getElementById('chatHeader').innerHTML=`<div class="w-9 h-9 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center"><i class="bi bi-person-fill"></i></div><div><p class="font-semibold">${esc(currentConvo.clientName||'Client')}</p><p class="text-xs text-slate-400">${esc(currentConvo.clientPhone||'')}${currentConvo.orderId?' · Commande #'+currentConvo.orderId:''}</p></div>`;
+    document.getElementById('chatHeader').innerHTML=`<div class="w-9 h-9 rounded-full bg-primary-100 text-[#FF9900] flex items-center justify-center"><i class="bi bi-person-fill"></i></div><div><p class="font-semibold">${esc(currentConvo.clientName||'Client')}</p><p class="text-xs text-[#A7A9AC]">${esc(currentConvo.clientPhone||'')}${currentConvo.orderId?' · Commande #'+currentConvo.orderId:''}</p></div>`;
     document.getElementById('chatInputWrap').style.opacity='1';
     renderMessagesList(d.messages);
     renderSupplierOffers(d.offers||[], d.conversation);
@@ -1134,7 +1137,7 @@ async function openConvo(id){
   }catch(e){ toast(e.message,'error'); }
 }
 function offerBadgeSup(s){
-  const m={PENDING:['bg-amber-50 text-amber-700','En attente'],ACCEPTED:['bg-green-50 text-green-600','Acceptée'],REJECTED:['bg-slate-100 text-slate-500','Refusée'],COUNTERED:['bg-slate-100 text-slate-500','Contre-offrée'],CONSUMED:['bg-primary-50 text-primary-700','Commandée'],CANCELLED:['bg-slate-100 text-slate-400','Annulée']};
+  const m={PENDING:['bg-[rgba(240,179,35,0.12)] text-[#F0B323]','En attente'],ACCEPTED:['bg-[rgba(6,125,98,0.12)] text-[#067D62]','Acceptée'],REJECTED:['bg-[rgba(196,0,0,0.12)] text-[#C40000]','Refusée'],COUNTERED:['bg-[rgba(240,179,35,0.12)] text-[#F0B323]','Contre-offrée'],CONSUMED:['bg-primary-50 text-[#FF9900]','Commandée'],CANCELLED:['bg-[#232F3E] text-[#A7A9AC]','Annulée']};
   const v=m[s]||m.PENDING; return `<span class="badge ${v[0]}">${v[1]}</span>`;
 }
 function renderSupplierOffers(offers, conv){
@@ -1143,19 +1146,19 @@ function renderSupplierOffers(offers, conv){
     const panel=document.getElementById('chatPanel');
     box=document.createElement('div');
     box.id='supplierOffers';
-    box.className='px-4 py-2 space-y-2 max-h-64 overflow-y-auto border-t bg-amber-50/40';
+    box.className='px-4 py-2 space-y-2 max-h-64 overflow-y-auto border-t bg-[rgba(240,179,35,0.05)]';
     panel.insertBefore(box, document.getElementById('chatInputWrap'));
   }
   if(!offers.length){ box.innerHTML=''; box.style.display='none'; return; }
   box.style.display='';
-  box.innerHTML='<p class="text-[11px] font-bold uppercase tracking-wider text-amber-700">Négociations</p>'+offers.map(o=>{
+  box.innerHTML='<p class="text-[11px] font-bold uppercase tracking-wider text-[#F0B323]">Négociations</p>'+offers.map(o=>{
     const mine=o.createdBy==='SUPPLIER';
     const pending=o.status==='PENDING'&&!mine;
-    return `<div class="bg-white border ${o.status==='ACCEPTED'?'border-green-300':'border-amber-200'} rounded-xl p-3">
+    return `<div class="bg-[#171A1A] border ${o.status==='ACCEPTED'?'border-[rgba(6,125,98,0.35)]':'border-[rgba(240,179,35,0.35)]'} rounded-xl p-3">
       <div class="flex items-center justify-between gap-2 mb-1">
-        <p class="text-[11px] font-bold uppercase tracking-wider text-amber-700">Offre ${mine?'vendeur':'client'}</p>${offerBadgeSup(o.status)}
+        <p class="text-[11px] font-bold uppercase tracking-wider text-[#F0B323]">Offre ${mine?'vendeur':'client'}</p>${offerBadgeSup(o.status)}
       </div>
-      <p class="font-extrabold tabular-nums">${fmt(o.unitPrice)} <span class="text-xs font-medium text-slate-500">/ unité × ${o.qty} = ${fmt(o.unitPrice*o.qty)}</span></p>
+      <p class="font-extrabold tabular-nums">${fmt(o.unitPrice)} <span class="text-xs font-medium text-[#A7A9AC]">/ unité × ${o.qty} = ${fmt(o.unitPrice*o.qty)}</span></p>
       <div class="flex flex-wrap gap-2 mt-2">
         ${pending?`<button class="btn btn-primary text-xs !py-1.5" onclick="supplierOfferDecide(${o.id},true)">Accepter</button>
         <button class="btn btn-outline text-xs !py-1.5" onclick="supplierOfferDecide(${o.id},false)">Refuser</button>
@@ -1177,7 +1180,7 @@ async function supplierCounter(id){
   }catch(e){ toast(e.message,'error'); }
 }
 function renderMessagesList(msgs){
-  document.getElementById('chatMessages').innerHTML=(msgs||[]).map(m=>`<div class="msg ${m.sender==='SUPPLIER'?'mine':'theirs'}"><span class="block text-[10px] opacity-70 mb-1">${m.sender==='SUPPLIER'?'Vous':''} ${fmtTime(m.createdAt)}</span>${escMsg(m.body)}</div>`).join('')||'<p class="text-slate-400 text-sm text-center self-center">Aucun message</p>';
+  document.getElementById('chatMessages').innerHTML=(msgs||[]).map(m=>`<div class="msg ${m.sender==='SUPPLIER'?'mine':'theirs'}"><span class="block text-[10px] opacity-70 mb-1">${m.sender==='SUPPLIER'?'Vous':''} ${fmtTime(m.createdAt)}</span>${escMsg(m.body)}</div>`).join('')||'<p class="text-[#A7A9AC] text-sm text-center self-center">Aucun message</p>';
   const box=document.getElementById('chatMessages'); box.scrollTop=box.scrollHeight;
 }
 async function sendMessage(){
@@ -1197,17 +1200,17 @@ async function renderNegociations(){
       content.innerHTML=`<h3 class="font-bold mb-4">Négociations en attente</h3>`+emptyState('Aucune offre en attente. Les propositions de vos clients apparaîtront ici.');
       return;
     }
-    content.innerHTML=`<h3 class="font-bold mb-1">Négociations en attente <span class="badge bg-amber-500 text-white ml-1">${list.length}</span></h3>
-    <p class="text-sm text-slate-500 mb-4">Répondez depuis la conversation pour garder tout l'historique.</p>
+    content.innerHTML=`<h3 class="font-bold mb-1">Négociations en attente <span class="badge bg-[rgba(240,179,35,0.12)]0 text-white ml-1">${list.length}</span></h3>
+    <p class="text-sm text-[#A7A9AC] mb-4">Répondez depuis la conversation pour garder tout l'historique.</p>
     <div class="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">`+list.map(o=>`
       <div class="card p-4">
         <div class="flex items-center justify-between gap-2 mb-2">
-          <p class="text-[11px] font-bold uppercase tracking-wider text-amber-700">Offre client</p>
-          <span class="badge bg-amber-50 text-amber-700">En attente</span>
+          <p class="text-[11px] font-bold uppercase tracking-wider text-[#F0B323]">Offre client</p>
+          <span class="badge bg-[rgba(240,179,35,0.12)] text-[#F0B323]">En attente</span>
         </div>
         <p class="font-bold text-sm truncate">${esc(o.productName||('Produit #'+o.productId))}</p>
-        <p class="font-extrabold text-lg tabular-nums my-1">${fmt(o.unitPrice)} <span class="text-xs font-medium text-slate-500">/ unité × ${o.qty} = ${fmt(o.unitPrice*o.qty)}</span></p>
-        <p class="text-xs text-slate-400 mb-3">Catalogue : ${fmt(o.catalogPrice)} · ${fmtDate(o.createdAt)}</p>
+        <p class="font-extrabold text-lg tabular-nums my-1">${fmt(o.unitPrice)} <span class="text-xs font-medium text-[#A7A9AC]">/ unité × ${o.qty} = ${fmt(o.unitPrice*o.qty)}</span></p>
+        <p class="text-xs text-[#A7A9AC] mb-3">Catalogue : ${fmt(o.catalogPrice)} · ${fmtDate(o.createdAt)}</p>
         <div class="flex flex-wrap gap-2">
           <button class="btn btn-primary text-xs !py-2" onclick="negoDecide(${o.id},${o.conversationId},true)">Accepter</button>
           <button class="btn btn-outline text-xs !py-2" onclick="negoDecide(${o.id},${o.conversationId},false)">Refuser</button>
@@ -1227,18 +1230,18 @@ async function renderNotifications(){
   content.innerHTML='<div class="skeleton h-40"></div>';
   try{
     const n=(await api('/notifications')).data;
-    content.innerHTML=`<div class="flex items-center justify-between mb-4"><h3 class="font-bold">Notifications <span class="badge bg-primary-600 text-white ml-1">${n.unread} non lues</span></h3><button class="btn btn-outline text-xs" onclick="markAllNotifs()"><i class="bi bi-check2-all"></i> Tout marquer lu</button></div>
+    content.innerHTML=`<div class="flex items-center justify-between mb-4"><h3 class="font-bold">Notifications <span class="badge bg-primary-600 text-[#111111] ml-1">${n.unread} non lues</span></h3><button class="btn btn-outline text-xs" onclick="markAllNotifs()"><i class="bi bi-check2-all"></i> Tout marquer lu</button></div>
     <div class="space-y-3" role="list" aria-label="Notifications">
       ${(n.list||[]).map(x=>`<div role="listitem" class="card p-4 flex items-start gap-3 ${x.read?'':'border-l-4 border-primary-500'}">
         <div class="w-9 h-9 rounded-full ${notifIcon(x.type)} flex items-center justify-center shrink-0" aria-hidden="true"><i class="bi ${notifIco(x.type)}"></i></div>
-        <div class="flex-1"><p class="font-semibold text-sm">${esc(x.title)}</p><p class="text-sm text-slate-500">${esc(x.message)}</p><p class="text-xs text-slate-400 mt-1">${fmtDate(x.createdAt)}${x.eventCode?' · '+esc(x.eventCode):''}</p></div>
-        ${x.read?'':'<button class="text-xs text-primary-600 hover:underline" onclick="readNotif(${x.id})">Marquer lu</button>'}
+        <div class="flex-1"><p class="font-semibold text-sm">${esc(x.title)}</p><p class="text-sm text-[#A7A9AC]">${esc(x.message)}</p><p class="text-xs text-[#A7A9AC] mt-1">${fmtDate(x.createdAt)}${x.eventCode?' · '+esc(x.eventCode):''}</p></div>
+        ${x.read?'':'<button class="text-xs text-[#FF9900] hover:underline" onclick="readNotif(${x.id})">Marquer lu</button>'}
       </div>`).join('')||emptyState('Aucune notification')}
     </div>`;
   }catch(e){ content.innerHTML=emptyState('Erreur: '+e.message); }
 }
 function notifIco(t){ const m={ORDER:'bi-cart-check',PAYMENT:'bi-credit-card',DELIVERY:'bi-truck',MESSAGE:'bi-chat-dots',NEGOTIATION:'bi-arrow-left-right',PRODUCT:'bi-box-seam',STOCK:'bi-box-seam',SUPPLIER:'bi-shop',SECURITY:'bi-shield-lock',SYSTEM:'bi-bell'}; return m[t]||'bi-bell'; }
-function notifIcon(t){ const m={ORDER:'bg-primary-50 text-primary-600',PAYMENT:'bg-green-50 text-green-600',DELIVERY:'bg-cyan-50 text-cyan-700',MESSAGE:'bg-indigo-50 text-indigo-600',NEGOTIATION:'bg-fuchsia-50 text-fuchsia-600',PRODUCT:'bg-amber-50 text-amber-600',STOCK:'bg-amber-50 text-amber-600',SUPPLIER:'bg-sky-50 text-sky-600',SECURITY:'bg-red-50 text-red-600',SYSTEM:'bg-slate-100 text-slate-500'}; return m[t]||'bg-slate-100 text-slate-500'; }
+function notifIcon(t){ const m={ORDER:'bg-primary-50 text-[#FF9900]',PAYMENT:'bg-[rgba(6,125,98,0.12)] text-[#067D62]',DELIVERY:'bg-[rgba(44,110,203,0.12)] text-[#2C6ECB]',MESSAGE:'bg-[rgba(44,110,203,0.12)] text-[#2C6ECB]',NEGOTIATION:'bg-[rgba(44,110,203,0.12)] text-[#2C6ECB]',PRODUCT:'bg-[rgba(240,179,35,0.12)] text-[#F0B323]',STOCK:'bg-[rgba(240,179,35,0.12)] text-[#F0B323]',SUPPLIER:'bg-[rgba(44,110,203,0.12)] text-[#2C6ECB]',SECURITY:'bg-[rgba(196,0,0,0.12)] text-[#C40000]',SYSTEM:'bg-[#232F3E] text-[#A7A9AC]'}; return m[t]||'bg-[#232F3E] text-[#A7A9AC]'; }
 async function readNotif(id){ try{ await api('/notifications/'+id+'/read',{method:'PATCH'}); renderNotifications(); refreshBadges(); }catch(e){} }
 async function markAllNotifs(){ try{ await api('/notifications/read-all',{method:'POST'}); renderNotifications(); refreshBadges(); }catch(e){} }
 
@@ -1252,29 +1255,29 @@ async function renderProfil(){
       <div class="max-w-3xl space-y-6">
         <div class="card p-6">
           <div class="flex items-center gap-4 mb-6">
-            <div class="w-20 h-20 rounded-2xl bg-primary-50 flex items-center justify-center overflow-hidden">${s.logo?'<img src="'+s.logo+'" class="w-full h-full object-cover" onerror="this.style.display=\'none\'">':'<i class="bi bi-shop text-3xl text-primary-600"></i>'}</div>
-            <div class="flex-1"><h3 class="font-bold text-lg">${esc(s.name||'')}</h3><p class="text-sm text-slate-500">${esc(s.email||'')}</p><p class="text-sm text-slate-400">Commission : <b>${s.commissionRate||0}%</b></p></div>
+            <div class="w-20 h-20 rounded-2xl bg-primary-50 flex items-center justify-center overflow-hidden">${s.logo?'<img src="'+s.logo+'" class="w-full h-full object-cover" onerror="this.style.display=\'none\'">':'<i class="bi bi-shop text-3xl text-[#FF9900]"></i>'}</div>
+            <div class="flex-1"><h3 class="font-bold text-lg">${esc(s.name||'')}</h3><p class="text-sm text-[#A7A9AC]">${esc(s.email||'')}</p><p class="text-sm text-[#A7A9AC]">Commission : <b>${s.commissionRate||0}%</b></p></div>
             <button class="btn btn-outline text-xs" onclick="document.getElementById('logoInput').click()"><i class="bi bi-image"></i> Changer le logo</button>
             <input type="file" id="logoInput" accept="image/*" class="hidden" onchange="uploadLogo(this)">
           </div>
           <form onsubmit="saveProfile(event)" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div><label class="text-xs font-semibold text-slate-600">Nom de la boutique</label><input id="pf_name" class="input" value="${esc(s.name||'')}" required></div>
-            <div><label class="text-xs font-semibold text-slate-600">Nom du responsable</label><input id="pf_contact" class="input" value="${esc(s.contactName||'')}"></div>
-            <div><label class="text-xs font-semibold text-slate-600">Email</label><input id="pf_email" type="email" class="input" value="${esc(s.email||'')}"></div>
-            <div><label class="text-xs font-semibold text-slate-600">Téléphone</label><input id="pf_phone" class="input" value="${esc(s.phone||'')}"></div>
-            <div><label class="text-xs font-semibold text-slate-600">WhatsApp</label><input id="pf_whatsapp" class="input" value="${esc(s.whatsapp||'')}"></div>
-            <div><label class="text-xs font-semibold text-slate-600">Ville</label><input id="pf_city" class="input" value="${esc(s.city||'')}"></div>
-            <div class="sm:col-span-2"><label class="text-xs font-semibold text-slate-600">Adresse</label><input id="pf_address" class="input" value="${esc(s.address||'')}"></div>
-            <div class="sm:col-span-2"><label class="text-xs font-semibold text-slate-600">Description</label><textarea id="pf_desc" class="input h-20">${esc(s.description||'')}</textarea></div>
+            <div><label class="text-xs font-semibold text-[#A7A9AC]">Nom de la boutique</label><input id="pf_name" class="input" value="${esc(s.name||'')}" required></div>
+            <div><label class="text-xs font-semibold text-[#A7A9AC]">Nom du responsable</label><input id="pf_contact" class="input" value="${esc(s.contactName||'')}"></div>
+            <div><label class="text-xs font-semibold text-[#A7A9AC]">Email</label><input id="pf_email" type="email" class="input" value="${esc(s.email||'')}"></div>
+            <div><label class="text-xs font-semibold text-[#A7A9AC]">Téléphone</label><input id="pf_phone" class="input" value="${esc(s.phone||'')}"></div>
+            <div><label class="text-xs font-semibold text-[#A7A9AC]">WhatsApp</label><input id="pf_whatsapp" class="input" value="${esc(s.whatsapp||'')}"></div>
+            <div><label class="text-xs font-semibold text-[#A7A9AC]">Ville</label><input id="pf_city" class="input" value="${esc(s.city||'')}"></div>
+            <div class="sm:col-span-2"><label class="text-xs font-semibold text-[#A7A9AC]">Adresse</label><input id="pf_address" class="input" value="${esc(s.address||'')}"></div>
+            <div class="sm:col-span-2"><label class="text-xs font-semibold text-[#A7A9AC]">Description</label><textarea id="pf_desc" class="input h-20">${esc(s.description||'')}</textarea></div>
             <div class="sm:col-span-2"><button class="btn btn-primary w-full justify-center"><i class="bi bi-check2"></i> Enregistrer les modifications</button></div>
           </form>
         </div>
         <div class="card p-6">
           <h3 class="font-bold mb-4">Changer le mot de passe</h3>
           <form onsubmit="changePass(event)" class="grid grid-cols-1 gap-3">
-            <div><label class="text-xs font-semibold text-slate-600">Mot de passe actuel</label><input id="cp_current" type="password" class="input" required></div>
-            <div><label class="text-xs font-semibold text-slate-600">Nouveau mot de passe</label><input id="cp_new" type="password" class="input" required></div>
-            <div><label class="text-xs font-semibold text-slate-600">Confirmer</label><input id="cp_confirm" type="password" class="input" required></div>
+            <div><label class="text-xs font-semibold text-[#A7A9AC]">Mot de passe actuel</label><input id="cp_current" type="password" class="input" required></div>
+            <div><label class="text-xs font-semibold text-[#A7A9AC]">Nouveau mot de passe</label><input id="cp_new" type="password" class="input" required></div>
+            <div><label class="text-xs font-semibold text-[#A7A9AC]">Confirmer</label><input id="cp_confirm" type="password" class="input" required></div>
             <div><button class="btn btn-outline w-full justify-center">Modifier le mot de passe</button></div>
           </form>
         </div>
