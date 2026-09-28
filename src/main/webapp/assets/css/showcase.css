@@ -1,15 +1,16 @@
 /* =========================================================
    MBOA STYLE — Galerie showcase (panneau animation produits)
    Utilisée par : auth.html, fournisseur.html, dashboard.html
-   Identité NOIR / BLANC / ROUGE. Images locales réelles
+   Identité VERT CITRON + BLANC. Images locales réelles
    (assets/img/showcase). Aucune logique métier ici.
    ========================================================= */
 .ms-showcase {
   position: relative;
   overflow: hidden;
   background:
-    radial-gradient(circle at 80% 18%, rgba(196, 0, 0, 0.16), transparent 45%),
-    linear-gradient(135deg, #0A0A0A, #151515);
+    radial-gradient(circle at 80% 18%, rgba(183, 240, 0, 0.22), transparent 45%),
+    radial-gradient(circle at 15% 85%, rgba(183, 240, 0, 0.12), transparent 50%),
+    linear-gradient(135deg, #0B2410, #123B16);
   display: flex;
   flex-direction: column;
   min-height: 100%;
@@ -23,7 +24,7 @@
   font-size: 15px;
   letter-spacing: 0.12em;
 }
-.ms-showcase-brand span { color: #C40000; }
+.ms-showcase-brand span { color: #B7F000; }
 .ms-showcase-stage {
   position: relative;
   z-index: 2;
@@ -39,25 +40,26 @@
   background: #FFFFFF;
   border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 25px 70px rgba(11, 36, 16, 0.45);
 }
 .ms-showcase-peek {
   position: absolute;
   width: 46%;
   aspect-ratio: 1 / 1;
   opacity: 0.35;
-  filter: blur(1px) brightness(0.85);
+  filter: blur(1px) brightness(0.95);
   transform: translateX(26%) scale(0.86);
   transition: opacity 900ms ease, transform 900ms ease;
   pointer-events: none;
 }
-.ms-showcase-peek img { width: 100%; height: 100%; object-fit: contain; background: #F5F5F5; display: block; }
+.ms-showcase-peek img { width: 100%; height: 100%; object-fit: contain; background: #F7FAF5; display: block; }
 .ms-showcase-main {
   position: relative;
   width: 70%;
   max-width: 70%;
   max-height: 75%;
   aspect-ratio: 1 / 1;
+  border: 1px solid #DDE6DC;
 }
 .ms-showcase-main img {
   position: absolute;
@@ -97,9 +99,9 @@
   justify-content: center;
   transition: background 200ms ease, border-color 200ms ease, transform 150ms ease;
 }
-.ms-showcase-arrow:hover { background: #C40000; border-color: #C40000; }
+.ms-showcase-arrow:hover { background: #B7F000; border-color: #B7F000; color: #0B2410; }
 .ms-showcase-arrow:active { transform: scale(0.94); }
-.ms-showcase-arrow:focus-visible { outline: 2px solid #E00000; outline-offset: 2px; }
+.ms-showcase-arrow:focus-visible { outline: 2px solid #C8FF1A; outline-offset: 2px; }
 .ms-showcase-dots { display: flex; align-items: center; gap: 8px; }
 .ms-showcase-dots button {
   width: 8px;
@@ -111,8 +113,8 @@
   cursor: pointer;
   transition: background 200ms ease, transform 200ms ease;
 }
-.ms-showcase-dots button.is-active { background: #C40000; transform: scale(1.25); }
-.ms-showcase-dots button:focus-visible { outline: 2px solid #E00000; outline-offset: 2px; }
+.ms-showcase-dots button.is-active { background: #B7F000; transform: scale(1.25); }
+.ms-showcase-dots button:focus-visible { outline: 2px solid #C8FF1A; outline-offset: 2px; }
 
 @media (max-width: 899px) {
   .ms-showcase-brand { padding: 18px 20px 0; font-size: 13px; }

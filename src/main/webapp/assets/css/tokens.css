@@ -1,120 +1,147 @@
 /* =========================================================
    MBOA STYLE — Design tokens officiels
-   Direction artistique : NOIR / BLANC / ROUGE (fond #0A0A0A,
-   rouge marque #C40000, 60/30/10, identité MBOA STYLE).
-   Source unique de vérité visuelle. Préfixe ms-*.
-   Adapté à l'architecture réelle (tokens + Tailwind),
-   sans système parallèle.
+   Identité VERT CITRON + BLANC (65/25/10).
+   Signature : #B7F000. Source unique de vérité visuelle.
+   Préfixes : --mboa-* (canonique) + --ms-* (compat).
    ========================================================= */
 :root {
-  /* ---------- PALETTE NOIR / BLANC / ROUGE (§2-10) ---------- */
-  --color-background: #0A0A0A;
+  /* ---------- PALETTE OFFICIELLE MBOA (§1-2) ---------- */
+  --mboa-lime: #B7F000;
+  --mboa-lime-bright: #C8FF1A;
+  --mboa-lime-active: #9ED600;
+  --mboa-lime-soft: rgba(183, 240, 0, 0.12);
+  --mboa-lime-ring: rgba(183, 240, 0, 0.15);
+  --mboa-lime-glow: 0 10px 30px rgba(183, 240, 0, 0.18);
+
+  --mboa-green-deep: #123B16;
+  --mboa-green-dark: #0B2410;
+
+  --mboa-white: #FFFFFF;
+  --mboa-white-soft: #F7FAF5;
+
+  --mboa-gray: #5F6B61;
+  --mboa-border: #DDE6DC;
+
+  /* Teintes douces citron (anciennes teintes rouges réassignées) */
+  --mboa-lime-50: #F7FFDC;
+  --mboa-lime-100: #EEFFC2;
+  --mboa-lime-200: #DFFF8F;
+  --mboa-lime-300: #CFFF5C;
+
+  /* ---------- Sémantique (§26 — conservée, jamais citron) ---------- */
+  --color-success: #16A34A;
+  --color-error: #DC2626;
+  --color-warning: #F59E0B;
+  --color-info: #2563EB;
+
+  /* ---------- Compat anciennes variables (mappées, §29) ---------- */
+  --color-background: #FFFFFF;
   --color-surface: #FFFFFF;
-  --color-surface-secondary: #F5F5F5;
-  --color-primary: #C40000;
-  --color-primary-hover: #E00000;
-  --color-text-primary: #0A0A0A;
-  --color-text-secondary: #6B6B6B;
-  --color-text-muted: #6B6B6B;
-  --color-border: #D9D9D9;
-  --color-success: #0A0A0A;
-  --color-error: #C40000;
-  --color-warning: #C40000;
-  --color-info: #0A0A0A;
-  --mboa-bg: #0A0A0A;
-  --mboa-bg-secondary: #FFFFFF;
+  --color-surface-secondary: #F7FAF5;
+  --color-primary: #B7F000;
+  --color-primary-hover: #C8FF1A;
+  --color-text-primary: #123B16;
+  --color-text-secondary: #5F6B61;
+  --color-text-muted: #5F6B61;
+  --color-border: #DDE6DC;
+  --color-success: #16A34A;
+  --color-error: #DC2626;
+  --color-warning: #F59E0B;
+  --color-info: #2563EB;
+  --mboa-bg: #FFFFFF;
+  --mboa-bg-secondary: #F7FAF5;
   --mboa-surface: #FFFFFF;
   --mboa-surface-elevated: #FFFFFF;
-  --mboa-primary: #C40000;
-  --mboa-primary-hover: #E00000;
-  --mboa-primary-dark: #9E0000;
-  --mboa-primary-soft: rgba(196,0,0,0.12);
-  --mboa-gold: #C40000;
-  --mboa-text: #0A0A0A;
-  --mboa-text-secondary: #6B6B6B;
-  --mboa-text-muted: #6B6B6B;
-  --mboa-border: #D9D9D9;
-  --mboa-border-faint: #E5E5E5;
-  --mboa-success: #0A0A0A;
-  --mboa-warning: #C40000;
-  --mboa-error: #C40000;
-  --mboa-info: #0A0A0A;
-  --ms-green: #C40000;          /* PRIMARY — actions importantes uniquement */
-  --ms-green-deep: #9E0000;     /* PRIMARY ACTIVE */
-  --ms-green-light: #C40000;    /* PRIMARY HOVER (accents lumineux) */
-  --ms-gold-champagne: #C40000; /* Accent = rouge */
-  --ms-navy: #0A0A0A;           /* CHROME (nav, sidebar, footer) */
-  --ms-background: #F5F5F5;     /* BACKGROUND (pages contenu) */
-  --ms-surface: #FFFFFF;        /* SURFACE (cartes, menus, modales) */
-  --ms-text: #0A0A0A;           /* Texte principal */
-  --ms-text-2: #6B6B6B;         /* Texte secondaire */
-  --ms-border-color: #D9D9D9;   /* Border */
-  --ms-success: #0A0A0A;
-  --ms-warning: #C40000;
-  --ms-error: #C40000;
+  --mboa-primary: #B7F000;
+  --mboa-primary-hover: #C8FF1A;
+  --mboa-primary-dark: #9ED600;
+  --mboa-primary-soft: rgba(183, 240, 0, 0.12);
+  --mboa-gold: #B7F000;
+  --mboa-text: #123B16;
+  --mboa-text-secondary: #5F6B61;
+  --mboa-text-muted: #5F6B61;
+  --mboa-border: #DDE6DC;
+  --mboa-border-faint: #DDE6DC;
+  --mboa-success: #16A34A;
+  --mboa-warning: #F59E0B;
+  --mboa-error: #DC2626;
+  --mboa-info: #2563EB;
+  --ms-green: #B7F000;            /* PRIMARY — CTA / actions */
+  --ms-green-deep: #123B16;       /* Titres / navigation claire */
+  --ms-green-light: #C8FF1A;      /* Hover lumineux */
+  --ms-gold-champagne: #B7F000;   /* Accent = citron */
+  --ms-navy: #0B2410;             /* CHROME (sidebar, footer, fonds sombres) */
+  --ms-background: #F7FAF5;       /* BACKGROUND (pages contenu) */
+  --ms-surface: #FFFFFF;          /* SURFACE (cartes, menus, modales) */
+  --ms-text: #123B16;             /* Texte principal */
+  --ms-text-2: #5F6B61;           /* Texte secondaire */
+  --ms-border-color: #DDE6DC;     /* Border */
+  --ms-success: #16A34A;
+  --ms-warning: #F59E0B;
+  --ms-error: #DC2626;
 
-  /* ---------- Dark backgrounds ---------- */
-  --ms-bg-app: #F5F5F5;
+  /* ---------- Dark backgrounds (verts profonds) ---------- */
+  --ms-bg-app: #F7FAF5;
   --ms-bg-2: #FFFFFF;
   --ms-bg-3: #FFFFFF;
-  --ms-bg-4: #FBEAEA;
-  /* ---------- Primary (Vert MBOA + déclinaisons dark) ---------- */
-  --ms-primary-50: #FBEAEA;
-  --ms-primary-100: #F7D4D4;
-  --ms-primary-200: #EFA9A9;
-  --ms-primary-300: #E07B7B;
-  --ms-primary-400: #C40000;
-  --ms-primary-500: #C40000;
-  --ms-primary-600: #C40000;
-  --ms-primary-700: #C40000;
-  --ms-primary-800: #E00000;
-  --ms-primary-900: #9E0000;
+  --ms-bg-4: #F7FFDC;
+  /* ---------- Primary (Citron + déclinaisons) ---------- */
+  --ms-primary-50: #F7FFDC;
+  --ms-primary-100: #EEFFC2;
+  --ms-primary-200: #DFFF8F;
+  --ms-primary-300: #CFFF5C;
+  --ms-primary-400: #C8FF1A;
+  --ms-primary-500: #B7F000;
+  --ms-primary-600: #B7F000;
+  --ms-primary-700: #9ED600;
+  --ms-primary-800: #C8FF1A;
+  --ms-primary-900: #123B16;
   --ms-primary: var(--ms-green);
-  --ms-primary-hover: #E00000;
-  --ms-primary-active: #E00000;
+  --ms-primary-hover: #C8FF1A;
+  --ms-primary-active: #9ED600;
 
-  /* ---------- Secondary (surface élevée, dark) ---------- */
+  /* ---------- Secondary (surface élevée) ---------- */
   --ms-secondary: #FFFFFF;
-  --ms-secondary-hover: #F5F5F5;
-  --ms-accent-400: #E00000;
-  --ms-accent-500: #C40000;
-  --ms-accent-600: #C40000;
+  --ms-secondary-hover: #F7FAF5;
+  --ms-accent-400: #C8FF1A;
+  --ms-accent-500: #B7F000;
+  --ms-accent-600: #9ED600;
   --ms-accent: var(--ms-accent-500);
 
-  /* ---------- Ex-gold (réassigné au rouge) ---------- */
-  --ms-gold-50: #FBEAEA;
-  --ms-gold-100: #F7D4D4;
-  --ms-gold-200: #EFA9A9;
-  --ms-gold-400: #E00000;
-  --ms-gold-500: #C40000;
-  --ms-gold-600: #C40000;
-  --ms-gold-700: #C40000;
+  /* ---------- Ex-gold (réassigné au citron) ---------- */
+  --ms-gold-50: #F7FFDC;
+  --ms-gold-100: #EEFFC2;
+  --ms-gold-200: #DFFF8F;
+  --ms-gold-400: #C8FF1A;
+  --ms-gold-500: #B7F000;
+  --ms-gold-600: #9ED600;
+  --ms-gold-700: #123B16;
 
-  /* ---------- Backgrounds / Surfaces ---------- */
-  --ms-bg: #F5F5F5;
+  /* ---------- Backgrounds / Surfaces (65% blanc) ---------- */
+  --ms-bg: #F7FAF5;
   --ms-bg-secondary: #FFFFFF;
   --ms-surface-elevated: #FFFFFF;
   --ms-surface-glass: rgba(255, 255, 255, 0.03);
 
   /* ---------- Text ---------- */
-  --ms-text-primary: #0A0A0A;
-  --ms-text-secondary: #6B6B6B;
-  --ms-text-muted: #6B6B6B;
-  --ms-text-disabled: #6B6B6B;
-  --ms-text-on-primary: #111111;
+  --ms-text-primary: #123B16;
+  --ms-text-secondary: #5F6B61;
+  --ms-text-muted: #5F6B61;
+  --ms-text-disabled: #5F6B61;
+  --ms-text-on-primary: #0B2410;
 
-  /* ---------- Borders (jamais trop visibles) ---------- */
-  --ms-border-subtle: #E5E5E5;
-  --ms-border: #D9D9D9;
-  --ms-border-strong: #D9D9D9;
+  /* ---------- Borders ---------- */
+  --ms-border-subtle: #DDE6DC;
+  --ms-border: #DDE6DC;
+  --ms-border-strong: #DDE6DC;
 
-  /* ---------- Semantic (cohérentes dark) ---------- */
-  --ms-success-bg: #0A0A0A;
-  --ms-warning-bg: #FBEAEA;
-  --ms-error-bg: #C40000;
-  --ms-info: #0A0A0A;
-  --ms-info-bg: #F5F5F5;
-  --ms-overlay: rgba(0, 0, 0, 0.65);
+  /* ---------- Semantic (fonctionnels conservés) ---------- */
+  --ms-success-bg: #DCFCE7;
+  --ms-warning-bg: #FEF3C7;
+  --ms-error-bg: #FEE2E2;
+  --ms-info: #2563EB;
+  --ms-info-bg: #EFF6FF;
+  --ms-overlay: rgba(11, 36, 16, 0.55);
 
   /* ---------- §2 TYPOGRAPHIE : Manrope (UI) + DM Serif Display (éditorial) ---------- */
   --ms-font-sans: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -153,13 +180,13 @@
   --ms-radius-xl: 1.75rem;
   --ms-radius-pill: 9999px;
 
-  /* ---------- Shadows dark + glows rares (§23-24) ---------- */
-  --ms-shadow-sm: 0 1px 2px rgba(0,0,0,0.06);
-  --ms-shadow-md: 0 12px 35px rgba(0,0,0,.15);
-  --ms-shadow-lg: 0 12px 35px rgba(0,0,0,.15);
-  --ms-shadow-xl: 0 20px 60px rgba(0,0,0,.45);
-  --ms-glow-green: 0 0 0 3px rgba(196,0,0,0.15);
-  --ms-glow-gold: 0 0 0 3px rgba(196,0,0,0.15);
+  /* ---------- Shadows + glows subtils citron (§10 — jamais néon) ---------- */
+  --ms-shadow-sm: 0 1px 2px rgba(18, 59, 22, 0.06);
+  --ms-shadow-md: 0 12px 35px rgba(18, 59, 22, 0.10);
+  --ms-shadow-lg: 0 12px 30px rgba(18, 59, 22, 0.10);
+  --ms-shadow-xl: 0 20px 60px rgba(11, 36, 16, 0.18);
+  --ms-glow-green: 0 0 0 3px rgba(183, 240, 0, 0.15);
+  --ms-glow-gold: 0 0 0 3px rgba(183, 240, 0, 0.15);
 
   /* ---------- Glass subtil (§23) ---------- */
   --ms-glass-light-bg: rgba(255, 255, 255, 0.85);
@@ -168,16 +195,16 @@
   --ms-glass-blur: blur(16px);
   --ms-glass-strong-bg: rgba(255, 255, 255, 0.95);
   --ms-glass-strong-blur: blur(24px);
-  --ms-glass-border: #D9D9D9;
+  --ms-glass-border: #DDE6DC;
 
-  /* ---------- Motion EMERALD LUXURY : 120 micro / 200 hover / 300 composants / 500 majeures ---------- */
+  /* ---------- Motion : 120 micro / 200 hover / 300 composants / 500 majeures ---------- */
   --ms-motion-micro: 120ms ease-out;
   --ms-motion-fast: 120ms ease-out;
   --ms-motion-hover: 200ms ease-out;
   --ms-motion-base: 300ms ease-out;
   --ms-motion-slow: 500ms ease-out;
 
-  /* ---------- Breakpoints (§15) : 320 360 390 430 768 1024 1280 1440 1920 2560 ---------- */
+  /* ---------- Breakpoints (§15/§31) ---------- */
   --ms-bp-xs: 320px;
   --ms-bp-sm: 360px;
   --ms-bp-mobile: 390px;
@@ -210,10 +237,10 @@ body {
   background: var(--ms-bg);
   text-rendering: optimizeLegibility;
 }
-::selection { background: var(--ms-primary-100); }
+::selection { background: var(--mboa-lime); color: var(--mboa-green-dark); }
 a:focus-visible, button:focus-visible, input:focus-visible,
 select:focus-visible, textarea:focus-visible {
-  outline: 2px solid var(--ms-primary-600);
+  outline: 2px solid var(--mboa-lime-active);
   outline-offset: 2px;
 }
 .ms-eyebrow {
@@ -221,12 +248,12 @@ select:focus-visible, textarea:focus-visible {
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--ms-primary-700);
+  color: var(--mboa-green-deep);
 }
 .ms-price {
   font-weight: var(--ms-price-weight);
   font-variant-numeric: tabular-nums;
-  color: var(--ms-text-primary);
+  color: var(--mboa-green-deep);
 }
 .ms-muted { color: var(--ms-text-secondary); }
 
