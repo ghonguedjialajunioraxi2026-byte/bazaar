@@ -101,9 +101,9 @@
   box-shadow: 0 4px 24px -8px rgba(0,0,0,0.08);
   transition: transform 200ms ease-out, box-shadow 300ms ease-out, border-color 200ms ease-out;
 }
-.ms-product-card:hover { transform: translateY(-4px); box-shadow: 0 12px 35px rgba(0,0,0,.15); border-color: rgba(196,0,0,0.35); }
+.ms-product-card:hover { transform: translateY(-5px); box-shadow: 0 12px 35px rgba(0,0,0,.15); border-color: rgba(196,0,0,0.35); }
 .ms-product-card .ms-pimg { transition: transform 500ms ease; }
-.ms-product-card:hover .ms-pimg { transform: scale(1.05); }
+.ms-product-card:hover .ms-pimg { transform: scale(1.03); }
 .ms-img-fallback {
   background: linear-gradient(135deg, var(--ms-primary-50), var(--ms-bg-secondary));
   display: flex; align-items: center; justify-content: center; color: var(--ms-primary-300);

@@ -8,16 +8,34 @@
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="assets/js/showcase.js" defer></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <link rel="stylesheet" href="assets/css/tokens.css">
 <link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/showcase.css">
 <script>
 tailwind.config={theme:{extend:{colors:{primary:{50:'#FBEAEA',100:'#F7D4D4',200:'#EFA9A9',300:'#E07B7B',400:'#E00000',500:'#C40000',600:'#C40000',700:'#C40000',800:'#E00000',900:'#9E0000'},accent:{50:'#FBEAEA',100:'#F7D4D4',200:'#EFA9A9',400:'#E00000',500:'#C40000',600:'#C40000',700:'#C40000'},dark:{800:'#222222',900:'#0A0A0A'},mboa:{black:'#0A0A0A',surface:'#151515',secondary:'#222222',white:'#FFFFFF',whiteSoft:'#F5F5F5',red:'#C40000',redBright:'#E00000',redDark:'#9E0000',gray:'#6B6B6B',grayLight:'#E5E5E5',border:'#D9D9D9',borderDark:'#303030'}},fontFamily:{sans:['Manrope','system-ui','sans-serif'],serif:['DM Serif Display','Georgia','serif']}}}}
 </script>
 <style>
 /* ADMIN premium sombre : Black Navy + Emerald + Gold */
 *{scroll-behavior:smooth}
-body{font-family:'Manrope',system-ui,sans-serif;background:#0A0A0A;color:#0A0A0A}
+body{font-family:'Manrope',system-ui,sans-serif;background:#F5F5F5;color:#0A0A0A}
+.login-bg-admin{background-color:#F5F5F3;position:relative;overflow:hidden}
+.login-bg-admin::before{content:'';position:absolute;inset:-40px;background:url('assets/img/auth-monstera.jpg') center 30%/cover no-repeat;filter:blur(36px) brightness(1.12) saturate(.85);z-index:0}
+.login-bg-admin>*{position:relative;z-index:1}
+.mini-label{display:block;font-size:13px;font-weight:600;color:#0A0A0A;margin-bottom:8px}
+.mini-input{width:100%;height:50px;padding:0 14px;font-size:14.5px;font-family:inherit;color:#0A0A0A;background:#fff;border:1px solid #D9D9D9;border-radius:12px;outline:none;transition:border-color 200ms ease,box-shadow 200ms ease}
+.mini-input:focus{border-color:#C40000;box-shadow:0 0 0 3px rgba(196,0,0,.10)}
+.pw-wrap{position:relative}
+.pw-wrap .mini-input{padding-right:44px}
+.pw-toggle{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:34px;height:34px;border:none;border-radius:8px;background:transparent;color:#6B6B6B;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.pw-toggle:hover{color:#0A0A0A;background:#F5F5F5}
+.btn-olive{display:block;width:100%;height:52px;border:none;border-radius:12px;background:#C40000;color:#fff;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;transition:background 200ms ease}
+.btn-olive:hover{background:#E00000}
+.btn-olive:active{background:#9E0000}
+.auth-side-dash{min-height:320px}
+@media(max-width:899px){.auth-side-dash{order:1;min-height:240px;max-height:280px}}
+@media(min-width:1024px){#loginPage>div{min-height:680px}}
 .admin-dark{background:#FFFFFF;color:#6B6B6B}
 .admin-dark .stat-card{background:rgba(255,255,255,0.04);border:1px solid rgba(240,179,35,0.18)}
 .admin-gold{color:#C40000}
@@ -34,30 +52,35 @@ body{font-family:'Manrope',system-ui,sans-serif;background:#0A0A0A;color:#0A0A0A
 input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(196,0,0,0.25)}
 </style>
 </head>
-<body class="text-[#0A0A0A] antialiased" style="background-color:#0A0A0A;background-image:radial-gradient(900px 480px at 10% -80px,rgba(196,0,0,0.06),transparent 65%),radial-gradient(760px 420px at 90% 6%,rgba(196,0,0,0.04),transparent 65%);background-attachment:fixed">
+<body class="text-[#0A0A0A] antialiased" style="background-color:#F5F5F5;background-attachment:fixed">
 
 <!-- ========== LOGIN PAGE ========== -->
-<div id="loginPage" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-700 via-primary-600 to-primary-500 p-4">
-  <div class="bg-[#FFFFFF] rounded-2xl shadow-2xl w-full max-w-md p-8">
-    <div class="text-center mb-8">
-      <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-600 to-primary-500 flex items-center justify-center mx-auto mb-4 shadow-lg">
-        <svg class="w-9 h-9 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
-      </div>
-      <h1 class="text-2xl font-bold text-[#0A0A0A]">MBOA STYLE</h1>
-      <p class="text-[#6B6B6B] text-sm mt-1">Panneau d'administration</p>
+<div id="loginPage" class="login-bg-admin min-h-screen flex items-center justify-center" style="padding:40px 4vw">
+  <div class="w-full grid bg-white overflow-hidden" style="max-width:min(1180px,92vw);grid-template-columns:2fr 3fr;border-radius:32px;box-shadow:0 25px 70px rgba(0,0,0,.15)">
+    <div class="min-w-0 flex flex-col justify-center" style="padding: clamp(28px, 5vw, 60px);">
+      <a href="index.html" aria-label="MBOA STYLE — accueil" style="display:flex;align-items:center;gap:10px;margin-bottom:30px;text-decoration:none;color:#0A0A0A">
+        <span style="width:38px;height:38px;border-radius:11px;background:#C40000;color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800">M</span>
+        <span style="font-weight:800;font-size:18px;letter-spacing:-.01em">MBOA <span style="color:#C40000">STYLE</span></span>
+      </a>
+      <h1 class="font-bold text-[#0A0A0A]" style="font-size:30px;letter-spacing:-.02em;line-height:1.2;margin-bottom:10px">Welcome Back</h1>
+      <p class="text-[#6B6B6B] mb-8" style="font-size:14.5px;line-height:1.6">Connectez-vous pour accéder à votre espace MBOA STYLE.</p>
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <div class="mb-5">
+          <label class="mini-label" for="loginUser">Username</label>
+          <input id="loginUser" type="text" value="admin" autocomplete="username" class="mini-input">
+        </div>
+        <div class="mb-6">
+          <label class="mini-label" for="loginPass">Password</label>
+          <div class="pw-wrap"><input id="loginPass" type="password" autocomplete="current-password" class="mini-input">
+          <button type="button" class="pw-toggle" data-pw-for="loginPass" aria-label="Afficher le mot de passe"><i class="bi bi-eye"></i></button></div>
+        </div>
+        <button type="submit" class="btn-olive">Sign In</button>
+        <p id="loginError" class="text-[#C40000] text-sm text-center mt-4 hidden">Identifiants incorrects</p>
+      </form>
     </div>
-    <form id="loginForm" onsubmit="handleLogin(event)">
-      <div class="mb-4">
-        <label class="block text-sm font-medium text-[#0A0A0A] mb-1">Nom d'utilisateur</label>
-        <input id="loginUser" type="text" value="admin" class="w-full px-4 py-3 rounded-xl border border-[#E5E5E5] focus:border-primary-500 transition text-sm">
-      </div>
-      <div class="mb-6">
-        <label class="block text-sm font-medium text-[#0A0A0A] mb-1">Mot de passe</label>
-        <input id="loginPass" type="password" autocomplete="current-password" class="w-full px-4 py-3 rounded-xl border border-[#E5E5E5] focus:border-primary-500 transition text-sm">
-      </div>
-      <button type="submit" class="w-full py-3 bg-gradient-to-r from-primary-600 to-primary-500 text-white font-semibold rounded-xl hover:from-primary-700 hover:to-primary-600 transition shadow-lg">Se connecter</button>
-      <p id="loginError" class="text-[#C40000] text-sm text-center mt-3 hidden">Identifiants incorrects</p>
-    </form>
+    <div class="auth-side-dash">
+      <div class="ms-showcase" data-showcase style="height:100%"></div>
+    </div>
   </div>
 </div>
 
@@ -615,6 +638,16 @@ function getPromoForProduct(pid) { return promotions.find(p => p.productId == pi
 // =====================================================================
 // AUTH
 // =====================================================================
+document.querySelectorAll('[data-pw-for]').forEach(btn => btn.addEventListener('click', () => {
+  const input = document.getElementById(btn.getAttribute('data-pw-for'));
+  if (!input) return;
+  const show = input.type === 'password';
+  input.type = show ? 'text' : 'password';
+  btn.setAttribute('aria-label', show ? 'Masquer le mot de passe' : 'Afficher le mot de passe');
+  btn.querySelector('i').className = show ? 'bi bi-eye-slash' : 'bi bi-eye';
+  input.focus();
+}));
+
 async function handleLogin(e) {
   e.preventDefault();
   const user = document.getElementById('loginUser').value;
