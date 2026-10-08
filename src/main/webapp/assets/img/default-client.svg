@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Photo de profil client BAZAAR par défaut">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#123B16"/>
+      <stop offset="1" stop-color="#0B2410"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="56" fill="url(#bg)"/>
+  <circle cx="216" cy="40" r="52" fill="#B7F000" opacity="0.12"/>
+  <circle cx="36" cy="220" r="64" fill="#B7F000" opacity="0.08"/>
+  <circle cx="128" cy="128" r="76" fill="#B7F000"/>
+  <circle cx="128" cy="108" r="30" fill="#0B2410"/>
+  <path d="M74 176c6-30 28-46 54-46s48 16 54 46c-14 12-33 19-54 19s-40-7-54-19z" fill="#0B2410"/>
+  <text x="128" y="238" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" font-weight="bold" letter-spacing="4" fill="#B7F000">BAZAAR</text>
+</svg>

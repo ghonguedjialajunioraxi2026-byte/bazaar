@@ -14,6 +14,10 @@ public class Supplier {
     private String address;
     private boolean active;
     private double commissionRate;
+    /** Provider PawaPay de versement (MTN_MOMO_CMR / ORANGE_CMR), choisi par le fournisseur. */
+    private String payoutProvider;
+    /** MSISDN de versement du fournisseur (format international, jamais loggé en clair). */
+    private String payoutPhone;
     private int balance;
     private int pendingBalance;
     private int paidBalance;
@@ -61,6 +65,23 @@ public class Supplier {
 
     public double getCommissionRate() { return commissionRate; }
     public void setCommissionRate(double commissionRate) { this.commissionRate = commissionRate; }
+
+    public String getPayoutProvider() { return payoutProvider; }
+    public void setPayoutProvider(String payoutProvider) { this.payoutProvider = payoutProvider; }
+
+    public String getPayoutPhone() { return payoutPhone; }
+    public void setPayoutPhone(String payoutPhone) { this.payoutPhone = payoutPhone; }
+
+    /** Numéro MTN de versement (jamais loggé en clair). */
+    private String mtnPhone;
+    /** Numéro Orange de versement (jamais loggé en clair). */
+    private String orangePhone;
+
+    public String getMtnPhone() { return mtnPhone; }
+    public void setMtnPhone(String mtnPhone) { this.mtnPhone = mtnPhone; }
+
+    public String getOrangePhone() { return orangePhone; }
+    public void setOrangePhone(String orangePhone) { this.orangePhone = orangePhone; }
 
     public int getBalance() { return balance; }
     public void setBalance(int balance) { this.balance = balance; }

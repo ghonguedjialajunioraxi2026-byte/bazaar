@@ -102,9 +102,46 @@ public class CategoryService {
     }
 
     public void setActive(int id, boolean active) throws SQLException {
-        Category c = categoryDAO.findById(id);
-        if (c == null) throw new SQLException("Catégorie introuvable");
         categoryDAO.setActive(id, active);
+    }
+
+    /**
+     * Traite une demande fournisseur : APPROVED crée la catégorie (même
+     * pipeline de validation/slug que la création admin), REJECTED la
+     * motive. Fournisseur notifié dans les deux cas. Idempotent : seule
+     * une demande PENDING peut être résolue.
+     */
+    public com.ecommerce.model.CategoryRequest resolveCategoryRequest(int requestId, boolean approve,
+            String adminNote) throws SQLException {
+        com.ecommerce.dao.CategoryRequestDAO reqDAO = new com.ecommerce.dao.CategoryRequestDAO();
+        com.ecommerce.model.CategoryRequest r = reqDAO.findById(requestId);
+        if (r == null) throw new SQLException("Demande introuvable");
+        if (!"PENDING".equals(r.getStatus())) throw new SQLException("Demande déjà traitée");
+        com.ecommerce.model.Category created = null;
+        if (approve) {
+            Category cat = new Category();
+            cat.setName(r.getName());
+            cat.setParentId(r.getParentId());
+            cat.setActive(true);
+            int id = createCategory(cat);
+            created = categoryDAO.findById(id);
+        }
+        String note = adminNote == null ? null
+            : adminNote.substring(0, Math.min(255, adminNote.length()));
+        if (!reqDAO.resolve(requestId, approve ? "APPROVED" : "REJECTED", note)) {
+            throw new SQLException("Demande déjà traitée");
+        }
+        try {
+            new com.ecommerce.service.NotificationService().notifySupplier(r.getSupplierId(),
+                approve ? "CATEGORY_APPROVED" : "CATEGORY_REJECTED",
+                approve ? "Catégorie acceptée : " + r.getName()
+                        : "Catégorie refusée : " + r.getName(),
+                approve ? "« " + r.getName() + " » est désormais disponible dans le catalogue."
+                        : ("Motif : " + (note == null || note.isEmpty() ? "non précisé" : note)),
+                "CATEGORY_REQUEST", requestId, null,
+                "CATREQ:" + requestId + ":" + (approve ? "APPROVED" : "REJECTED"));
+        } catch (Exception ignored) {}
+        return r;
     }
 
     public void toggleActive(int id) throws SQLException {

@@ -62,11 +62,21 @@ public class ProductImageServlet extends HttpServlet {
             String productIdStr = req.getParameter("productId");
 
             if (idStr != null) {
+                if (!idStr.matches("\\d+")) {
+                    resp.setStatus(400);
+                    resp.getWriter().write("{\"success\":false,\"message\":\"Identifiant image requis\"}");
+                    return;
+                }
                 int imageId = Integer.parseInt(idStr);
                 resp.getWriter().write("{\"id\":" + imageId + "}");
                 return;
             }
 
+            if (productIdStr == null || !productIdStr.matches("\\d+")) {
+                resp.setStatus(400);
+                resp.getWriter().write("{\"success\":false,\"message\":\"Identifiant produit requis\"}");
+                return;
+            }
             int productId = Integer.parseInt(productIdStr);
             boolean details = "true".equals(req.getParameter("details"));
             if (details) {
@@ -96,7 +106,7 @@ public class ProductImageServlet extends HttpServlet {
 
                 if (filePart == null || filePart.getSize() == 0) {
                     resp.setStatus(400);
-                    resp.getWriter().write("{\"error\":\"No file uploaded\"}");
+                    resp.getWriter().write("{\"error\":\"Aucun fichier fourni\"}");
                     return;
                 }
 
@@ -156,7 +166,7 @@ public class ProductImageServlet extends HttpServlet {
                 resp.getWriter().write("{\"success\":true}");
             } else {
                 resp.setStatus(400);
-                resp.getWriter().write("{\"error\":\"Unknown action\"}");
+                resp.getWriter().write("{\"error\":\"Action inconnue\"}");
             }
         } catch (Exception e) {
             resp.setStatus(500);
@@ -170,7 +180,12 @@ public class ProductImageServlet extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
         try {
             if (com.ecommerce.util.AdminAuth.requireAdmin(req, resp) <= 0) return;
-            int id = Integer.parseInt(req.getParameter("id"));
+            Integer id = com.ecommerce.util.ServiceErrors.toId(req.getParameter("id"));
+            if (id == null) {
+                resp.setStatus(400);
+                resp.getWriter().write("{\"error\":\"Identifiant image requis\"}");
+                return;
+            }
             productImageDAO.removeImage(id);
             resp.getWriter().write("{\"success\":true}");
         } catch (Exception e) {

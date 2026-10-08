@@ -3,10 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Page introuvable — MBOA STYLE</title>
+<title>Page introuvable — BAZAAR</title>
 <meta name="robots" content="noindex, nofollow">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%23B7F000'/><text x='50' y='70' font-size='56' text-anchor='middle' fill='%230B2410' font-family='sans-serif' font-weight='bold'>M</text></svg>">
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#B7F000">
+<style>.logo-wordmark{font-family:'Nunito','Manrope',system-ui,sans-serif;font-weight:900;letter-spacing:-.02em;line-height:1}.logo-wordmark--deep{color:#123B16}.logo-wordmark--light{color:#fff}</style>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Nunito:wght@800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
 tailwind.config = { theme: { extend: {
@@ -18,11 +22,14 @@ tailwind.config = { theme: { extend: {
 <body class="antialiased" style="background-color:#F7FAF5;font-family:'Manrope',system-ui,sans-serif">
 <main class="min-h-screen flex items-center justify-center px-4">
   <div class="text-center max-w-md">
+    <a href="/" class="inline-block mb-6" aria-label="BAZAAR — accueil">
+      <img src="logo/BAZAAR.png" alt="BAZAAR" width="120" height="40" class="h-9 w-auto">
+    </a>
     <p class="font-display text-7xl font-extrabold text-[#4D7C0F] tabular-nums">404</p>
     <h1 class="text-2xl font-bold text-dark-900 mt-2 mb-3">Page introuvable</h1>
     <p class="text-[#5F6B61] text-sm mb-8">La page que vous cherchez n'existe pas ou a été déplacée.</p>
     <div class="flex flex-wrap justify-center gap-3">
-      <a href="/" class="px-6 py-3 bg-[#B7F000] hover:bg-[#C8FF1A] text-[#0B2410] text-sm font-bold rounded-2xl transition">Accueil</a>
+      <a href="/" class="px-6 py-3 bg-[#B7F000] hover:bg-[#C8FF1A] text-[#0A0A0A] text-sm font-bold rounded-2xl transition">Accueil</a>
       <button onclick="if (history.length > 1) history.back(); else location.href='/'" class="px-6 py-3 bg-white border border-[#DDE6DC] hover:border-[#B7F000] text-sm font-bold rounded-2xl transition">Retour</button>
     </div>
   </div>

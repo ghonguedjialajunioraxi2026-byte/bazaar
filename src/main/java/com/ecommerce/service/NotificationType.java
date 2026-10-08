@@ -42,6 +42,13 @@ public final class NotificationType {
         reg("DELIVERY_OUT_FOR_DELIVERY", "DELIVERY", "HIGH");
         reg("DELIVERY_DELIVERED", "DELIVERY", "NORMAL");
         reg("DELIVERY_FAILED", "DELIVERY", "HIGH");
+        // Livraison v2 : workflow en 2 actions (fournisseur -> client -> fournisseur)
+        reg("DELIVERY_STARTED", "DELIVERY", "HIGH");
+        reg("RECEIPT_CONFIRMED", "DELIVERY", "HIGH");
+        reg("DELIVERY_VALIDATED", "DELIVERY", "HIGH");
+        // Règlement fournisseur (suite de DELIVERY_VALIDATED)
+        reg("PAYOUT_REQUESTED", "PAYMENT", "HIGH");
+        reg("PAYOUT_COMPLETED", "PAYMENT", "HIGH");
         // Messagerie / négociation
         reg("MESSAGE_RECEIVED", "MESSAGE", "NORMAL");
         reg("OFFER_RECEIVED", "NEGOTIATION", "NORMAL");

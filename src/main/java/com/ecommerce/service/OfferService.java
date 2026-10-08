@@ -37,7 +37,14 @@ public class OfferService {
     public Offer createOffer(int convId, int productId, int qty, String size, String color,
                              int unitPrice, String by, String phone, String cid, int supplierId)
             throws AppException, SQLException {
-        Conversation c = resolveConversation(convId, by, phone, cid, supplierId);
+        return createOffer(convId, productId, qty, size, color, unitPrice, by, phone, cid, supplierId, null);
+    }
+
+    public Offer createOffer(int convId, int productId, int qty, String size, String color,
+                             int unitPrice, String by, String phone, String cid, int supplierId,
+                             Integer sessionCustomerId)
+            throws AppException, SQLException {
+        Conversation c = resolveConversation(convId, by, phone, cid, supplierId, sessionCustomerId);
         if (!"OPEN".equals(c.getStatus())) {
             throw new AppException(ErrorCodes.OFFER_INVALID, 400, "Conversation fermée");
         }
@@ -103,11 +110,16 @@ public class OfferService {
     /** Accepte ou refuse : seul l'AUTRE auteur, offre encore PENDING (atomique). */
     public Offer decide(int offerId, boolean accept, String by, String phone, String cid, int supplierId)
             throws AppException, SQLException {
+        return decide(offerId, accept, by, phone, cid, supplierId, null);
+    }
+
+    public Offer decide(int offerId, boolean accept, String by, String phone, String cid, int supplierId,
+            Integer sessionCustomerId) throws AppException, SQLException {
         Offer o = offerDAO.findById(offerId);
         if (o == null) {
             throw new AppException(ErrorCodes.RESOURCE_NOT_FOUND, 404, "Offre introuvable");
         }
-        resolveConversation(o.getConversationId(), by, phone, cid, supplierId);
+        resolveConversation(o.getConversationId(), by, phone, cid, supplierId, sessionCustomerId);
         if (by.equals(o.getCreatedBy())) {
             throw new AppException(ErrorCodes.OFFER_ACCESS_DENIED, 403, "Vous ne pouvez pas répondre à votre propre offre");
         }
@@ -139,11 +151,16 @@ public class OfferService {
 
     public void cancel(int offerId, String by, String phone, String cid, int supplierId)
             throws AppException, SQLException {
+        cancel(offerId, by, phone, cid, supplierId, null);
+    }
+
+    public void cancel(int offerId, String by, String phone, String cid, int supplierId,
+            Integer sessionCustomerId) throws AppException, SQLException {
         Offer o = offerDAO.findById(offerId);
         if (o == null) {
             throw new AppException(ErrorCodes.RESOURCE_NOT_FOUND, 404, "Offre introuvable");
         }
-        resolveConversation(o.getConversationId(), by, phone, cid, supplierId);
+        resolveConversation(o.getConversationId(), by, phone, cid, supplierId, sessionCustomerId);
         if (!by.equals(o.getCreatedBy())) {
             throw new AppException(ErrorCodes.OFFER_ACCESS_DENIED, 403, "Seul l'auteur peut annuler");
         }
@@ -154,14 +171,43 @@ public class OfferService {
     }
 
     /**
+     * Suppression définitive par le fournisseur propriétaire (CRUD : Delete).
+     * Uniquement PENDING / REJECTED (ACCEPTED / CONSUMED = historique
+     * financier intangible). 404 hors périmètre ou état protégé.
+     */
+    public void deleteOfferForSupplier(int offerId, int supplierId)
+            throws AppException, SQLException {
+        boolean ok = offerDAO.deleteScoped(offerId, supplierId);
+        if (!ok) {
+            throw new AppException(ErrorCodes.RESOURCE_NOT_FOUND, 404,
+                "Offre introuvable ou non supprimable");
+        }
+    }
+
+    /**
      * Consomme une offre ACCEPTED pour une commande (compare-and-set atomique).
      * Vérifie produit/qty/variantes/phone. Le prix négocié est alors figé.
      */
     public Offer consumeForOrder(int offerId, String phone, int qty, String size, String color)
             throws AppException, SQLException {
+        return consumeForOrder(offerId, phone, qty, size, color, null);
+    }
+
+    public Offer consumeForOrder(int offerId, String phone, int qty, String size, String color,
+            Integer sessionCustomerId) throws AppException, SQLException {
         Offer o = offerDAO.findById(offerId);
         if (o == null) {
             throw new AppException(ErrorCodes.RESOURCE_NOT_FOUND, 404, "Offre introuvable");
+        }
+        // Isolation de compte : si une session est présente, la conversation
+        // de l'offre doit appartenir au compte (ou être invitée non liée) ;
+        // sinon, le téléphone prouve l'appartenance (parcours invité).
+        if (sessionCustomerId != null) {
+            Conversation conv = conversationDAO.findById(o.getConversationId());
+            if (conv == null) {
+                throw new AppException(ErrorCodes.RESOURCE_NOT_FOUND, 404, "Offre introuvable");
+            }
+            CustomerIsolation.requireConversationVisible(conv, sessionCustomerId);
         }
         String ownerPhone = conversationDAO.findClientPhone(o.getConversationId());
         if (ownerPhone == null || phone == null || !ownerPhone.trim().equals(phone.trim())) {
@@ -190,12 +236,25 @@ public class OfferService {
 
     private Conversation resolveConversation(int convId, String by, String phone, String cid, int supplierId)
             throws AppException, SQLException {
+        return resolveConversation(convId, by, phone, cid, supplierId, null);
+    }
+
+    /**
+     * Côté CLIENT avec session : la conversation doit appartenir au compte
+     * (ou être invitée prouvée par phone+cid, rattachée au compte).
+     * Sans session : preuve phone+cid (parcours invité conservé).
+     */
+    private Conversation resolveConversation(int convId, String by, String phone, String cid, int supplierId,
+            Integer sessionCustomerId) throws AppException, SQLException {
         if ("SUPPLIER".equals(by)) {
             Conversation c = conversationDAO.findByIdScoped(supplierId, convId);
             if (c == null) {
                 throw new AppException(ErrorCodes.CONVERSATION_ACCESS_DENIED, 403, "Conversation inaccessible");
             }
             return c;
+        }
+        if (sessionCustomerId != null) {
+            return conversationService.getForCustomerOrLink(convId, sessionCustomerId, phone, cid);
         }
         return conversationService.getForGuest(convId, phone, cid);
     }

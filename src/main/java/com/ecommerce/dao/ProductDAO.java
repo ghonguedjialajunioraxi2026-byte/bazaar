@@ -31,6 +31,7 @@ public class ProductDAO {
         p.setSizes(Product.parseJsonArray(rs.getString("sizes")));
         p.setColors(Product.parseJsonArray(rs.getString("colors")));
         p.setStock(rs.getInt("stock"));
+        try { p.setDeliveryPrice(rs.getInt("delivery_price")); } catch (SQLException e) { p.setDeliveryPrice(0); }
         int supId = rs.getInt("supplier_id");
         p.setSupplierId(rs.wasNull() ? 0 : supId);
         try { p.setStatus(rs.getString("status")); } catch (SQLException e) { p.setStatus(null); }
@@ -47,6 +48,11 @@ public class ProductDAO {
             p.setSupplierWhatsapp("");
         }
         try {
+            p.setSupplierLogo(rs.getString("supplier_logo"));
+        } catch (SQLException e) {
+            p.setSupplierLogo(null);
+        }
+        try {
             p.setPromoStart(rs.getString("promo_start"));
             p.setPromoEnd(rs.getString("promo_end"));
         } catch (SQLException e) {
@@ -57,7 +63,7 @@ public class ProductDAO {
     }
 
     private String buildBaseQuery() {
-        return "SELECT p.*, c.name AS category_name, s.name AS supplier_name, s.phone AS supplier_phone "
+        return "SELECT p.*, c.name AS category_name, s.name AS supplier_name, s.phone AS supplier_phone, s.logo AS supplier_logo "
              + "FROM products p "
              + "LEFT JOIN categories c ON p.category_id = c.id "
              + "LEFT JOIN suppliers s ON p.supplier_id = s.id ";
@@ -66,7 +72,7 @@ public class ProductDAO {
     private String buildBaseQueryPublic() {
         // Accueil : TOUS les produits, toutes catégories, sans filtre de statut.
         // (Le filtre status cassait l'accueil quand la colonne n'existe pas encore en base.)
-        return "SELECT p.*, c.name AS category_name, s.name AS supplier_name, s.phone AS supplier_phone "
+        return "SELECT p.*, c.name AS category_name, s.name AS supplier_name, s.phone AS supplier_phone, s.logo AS supplier_logo "
              + "FROM products p "
              + "LEFT JOIN categories c ON p.category_id = c.id "
              + "LEFT JOIN suppliers s ON p.supplier_id = s.id "
@@ -563,8 +569,8 @@ public class ProductDAO {
 
     public int createSupplierProduct(Product p) throws SQLException {
         String slug = toSlug(p.getName());
-        String sql = "INSERT INTO products (name, slug, reference, brand, category_id, price, old_price, discount, badge, description, images, sizes, colors, stock, supplier_id, status, promo_start, promo_end) "
-                   + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'ACTIVE', ?, ?)";
+        String sql = "INSERT INTO products (name, slug, reference, brand, category_id, price, old_price, discount, badge, description, images, sizes, colors, stock, delivery_price, supplier_id, status, promo_start, promo_end) "
+                   + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'ACTIVE', ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, p.getName());
@@ -581,9 +587,10 @@ public class ProductDAO {
             ps.setString(12, toJsonArray(p.getSizes()));
             ps.setString(13, toJsonArray(p.getColors()));
             ps.setInt(14, p.getStock());
-            ps.setInt(15, p.getSupplierId());
-            if (p.getPromoStart() != null) ps.setString(16, p.getPromoStart()); else ps.setNull(16, Types.DATE);
-            if (p.getPromoEnd() != null) ps.setString(17, p.getPromoEnd()); else ps.setNull(17, Types.DATE);
+            ps.setInt(15, p.getDeliveryPrice());
+            ps.setInt(16, p.getSupplierId());
+            if (p.getPromoStart() != null) ps.setString(17, p.getPromoStart()); else ps.setNull(17, Types.DATE);
+            if (p.getPromoEnd() != null) ps.setString(18, p.getPromoEnd()); else ps.setNull(18, Types.DATE);
             ps.executeUpdate();
             try (ResultSet keys = ps.getGeneratedKeys()) {
                 if (keys.next()) return keys.getInt(1);
@@ -594,7 +601,7 @@ public class ProductDAO {
 
     // Mise à jour par le fournisseur : ne modifie JAMAIS supplier_id ni status
     public void updateSupplierProduct(Product p) throws SQLException {
-        String sql = "UPDATE products SET name=?, slug=?, reference=?, brand=?, category_id=?, price=?, old_price=?, discount=?, badge=?, description=?, images=?, sizes=?, colors=?, stock=?, promo_start=?, promo_end=? WHERE id=? AND supplier_id=?";
+        String sql = "UPDATE products SET name=?, slug=?, reference=?, brand=?, category_id=?, price=?, old_price=?, discount=?, badge=?, description=?, images=?, sizes=?, colors=?, stock=?, delivery_price=?, promo_start=?, promo_end=? WHERE id=? AND supplier_id=?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, p.getName());
@@ -611,10 +618,11 @@ public class ProductDAO {
             ps.setString(12, toJsonArray(p.getSizes()));
             ps.setString(13, toJsonArray(p.getColors()));
             ps.setInt(14, p.getStock());
-            if (p.getPromoStart() != null) ps.setString(15, p.getPromoStart()); else ps.setNull(15, Types.DATE);
-            if (p.getPromoEnd() != null) ps.setString(16, p.getPromoEnd()); else ps.setNull(16, Types.DATE);
-            ps.setInt(17, p.getId());
-            ps.setInt(18, p.getSupplierId());
+            ps.setInt(15, p.getDeliveryPrice());
+            if (p.getPromoStart() != null) ps.setString(16, p.getPromoStart()); else ps.setNull(16, Types.DATE);
+            if (p.getPromoEnd() != null) ps.setString(17, p.getPromoEnd()); else ps.setNull(17, Types.DATE);
+            ps.setInt(18, p.getId());
+            ps.setInt(19, p.getSupplierId());
             ps.executeUpdate();
         }
     }

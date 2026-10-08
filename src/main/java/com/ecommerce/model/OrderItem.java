@@ -12,6 +12,8 @@ public class OrderItem {
     private int unitPrice;
     /** Offre négociée consommée (nullable, traçabilité Phase 8). */
     private Integer offerId;
+    /** Visuel principal du produit (lecture seule, jointure product_images). */
+    private String image;
 
     public OrderItem() {}
 
@@ -41,4 +43,7 @@ public class OrderItem {
 
     public Integer getOfferId() { return offerId; }
     public void setOfferId(Integer offerId) { this.offerId = offerId; }
+
+    public String getImage() { return image; }
+    public void setImage(String image) { this.image = image; }
 }

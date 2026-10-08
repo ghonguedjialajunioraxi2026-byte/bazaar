@@ -370,6 +370,11 @@ public class NotificationDAO {
     // ================= FOURNISSEUR PAGINÉ =================
 
     public List<Notification> findForSupplierPaged(int supplierId, String category, Boolean unreadOnly, int limit, int offset) throws SQLException {
+        return findForSupplierPaged(supplierId, category, unreadOnly, false, limit, offset);
+    }
+
+    /** Variante avec filtre d'archivage : null = toutes, true = sauvegardées, false = boîte active. */
+    public List<Notification> findForSupplierPaged(int supplierId, String category, Boolean unreadOnly, Boolean archivedOnly, int limit, int offset) throws SQLException {
         List<Notification> list = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT * FROM notifications WHERE target_role = 'SUPPLIER' AND (target_user_id = ? OR target_user_id IS NULL)");
         List<Object> params = new ArrayList<>();
@@ -380,6 +385,7 @@ public class NotificationDAO {
             if (hasColumn("event_code")) params.add(category);
         }
         if (unreadOnly != null) sql.append(unreadOnly ? " AND is_read = 0" : " AND is_read = 1");
+        if (hasColumn("is_archived") && archivedOnly != null) sql.append(archivedOnly ? " AND is_archived = 1" : " AND is_archived = 0");
         sql.append(" ORDER BY created_at DESC LIMIT ? OFFSET ?");
         params.add(limit);
         params.add(offset);
@@ -394,6 +400,10 @@ public class NotificationDAO {
     }
 
     public int countForSupplierPaged(int supplierId, String category, Boolean unreadOnly) throws SQLException {
+        return countForSupplierPaged(supplierId, category, unreadOnly, false);
+    }
+
+    public int countForSupplierPaged(int supplierId, String category, Boolean unreadOnly, Boolean archivedOnly) throws SQLException {
         StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM notifications WHERE target_role = 'SUPPLIER' AND (target_user_id = ? OR target_user_id IS NULL)");
         List<Object> params = new ArrayList<>();
         params.add(supplierId);
@@ -403,6 +413,7 @@ public class NotificationDAO {
             if (hasColumn("event_code")) params.add(category);
         }
         if (unreadOnly != null) sql.append(unreadOnly ? " AND is_read = 0" : " AND is_read = 1");
+        if (hasColumn("is_archived") && archivedOnly != null) sql.append(archivedOnly ? " AND is_archived = 1" : " AND is_archived = 0");
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql.toString())) {
             bindParams(ps, params);
@@ -471,7 +482,8 @@ public class NotificationDAO {
     }
 
     public int countUnreadForSupplier(int supplierId) throws SQLException {
-        String sql = "SELECT COUNT(*) FROM notifications WHERE target_role = 'SUPPLIER' AND (target_user_id = ? OR target_user_id IS NULL) AND is_read = 0";
+        String sql = "SELECT COUNT(*) FROM notifications WHERE target_role = 'SUPPLIER' AND (target_user_id = ? OR target_user_id IS NULL) AND is_read = 0"
+                + (hasColumn("is_archived") ? " AND is_archived = 0" : "");
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, supplierId);
@@ -501,6 +513,30 @@ public class NotificationDAO {
         }
     }
 
+    /** Suppression d'une notification par son propriétaire fournisseur (anti-IDOR). */
+    public boolean deleteForSupplier(int supplierId, int id) throws SQLException {
+        String sql = "DELETE FROM notifications WHERE id = ? AND target_role = 'SUPPLIER' AND (target_user_id = ? OR target_user_id IS NULL)";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.setInt(2, supplierId);
+            return ps.executeUpdate() > 0;
+        }
+    }
+
+    /** Sauvegarde (archivage) / restauration d'une notification par son propriétaire. */
+    public boolean archiveForSupplier(int supplierId, int id, boolean archived) throws SQLException {
+        if (!hasColumn("is_archived")) return false;
+        String sql = "UPDATE notifications SET is_archived = ? WHERE id = ? AND target_role = 'SUPPLIER' AND (target_user_id = ? OR target_user_id IS NULL)";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, archived ? 1 : 0);
+            ps.setInt(2, id);
+            ps.setInt(3, supplierId);
+            return ps.executeUpdate() > 0;
+        }
+    }
+
     public void createForSupplier(int supplierId, String title, String message, String type) throws SQLException {
         Notification n = new Notification();
         n.setTargetRole("SUPPLIER");
@@ -522,6 +558,7 @@ public class NotificationDAO {
         n.setType(rs.getString("type"));
         try { n.setPriority(rs.getString("priority")); } catch (SQLException ignored) { n.setPriority("NORMAL"); }
         n.setRead(rs.getBoolean("is_read"));
+        try { n.setArchived(rs.getBoolean("is_archived")); } catch (SQLException ignored) {}
         n.setLink(rs.getString("link"));
         n.setCreatedAt(rs.getString("created_at"));
         // Colonnes v3 (tolérantes : absentes avant migration).

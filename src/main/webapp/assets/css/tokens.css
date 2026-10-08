@@ -1,11 +1,11 @@
 /* =========================================================
-   MBOA STYLE — Design tokens officiels
+   BAZAAR — Design tokens officiels
    Identité VERT CITRON + BLANC (65/25/10).
    Signature : #B7F000. Source unique de vérité visuelle.
    Préfixes : --mboa-* (canonique) + --ms-* (compat).
    ========================================================= */
 :root {
-  /* ---------- PALETTE OFFICIELLE MBOA (§1-2) ---------- */
+  /* ---------- PALETTE OFFICIELLE BAZAAR (§1-2) ---------- */
   --mboa-lime: #B7F000;
   --mboa-lime-bright: #C8FF1A;
   --mboa-lime-active: #9ED600;
@@ -21,6 +21,23 @@
 
   --mboa-gray: #5F6B61;
   --mboa-border: #DDE6DC;
+
+  /* ---------- MARQUE BAZAAR (§15 — variables canoniques) ---------- */
+  --brand-primary: #B7F000;
+  --brand-primary-bright: #C8FF1A;
+  --brand-deep: #123B16;
+  --brand-dark: #0B2410;
+  --brand-white: #FFFFFF;
+  --brand-soft: #F7FAF5;
+  --brand-text-muted: #5F6B61;
+  --brand-border: #DDE6DC;
+  --brand-lime: #B7F000;
+  --brand-lime-bright: #C8FF1A;
+  --brand-green: #123B16;
+  --brand-green-dark: #0B2410;
+  --brand-black: #0A0A0A;
+  --brand-white: #FFFFFF;
+  --brand-soft-white: #F7FAF5;
 
   /* Teintes douces citron (anciennes teintes rouges réassignées) */
   --mboa-lime-50: #F7FFDC;
@@ -70,7 +87,7 @@
   --ms-green-deep: #123B16;       /* Titres / navigation claire */
   --ms-green-light: #C8FF1A;      /* Hover lumineux */
   --ms-gold-champagne: #B7F000;   /* Accent = citron */
-  --ms-navy: #0B2410;             /* CHROME (sidebar, footer, fonds sombres) */
+  --ms-navy: #0B2410;             /* Vert nuit (bandes premium, sidebar fournisseur) */
   --ms-background: #F7FAF5;       /* BACKGROUND (pages contenu) */
   --ms-surface: #FFFFFF;          /* SURFACE (cartes, menus, modales) */
   --ms-text: #123B16;             /* Texte principal */

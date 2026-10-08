@@ -126,23 +126,121 @@ public class ConversationDAO {
     }
 
     public int create(Conversation c) throws SQLException {
-        String sql = "INSERT INTO conversations (supplier_id, client_identifier, client_name, client_phone, order_id, product_id, subject, status) "
-                + "VALUES (?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO conversations (supplier_id, customer_id, client_identifier, client_name, client_phone, order_id, product_id, subject, status) "
+                + "VALUES (?,?,?,?,?,?,?,?,?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, c.getSupplierId());
-            ps.setString(2, c.getClientIdentifier());
-            ps.setString(3, c.getClientName());
-            ps.setString(4, c.getClientPhone());
-            if (c.getOrderId() != null) ps.setInt(5, c.getOrderId()); else ps.setNull(5, Types.INTEGER);
-            if (c.getProductId() != null) ps.setInt(6, c.getProductId()); else ps.setNull(6, Types.INTEGER);
-            ps.setString(7, c.getSubject());
-            ps.setString(8, c.getStatus() == null ? "OPEN" : c.getStatus());
+            if (c.getCustomerId() > 0) ps.setInt(2, c.getCustomerId()); else ps.setNull(2, Types.INTEGER);
+            ps.setString(3, c.getClientIdentifier());
+            ps.setString(4, c.getClientName());
+            ps.setString(5, c.getClientPhone());
+            if (c.getOrderId() != null) ps.setInt(6, c.getOrderId()); else ps.setNull(6, Types.INTEGER);
+            if (c.getProductId() != null) ps.setInt(7, c.getProductId()); else ps.setNull(7, Types.INTEGER);
+            ps.setString(8, c.getSubject());
+            ps.setString(9, c.getStatus() == null ? "OPEN" : c.getStatus());
             ps.executeUpdate();
             ResultSet keys = ps.getGeneratedKeys();
             if (keys.next()) return keys.getInt(1);
             return 0;
         }
+    }
+
+    /** Lie une conversation invitée au compte client (migration douce, 1ère utilisation). */
+    public void linkCustomer(int conversationId, int customerId) throws SQLException {
+        String sql = "UPDATE conversations SET customer_id = ? WHERE id = ? AND (customer_id IS NULL OR customer_id = 0)";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, customerId);
+            ps.setInt(2, conversationId);
+            ps.executeUpdate();
+        }
+    }
+
+    /** Conversations d'un client authentifié (compte prioritaire sur phone+cid). */
+    public List<Conversation> findByCustomer(int customerId) throws SQLException {
+        List<Conversation> list = new ArrayList<>();
+        String sql = "SELECT c.*, "
+                + "(SELECT COUNT(*) FROM messages m WHERE m.conversation_id = c.id AND m.sender='SUPPLIER' AND m.is_read=0) AS unread_count, "
+                + "(SELECT m.body FROM messages m WHERE m.conversation_id = c.id ORDER BY m.id DESC LIMIT 1) AS last_message, "
+                + "(SELECT m.created_at FROM messages m WHERE m.conversation_id = c.id ORDER BY m.id DESC LIMIT 1) AS last_message_at "
+                + "FROM conversations c WHERE c.customer_id = ? ORDER BY c.updated_at DESC";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, customerId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) list.add(mapRow(rs, true));
+            }
+        }
+        return list;
+    }
+
+    /** Conversation strictement limitée à son propriétaire authentifié (anti-IDOR). */
+    public Conversation findByIdCustomer(int id, int customerId) throws SQLException {
+        String sql = "SELECT * FROM conversations WHERE id = ? AND customer_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.setInt(2, customerId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return mapRow(rs, false);
+            }
+        }
+        return null;
+    }
+
+    public int unreadCountForCustomer(int customerId) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM messages m "
+                + "JOIN conversations c ON c.id = m.conversation_id "
+                + "WHERE c.customer_id = ? AND m.sender='SUPPLIER' AND m.is_read=0";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, customerId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return rs.getInt(1);
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * Fiche produit pour contexte conversation (nom, prix, image primaire).
+     * Jamais de données vendeur sensibles.
+     */
+    public java.util.Map<String, Object> productSnippet(int productId) throws SQLException {
+        String sql = "SELECT p.id, p.name, p.price, "
+                + "(SELECT pi.image_url FROM product_images pi WHERE pi.product_id = p.id "
+                + "ORDER BY pi.is_primary DESC, pi.sort_order ASC LIMIT 1) AS image "
+                + "FROM products p WHERE p.id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, productId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    java.util.Map<String, Object> m = new java.util.LinkedHashMap<>();
+                    m.put("id", rs.getInt("id"));
+                    m.put("name", rs.getString("name"));
+                    m.put("price", rs.getInt("price"));
+                    m.put("image", rs.getString("image"));
+                    return m;
+                }
+            }
+        }
+        return null;
+    }
+
+    /** Numéro de commande pour contexte (lecture seule). */
+    public String findOrderNumber(Integer orderId) throws SQLException {
+        if (orderId == null) return null;
+        String sql = "SELECT order_number FROM orders WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, orderId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return rs.getString(1);
+            }
+        }
+        return null;
     }
 
     public int unreadCountForSupplier(int supplierId) throws SQLException {
@@ -161,7 +259,7 @@ public class ConversationDAO {
 
     public void markConversationRead(int supplierId, int conversationId) throws SQLException {
         String sql = "UPDATE messages m JOIN conversations c ON c.id = m.conversation_id "
-                + "SET m.is_read=1 WHERE c.id = ? AND c.supplier_id = ? AND m.sender='CLIENT'";
+                + "SET m.is_read=1, m.read_at = IF(m.read_at IS NULL, NOW(), m.read_at) WHERE c.id = ? AND c.supplier_id = ? AND m.sender='CLIENT'";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, conversationId);
@@ -278,7 +376,7 @@ public class ConversationDAO {
     }
 
     public void markGuestRead(int conversationId) throws SQLException {
-        String sql = "UPDATE messages SET is_read=1 WHERE conversation_id = ? AND sender='SUPPLIER'";
+        String sql = "UPDATE messages SET is_read=1, read_at = IF(read_at IS NULL, NOW(), read_at) WHERE conversation_id = ? AND sender='SUPPLIER'";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, conversationId);
@@ -318,6 +416,10 @@ public class ConversationDAO {
         Conversation c = new Conversation();
         c.setId(rs.getInt("id"));
         c.setSupplierId(rs.getInt("supplier_id"));
+        try {
+            int cuid = rs.getInt("customer_id");
+            c.setCustomerId(rs.wasNull() ? 0 : cuid);
+        } catch (SQLException ignored) {}
         c.setClientIdentifier(rs.getString("client_identifier"));
         c.setClientName(rs.getString("client_name"));
         c.setClientPhone(rs.getString("client_phone"));

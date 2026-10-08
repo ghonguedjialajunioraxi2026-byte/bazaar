@@ -7,6 +7,8 @@ public class Order {
     private String orderNumber;
     private String fullname;
     private String phone;
+    /** Email client optionnel (notifications email, jamais obligatoire). */
+    private String email;
     private String city;
     private String district;
     private String address;
@@ -17,6 +19,8 @@ public class Order {
     private String paymentStatus;
     private int total;
     private int supplierId;
+    /** Client propriétaire (0 = commande invitée historique). */
+    private int customerId;
     private String status;
     private String createdAt;
     private List<OrderItem> items;
@@ -34,6 +38,9 @@ public class Order {
 
     public String getPhone() { return phone; }
     public void setPhone(String phone) { this.phone = phone; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
     public String getCity() { return city; }
     public void setCity(String city) { this.city = city; }
@@ -61,6 +68,9 @@ public class Order {
 
     public int getSupplierId() { return supplierId; }
     public void setSupplierId(int supplierId) { this.supplierId = supplierId; }
+
+    public int getCustomerId() { return customerId; }
+    public void setCustomerId(int customerId) { this.customerId = customerId; }
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }

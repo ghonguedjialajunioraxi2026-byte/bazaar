@@ -3,6 +3,8 @@ package com.ecommerce.model;
 public class Conversation {
     private int id;
     private int supplierId;
+    /** Propriétaire authentifié (0 = invité phone+cid historique). */
+    private int customerId;
     private String clientIdentifier;
     private String clientName;
     private String clientPhone;
@@ -23,6 +25,9 @@ public class Conversation {
 
     public int getSupplierId() { return supplierId; }
     public void setSupplierId(int supplierId) { this.supplierId = supplierId; }
+
+    public int getCustomerId() { return customerId; }
+    public void setCustomerId(int customerId) { this.customerId = customerId; }
 
     public String getClientIdentifier() { return clientIdentifier; }
     public void setClientIdentifier(String clientIdentifier) { this.clientIdentifier = clientIdentifier; }

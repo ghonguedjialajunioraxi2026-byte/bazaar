@@ -17,6 +17,7 @@ ré-exécutables sans erreur) :
 | 3 | `database/seed_categories.sql` | catégories initiales |
 | 4 | `database/migrate_delivery.sql` | zones + expéditions |
 | 5 | `database/migrate_monetization.sql` | ledger + règles |
+| 5b | `database/migrate_monetization_1pct.sql` | commission BAZAAR = 1 % (règle active 100 bps, taux affichage + défaut `suppliers.commission_rate` 1.00) |
 | 6 | `database/migrate_notifications_v2.sql` | notifications v2 |
 | 7 | `database/migrate_notifications_v3.sql` | notifications v3 |
 | 8 | `database/migrate_order_snapshot.sql` | snapshot lignes commande (**avant** offers : `migrate_offers` fait `ADD COLUMN … AFTER product_name`) |
@@ -27,7 +28,7 @@ ré-exécutables sans erreur) :
 
 ```bash
 for f in migrate_products_status migrate_categories_v2 seed_categories \
-         migrate_delivery migrate_monetization migrate_notifications_v2 \
+         migrate_delivery migrate_monetization migrate_monetization_1pct migrate_notifications_v2 \
          migrate_notifications_v3 migrate_order_snapshot migrate_offers \
          migrate_order_number_unique migrate_payments migrate_perf_indexes; do
   mysql -u root -p mboa_style < "database/$f.sql"

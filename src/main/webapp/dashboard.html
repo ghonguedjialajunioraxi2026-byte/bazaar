@@ -2,19 +2,23 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#B7F000">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MBOA STYLE — Administration</title>
+<title>BAZAAR — Administration</title>
 <meta name="robots" content="noindex, nofollow">
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Nunito:wght@800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="assets/js/showcase.js" defer></script>
+<script src="assets/js/showcase.js?v=20260929" defer></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-<link rel="stylesheet" href="assets/css/tokens.css">
-<link rel="stylesheet" href="assets/css/components.css">
-<link rel="stylesheet" href="assets/css/showcase.css">
+<link rel="stylesheet" href="assets/css/tokens.css?v=20260929">
+<link rel="stylesheet" href="assets/css/components.css?v=20260929">
+<link rel="stylesheet" href="assets/css/showcase.css?v=20260929">
 <script>
-tailwind.config={theme:{extend:{colors:{primary:{50:'#F7FFDC',100:'#EEFFC2',200:'#DFFF8F',300:'#CFFF5C',400:'#C8FF1A',500:'#B7F000',600:'#65A30D',700:'#4D7C0F',800:'#3F6212',900:'#123B16'},accent:{50:'#F7FFDC',100:'#EEFFC2',200:'#DFFF8F',400:'#C8FF1A',500:'#65A30D',600:'#4D7C0F',700:'#3F6212'},dark:{800:'#123B16',900:'#0B2410'},mboa:{black:'#0B2410',surface:'#0B2410',secondary:'#123B16',white:'#FFFFFF',whiteSoft:'#F7FAF5',lime:'#B7F000',limeBright:'#C8FF1A',limeActive:'#9ED600',greenDeep:'#123B16',greenDark:'#0B2410',gray:'#5F6B61',grayLight:'#DDE6DC',border:'#DDE6DC',borderDark:'#123B16'}},fontFamily:{sans:['Manrope','system-ui','sans-serif'],serif:['DM Serif Display','Georgia','serif']}}}}
+tailwind.config={theme:{extend:{colors:{primary:{50:'#F7FFDC',100:'#EEFFC2',200:'#DFFF8F',300:'#CFFF5C',400:'#C8FF1A',500:'#B7F000',600:'#65A30D',700:'#4D7C0F',800:'#3F6212',900:'#123B16'},accent:{50:'#F7FFDC',100:'#EEFFC2',200:'#DFFF8F',400:'#C8FF1A',500:'#65A30D',600:'#4D7C0F',700:'#3F6212'},dark:{800:'#1A1A1A',900:'#0A0A0A'},mboa:{black:'#0B2410',surface:'#0B2410',secondary:'#123B16',white:'#FFFFFF',whiteSoft:'#F7FAF5',lime:'#B7F000',limeBright:'#C8FF1A',limeActive:'#9ED600',greenDeep:'#123B16',greenDark:'#0B2410',gray:'#5F6B61',grayLight:'#DDE6DC',border:'#DDE6DC',borderDark:'#123B16'}},fontFamily:{sans:['Manrope','system-ui','sans-serif'],serif:['DM Serif Display','Georgia','serif']}}}}
 </script>
 <style>
 /* ADMIN premium sombre : Black Navy + Emerald + Gold */
@@ -30,7 +34,7 @@ body{font-family:'Manrope',system-ui,sans-serif;background:#F7FAF5;color:#123B16
 .pw-wrap .mini-input{padding-right:44px}
 .pw-toggle{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:34px;height:34px;border:none;border-radius:8px;background:transparent;color:#5F6B61;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .pw-toggle:hover{color:#123B16;background:#F7FAF5}
-.btn-olive{display:block;width:100%;height:52px;border:none;border-radius:12px;background:#B7F000;color:#0B2410;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;transition:background 200ms ease}
+.btn-olive{display:block;width:100%;height:52px;border:none;border-radius:12px;background:#B7F000;color:#0A0A0A;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;transition:background 200ms ease}
 .btn-olive:hover{background:#C8FF1A}
 .btn-olive:active{background:#9ED600}
 .auth-side-dash{min-height:320px}
@@ -40,8 +44,8 @@ body{font-family:'Manrope',system-ui,sans-serif;background:#F7FAF5;color:#123B16
 .admin-dark .stat-card{background:rgba(255,255,255,0.04);border:1px solid rgba(183,240,0,0.18)}
 .admin-gold{color:#4D7C0F}
 .sidebar-link{transition:background 120ms ease-out,color 120ms ease-out}
-.sidebar-link:hover{background:rgba(183,240,0,0.12);color:#B7F000}.sidebar-link.active{background:#B7F000;color:#0B2410}
-.sidebar-link.active{border-right:3px solid #B7F000;font-weight:600}
+.sidebar-link:hover{background:rgba(183,240,0,0.16);color:#0A0A0A}.sidebar-link.active{background:#B7F000;color:#0A0A0A}
+.sidebar-link.active{border-right:3px solid #0A0A0A;font-weight:600}
 .stat-card{transition:transform 200ms ease-out,box-shadow 300ms ease-out}
 .stat-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.08)}
 .table-row:hover{background:#F7FAF5}
@@ -58,12 +62,11 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(1
 <div id="loginPage" class="login-bg-admin min-h-screen flex items-center justify-center" style="padding:40px 4vw">
   <div class="w-full grid bg-white overflow-hidden" style="max-width:min(1180px,92vw);grid-template-columns:2fr 3fr;border-radius:32px;box-shadow:0 25px 70px rgba(0,0,0,.15)">
     <div class="min-w-0 flex flex-col justify-center" style="padding: clamp(28px, 5vw, 60px);">
-      <a href="index.html" aria-label="MBOA STYLE — accueil" style="display:flex;align-items:center;gap:10px;margin-bottom:30px;text-decoration:none;color:#123B16">
-        <span style="width:38px;height:38px;border-radius:11px;background:#B7F000;color:#0B2410;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800">M</span>
-        <span style="font-weight:800;font-size:18px;letter-spacing:-.01em">MBOA <span style="color:#4D7C0F">STYLE</span></span>
+      <a href="index.html" aria-label="BAZAAR — accueil" style="display:flex;align-items:center;gap:10px;margin-bottom:30px;text-decoration:none;color:#123B16">
+        <img src="logo/BAZAAR.png" alt="BAZAAR" width="135" height="45" style="height:36px;width:auto">
       </a>
       <h1 class="font-bold text-[#123B16]" style="font-size:30px;letter-spacing:-.02em;line-height:1.2;margin-bottom:10px">Welcome Back</h1>
-      <p class="text-[#5F6B61] mb-8" style="font-size:14.5px;line-height:1.6">Connectez-vous pour accéder à votre espace MBOA STYLE.</p>
+      <p class="text-[#5F6B61] mb-8" style="font-size:14.5px;line-height:1.6">Connectez-vous pour accéder à votre espace BAZAAR.</p>
       <form id="loginForm" onsubmit="handleLogin(event)">
         <div class="mb-5">
           <label class="mini-label" for="loginUser">Username</label>
@@ -88,74 +91,83 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(1
 <div id="appShell" class="hidden min-h-screen">
 
   <!-- SIDEBAR -->
-  <aside id="sidebar" class="fixed top-0 left-0 bottom-0 w-64 bg-[#0B2410] border-r border-white/10 z-40 transform transition-transform lg:translate-x-0 -translate-x-full" style="overflow-y:auto">
-    <div class="p-5 border-b border-white/10">
+  <aside id="sidebar" class="fixed top-0 left-0 bottom-0 w-64 bg-white border-r border-[#DDE6DC] z-40 transform transition-transform lg:translate-x-0 -translate-x-full" style="overflow-y:auto">
+    <div class="p-5 border-b border-[#DDE6DC]">
       <div class="flex items-center gap-2.5">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-primary-600 to-primary-500 flex items-center justify-center">
-          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
-        </div>
-        <span class="font-bold text-white tracking-tight">MBOA <span class="text-[#B7F000]">STYLE</span></span>
-        <span class="text-xs bg-[#B7F000] text-[#0B2410] px-2 py-0.5 rounded-full font-medium ml-auto">Admin</span>
+        <img src="logo/BAZAAR.png" alt="BAZAAR" width="120" height="40" style="height:32px;width:auto">
+        <span class="text-xs bg-[#B7F000] text-[#0A0A0A] px-2 py-0.5 rounded-full font-medium ml-auto">Admin</span>
       </div>
     </div>
     <nav class="p-3" aria-label="Navigation administrative">
-      <p class="text-[10px] uppercase tracking-wider text-white/70 font-semibold px-3 mb-2 mt-2">Accueil</p>
-      <a href="#" onclick="showPage('dashboard')" data-page="dashboard" class="sidebar-link active flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white/70">
+      <p class="text-[10px] uppercase tracking-wider text-[#5F6B61] font-semibold px-3 mb-2 mt-2">Accueil</p>
+      <a href="#" onclick="showPage('dashboard')" data-page="dashboard" class="sidebar-link active flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#0A0A0A]">
         <i class="bi bi-grid-1x2-fill text-base"></i> Vue générale
       </a>
-      <p class="text-[10px] uppercase tracking-wider text-white/70 font-semibold px-3 mb-2 mt-5">Catalogue</p>
-      <a href="#" onclick="showPage('categories')" data-page="categories" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white/70">
+      <p class="text-[10px] uppercase tracking-wider text-[#5F6B61] font-semibold px-3 mb-2 mt-5">Catalogue</p>
+      <a href="#" onclick="showPage('categories')" data-page="categories" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#0A0A0A]">
         <i class="bi bi-tags text-base"></i> Catégories &amp; Produits
       </a>
-      <a href="#" onclick="showPage('promotions')" data-page="promotions" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white/70">
+      <a href="#" onclick="showPage('promotions')" data-page="promotions" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#0A0A0A]">
         <i class="bi bi-percent text-base"></i> Promotions
       </a>
-      <p class="text-[10px] uppercase tracking-wider text-white/70 font-semibold px-3 mb-2 mt-5">Marketplace</p>
-      <a href="#" onclick="showPage('orders')" data-page="orders" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white/70">
+      <p class="text-[10px] uppercase tracking-wider text-[#5F6B61] font-semibold px-3 mb-2 mt-5">Marketplace</p>
+      <a href="#" onclick="showPage('orders')" data-page="orders" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#0A0A0A]">
         <i class="bi bi-receipt text-base"></i> Commandes
       </a>
-      <a href="#" onclick="showPage('suppliers')" data-page="suppliers" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white/70">
+      <a href="#" onclick="showPage('suppliers')" data-page="suppliers" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#0A0A0A]">
         <i class="bi bi-people text-base"></i> Fournisseurs
       </a>
-      <p class="text-[10px] uppercase tracking-wider text-white/70 font-semibold px-3 mb-2 mt-5">Finances</p>
-      <a href="#" onclick="showPage('payments')" data-page="payments" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white/70">
+      <p class="text-[10px] uppercase tracking-wider text-[#5F6B61] font-semibold px-3 mb-2 mt-5">Finances</p>
+      <a href="#" onclick="showPage('payments')" data-page="payments" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#0A0A0A]">
         <i class="bi bi-credit-card text-base"></i> Paiements
-        <span id="payPageBadge" class="ml-auto min-w-[20px] h-5 px-1.5 bg-[#B7F000] text-[#0B2410] text-[10px] rounded-full hidden items-center justify-center font-bold">0</span>
+        <span id="payPageBadge" class="ml-auto min-w-[20px] h-5 px-1.5 bg-[#B7F000] text-[#0A0A0A] text-[10px] rounded-full hidden items-center justify-center font-bold">0</span>
       </a>
-      <p class="text-[10px] uppercase tracking-wider text-white/70 font-semibold px-3 mb-2 mt-5">Livraison</p>
-      <a href="#" onclick="showPage('shipments')" data-page="shipments" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white/70">
+      <a href="#" onclick="showPage('payouts')" data-page="payouts" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#0A0A0A]">
+        <i class="bi bi-send text-base"></i> Versements
+      </a>
+      <a href="#" onclick="showPage('refunds')" data-page="refunds" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#0A0A0A]">
+        <i class="bi bi-arrow-counterclockwise text-base"></i> Remboursements
+      </a>
+      <a href="#" onclick="showPage('disputes')" data-page="disputes" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#0A0A0A]">
+        <i class="bi bi-exclamation-triangle text-base"></i> Litiges
+      </a>
+      <p class="text-[10px] uppercase tracking-wider text-[#5F6B61] font-semibold px-3 mb-2 mt-5">Livraison</p>
+      <a href="#" onclick="showPage('shipments')" data-page="shipments" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#0A0A0A]">
         <i class="bi bi-truck text-base"></i> Expéditions
-        <span id="shipPageBadge" class="ml-auto min-w-[20px] h-5 px-1.5 bg-[#B7F000] text-[#0B2410] text-[10px] rounded-full hidden items-center justify-center font-bold">0</span>
+        <span id="shipPageBadge" class="ml-auto min-w-[20px] h-5 px-1.5 bg-[#B7F000] text-[#0A0A0A] text-[10px] rounded-full hidden items-center justify-center font-bold">0</span>
       </a>
-      <p class="text-[10px] uppercase tracking-wider text-white/70 font-semibold px-3 mb-2 mt-5">Communication</p>
-      <a href="#" onclick="showPage('messages')" data-page="messages" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white/70">
+      <p class="text-[10px] uppercase tracking-wider text-[#5F6B61] font-semibold px-3 mb-2 mt-5">Communication</p>
+      <a href="#" onclick="showPage('messages')" data-page="messages" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#0A0A0A]">
         <i class="bi bi-chat-dots text-base"></i> Messages
-        <span id="msgPageBadge" class="ml-auto min-w-[20px] h-5 px-1.5 bg-[#B7F000] text-[#0B2410] text-[10px] rounded-full hidden items-center justify-center font-bold">0</span>
+        <span id="msgPageBadge" class="ml-auto min-w-[20px] h-5 px-1.5 bg-[#B7F000] text-[#0A0A0A] text-[10px] rounded-full hidden items-center justify-center font-bold">0</span>
       </a>
-      <a href="#" onclick="showPage('notifications')" data-page="notifications" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white/70">
+      <a href="#" onclick="showPage('notifications')" data-page="notifications" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#0A0A0A]">
         <i class="bi bi-bell text-base"></i> Notifications
-        <span id="notifPageBadge" class="ml-auto min-w-[20px] h-5 px-1.5 bg-[#B7F000] text-[#0B2410] text-[10px] rounded-full hidden items-center justify-center font-bold">0</span>
+        <span id="notifPageBadge" class="ml-auto min-w-[20px] h-5 px-1.5 bg-[#B7F000] text-[#0A0A0A] text-[10px] rounded-full hidden items-center justify-center font-bold">0</span>
       </a>
-      <p class="text-[10px] uppercase tracking-wider text-white/70 font-semibold px-3 mb-2 mt-5">Modération</p>
-      <a href="#" onclick="showPage('reviews')" data-page="reviews" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white/70">
+      <p class="text-[10px] uppercase tracking-wider text-[#5F6B61] font-semibold px-3 mb-2 mt-5">Modération</p>
+      <a href="#" onclick="showPage('reviews')" data-page="reviews" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#0A0A0A]">
         <i class="bi bi-star text-base"></i> Avis
-        <span id="revPageBadge" class="ml-auto min-w-[20px] h-5 px-1.5 bg-[#B7F000] text-[#0B2410] text-[10px] rounded-full hidden items-center justify-center font-bold">0</span>
+        <span id="revPageBadge" class="ml-auto min-w-[20px] h-5 px-1.5 bg-[#B7F000] text-[#0A0A0A] text-[10px] rounded-full hidden items-center justify-center font-bold">0</span>
       </a>
-      <p class="text-[10px] uppercase tracking-wider text-white/70 font-semibold px-3 mb-2 mt-5">Analyse</p>
-      <a href="#" onclick="showPage('stats')" data-page="stats" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white/70">
+      <p class="text-[10px] uppercase tracking-wider text-[#5F6B61] font-semibold px-3 mb-2 mt-5">Analyse</p>
+      <a href="#" onclick="showPage('stats')" data-page="stats" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#0A0A0A]">
         <i class="bi bi-graph-up text-base"></i> Statistiques
       </a>
-      <a href="#" onclick="showPage('visitors')" data-page="visitors" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white/70">
+      <a href="#" onclick="showPage('visitors')" data-page="visitors" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#0A0A0A]">
         <i class="bi bi-bar-chart-line text-base"></i> Activité
       </a>
-      <p class="text-[10px] uppercase tracking-wider text-white/70 font-semibold px-3 mb-2 mt-5">Système</p>
-      <a href="#" onclick="showPage('audit')" data-page="audit" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white/70">
+      <p class="text-[10px] uppercase tracking-wider text-[#5F6B61] font-semibold px-3 mb-2 mt-5">Système</p>
+      <a href="#" onclick="showPage('audit')" data-page="audit" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#0A0A0A]">
         <i class="bi bi-journal-text text-base"></i> Journal d'audit
       </a>
-      <a href="#" onclick="showPage('settings')" data-page="settings" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white/70">
+      <a href="#" onclick="showPage('settings')" data-page="settings" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#0A0A0A]">
         <i class="bi bi-gear text-base"></i> Paramètres
       </a>
-      <a href="index.html" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white/70 mt-1">
+      <a href="#" onclick="showPage('pawapay')" data-page="pawapay" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#0A0A0A]">
+        <i class="bi bi-bank text-base"></i> PawaPay
+      </a>
+      <a href="index.html" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#0A0A0A] mt-1">
         <i class="bi bi-shop text-base"></i> Voir la boutique
       </a>
     </nav>
@@ -172,10 +184,10 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(1
       <div class="flex items-center gap-3">
         <button onclick="loadNotifications()" class="relative p-2 rounded-lg hover:bg-[#F7FAF5]" aria-label="Notifications" aria-haspopup="true" aria-expanded="false" id="notifBellBtn">
           <i class="bi bi-bell text-lg text-[#5F6B61]"></i>
-          <span id="notifBadge" class="absolute -top-0.5 -right-0.5 w-5 h-5 bg-[#B7F000] text-[#0B2410] text-[10px] rounded-full flex items-center justify-center font-bold hidden" aria-label="Notifications non lues">0</span>
+          <span id="notifBadge" class="absolute -top-0.5 -right-0.5 w-5 h-5 bg-[#B7F000] text-[#0A0A0A] text-[10px] rounded-full flex items-center justify-center font-bold hidden" aria-label="Notifications non lues">0</span>
         </button>
         <div class="flex items-center gap-2 pl-3 border-l border-[#DDE6DC]">
-          <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center text-[#0B2410] text-sm font-bold">A</div>
+          <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center text-[#0A0A0A] text-sm font-bold">A</div>
           <span class="text-sm font-medium text-[#123B16] hidden sm:block">Admin</span>
           <span id="roleChip" class="hidden text-[10px] font-bold px-2 py-0.5 rounded-full bg-primary-100 text-[#4D7C0F]">ADMIN</span>
           <button onclick="handleLogout()" class="p-1.5 rounded-lg hover:bg-[rgba(220,38,38,0.08)] text-[#5F6B61] hover:text-[#DC2626] transition" title="Déconnexion">
@@ -189,9 +201,20 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(1
     <main class="p-4 sm:p-6 2xl:px-10">
       <!-- DASHBOARD PAGE -->
       <div id="page-dashboard" class="page-content">
+        <div class="flex flex-wrap items-center gap-3 mb-4">
+          <span id="syncBadge" class="text-xs font-semibold px-3 py-1.5 rounded-full bg-[#F7FAF5] text-[#5F6B61] border border-[#DDE6DC]">Synchronisation…</span>
+          <button onclick="loadSyncedDashboard()" class="text-xs font-bold px-3 py-1.5 rounded-full bg-primary-600 text-white hover:bg-primary-700 transition">Actualiser</button>
+          <label class="text-xs text-[#5F6B61] flex items-center gap-1.5 ml-auto"><input id="syncAuto" type="checkbox" checked class="accent-[#4D7C0F]"> Auto (60 s)</label>
+        </div>
         <div id="dashStats" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-5 gap-4 mb-6"></div>
         <h3 class="font-semibold text-[#123B16] mb-3">Supervision <span class="text-xs font-normal text-[#5F6B61]">(temps réel, toutes données réelles)</span></h3>
         <div id="overviewRow" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-6"></div>
+        <h3 class="font-semibold text-[#123B16] mb-3">Client ↔ Fournisseur <span class="text-xs font-normal text-[#5F6B61]">(même instant T : encours vs comptabilisé, réconciliation par boutique)</span></h3>
+        <div id="syncRow" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6"></div>
+        <div class="bg-[#FFFFFF] rounded-xl p-5 shadow-sm border border-[#DDE6DC] mb-6">
+          <h3 class="font-semibold text-[#123B16] mb-4">Réconciliation par boutique <span class="text-xs font-normal text-[#5F6B61]">(commandes vs ledger — mêmes chiffres que l'espace fournisseur)</span></h3>
+          <div id="reconTable" class="overflow-x-auto"></div>
+        </div>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           <div class="bg-[#FFFFFF] rounded-xl p-5 shadow-sm border border-[#DDE6DC]">
             <h3 class="font-semibold text-[#123B16] mb-4">Commandes par statut</h3>
@@ -240,6 +263,59 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(1
           <div id="paymentsTable" class="overflow-x-auto"></div>
         </div>
         <div id="payPagination" class="flex justify-center gap-2 mt-5"></div>
+      </div>
+
+      <!-- PAYOUTS PAGE -->
+      <div id="page-payouts" class="page-content hidden">
+        <div class="flex flex-wrap gap-2 mb-4" role="group" aria-label="Filtrer les versements">
+          <button onclick="filterPayouts('', event)" class="payout-filter active px-4 py-2 rounded-lg text-sm font-medium border border-[#DDE6DC] bg-primary-600 text-white transition">Tous</button>
+          <button onclick="filterPayouts('PENDING', event)" class="payout-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#DDE6DC] bg-[#FFFFFF] text-[#5F6B61] transition">En attente</button>
+          <button onclick="filterPayouts('ACCEPTED', event)" class="payout-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#DDE6DC] bg-[#FFFFFF] text-[#5F6B61] transition">Acceptés</button>
+          <button onclick="filterPayouts('ENQUEUED', event)" class="payout-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#DDE6DC] bg-[#FFFFFF] text-[#5F6B61] transition">En file</button>
+          <button onclick="filterPayouts('PROCESSING', event)" class="payout-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#DDE6DC] bg-[#FFFFFF] text-[#5F6B61] transition">En cours</button>
+          <button onclick="filterPayouts('COMPLETED', event)" class="payout-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#DDE6DC] bg-[#FFFFFF] text-[#5F6B61] transition">Versés</button>
+          <button onclick="filterPayouts('FAILED', event)" class="payout-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#DDE6DC] bg-[#FFFFFF] text-[#5F6B61] transition">Échoués</button>
+        </div>
+        <div class="bg-[#FFFFFF] rounded-xl shadow-sm border border-[#DDE6DC] p-4 mb-4">
+          <p class="text-sm font-bold mb-1">Versements groupés (Bulk PawaPay, max 20)</p>
+          <p class="text-xs text-[#5F6B61] mb-2">Un seul appel PawaPay pour N commandes éligibles — chaque versement garde son payoutId, son calcul et ses callbacks.</p>
+          <div class="flex flex-wrap gap-2">
+            <input id="bulkOrderIds" type="text" placeholder="IDs commandes séparés par des virgules (ex : 12,13,14)" class="flex-1 min-w-[220px] px-4 py-2.5 rounded-xl border border-[#DDE6DC] text-sm">
+            <button onclick="processBulkPayouts()" class="px-4 py-2.5 bg-primary-600 text-white text-sm font-bold rounded-xl">Verser en bulk</button>
+          </div>
+          <div id="bulkResult" class="text-xs mt-2"></div>
+        </div>
+        <div class="bg-[#FFFFFF] rounded-xl shadow-sm border border-[#DDE6DC] overflow-hidden">
+          <div id="payoutsTable" class="overflow-x-auto"></div>
+        </div>
+      </div>
+
+      <!-- REFUNDS PAGE -->
+      <div id="page-refunds" class="page-content hidden">
+        <div class="flex flex-wrap gap-2 mb-4" role="group" aria-label="Filtrer les remboursements">
+          <button onclick="filterRefunds('', event)" class="refund-filter active px-4 py-2 rounded-lg text-sm font-medium border border-[#DDE6DC] bg-primary-600 text-white transition">Tous</button>
+          <button onclick="filterRefunds('ACCEPTED', event)" class="refund-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#DDE6DC] bg-[#FFFFFF] text-[#5F6B61] transition">Acceptés</button>
+          <button onclick="filterRefunds('ENQUEUED', event)" class="refund-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#DDE6DC] bg-[#FFFFFF] text-[#5F6B61] transition">En file</button>
+          <button onclick="filterRefunds('PROCESSING', event)" class="refund-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#DDE6DC] bg-[#FFFFFF] text-[#5F6B61] transition">En cours</button>
+          <button onclick="filterRefunds('COMPLETED', event)" class="refund-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#DDE6DC] bg-[#FFFFFF] text-[#5F6B61] transition">Effectués</button>
+          <button onclick="filterRefunds('FAILED', event)" class="refund-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#DDE6DC] bg-[#FFFFFF] text-[#5F6B61] transition">Échoués</button>
+        </div>
+        <div class="bg-[#FFFFFF] rounded-xl shadow-sm border border-[#DDE6DC] overflow-hidden">
+          <div id="refundsTable" class="overflow-x-auto"></div>
+        </div>
+      </div>
+
+      <!-- DISPUTES PAGE -->
+      <div id="page-disputes" class="page-content hidden">
+        <div class="flex flex-wrap gap-2 mb-4" role="group" aria-label="Filtrer les litiges">
+          <button onclick="filterDisputes('OPEN', event)" class="dispute-filter active px-4 py-2 rounded-lg text-sm font-medium border border-[#DDE6DC] bg-primary-600 text-white transition">Ouverts</button>
+          <button onclick="filterDisputes('', event)" class="dispute-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#DDE6DC] bg-[#FFFFFF] text-[#5F6B61] transition">Tous</button>
+          <button onclick="filterDisputes('RESOLVED_REFUNDED', event)" class="dispute-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#DDE6DC] bg-[#FFFFFF] text-[#5F6B61] transition">Remboursés</button>
+          <button onclick="filterDisputes('RESOLVED_REJECTED', event)" class="dispute-filter px-4 py-2 rounded-lg text-sm font-medium border border-[#DDE6DC] bg-[#FFFFFF] text-[#5F6B61] transition">Rejetés</button>
+        </div>
+        <div class="bg-[#FFFFFF] rounded-xl shadow-sm border border-[#DDE6DC] overflow-hidden">
+          <div id="disputesTable" class="overflow-x-auto"></div>
+        </div>
       </div>
 
       <!-- SHIPMENTS PAGE -->
@@ -462,12 +538,12 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(1
         </div>
         <div class="bg-[#FFFFFF] rounded-xl p-5 shadow-sm border border-[#DDE6DC] mb-6">
           <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
-            <h3 class="font-semibold text-[#123B16]">Finance plateforme <span class="text-xs font-normal text-[#5F6B61]">(GMV ≠ revenus MBOA)</span></h3>
+            <h3 class="font-semibold text-[#123B16]">Finance plateforme <span class="text-xs font-normal text-[#5F6B61]">(GMV ≠ revenus BAZAAR)</span></h3>
             <span class="text-xs text-[#5F6B61]">Comptabilisé au passage en LIVREE</span>
           </div>
           <div class="grid grid-cols-2 lg:grid-cols-4 gap-4" id="financeCards">
             <div class="rounded-xl bg-[#FFFFFF] p-4"><p class="text-xs text-[#5F6B61]">Volume brut (GMV)</p><p class="text-xl font-bold tabular-nums" id="finGmv">—</p></div>
-            <div class="rounded-xl bg-primary-50 p-4"><p class="text-xs text-[#5F6B61]">Revenus MBOA</p><p class="text-xl font-bold text-[#4D7C0F] tabular-nums" id="finPlatform">—</p></div>
+            <div class="rounded-xl bg-primary-50 p-4"><p class="text-xs text-[#5F6B61]">Revenus BAZAAR</p><p class="text-xl font-bold text-[#4D7C0F] tabular-nums" id="finPlatform">—</p></div>
             <div class="rounded-xl bg-[#FFFFFF] p-4"><p class="text-xs text-[#5F6B61]">Reversé fournisseurs</p><p class="text-xl font-bold tabular-nums" id="finSuppliers">—</p></div>
             <div class="rounded-xl bg-[#FFFFFF] p-4"><p class="text-xs text-[#5F6B61]">Commandes comptabilisées</p><p class="text-xl font-bold tabular-nums" id="finOrders">—</p></div>
           </div>
@@ -507,6 +583,60 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(1
         <div id="auditPagination" class="flex justify-center gap-2 mt-5"></div>
       </div>
 
+      <!-- PAWAPAY PAGE : Finances + Toolkit (diagnostic admin) -->
+      <div id="page-pawapay" class="page-content hidden">
+        <div class="bg-[#FFF8E1] border border-[#E5C558] rounded-xl p-4 mb-4 text-xs text-[#5F6B61]">
+          Données <b>distantes PawaPay</b> (diagnostic/audit) — distinctes du journal comptable
+          BAZAAR : aucun chiffre ici ne modifie la comptabilité interne. Jamais de secret affiché.
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+          <div class="bg-[#FFFFFF] rounded-xl shadow-sm border border-[#DDE6DC] p-4">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="font-bold">Wallets PawaPay</h3>
+              <button onclick="loadPpWallet()" class="text-xs underline">Actualiser</button>
+            </div>
+            <div id="ppWallet" class="text-sm"><p class="text-[#5F6B61]">Chargement…</p></div>
+          </div>
+          <div class="bg-[#FFFFFF] rounded-xl shadow-sm border border-[#DDE6DC] p-4">
+            <h3 class="font-bold mb-2">Réconciliation PawaPay vs BAZAAR</h3>
+            <div id="ppRecon" class="text-sm"><p class="text-[#5F6B61]">Chargement…</p></div>
+          </div>
+        </div>
+        <div class="bg-[#FFFFFF] rounded-xl shadow-sm border border-[#DDE6DC] p-4 mb-4">
+          <h3 class="font-bold mb-2">Relevés (statements)</h3>
+          <div class="flex flex-wrap gap-2 mb-2 text-sm">
+            <input id="ppStCountry" maxlength="3" value="CMR" class="px-3 py-2 rounded-xl border border-[#DDE6DC] w-24" placeholder="CMR">
+            <input id="ppStCurrency" maxlength="3" value="XAF" class="px-3 py-2 rounded-xl border border-[#DDE6DC] w-24" placeholder="XAF">
+            <input id="ppStProvider" class="px-3 py-2 rounded-xl border border-[#DDE6DC] w-44" placeholder="Provider (optionnel)">
+            <input id="ppStStart" class="px-3 py-2 rounded-xl border border-[#DDE6DC]" placeholder="Début RFC3339">
+            <input id="ppStEnd" class="px-3 py-2 rounded-xl border border-[#DDE6DC]" placeholder="Fin RFC3339 (≤31j)">
+            <button onclick="ppRequestStatement()" class="px-4 py-2 bg-primary-600 text-white text-sm font-bold rounded-xl">Demander</button>
+            <button onclick="loadPpStatements()" class="px-4 py-2 border border-[#DDE6DC] text-sm rounded-xl">Actualiser</button>
+          </div>
+          <p class="text-xs text-[#5F6B61] mb-2">Callback statements : <span id="ppStCb" class="font-mono">—</span> (HTTPS publique requise, réglable dans Paramètres › <span class="font-mono">pawapay.statement.callback_url</span>).</p>
+          <div id="ppStatements" class="overflow-x-auto"></div>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div class="bg-[#FFFFFF] rounded-xl shadow-sm border border-[#DDE6DC] p-4">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="font-bold">Configuration active + Disponibilité</h3>
+              <button onclick="loadPpToolkit()" class="text-xs underline">Actualiser</button>
+            </div>
+            <div id="ppToolkit" class="text-sm"><p class="text-[#5F6B61]">Chargement…</p></div>
+          </div>
+          <div class="bg-[#FFFFFF] rounded-xl shadow-sm border border-[#DDE6DC] p-4">
+            <h3 class="font-bold mb-2">Prédiction provider / Clés publiques</h3>
+            <div class="flex gap-2 mb-2">
+              <input id="ppPredictPhone" type="tel" class="flex-1 px-3 py-2 rounded-xl border border-[#DDE6DC] text-sm" placeholder="Ex : 237690123456">
+              <button onclick="ppPredict()" class="px-4 py-2 bg-primary-600 text-white text-sm font-bold rounded-xl">Prédire</button>
+              <button onclick="loadPpKeys()" class="px-4 py-2 border border-[#DDE6DC] text-sm rounded-xl">Clés</button>
+            </div>
+            <div id="ppPredict" class="text-sm"></div>
+            <div id="ppKeys" class="text-sm mt-2"></div>
+          </div>
+        </div>
+      </div>
+
       <!-- SETTINGS PAGE -->
       <div id="page-settings" class="page-content hidden">
         <div class="max-w-2xl space-y-6">
@@ -537,7 +667,7 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(1
           </div>
           <div class="bg-[#FFFFFF] rounded-xl p-6 shadow-sm border border-[#DDE6DC]">
             <h3 class="font-semibold text-[#123B16] mb-1">Clients</h3>
-            <p class="text-sm text-[#5F6B61]">MBOA STYLE n'a pas de comptes clients : les acheteurs sont des <strong>invités</strong> identifiés par téléphone (commandes, messages, suivi). Aucune donnée à administrer ici — voir Commandes et Messages.</p>
+            <p class="text-sm text-[#5F6B61]">BAZAAR n'a pas de comptes clients : les acheteurs sont des <strong>invités</strong> identifiés par téléphone (commandes, messages, suivi). Aucune donnée à administrer ici — voir Commandes et Messages.</p>
           </div>
           <div class="bg-[#FFFFFF] rounded-xl p-6 shadow-sm border border-[#DDE6DC]">
             <h3 class="font-semibold text-[#123B16] mb-4">Journal d'activité récent</h3>
@@ -703,11 +833,14 @@ function showPage(page) {
     if (el === activeLink) el.setAttribute('aria-current', 'page');
     else el.removeAttribute('aria-current');
   });
-  const titles = { dashboard:'Vue générale', orders:'Commandes', payments:'Paiements', shipments:'Expéditions', messages:'Messages', notifications:'Notifications', reviews:'Avis', categories:'Catégories & Produits', promotions:'Promotions', suppliers:'Fournisseurs', visitors:'Activité commandes', stats:'Statistiques', audit:'Journal d\'audit', settings:'Paramètres' };
-  document.getElementById('pageTitle').textContent = titles[page] || 'MBOA STYLE';
-  if (page === 'dashboard') { loadDashboardData(); loadOverview(); }
+  const titles = { dashboard:'Vue générale', orders:'Commandes', payments:'Paiements', payouts:'Versements', refunds:'Remboursements', disputes:'Litiges', shipments:'Expéditions', messages:'Messages', notifications:'Notifications', reviews:'Avis', categories:'Catégories & Produits', promotions:'Promotions', suppliers:'Fournisseurs', visitors:'Activité commandes', stats:'Statistiques', audit:'Journal d\'audit', settings:'Paramètres', pawapay:'PawaPay Finances + Toolkit' };
+  document.getElementById('pageTitle').textContent = titles[page] || 'BAZAAR';
+  if (page === 'dashboard') { loadSyncedDashboard(); }
   if (page === 'orders') loadOrders();
   if (page === 'payments') loadPayments();
+  if (page === 'payouts') loadPayouts();
+  if (page === 'refunds') loadRefunds();
+  if (page === 'disputes') loadDisputes();
   if (page === 'shipments') loadShipments();
   if (page === 'messages') loadMessages();
   if (page === 'reviews') loadReviews();
@@ -719,6 +852,131 @@ function showPage(page) {
   if (page === 'stats') { loadStats(); loadFinance(); }
   if (page === 'audit') loadAudit();
   if (page === 'settings') loadSettings();
+  if (page === 'pawapay') loadPawaPay();
+}
+
+// =====================================================================
+// PAWAPAY FINANCES + TOOLKIT (diagnostic admin, jamais comptable)
+// =====================================================================
+function ppLoading(id) { const el = document.getElementById(id); if (el) el.innerHTML = '<p class="text-[#5F6B61]">Chargement…</p>'; }
+function ppError(id) { const el = document.getElementById(id); if (el) el.innerHTML = '<p class="text-sm">Données indisponibles. <button onclick="loadPawaPay()" class="underline font-semibold">Réessayer</button></p>'; }
+async function loadPawaPay() {
+  loadPpWallet(); loadPpRecon(); loadPpStatements(); loadPpToolkit(); loadPpKeys();
+  try {
+    const settings = await api('/api/admin/finance/settings');
+    const rows = Array.isArray(settings) ? settings : (settings && settings.data) || [];
+    const cb = rows.find(s => (s.key || s.KEY) === 'pawapay.statement.callback_url');
+    const el = document.getElementById('ppStCb');
+    if (el) el.textContent = (cb && (cb.value || cb.VALUE)) || '(non configurée)';
+  } catch (e) {}
+}
+async function loadPpWallet() {
+  ppLoading('ppWallet');
+  try {
+    const d = await api('/api/admin/pawapay/wallet?country=CMR');
+    const rows = d.balances || (d.data && d.data.balances) || [];
+    document.getElementById('ppWallet').innerHTML =
+      (rows.length ? `<table class="w-full text-sm"><thead><tr class="text-left text-[#5F6B61] text-xs uppercase"><th class="py-2">Pays</th><th class="py-2">Devise</th><th class="py-2">Provider</th><th class="py-2 text-right">Solde</th></tr></thead><tbody>` +
+        rows.map(b => `<tr class="border-t"><td class="py-2 font-mono">${notifEsc(b.country || '')}</td><td class="py-2">${notifEsc(b.currency || '')}</td><td class="py-2 font-mono text-xs">${notifEsc(b.provider || '—')}</td><td class="py-2 text-right font-semibold tabular-nums">${notifEsc(String(b.balance ?? '—'))}</td></tr>`).join('') + `</tbody></table>` : '<p class="text-[#5F6B61]">Aucun wallet.</p>')
+      + `<p class="text-xs text-[#5F6B61] mt-2">Lecture : ${notifEsc(d.fetchedAt || '')} · ${notifEsc(d.environment || '')}</p>`;
+  } catch (e) { ppError('ppWallet'); }
+}
+async function loadPpRecon() {
+  ppLoading('ppRecon');
+  try {
+    const d = await api('/api/admin/pawapay/reconciliation');
+    const b = d.bazaar || {};
+    const w = (d.pawapayWallet && d.pawapayWallet.balances) || [];
+    document.getElementById('ppRecon').innerHTML =
+      `<p class="text-xs font-bold uppercase text-[#5F6B61]">PawaPay (distant)</p>`
+      + (w.length ? w.map(x => `<p class="text-sm tabular-nums">${notifEsc(x.country || '')} ${notifEsc(x.currency || '')} : <b>${notifEsc(String(x.balance ?? '—'))}</b></p>`).join('') : '<p class="text-sm text-[#5F6B61]">Wallet injoignable.</p>')
+      + `<p class="text-xs font-bold uppercase text-[#5F6B61] mt-3">BAZAAR (interne)</p>`
+      + `<p class="text-sm">Deposits : ${notifEsc(JSON.stringify(b.deposits || {}))}</p>`
+      + `<p class="text-sm">Payouts : ${notifEsc(JSON.stringify(b.payouts || {}))}</p>`
+      + `<p class="text-sm">Refunds : ${notifEsc(JSON.stringify(b.refunds || {}))}</p>`
+      + `<p class="text-xs text-[#5F6B61] mt-2">${notifEsc(d.note || '')}</p>`;
+  } catch (e) { ppError('ppRecon'); }
+}
+async function loadPpStatements() {
+  const box = document.getElementById('ppStatements');
+  box.innerHTML = '<p class="text-[#5F6B61] text-sm">Chargement…</p>';
+  try {
+    const data = await api('/api/admin/pawapay/statements?limit=20');
+    const rows = Array.isArray(data) ? data : (data && data.data) || [];
+    box.innerHTML = rows.length === 0
+      ? '<p class="text-[#5F6B61] text-sm">Aucun relevé demandé.</p>'
+      : `<table class="w-full text-sm"><thead><tr class="text-left text-[#5F6B61] text-xs uppercase"><th class="px-2 py-2">Statement</th><th class="px-2 py-2">Wallet</th><th class="px-2 py-2">Période</th><th class="px-2 py-2">Statut</th><th class="px-2 py-2">Fichier</th><th class="px-2 py-2"></th></tr></thead><tbody>${rows.map(s => `
+        <tr class="border-t">
+          <td class="px-2 py-2 font-mono text-xs">${notifEsc((s.statementId || '').slice(0, 8))}…</td>
+          <td class="px-2 py-2 font-mono text-xs">${notifEsc(((s.wallet || {}).country || '') + '/' + ((s.wallet || {}).currency || ''))}</td>
+          <td class="px-2 py-2 text-xs">${notifEsc((s.startDate || '').slice(0, 10))} → ${notifEsc((s.endDate || '').slice(0, 10))}</td>
+          <td class="px-2 py-2">${finBadge(s.status)}</td>
+          <td class="px-2 py-2 text-xs">${s.downloadUrl && !s.downloadExpired && String(s.downloadUrl).startsWith('https://') ? `<a href="${notifEsc(s.downloadUrl)}" target="_blank" rel="noopener" class="underline font-semibold">CSV</a>` : '<span class="text-[#5F6B61]">—</span>'}</td>
+          <td class="px-2 py-2 text-xs"><button data-statement="${notifEsc(s.statementId || '')}" onclick="ppStatementStatus(this.dataset.statement)" class="underline">Réconcilier</button></td>
+        </tr>`).join('')}</tbody></table>`;
+  } catch (e) { box.innerHTML = '<p class="text-sm">Indisponible.</p>'; }
+}
+async function ppStatementStatus(statementId) {
+  try {
+    const d = await api('/api/admin/pawapay/statements/status?statementId=' + encodeURIComponent(statementId));
+    alert('Relevé : ' + ((d && d.status) || (d && d.data && d.data.status) || '?'));
+    loadPpStatements();
+  } catch (e) { alert('Réconciliation impossible.'); }
+}
+async function ppRequestStatement() {
+  const body = {
+    country: document.getElementById('ppStCountry').value.trim(),
+    currency: document.getElementById('ppStCurrency').value.trim(),
+    provider: document.getElementById('ppStProvider').value.trim(),
+    startDate: document.getElementById('ppStStart').value.trim(),
+    endDate: document.getElementById('ppStEnd').value.trim(),
+    compressed: false
+  };
+  if (!body.startDate || !body.endDate) { alert('Plage RFC3339 requise (ex : 2026-09-01T00:00:00Z). Max 31 jours.'); return; }
+  if (!confirm('Demander un relevé PawaPay ' + body.country + '/' + body.currency + ' ?')) return;
+  try {
+    const res = await api('/api/admin/pawapay/statements', { method: 'POST', body: JSON.stringify(body) });
+    alert('Relevé : ' + ((res && res.statement && res.statement.status) || 'demandé'));
+    loadPpStatements();
+  } catch (e) { alert('Demande impossible (vérifiez wallet + callback HTTPS + plage ≤ 31 j).'); }
+}
+async function loadPpToolkit() {
+  ppLoading('ppToolkit');
+  try {
+    const [conf, avail] = await Promise.all([
+      api('/api/admin/pawapay/configuration?country=CMR'),
+      api('/api/admin/pawapay/availability?country=CMR')
+    ]);
+    const c = conf.configuration || conf;
+    const sig = (c && c.signatureConfiguration) || {};
+    const summary = (avail && avail.summary) || {};
+    document.getElementById('ppToolkit').innerHTML =
+      `<p class="text-sm">Société : <b>${notifEsc((c && c.companyName) || '—')}</b></p>`
+      + `<p class="text-sm">Signatures : requêtes <b>${sig.signedRequestsOnly ? 'OBLIGATOIRES' : 'optionnelles'}</b> · callbacks <b>${sig.signedCallbacks ? 'SIGNÉS' : 'non signés'}</b></p>`
+      + `<div class="mt-2 text-sm">` + Object.keys(summary).map(p =>
+        `<p class="font-mono text-xs">${notifEsc(p)} : ${Object.keys(summary[p]).map(op => notifEsc(op) + '=' + notifEsc(summary[p][op])).join(', ')}</p>`
+      ).join('') + `</div>`;
+  } catch (e) { ppError('ppToolkit'); }
+}
+async function ppPredict() {
+  const box = document.getElementById('ppPredict');
+  const phone = document.getElementById('ppPredictPhone').value.trim();
+  if (!phone) return;
+  box.innerHTML = '<p class="text-[#5F6B61]">…</p>';
+  try {
+    const d = await api('/api/admin/pawapay/predict', { method: 'POST', body: JSON.stringify({ phoneNumber: phone }) });
+    box.innerHTML = `<p class="text-sm">Provider prédit : <b class="font-mono">${notifEsc(d.provider || '?')}</b> (${notifEsc(d.country || '')}) · <span class="font-mono">${notifEsc(d.phoneNumber || '')}</span></p><p class="text-xs text-[#5F6B61]">${notifEsc(d.disclaimer || '')}</p>`;
+  } catch (e) { box.innerHTML = '<p class="text-sm">Prédiction impossible.</p>'; }
+}
+async function loadPpKeys() {
+  const box = document.getElementById('ppKeys');
+  box.innerHTML = '<p class="text-[#5F6B61]">…</p>';
+  try {
+    const d = await api('/api/admin/pawapay/public-keys');
+    const keys = d.keys || [];
+    box.innerHTML = `<p class="text-sm font-bold">Clés publiques callbacks (${d.count || 0})</p>` +
+      (keys.map(k => `<p class="font-mono text-xs">${notifEsc(k.id || '')}</p>`).join('') || '<p class="text-sm text-[#5F6B61]">Aucune.</p>');
+  } catch (e) { box.innerHTML = '<p class="text-sm">Indisponible.</p>'; }
 }
 
 // =====================================================================
@@ -743,7 +1001,7 @@ let notifPollTimer = null;
 
 function notifEsc(s) {
   return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
 function notifTypeMeta(type) {
@@ -757,7 +1015,7 @@ function notifTypeMeta(type) {
     case 'STOCK': return { icon: 'bi-boxes', color: 'text-[#DC2626]', bg: 'bg-[rgba(220,38,38,0.08)]', label: 'Stock' };
     case 'SUPPLIER': return { icon: 'bi-people', color: 'text-[#123B16]', bg: 'bg-[#DDE6DC]', label: 'Fournisseur' };
     case 'SECURITY': return { icon: 'bi-shield-lock', color: 'text-[#4D7C0F]', bg: 'bg-[rgba(183,240,0,0.12)]', label: 'Sécurité' };
-    case 'MARKETING': return { icon: 'bi-megaphone', color: 'text-[#0B2410]', bg: 'bg-[#B7F000]', label: 'Promo' };
+    case 'MARKETING': return { icon: 'bi-megaphone', color: 'text-[#0A0A0A]', bg: 'bg-[#B7F000]', label: 'Promo' };
     default: return { icon: 'bi-info-circle', color: 'text-[#5F6B61]', bg: 'bg-[#F7FAF5]', label: 'Système' };
   }
 }
@@ -834,7 +1092,7 @@ function notifItemHTML(n, withCheckbox) {
   if (m) {
     actions = `
       <div class="flex gap-2 mt-2">
-        <button onclick="event.stopPropagation();validateProduct(${m[1]}, true, ${n.id})" class="text-xs font-medium bg-[#B7F000] text-[#0B2410] px-2.5 py-1 rounded-md hover:bg-[#C8FF1A]">Ajouter à la boutique</button>
+        <button onclick="event.stopPropagation();validateProduct(${m[1]}, true, ${n.id})" class="text-xs font-medium bg-[#B7F000] text-[#0A0A0A] px-2.5 py-1 rounded-md hover:bg-[#C8FF1A]">Ajouter à la boutique</button>
         <button onclick="event.stopPropagation();validateProduct(${m[1]}, false, ${n.id})" class="text-xs font-medium bg-[#FFFFFF] text-[#123B16] border border-[#DDE6DC] px-2.5 py-1 rounded-md hover:border-[#B7F000]">Refuser</button>
       </div>`;
   }
@@ -1231,7 +1489,7 @@ async function renderRecentOrders() {
 }
 
 function statusClass(s) {
-  const m = { EN_ATTENTE:'bg-[#B7F000] text-[#0B2410]', CONFIRMEE:'bg-[#DDE6DC] text-[#123B16]', EN_PREPARATION:'bg-[#DDE6DC] text-[#123B16]', EN_LIVRAISON:'bg-[#DDE6DC] text-[#123B16]', LIVREE:'bg-[#123B16] text-white', ANNULEE:'bg-[#DC2626] text-white' };
+  const m = { EN_ATTENTE:'bg-[#B7F000] text-[#0A0A0A]', CONFIRMEE:'bg-[#DDE6DC] text-[#123B16]', EN_PREPARATION:'bg-[#DDE6DC] text-[#123B16]', EN_LIVRAISON:'bg-[#DDE6DC] text-[#123B16]', LIVREE:'bg-[#123B16] text-white', ANNULEE:'bg-[#DC2626] text-white' };
   return m[s] || 'bg-[#F7FAF5] text-[#123B16]';
 }
 function statusLabel(s) {
@@ -1321,8 +1579,17 @@ async function loadAdminShipment(orderId) {
     const s = d && d.shipment;
     if (!s) { box.innerHTML = '<p class="text-xs text-[#5F6B61]">Aucune expédition (créée par le vendeur après confirmation).</p>'; return; }
     const ev = (d.events || []).slice(-3);
+    // Workflow v2 : les 3 étapes métier (données réelles, lecture seule —
+    // l'admin ne contourne jamais le financier depuis le frontend).
+    const step = (done, label, at) => `<p class="text-xs ${done ? 'text-[#123B16] font-bold' : 'text-[#5F6B61]'}">${done ? '✓' : '○'} ${label}${at ? ' · ' + at : ''}</p>`;
+    const started = !!(s.deliveryStartedAt || s.delivery_started_at);
+    const receipt = !!s.receiptConfirmed;
+    const validated = !!(s.deliveryValidatedAt || s.delivery_validated_at);
     box.innerHTML = `<div class="rounded-xl border border-[#DDE6DC] bg-[#FFFFFF]/70 p-3 text-sm space-y-1">
-      <div class="flex items-center justify-between gap-2"><p class="font-mono font-bold text-[#4D7C0F]">${s.trackingNumber}</p><span class="text-xs font-bold">${s.status}</span></div>
+      <div class="flex items-center justify-between gap-2"><p class="font-mono font-bold text-[#4D7C0F]">${s.trackingNumber}</p></div>
+      ${step(started, 'Fournisseur en route (EN COURS DE LIVRAISON)', s.deliveryStartedAt || s.delivery_started_at)}
+      ${step(receipt, 'Client a reçu (COMMANDE REÇUE)', s.receiptConfirmedAt || s.receipt_confirmed_at)}
+      ${step(validated, 'Livraison validée (payout lancé)', s.deliveryValidatedAt || s.delivery_validated_at)}
       ${ev.map(e => `<p class="text-xs text-[#5F6B61]">${e.label || e.status} · ${e.createdAt || ''}</p>`).join('')}
     </div>`;
   } catch (e) { box.innerHTML = '<p class="text-xs text-[#4D7C0F]">Livraison illisible.</p>'; }
@@ -1337,13 +1604,13 @@ async function loadAdminPayment(orderId) {
     const badge = p.status === 'REUSSIE'
       ? '<span class="text-xs font-bold text-white bg-[#123B16] px-2 py-0.5 rounded-full">Confirmé</span>'
       : p.status === 'EN_ATTENTE'
-        ? '<span class="text-xs font-bold text-[#0B2410] bg-[#B7F000] px-2 py-0.5 rounded-full">En attente</span>'
+        ? '<span class="text-xs font-bold text-[#0A0A0A] bg-[#B7F000] px-2 py-0.5 rounded-full">En attente</span>'
         : `<span class="text-xs font-bold text-[#5F6B61] bg-[#F7FAF5] px-2 py-0.5 rounded-full">${p.status}</span>`;
     box.innerHTML = `<div class="rounded-xl border border-[#DDE6DC] p-3 space-y-1.5">
       <div class="flex items-center justify-between gap-2"><p class="text-xs font-bold uppercase tracking-wider text-[#5F6B61]">Paiement ${formatMoney(p.amount)}</p>${badge}</div>
       ${p.transactionRef ? `<p class="text-xs">Référence : <strong>${p.transactionRef}</strong></p>` : '<p class="text-xs text-[#5F6B61]">Aucune référence transmise.</p>'}
       ${p.status === 'EN_ATTENTE' && isMoneyAllowed() ? `<div class="flex gap-2 pt-1">
-        <button onclick="verifyPayment(${p.id})" class="px-3 py-1.5 bg-[#B7F000] hover:bg-[#C8FF1A] text-[#0B2410] text-xs font-bold rounded-lg transition">Vérifier</button>
+        <button onclick="verifyPayment(${p.id})" class="px-3 py-1.5 bg-[#B7F000] hover:bg-[#C8FF1A] text-[#0A0A0A] text-xs font-bold rounded-lg transition">Vérifier</button>
         <button onclick="failPayment(${p.id})" class="px-3 py-1.5 border border-[#DDE6DC] hover:border-[rgba(220,38,38,0.35)] hover:text-[#DC2626] text-xs font-bold rounded-lg transition">Rejeter</button>
       </div>` : ''}
     </div>`;
@@ -1678,7 +1945,7 @@ function renderImageManager(product, images) {
             <img src="${img.url}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/200x200/e2e8f0/94a3b8?text=Erreur'">
             ${img.isPrimary ? '<span class="absolute top-1 left-1 bg-primary-600 text-white text-[9px] px-1.5 py-0.5 rounded font-bold shadow">PRINCIPALE</span>' : ''}
             <div class="absolute inset-0 bg-black/40 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition">
-              ${!img.isPrimary ? `<button onclick="setImagePrimary(${product.id}, ${img.id})" class="w-8 h-8 bg-primary-500 text-[#0B2410] rounded-full flex items-center justify-center text-xs" title="Définir principale"><i class="bi bi-star"></i></button>` : ''}
+              ${!img.isPrimary ? `<button onclick="setImagePrimary(${product.id}, ${img.id})" class="w-8 h-8 bg-primary-500 text-[#0A0A0A] rounded-full flex items-center justify-center text-xs" title="Définir principale"><i class="bi bi-star"></i></button>` : ''}
               <button onclick="deleteProductImage(${product.id}, ${img.id})" class="w-8 h-8 bg-[#DC2626] text-white rounded-full flex items-center justify-center text-xs" title="Supprimer"><i class="bi bi-trash"></i></button>
             </div>
           </div>
@@ -1767,7 +2034,51 @@ async function loadCategories() {
     promotions = Array.isArray(promos) ? promos : [];
     if (catView === 'tree') renderCategoriesTree();
     else renderCategories();
+    loadCategoryRequests();
   } catch (e) { console.error('Categories error:', e); }
+}
+
+/* Demandes de catégories fournisseurs (validation admin). */
+async function loadCategoryRequests() {
+  let box = document.getElementById('catRequests');
+  if (!box) {
+    const grid = document.getElementById('categoriesGrid');
+    if (!grid || !grid.parentElement) return;
+    box = document.createElement('div');
+    box.id = 'catRequests';
+    box.className = 'mb-4';
+    grid.parentElement.insertBefore(box, grid);
+  }
+  try {
+    const res = await api('/api/admin/category-requests?status=PENDING');
+    const rows = Array.isArray(res) ? res : (res.data || []);
+    if (!rows.length) { box.innerHTML = ''; return; }
+    box.innerHTML = `<div class="bg-[#FFF8E1] border border-[#E5C558] rounded-xl p-4">
+      <h4 class="font-bold text-sm mb-2">Demandes fournisseurs en attente (${rows.length})</h4>
+      <div class="space-y-2">${rows.map(r => `
+        <div class="flex flex-wrap items-center gap-2 bg-[#FFFFFF] rounded-xl border border-[#DDE6DC] px-3 py-2">
+          <div class="min-w-0 flex-1">
+            <p class="text-sm font-bold">${notifEsc(r.name)}${r.parentName ? ` <span class="font-normal text-[#5F6B61]">· sous « ${notifEsc(r.parentName)} »</span>` : ' <span class="font-normal text-[#5F6B61]">· catégorie</span>'}</p>
+            <p class="text-[11px] text-[#5F6B61]">Fournisseur #${r.supplierId}${r.supplierName ? ' · ' + notifEsc(r.supplierName) : ''} · ${notifEsc(r.createdAt || '')}</p>
+          </div>
+          <button onclick="resolveCategoryRequest(${r.id},true)" class="px-3 py-1.5 bg-[#123B16] hover:bg-[#0B2410] text-white text-xs font-bold rounded-lg transition">Accepter</button>
+          <button onclick="resolveCategoryRequest(${r.id},false)" class="px-3 py-1.5 border border-[rgba(220,38,38,0.35)] text-[#DC2626] text-xs font-bold rounded-lg transition">Refuser</button>
+        </div>`).join('')}</div>
+    </div>`;
+  } catch (e) { box.innerHTML = ''; }
+}
+async function resolveCategoryRequest(id, approved) {
+  let note = '';
+  if (!approved) {
+    note = prompt('Motif du refus (visible par le fournisseur) :', '') || '';
+  }
+  if (!confirm(approved ? 'Créer cette catégorie ?' : 'Refuser cette demande ?')) return;
+  try {
+    await api('/api/admin/product/validate', { method: 'POST', body: JSON.stringify({ categoryRequestId: id, approved, note }) });
+    alert(approved ? 'Catégorie créée' : 'Demande refusée');
+    loadCategoryRequests();
+    loadCategories();
+  } catch (e) { alert('Opération impossible.'); }
 }
 
 function catCardHTML(c, depth) {
@@ -2000,7 +2311,7 @@ async function deleteCategory(id) {
 // =====================================================================
 async function loadPromotions() {
   try {
-    const [promos, prods] = await Promise.all([api('/api/promotions'), api('/api/products')]);
+    const [promos, prods] = await Promise.all([api('/api/promotions?action=all'), api('/api/products')]);
     promotions = Array.isArray(promos) ? promos : [];
     products = Array.isArray(prods) ? prods : [];
     renderPromotions();
@@ -2070,10 +2381,13 @@ async function savePromotion(e, id) {
   };
   if (!id) data.productId = parseInt(document.getElementById('prProductId').value);
   try {
-    if (id) { data.id = id; await api('/api/promotions', { method: 'PUT', body: JSON.stringify(data) }); }
-    else { await api('/api/promotions', { method: 'POST', body: JSON.stringify(data) }); }
+    let res;
+    if (id) { data.id = id; res = await api('/api/promotions', { method: 'PUT', body: JSON.stringify(data) }); }
+    else { res = await api('/api/promotions', { method: 'POST', body: JSON.stringify(data) }); }
+    if (res && res.error) { notifyMsg('Erreur: ' + res.error); return; }
     closeModal();
     loadPromotions();
+    notifyMsg('Promotion enregistrée', 'success');
   } catch (e) { notifyMsg('Erreur: ' + e.message); }
 }
 
@@ -2131,7 +2445,7 @@ function renderSuppliers() {
           <td class="px-4 py-3 font-semibold">${(s.commissionRate || 0)}%</td>
           <td class="px-4 py-3"><span class="px-2 py-1 rounded-full text-xs font-medium ${s.active ? 'bg-[#123B16] text-white' : 'bg-[#F7FAF5] text-[#123B16]'}">${s.active ? 'Actif' : 'Inactif'}</span></td>
           <td class="px-4 py-3"><div class="flex gap-1">
-            <button onclick="toggleSupplier(${s.id}, ${s.active ? 'false' : 'true'})" class="p-1.5 rounded-lg hover:bg-[#B7F000] text-[#0B2410]" title="${s.active ? 'Suspendre' : 'Activer'}"><i class="bi ${s.active ? 'bi-pause-circle' : 'bi-play-circle'} text-sm"></i></button>
+            <button onclick="toggleSupplier(${s.id}, ${s.active ? 'false' : 'true'})" class="p-1.5 rounded-lg hover:bg-[#B7F000] text-[#0A0A0A]" title="${s.active ? 'Suspendre' : 'Activer'}"><i class="bi ${s.active ? 'bi-pause-circle' : 'bi-play-circle'} text-sm"></i></button>
             ${isDestructiveAllowed() ? `<button onclick="deleteSupplier(${s.id})" class="p-1.5 rounded-lg hover:bg-[rgba(183,240,0,0.12)] text-[#4D7C0F]" title="Supprimer"><i class="bi bi-trash text-sm"></i></button>` : ''}
           </div></td>
         </tr>`).join('')}</tbody></table>`;
@@ -2149,7 +2463,7 @@ function openSupplierModal() {
         </div>
         <input id="supEmail" type="email" required placeholder="Email" class="w-full px-4 py-2.5 rounded-xl border border-[#DDE6DC] text-sm">
         <div class="grid grid-cols-2 gap-3">
-          <input id="supPhone" placeholder="Téléphone / WhatsApp" class="w-full px-4 py-2.5 rounded-xl border border-[#DDE6DC] text-sm">
+          <input id="supPhone" placeholder="Téléphone" class="w-full px-4 py-2.5 rounded-xl border border-[#DDE6DC] text-sm">
           <input id="supAddress" placeholder="Adresse" class="w-full px-4 py-2.5 rounded-xl border border-[#DDE6DC] text-sm">
         </div>
         <input id="supPass" type="password" placeholder="Mot de passe (pour se connecter)" class="w-full px-4 py-2.5 rounded-xl border border-[#DDE6DC] text-sm">
@@ -2175,21 +2489,31 @@ async function saveSupplier(e) {
     active: true
   };
   try {
-    await api('/api/suppliers', { method: 'POST', body: JSON.stringify(data) });
+    const res = await api('/api/suppliers', { method: 'POST', body: JSON.stringify(data) });
+    if (res && res.error) { notifyMsg('Erreur: ' + res.error); return; }
     closeModal();
     loadSuppliers();
+    notifyMsg('Fournisseur ajouté', 'success');
   } catch (e) { notifyMsg('Erreur: ' + e.message); }
 }
 
 async function toggleSupplier(id, active) {
   if (!active) {
     confirmAction('Suspendre ce fournisseur ?', 'Sa boutique sera temporairement désactivée. Cette action est journalisée.', 'Suspendre', async () => {
-      try { await api('/api/suppliers', { method: 'PUT', body: JSON.stringify({ id, active }) }); loadSuppliers(); notifyMsg('Fournisseur suspendu', 'success'); }
+      try {
+        const res = await api('/api/suppliers', { method: 'PUT', body: JSON.stringify({ id, active }) });
+        if (res && res.error) { notifyMsg('Erreur: ' + res.error); return; }
+        loadSuppliers(); notifyMsg('Fournisseur suspendu', 'success');
+      }
       catch (e) { notifyMsg('Erreur: ' + e.message); }
     }, true);
     return;
   }
-  try { await api('/api/suppliers', { method: 'PUT', body: JSON.stringify({ id, active }) }); loadSuppliers(); }
+  try {
+    const res = await api('/api/suppliers', { method: 'PUT', body: JSON.stringify({ id, active }) });
+    if (res && res.error) { notifyMsg('Erreur: ' + res.error); return; }
+    loadSuppliers(); notifyMsg('Fournisseur réactivé', 'success');
+  }
   catch (e) { notifyMsg('Erreur: ' + e.message); }
 }
 
@@ -2249,7 +2573,7 @@ async function loadStats() {
       document.getElementById('statLowRotation').textContent = stats.lowRotationProducts || '0';
     }
     if (stats.topProducts && stats.topProducts.length > 0) {
-      document.getElementById('topProductsTable').innerHTML = `<table class="w-full text-sm"><thead><tr class="text-left text-[#5F6B61] text-xs uppercase bg-[#FFFFFF]"><th class="px-4 py-2">Produit</th><th class="px-4 py-2">Vendus</th><th class="px-4 py-2">Revenus</th></tr></thead><tbody>${stats.topProducts.map((p, i) => `<tr class="border-t border-[rgba(255,255,255,0.06)]"><td class="px-4 py-2 font-medium">${i+1}. ${notifEsc(p.name || 'Produit #' + p.productId)}</td><td class="px-4 py-2">${p.totalSold || 0}</td><td class="px-4 py-2 font-semibold">${formatMoney(p.totalRevenue || 0)}</td></tr>`).join('')}</tbody></table>`;
+      document.getElementById('topProductsTable').innerHTML = `<table class="w-full text-sm"><thead><tr class="text-left text-[#5F6B61] text-xs uppercase bg-[#FFFFFF]"><th class="px-4 py-2">Produit</th><th class="px-4 py-2">Vendus</th><th class="px-4 py-2">Revenus</th></tr></thead><tbody>${stats.topProducts.map((p, i) => `<tr class="border-t border-[rgba(255,255,255,0.06)]"><td class="px-4 py-2 font-medium">${i+1}. ${notifEsc(p.name || 'Produit #' + p.productId)}</td><td class="px-4 py-2">${p.totalSold || 0}</td><td class="px-4 py-2 font-semibold">${formatMoney(p.revenue || 0)}</td></tr>`).join('')}</tbody></table>`;
     }
     if (stats.topCities && stats.topCities.length > 0) {
       document.getElementById('topCitiesTable').innerHTML = `<table class="w-full text-sm"><thead><tr class="text-left text-[#5F6B61] text-xs uppercase bg-[#FFFFFF]"><th class="px-4 py-2">Ville</th><th class="px-4 py-2">Commandes</th></tr></thead><tbody>${stats.topCities.map(c => `<tr class="border-t border-[rgba(255,255,255,0.06)]"><td class="px-4 py-2 font-medium">${notifEsc(c.city)}</td><td class="px-4 py-2">${c.count || 0}</td></tr>`).join('')}</tbody></table>`;
@@ -2407,6 +2731,136 @@ async function loadOverview() {
   } catch (e) { console.error('Overview error:', e); }
 }
 
+/* ---------- Tableau SYNCHRONISÉ : 1 appel = admin + client + fournisseur,
+   même instant T (fini la dérive entre /dashboard, /overview, /finance). ---------- */
+let synced = null;
+let syncTimer = null;
+async function loadSyncedDashboard() {
+  try {
+    synced = await api('/api/admin/dashboard/synced');
+    if (!synced || !synced.orders) throw new Error('synced vide');
+    const byStatus = synced.orders.byStatus || {};
+    dashboard = {
+      totalProducts: (synced.catalog && synced.catalog.products) || 0,
+      totalOrders: synced.orders.total || 0,
+      pendingOrders: byStatus.EN_ATTENTE || 0,
+      todayOrders: synced.orders.today || 0,
+      totalRevenue: synced.orders.revenuePending || 0,
+      todayRevenue: synced.orders.todayRevenue || 0,
+      totalCategories: (synced.catalog && synced.catalog.categories) || 0
+    };
+    renderDashStats();
+    renderOverviewFromSynced();
+    renderSyncRow();
+    renderDashChartsSynced();
+    renderRecentOrders();
+    const badge = document.getElementById('syncBadge');
+    if (badge) badge.textContent = 'Synchronisé à ' + (synced.generatedAt || '—');
+    startSyncTimer();
+  } catch (e) {
+    console.error('Synced error, repli ancien mode:', e);
+    const badge = document.getElementById('syncBadge');
+    if (badge) badge.textContent = 'Mode dégradé (données possiblement désynchronisées)';
+    loadDashboardData(); loadOverview();
+  }
+}
+
+function renderOverviewFromSynced() {
+  const msg = synced.messaging || {}, ops = synced.ops || {}, cat = synced.catalog || {}, sup = synced.suppliers || {};
+  overview = {
+    distinctClients: ((synced.clients && synced.clients.guestPhones) || 0),
+    unreadMessages: msg.unreadMessages || 0,
+    conversations: msg.conversations || 0,
+    pendingOffers: msg.pendingOffers || 0,
+    pendingPayments: ops.pendingPayments || 0,
+    failedPayments: ops.failedPayments || 0,
+    activeShipments: ops.activeShipments || 0,
+    shipmentIncidents: ops.shipmentIncidents || 0,
+    pendingReviews: cat.pendingReviews || 0,
+    pendingProducts: sup.pendingProducts || 0
+  };
+  const card = (label, val, sub, color) => `
+    <div class="bg-[#FFFFFF] rounded-xl p-4 shadow-sm border border-[#DDE6DC]">
+      <p class="text-xs text-[#5F6B61]">${label}</p>
+      <p class="text-2xl font-bold mt-1 ${color || 'text-[#123B16]'}">${val}</p>
+      ${sub ? `<p class="text-[11px] text-[#5F6B61] mt-0.5">${sub}</p>` : ''}
+    </div>`;
+  document.getElementById('overviewRow').innerHTML =
+    card('Clients (tél. uniques)', overview.distinctClients || 0, 'invités, sans comptes') +
+    card('Messages non lus', overview.unreadMessages || 0, (overview.conversations || 0) + ' conversations', (overview.unreadMessages || 0) ? 'text-[#4D7C0F]' : '') +
+    card('Offres en attente', overview.pendingOffers || 0, 'négociations') +
+    card('Paiements en attente', overview.pendingPayments || 0, (overview.failedPayments || 0) + ' échoués', (overview.failedPayments || 0) ? 'text-[#4D7C0F]' : '') +
+    card('Expéditions en cours', overview.activeShipments || 0, (overview.shipmentIncidents || 0) + ' incident(s)', (overview.shipmentIncidents || 0) ? 'text-[#4D7C0F]' : '') +
+    card('À modérer', (overview.pendingReviews || 0) + (overview.pendingProducts || 0), 'avis + produits', ((overview.pendingReviews || 0) + (overview.pendingProducts || 0)) ? 'text-[#4D7C0F]' : '');
+  sideBadge('payPageBadge', overview.pendingPayments || 0);
+  sideBadge('shipPageBadge', overview.shipmentIncidents || 0);
+  sideBadge('msgPageBadge', overview.unreadMessages || 0);
+  sideBadge('revPageBadge', overview.pendingReviews || 0);
+}
+
+function renderSyncRow() {
+  const cl = synced.clients || {}, sup = synced.suppliers || {}, fin = synced.finance || {}, ops = synced.ops || {};
+  const card = (label, val, sub) => `
+    <div class="bg-[#FFFFFF] rounded-xl p-4 shadow-sm border border-[#123B16]">
+      <p class="text-xs text-[#5F6B61]">${label}</p>
+      <p class="text-2xl font-bold mt-1 text-[#123B16]">${val}</p>
+      ${sub ? `<p class="text-[11px] text-[#5F6B61] mt-0.5">${sub}</p>` : ''}
+    </div>`;
+  document.getElementById('syncRow').innerHTML =
+    card('Espace client', (cl.registered || 0) + (cl.guestPhones || 0),
+      (cl.registered || 0) + ' compte(s) + ' + (cl.guestPhones || 0) + ' invité(s)') +
+    card('Fournisseurs', (sup.active || 0) + '/' + (sup.total || 0),
+      'actifs · ' + (sup.ordersWithoutSupplier || 0) + ' commande(s) sans boutique') +
+    card('Encours commandes', formatMoney(synced.orders.revenuePending || 0),
+      (synced.orders.total || 0) + ' commande(s) non annulée(s)') +
+    card('Comptabilisé (ledger)', formatMoney(fin.suppliersSettled || 0),
+      'GMV ' + formatMoney(fin.gmvSettled || 0) + ' · ' + (fin.settledOrders || 0) + ' soldée(s)');
+  const rows = (sup.reconciliation || []).slice(0, 10);
+  document.getElementById('reconTable').innerHTML = rows.length === 0
+    ? '<p class="p-4 text-sm text-[#5F6B61] text-center">Aucun fournisseur</p>'
+    : `<table class="w-full text-sm"><thead><tr class="text-left text-[#5F6B61] text-xs uppercase bg-[#FFFFFF]">
+        <th class="px-4 py-2">Boutique</th><th class="px-4 py-2">Commandes</th><th class="px-4 py-2">Revenus cmd.</th>
+        <th class="px-4 py-2">Net ledger</th><th class="px-4 py-2">Solde</th><th class="px-4 py-2">État</th>
+      </tr></thead><tbody>${rows.map(r => {
+        const gap = (r.revenueOrders || 0) - (r.netLedger || 0);
+        return `<tr class="border-t border-[rgba(255,255,255,0.06)]">
+          <td class="px-4 py-2 font-medium">${notifEsc(r.name || ('#' + r.id))}${r.active ? '' : ' <span class="text-[10px] text-[#DC2626] font-bold">INACTIF</span>'}</td>
+          <td class="px-4 py-2">${r.orders || 0}</td>
+          <td class="px-4 py-2">${formatMoney(r.revenueOrders || 0)}</td>
+          <td class="px-4 py-2">${formatMoney(r.netLedger || 0)}</td>
+          <td class="px-4 py-2">${formatMoney(r.balance || 0)}</td>
+          <td class="px-4 py-2 text-xs">${gap === 0 ? '<span class="text-[#4D7C0F] font-bold">OK</span>' : '<span class="text-[#B45309] font-bold">Encours ' + formatMoney(gap) + '</span>'}</td>
+        </tr>`; }).join('')}</tbody></table>`;
+}
+
+/* Graphiques alimentés par le snapshot synchronisé (pas de 2e appel divergent). */
+function renderDashChartsSynced() {
+  try {
+    const byStatus = (synced && synced.orders && synced.orders.byStatus) || {};
+    const labels = Object.keys(byStatus);
+    const data = labels.map(l => byStatus[l]);
+    const statusCtx = document.getElementById('chartOrderStatus');
+    if (statusCtx && labels.length) {
+      if (window._chartStatus) window._chartStatus.destroy();
+      const colors = { EN_ATTENTE:'#B7F000', CONFIRMEE:'#5F6B61', EN_PREPARATION:'#123B16', EN_LIVRAISON:'#C8FF1A', LIVREE:'#123B16', ANNULEE:'#9ED600' };
+      window._chartStatus = new Chart(statusCtx, {
+        type: 'doughnut',
+        data: { labels, datasets: [{ data, backgroundColor: labels.map(l => colors[l] || '#5F6B61') }] },
+        options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } } }
+      });
+    }
+  } catch (e) {}
+  renderDashCharts();
+}
+
+function startSyncTimer() {
+  if (syncTimer) clearInterval(syncTimer);
+  syncTimer = setInterval(() => {
+    const auto = document.getElementById('syncAuto');
+    if (currentPage === 'dashboard' && !document.hidden && (!auto || auto.checked)) loadSyncedDashboard();
+  }, 60000);
+}
+
 /* ---------- Paiements ---------- */
 async function loadPayments() {
   const box = document.getElementById('paymentsTable');
@@ -2428,7 +2882,7 @@ async function loadPayments() {
           <td class="px-4 py-3 text-xs">${notifEsc(p.method || '—')}</td>
           <td class="px-4 py-3 font-mono text-xs">${notifEsc(p.transactionRef || '—')}</td>
           <td class="px-4 py-3">${p.status === 'REUSSIE' ? '<span class="px-2 py-1 rounded-full text-xs font-medium bg-[#123B16] text-white">Réussi</span>'
-            : p.status === 'EN_ATTENTE' ? '<span class="px-2 py-1 rounded-full text-xs font-medium bg-[#B7F000] text-[#0B2410]">En attente</span>'
+            : p.status === 'EN_ATTENTE' ? '<span class="px-2 py-1 rounded-full text-xs font-medium bg-[#B7F000] text-[#0A0A0A]">En attente</span>'
             : p.status === 'ECHOUEE' ? '<span class="px-2 py-1 rounded-full text-xs font-medium bg-[rgba(183,240,0,0.12)] text-[#4D7C0F]">Échoué</span>'
             : '<span class="px-2 py-1 rounded-full text-xs font-medium bg-[#F7FAF5] text-[#123B16]">Remboursé</span>'}</td>
           <td class="px-4 py-3 text-xs text-[#5F6B61]">${formatDate(p.createdAt)}</td>
@@ -2439,6 +2893,160 @@ async function loadPayments() {
   }
 }
 function filterPayments(status, ev) { payFilter = status; payPage = 1; setFilterButtons('pay-filter', ev && ev.target); loadPayments(); }
+
+// =====================================================================
+// FINANCE BAZAAR — Versements / Remboursements / Litiges
+// =====================================================================
+let payoutFilter = '', refundFilter = '', disputeFilter = 'OPEN';
+function finBadge(s) {
+  const ok = ['COMPLETED', 'PAID', 'RESOLVED_REFUNDED'];
+  const wait = ['PENDING', 'PROCESSING', 'OPEN', 'ACCEPTED', 'ENQUEUED'];
+  const cls = ok.includes(s) ? 'bg-[#123B16] text-white'
+    : wait.includes(s) ? 'bg-[#B7F000] text-[#0A0A0A]'
+    : (s === 'FAILED' || s === 'BLOCKED' || s === 'CANCELLED') ? 'bg-[#DC2626] text-white'
+    : 'bg-[#F7FAF5] text-[#123B16]';
+  return '<span class="px-2 py-1 rounded-full text-xs font-medium ' + cls + '">' + notifEsc(s || '—') + '</span>';
+}
+async function loadPayouts() {
+  const box = document.getElementById('payoutsTable');
+  box.innerHTML = '<p class="p-6 text-sm text-[#5F6B61] text-center">Chargement des versements…</p>';
+  try {
+    const data = await api('/api/admin/payouts?status=' + encodeURIComponent(payoutFilter));
+    const rows = Array.isArray(data) ? data : (data && data.data) || [];
+    box.innerHTML = rows.length === 0
+      ? '<p class="p-6 text-sm text-[#5F6B61] text-center">Aucun versement pour ce statut</p>'
+      : `<table class="w-full text-sm"><thead><tr class="text-left text-[#5F6B61] text-xs uppercase bg-[#FFFFFF]">
+          <th class="px-4 py-3">Commande</th><th class="px-4 py-3">Fournisseur</th><th class="px-4 py-3">Brut</th>
+          <th class="px-4 py-3">Commission</th><th class="px-4 py-3">Frais</th><th class="px-4 py-3">Net</th>
+          <th class="px-4 py-3">Statut</th><th class="px-4 py-3">Réf. provider</th><th class="px-4 py-3">Réconcilié</th><th class="px-4 py-3">Actions</th>
+        </tr></thead><tbody>${rows.map(p => `
+        <tr class="table-row border-t border-[rgba(255,255,255,0.06)]">
+          <td class="px-4 py-3 font-mono text-xs">${notifEsc(p.orderNumber || ('#' + (p.orderId || '')))}</td>
+          <td class="px-4 py-3">${notifEsc(p.supplierName || ('#' + p.supplierId))}</td>
+          <td class="px-4 py-3 tabular-nums">${formatMoney(p.grossAmount || 0)}</td>
+          <td class="px-4 py-3 tabular-nums">${formatMoney(p.commission || 0)}</td>
+          <td class="px-4 py-3 tabular-nums">${formatMoney(p.pawapayFee || 0)}</td>
+          <td class="px-4 py-3 font-semibold tabular-nums">${formatMoney(p.amount)}</td>
+          <td class="px-4 py-3">${finBadge(p.status)}</td>
+          <td class="px-4 py-3 font-mono text-xs">${notifEsc(p.providerTransactionId || '—')}</td>
+          <td class="px-4 py-3 text-xs text-[#5F6B61]">${p.lastReconciledAt ? formatDate(p.lastReconciledAt) : '—'}</td>
+          <td class="px-4 py-3 text-xs whitespace-nowrap">${p.orderId ? `<button onclick="processPayout(${p.orderId})" class="underline font-semibold">Verser / Relancer</button>${p.status === 'ENQUEUED' ? ` · <button onclick="cancelPayout(${p.orderId})" class="underline">Annuler</button>` : ''}` : '—'}</td>
+        </tr>`).join('')}</tbody></table>`;
+  } catch (e) {
+    box.innerHTML = '<p class="p-6 text-sm text-center">Impossible de charger les versements. <button onclick="loadPayouts()" class="font-semibold underline">Réessayer</button></p>';
+  }
+}
+function filterPayouts(status, ev) { payoutFilter = status; setFilterButtons('payout-filter', ev && ev.target); loadPayouts(); }
+async function processPayout(orderId) {
+  if (!confirm('Déclencher le versement PawaPay de la commande #' + orderId + ' ?')) return;
+  try {
+    const res = await api('/api/admin/payouts/process', { method: 'POST', body: JSON.stringify({ orderId }) });
+    alert('Versement : ' + ((res && res.payout && res.payout.status) || 'demandé') + ((res && res.duplicate) ? ' (déjà existant)' : ''));
+    loadPayouts();
+  } catch (e) { alert('Versement bloqué ou impossible.'); }
+}
+async function cancelPayout(orderId) {
+  if (!confirm('Annuler le versement EN FILE de la commande #' + orderId + ' côté PawaPay ? (impossible si déjà exécuté)')) return;
+  try {
+    const res = await api('/api/admin/payouts/cancel', { method: 'POST', body: JSON.stringify({ orderId }) });
+    alert('Annulation : ' + ((res && res.status) || 'acceptée') + ' (' + ((res && res.failureCode) || '') + ')');
+    loadPayouts();
+  } catch (e) { alert('Annulation impossible (plus en file ou déjà exécuté).'); }
+}
+async function processBulkPayouts() {
+  const raw = (document.getElementById('bulkOrderIds').value || '').trim();
+  const box = document.getElementById('bulkResult');
+  const ids = raw.split(/[\s,;]+/).map(s => parseInt(s, 10)).filter(n => n > 0);
+  if (!ids.length) { box.textContent = 'Indiquez au moins un ID de commande.'; return; }
+  if (ids.length > 20) { box.textContent = 'Maximum 20 commandes par bulk.'; return; }
+  if (!confirm('Verser en bulk ' + ids.length + ' commande(s) en UN appel PawaPay ?')) return;
+  box.textContent = 'Envoi bulk…';
+  try {
+    const res = await api('/api/admin/payouts/bulk', { method: 'POST', body: JSON.stringify({ orderIds: ids }) });
+    const items = (res && res.items) || [];
+    box.innerHTML = 'Bulk : <b>' + (res.accepted || 0) + '/' + (res.total || 0) + '</b> acceptés.<br>'
+      + items.map(i => '#' + i.orderId + ' → ' + notifEsc(i.status || i.error || '?')).join('<br>');
+    loadPayouts();
+  } catch (e) { box.textContent = 'Bulk impossible.'; }
+}
+async function loadRefunds() {
+  const box = document.getElementById('refundsTable');
+  box.innerHTML = '<p class="p-6 text-sm text-[#5F6B61] text-center">Chargement des remboursements…</p>';
+  try {
+    const data = await api('/api/admin/refunds?status=' + encodeURIComponent(refundFilter));
+    const rows = Array.isArray(data) ? data : (data && data.data) || [];
+    box.innerHTML = rows.length === 0
+      ? '<p class="p-6 text-sm text-[#5F6B61] text-center">Aucun remboursement pour ce statut</p>'
+      : `<table class="w-full text-sm"><thead><tr class="text-left text-[#5F6B61] text-xs uppercase bg-[#FFFFFF]">
+          <th class="px-4 py-3">Commande</th><th class="px-4 py-3">Montant</th>
+          <th class="px-4 py-3">Réf. refund</th><th class="px-4 py-3">Statut</th><th class="px-4 py-3">Réf. provider</th><th class="px-4 py-3">Réconcilié</th><th class="px-4 py-3">Actions</th>
+        </tr></thead><tbody>${rows.map(r => `
+        <tr class="table-row border-t border-[rgba(255,255,255,0.06)]">
+          <td class="px-4 py-3 font-mono text-xs">${notifEsc(r.orderNumber || ('#' + r.orderId))}</td>
+          <td class="px-4 py-3 font-semibold tabular-nums">${formatMoney(r.amount)}</td>
+          <td class="px-4 py-3 font-mono text-xs">${notifEsc((r.refundId || '').slice(0, 8))}…</td>
+          <td class="px-4 py-3">${finBadge(r.status)}</td>
+          <td class="px-4 py-3 font-mono text-xs">${notifEsc(r.providerTransactionId || '—')}</td>
+          <td class="px-4 py-3 text-xs text-[#5F6B61]">${r.lastReconciledAt ? formatDate(r.lastReconciledAt) : '—'}</td>
+          <td class="px-4 py-3 text-xs whitespace-nowrap"><button onclick="requestRefund(${r.orderId})" class="underline font-semibold">Relancer</button>${r.status === 'ENQUEUED' ? ` · <button onclick="cancelRefund(${r.orderId})" class="underline">Annuler</button>` : ''}</td>
+        </tr>`).join('')}</tbody></table>`;
+  } catch (e) {
+    box.innerHTML = '<p class="p-6 text-sm text-center">Impossible de charger les remboursements. <button onclick="loadRefunds()" class="font-semibold underline">Réessayer</button></p>';
+  }
+}
+function filterRefunds(status, ev) { refundFilter = status; setFilterButtons('refund-filter', ev && ev.target); loadRefunds(); }
+async function requestRefund(orderId) {
+  if (!confirm('Déclencher le remboursement PawaPay de la commande #' + orderId + ' ?')) return;
+  try {
+    const res = await api('/api/admin/refunds/request', { method: 'POST', body: JSON.stringify({ orderId }) });
+    alert('Remboursement : ' + ((res && res.refund && res.refund.status) || 'demandé'));
+    loadRefunds();
+  } catch (e) { alert('Remboursement impossible.'); }
+}
+async function cancelRefund(orderId) {
+  if (!confirm('Annuler le remboursement EN FILE de la commande #' + orderId + ' côté PawaPay ? (impossible si déjà exécuté)')) return;
+  try {
+    const res = await api('/api/admin/refunds/cancel', { method: 'POST', body: JSON.stringify({ orderId }) });
+    alert('Annulation : ' + ((res && res.status) || 'acceptée') + ' (' + ((res && res.failureCode) || '') + ')');
+    loadRefunds();
+  } catch (e) { alert('Annulation impossible (plus en file ou déjà exécuté).'); }
+}
+async function loadDisputes() {
+  const box = document.getElementById('disputesTable');
+  box.innerHTML = '<p class="p-6 text-sm text-[#5F6B61] text-center">Chargement des litiges…</p>';
+  try {
+    const data = await api('/api/admin/disputes?status=' + encodeURIComponent(disputeFilter));
+    const rows = Array.isArray(data) ? data : (data && data.data) || [];
+    box.innerHTML = rows.length === 0
+      ? '<p class="p-6 text-sm text-[#5F6B61] text-center">Aucun litige pour ce statut</p>'
+      : `<table class="w-full text-sm"><thead><tr class="text-left text-[#5F6B61] text-xs uppercase bg-[#FFFFFF]">
+          <th class="px-4 py-3">Commande</th><th class="px-4 py-3">Total</th><th class="px-4 py-3">Motif</th>
+          <th class="px-4 py-3">Statut</th><th class="px-4 py-3">Note</th><th class="px-4 py-3">Actions</th>
+        </tr></thead><tbody>${rows.map(d => `
+        <tr class="table-row border-t border-[rgba(255,255,255,0.06)]">
+          <td class="px-4 py-3 font-mono text-xs">${notifEsc(d.orderNumber || ('#' + d.orderId))}</td>
+          <td class="px-4 py-3 tabular-nums">${formatMoney(d.orderTotal || 0)}</td>
+          <td class="px-4 py-3 text-xs">${notifEsc(d.reason || '')}</td>
+          <td class="px-4 py-3">${finBadge(d.status)}</td>
+          <td class="px-4 py-3 text-xs text-[#5F6B61]">${notifEsc(d.resolutionNote || '—')}</td>
+          <td class="px-4 py-3 text-xs whitespace-nowrap">${d.status === 'OPEN'
+            ? `<button onclick="resolveDispute(${d.orderId},'REFUND')" class="underline font-semibold">Rembourser</button> · <button onclick="resolveDispute(${d.orderId},'REJECT')" class="underline">Rejeter</button>`
+            : '—'}</td>
+        </tr>`).join('')}</tbody></table>`;
+  } catch (e) {
+    box.innerHTML = '<p class="p-6 text-sm text-center">Impossible de charger les litiges. <button onclick="loadDisputes()" class="font-semibold underline">Réessayer</button></p>';
+  }
+}
+function filterDisputes(status, ev) { disputeFilter = status; setFilterButtons('dispute-filter', ev && ev.target); loadDisputes(); }
+async function resolveDispute(orderId, decision) {
+  const note = prompt(decision === 'REFUND' ? 'Note de résolution (remboursement PawaPay sera déclenché) :' : 'Motif du rejet :', '');
+  if (note === null) return;
+  try {
+    await api('/api/admin/disputes/resolve', { method: 'POST', body: JSON.stringify({ orderId, decision, note }) });
+    alert(decision === 'REFUND' ? 'Remboursement déclenché.' : 'Litige rejeté.');
+    loadDisputes();
+  } catch (e) { alert('Résolution impossible.'); }
+}
 function payGoto(p) { payPage = Math.max(1, p); loadPayments(); }
 function renderPayPagination(total) {
   const pages = Math.max(1, Math.ceil(total / payLimit));
@@ -2549,7 +3157,7 @@ async function loadReviews() {
           <td class="px-4 py-3">${notifEsc(r.fullname || '—')}</td>
           <td class="px-4 py-3 font-bold text-[#4D7C0F]">${'★'.repeat(Math.max(0, Math.min(5, r.rating || 0)))}<span class="text-[#5F6B61]">${'★'.repeat(5 - Math.max(0, Math.min(5, r.rating || 0)))}</span></td>
           <td class="px-4 py-3 text-[#5F6B61] max-w-xs truncate">${notifEsc(r.comment || '—')}</td>
-          <td class="px-4 py-3">${r.approved ? '<span class="px-2 py-1 rounded-full text-xs font-medium bg-[#123B16] text-white">Approuvé</span>' : '<span class="px-2 py-1 rounded-full text-xs font-medium bg-[#B7F000] text-[#0B2410]">En attente</span>'}</td>
+          <td class="px-4 py-3">${r.approved ? '<span class="px-2 py-1 rounded-full text-xs font-medium bg-[#123B16] text-white">Approuvé</span>' : '<span class="px-2 py-1 rounded-full text-xs font-medium bg-[#B7F000] text-[#0A0A0A]">En attente</span>'}</td>
           <td class="px-4 py-3"><div class="flex gap-1">
             ${r.approved ? '' : `<button onclick="approveReview(${r.id})" class="p-1.5 rounded-lg hover:bg-[#123B16] text-white" title="Approuver"><i class="bi bi-check-circle text-sm"></i></button>`}
             <button onclick="deleteReview(${r.id})" class="p-1.5 rounded-lg hover:bg-[rgba(183,240,0,0.12)] text-[#4D7C0F]" title="Supprimer"><i class="bi bi-trash text-sm"></i></button>

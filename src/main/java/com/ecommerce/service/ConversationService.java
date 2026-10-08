@@ -49,6 +49,17 @@ public class ConversationService {
      */
     public Conversation getOrCreate(int supplierId, Integer productId, String clientName,
                                     String phone, String cid) throws AppException, SQLException {
+        return getOrCreate(supplierId, productId, null, clientName, phone, cid, 0, null, null);
+    }
+
+    /**
+     * Création/réutilisation avec commande + compte : réutilise la conversation
+     * OPEN du compte (ou invitée qu'elle lie), sinon la crée déjà liée.
+     */
+    public Conversation getOrCreate(int supplierId, Integer productId, Integer orderId,
+                                    String clientName, String phone, String cid,
+                                    int customerId, String customerName, String customerEmail)
+            throws AppException, SQLException {
         checkPhone(phone);
         checkClientKey(cid);
         if (supplierDAO.findById(supplierId) == null) {
@@ -65,7 +76,9 @@ public class ConversationService {
                 throw new AppException(ErrorCodes.OFFER_INVALID, 400, "Produit d'un autre vendeur");
             }
         }
-        List<Conversation> mine = listForGuest(phone.trim(), cid.trim());
+        List<Conversation> mine = customerId > 0
+            ? listForCustomerOrGuest(customerId, phone.trim(), cid.trim())
+            : listForGuest(phone.trim(), cid.trim());
         for (Conversation c : mine) {
             if (c.getSupplierId() == supplierId
                     && "OPEN".equals(c.getStatus())
@@ -76,9 +89,13 @@ public class ConversationService {
         }
         Conversation c = new Conversation();
         c.setSupplierId(supplierId);
+        if (customerId > 0) c.setCustomerId(customerId);
         c.setClientIdentifier(cid.trim());
-        c.setClientName(clientName != null && !clientName.trim().isEmpty() ? clientName.trim().substring(0, Math.min(120, clientName.trim().length())) : null);
+        String nm = clientName;
+        if ((nm == null || nm.trim().isEmpty()) && customerName != null) nm = customerName;
+        c.setClientName(nm != null && !nm.trim().isEmpty() ? nm.trim().substring(0, Math.min(120, nm.trim().length())) : null);
         c.setClientPhone(phone.trim());
+        if (orderId != null && orderId > 0) c.setOrderId(orderId);
         c.setProductId(productId);
         c.setStatus("OPEN");
         c.setSubject(product != null ? product.getName() : "Discussion");
@@ -92,6 +109,81 @@ public class ConversationService {
         checkPhone(phone);
         checkClientKey(cid);
         return conversationDAO.findByGuest(phone.trim(), cid.trim());
+    }
+
+    /**
+     * Liste du compte authentifié : lie d'abord l'historique invité
+     * (même téléphone) au compte — migration douce, une seule source.
+     */
+    public List<Conversation> listForCustomerOrGuest(int customerId, String phone, String cid)
+            throws SQLException {
+        if (phone != null && phone.replaceAll("\\D", "").length() >= 9) {
+            try {
+                String c = (cid == null) ? "" : cid.trim();
+                for (Conversation g : conversationDAO.findByGuest(phone.trim(), c.isEmpty() ? "\0" : c)) {
+                    if (g.getCustomerId() <= 0) conversationDAO.linkCustomer(g.getId(), customerId);
+                }
+            } catch (SQLException ignored) {}
+        }
+        return conversationDAO.findByCustomer(customerId);
+    }
+
+    /**
+     * Détail : compte prioritaire, sinon invité avec liaison au compte
+     * (si phone+cid prouvent la propriété).
+     */
+    public Conversation getForCustomerOrLink(int convId, int customerId, String phone, String cid)
+            throws AppException, SQLException {
+        Conversation c = conversationDAO.findByIdCustomer(convId, customerId);
+        if (c != null) return c;
+        if (phone != null && cid != null) {
+            try {
+                checkPhone(phone);
+                checkClientKey(cid);
+                Conversation g = conversationDAO.findByIdGuest(convId, phone.trim(), cid.trim());
+                if (g != null) {
+                    if (g.getCustomerId() <= 0) conversationDAO.linkCustomer(convId, customerId);
+                    return conversationDAO.findByIdCustomer(convId, customerId);
+                }
+            } catch (AppException | SQLException ignored) {}
+        }
+        throw new AppException(ErrorCodes.CONVERSATION_ACCESS_DENIED, 403, "Conversation inaccessible");
+    }
+
+    /** Enrichit un détail avec produit + commande (contexte, lecture seule). */
+    public java.util.Map<String, Object> detailContext(Conversation c) throws SQLException {
+        java.util.Map<String, Object> m = new java.util.LinkedHashMap<>();
+        if (c.getProductId() != null) {
+            try {
+                java.util.Map<String, Object> p = conversationDAO.productSnippet(c.getProductId());
+                if (p != null) m.put("product", p);
+            } catch (SQLException ignored) {}
+        }
+        if (c.getOrderId() != null) {
+            try {
+                String num = conversationDAO.findOrderNumber(c.getOrderId());
+                if (num != null) m.put("orderNumber", num);
+            } catch (SQLException ignored) {}
+        }
+        return m;
+    }
+
+    /** Liste du client authentifié (compte prioritaire). */
+    public List<Conversation> listForCustomer(int customerId) throws SQLException {
+        return conversationDAO.findByCustomer(customerId);
+    }
+
+    /** Détail du client authentifié (anti-IDOR par compte). */
+    public Conversation getForCustomer(int convId, int customerId) throws AppException, SQLException {
+        Conversation c = conversationDAO.findByIdCustomer(convId, customerId);
+        if (c == null) {
+            throw new AppException(ErrorCodes.CONVERSATION_ACCESS_DENIED, 403, "Conversation inaccessible");
+        }
+        return c;
+    }
+
+    public int unreadCountForCustomer(int customerId) throws SQLException {
+        return conversationDAO.unreadCountForCustomer(customerId);
     }
 
     public Conversation getForGuest(int convId, String phone, String cid) throws AppException, SQLException {
@@ -115,8 +207,33 @@ public class ConversationService {
         return conversationDAO.findMessagesAfter(convId, afterId);
     }
 
+    /** Messages du compte authentifié (propriété déjà vérifiée). */
+    public List<SupplierMessage> getMessagesForCustomer(int convId, int customerId)
+            throws AppException, SQLException {
+        getForCustomer(convId, customerId);
+        return conversationDAO.findMessages(convId);
+    }
+
+    /** Polling incrémental du compte authentifié. */
+    public List<SupplierMessage> getMessagesAfterForCustomer(int convId, int customerId, int afterId)
+            throws AppException, SQLException {
+        getForCustomer(convId, customerId);
+        return conversationDAO.findMessagesAfter(convId, afterId);
+    }
+
     public SupplierMessage sendClientMessage(int convId, String phone, String cid, String body) throws AppException, SQLException {
-        Conversation c = getForGuest(convId, phone, cid);
+        return sendClientMessage(convId, phone, cid, body, 0);
+    }
+
+    /** Envoi client : compte authentifié prioritaire (lié si invité prouvé), sinon invité. */
+    public SupplierMessage sendClientMessage(int convId, String phone, String cid, String body, int customerId)
+            throws AppException, SQLException {
+        Conversation c;
+        if (customerId > 0) {
+            c = getForCustomerOrLink(convId, customerId, phone, cid);
+        } else {
+            c = getForGuest(convId, phone, cid);
+        }
         if (!"OPEN".equals(c.getStatus())) {
             throw new AppException(ErrorCodes.VALIDATION_ERROR, 400, "Conversation fermée");
         }
@@ -139,6 +256,18 @@ public class ConversationService {
                 "CONVERSATION", convId, null,
                 "CONV:" + convId + ":MSG:" + id);
         } catch (Exception ignored) {}
+        // Email fournisseur (best-effort) : remplace la notification WhatsApp.
+        try {
+            com.ecommerce.model.Supplier s = supplierDAO.findById(c.getSupplierId());
+            if (s != null && EmailService.isValidEmail(s.getEmail())) {
+                String excerpt = clean.length() > 160 ? clean.substring(0, 160) + "…" : clean;
+                new EmailService().queueAndSend(s.getEmail(),
+                    EmailService.messageReceivedSubject(s.getName() != null ? s.getName() : "BAZAAR"),
+                    EmailService.messageReceivedBody(
+                        c.getClientName() != null ? c.getClientName() : "Un client", excerpt),
+                    "MESSAGE_RECEIVED", null);
+            }
+        } catch (Exception ignored) {}
         SupplierMessage m = new SupplierMessage();
         m.setId(id);
         m.setConversationId(convId);
@@ -149,6 +278,12 @@ public class ConversationService {
 
     public void markRead(int convId, String phone, String cid) throws AppException, SQLException {
         getForGuest(convId, phone, cid);
+        conversationDAO.markGuestRead(convId);
+    }
+
+    /** Marquage lu du compte authentifié. */
+    public void markReadForCustomer(int convId, int customerId) throws AppException, SQLException {
+        getForCustomer(convId, customerId);
         conversationDAO.markGuestRead(convId);
     }
 

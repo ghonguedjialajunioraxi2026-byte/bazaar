@@ -131,8 +131,32 @@ public class SupplierDAO {
         }
     }
 
-    public void updateLogo(int id, String logo) throws SQLException {
-        String sql = "UPDATE suppliers SET logo = ? WHERE id = ?";
+    /** Coordonnées de versement Mobile Money (choisies par le fournisseur). */
+    public void updatePayoutDetails(int id, String provider, String phone) throws SQLException {
+        String sql = "UPDATE suppliers SET payout_provider = ?, payout_phone = ? WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, provider);
+            ps.setString(2, phone);
+            ps.setInt(3, id);
+            ps.executeUpdate();
+        }
+    }
+
+    /** Numéros de versement MTN + Orange (déjà normalisés par l'appelant ; NULL = conservé). */
+    public void updatePayoutPhones(int id, String mtnPhone, String orangePhone) throws SQLException {
+        String sql = "UPDATE suppliers SET mtn_phone = COALESCE(?, mtn_phone),"
+            + " orange_phone = COALESCE(?, orange_phone) WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, mtnPhone);
+            ps.setString(2, orangePhone);
+            ps.setInt(3, id);
+            ps.executeUpdate();
+        }
+    }
+
+    public void updateLogo(int id, String logo) throws SQLException {        String sql = "UPDATE suppliers SET logo = ? WHERE id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, logo);
@@ -210,6 +234,10 @@ public class SupplierDAO {
         try { s.setPaidBalance(rs.getInt("paid_balance")); } catch (SQLException ignored) {}
         try { s.setLastLogin(rs.getString("last_login")); } catch (SQLException ignored) {}
         try { s.setGoogleId(rs.getString("google_id")); } catch (SQLException ignored) {}
+        try { s.setPayoutProvider(rs.getString("payout_provider")); } catch (SQLException ignored) {}
+        try { s.setPayoutPhone(rs.getString("payout_phone")); } catch (SQLException ignored) {}
+        try { s.setMtnPhone(rs.getString("mtn_phone")); } catch (SQLException ignored) {}
+        try { s.setOrangePhone(rs.getString("orange_phone")); } catch (SQLException ignored) {}
         s.setCreatedAt(rs.getString("created_at"));
         return s;
     }

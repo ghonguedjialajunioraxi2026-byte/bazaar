@@ -105,13 +105,29 @@ public class SupplierApiServlet extends HttpServlet {
             if (path.equals("/orders") || path.startsWith("/orders/")) {
                 String sub = path.substring("/orders".length());
                 if (sub.isEmpty()) {
-                    write(resp, ok("Commandes", supplierService.getOrdersBySupplier(supplierId)), 200);
+                    write(resp, ok("Commandes", supplierService.getOrdersEnriched(supplierId)), 200);
+                } else if (sub.endsWith("/finance")) {
+                    int oid = Integer.parseInt(sub.substring(1, sub.length() - "/finance".length()));
+                    java.util.Map<String, Object> fin = supplierService.getOrderFinance(supplierId, oid);
+                    if (fin == null) { write(resp, err("Commande introuvable"), 404); return; }
+                    write(resp, ok("Finance commande", fin), 200);
                 } else {
                     int oid = Integer.parseInt(sub.substring(1));
                     Order o = supplierService.getOrderForSupplier(supplierId, oid);
                     if (o == null) { write(resp, err("Commande introuvable"), 404); return; }
                     write(resp, ok("Commande", o), 200);
                 }
+                return;
+            }
+            // /api/supplier/shipments/by-id/{shipmentId} -> {orderId, orderNumber}
+            // Bouton « VOIR LA COMMANDE » des notifications (entité SHIPMENT).
+            // Propriété vérifiée côté service (404/403 hors périmètre).
+            if (path.startsWith("/shipments/by-id/")) {
+                int sid = parseInt(path.substring("/shipments/by-id/".length()));
+                if (sid <= 0) { write(resp, err("Expédition introuvable"), 404); return; }
+                java.util.Map<String, Object> data =
+                    new com.ecommerce.service.ShipmentService().shipmentOrderForSupplier(sid, supplierId);
+                write(resp, ok("Commande", data), 200);
                 return;
             }
             // /api/supplier/conversations
@@ -128,6 +144,17 @@ public class SupplierApiServlet extends HttpServlet {
                 data.put("conversation", c);
                 data.put("messages", supplierService.getMessagesForSupplier(supplierId, cid));
                 try {
+                    com.ecommerce.dao.ConversationDAO cdao = new com.ecommerce.dao.ConversationDAO();
+                    if (c.getProductId() != null) {
+                        java.util.Map<String, Object> p = cdao.productSnippet(c.getProductId());
+                        if (p != null) data.put("product", p);
+                    }
+                    if (c.getOrderId() != null) {
+                        String num = cdao.findOrderNumber(c.getOrderId());
+                        if (num != null) data.put("orderNumber", num);
+                    }
+                } catch (Exception ignored) {}
+                try {
                     data.put("offers", new com.ecommerce.service.OfferService().listForConversation(cid));
                 } catch (Exception ignored) {
                     data.put("offers", new java.util.ArrayList<>());
@@ -136,6 +163,7 @@ public class SupplierApiServlet extends HttpServlet {
                 return;
             }
             // /api/supplier/notifications (centre paginé + filtres)
+            // archived=true -> sauvegardées, archived=all -> toutes, défaut -> boîte active.
             if (path.equals("/notifications")) {
                 String category = req.getParameter("type");
                 if (category == null) category = req.getParameter("category");
@@ -143,11 +171,15 @@ public class SupplierApiServlet extends HttpServlet {
                 Boolean unreadOnly = null;
                 if ("unread".equalsIgnoreCase(status)) unreadOnly = true;
                 else if ("read".equalsIgnoreCase(status)) unreadOnly = false;
+                Boolean archivedOnly = false;
+                String arch = req.getParameter("archived");
+                if ("all".equalsIgnoreCase(arch)) archivedOnly = null;
+                else if ("true".equalsIgnoreCase(arch) || "1".equals(arch)) archivedOnly = true;
                 int page = parseNum(req.getParameter("page"), 1);
                 int limit = Math.min(50, Math.max(1, parseNum(req.getParameter("limit"), 20)));
                 Map<String, Object> data = new LinkedHashMap<>();
-                data.put("list", supplierService.getNotificationsPaged(supplierId, category, unreadOnly, limit, (page - 1) * limit));
-                data.put("total", supplierService.countNotifications(supplierId, category, unreadOnly));
+                data.put("list", supplierService.getNotificationsPaged(supplierId, category, unreadOnly, archivedOnly, limit, (page - 1) * limit));
+                data.put("total", supplierService.countNotifications(supplierId, category, unreadOnly, archivedOnly));
                 data.put("unread", supplierService.getUnreadNotifications(supplierId));
                 data.put("page", page);
                 data.put("limit", limit);
@@ -170,6 +202,12 @@ public class SupplierApiServlet extends HttpServlet {
             // /api/supplier/payments
             if (path.equals("/payments")) {
                 write(resp, ok("Paiements", supplierService.getPayments(supplierId)), 200);
+                return;
+            }
+            // /api/supplier/category-requests — mes demandes (statuts visibles).
+            if (path.equals("/category-requests")) {
+                write(resp, ok("Demandes de catégories",
+                    supplierService.getCategoryRequests(supplierId)), 200);
                 return;
             }
             // /api/supplier/offers — négociations en attente (toutes conversations)
@@ -232,6 +270,7 @@ public class SupplierApiServlet extends HttpServlet {
                     p.setOldPrice(optInt(req.getParameter("oldPrice")));
                     p.setDiscount(parseInt(req.getParameter("discount")));
                     p.setStock(parseInt(req.getParameter("stock")));
+                    p.setDeliveryPrice(parseInt(req.getParameter("deliveryPrice")));
                     p.setSizes(parseJsonList(req.getParameter("sizes")));
                     p.setColors(parseJsonList(req.getParameter("colors")));
                     String existingImages = req.getParameter("existingImages");
@@ -252,6 +291,7 @@ public class SupplierApiServlet extends HttpServlet {
                     p.setOldPrice(body.get("oldPrice") == null ? null : num(body.get("oldPrice")));
                     p.setDiscount(num(body.get("discount")));
                     p.setStock(num(body.get("stock")));
+                    p.setDeliveryPrice(num(body.get("deliveryPrice")));
                     p.setSizes(stringList(body.get("sizes")));
                     p.setColors(stringList(body.get("colors")));
                     images = stringList(body.get("images"));
@@ -279,9 +319,32 @@ public class SupplierApiServlet extends HttpServlet {
                 return;
             }
 
-            // POST payments/request
-            if (path.equals("/payments/request")) {
+            // POST category-requests : proposer une catégorie / sous-catégorie
+            // (validation admin requise, jamais de création directe).
+            if (path.equals("/category-requests")) {
                 BufferedReader reader = req.getReader();
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) sb.append(line);
+                Map<String, Object> body = JsonUtil.fromJson(sb.toString(), Map.class);
+                String name = str(body.get("name"));
+                Object rawParent = body.get("parentId") != null ? body.get("parentId") : body.get("parent_id");
+                Integer parentId = null;
+                if (rawParent instanceof Number) {
+                    int v = ((Number) rawParent).intValue();
+                    if (v > 0) parentId = v;
+                }
+                try {
+                    int id = supplierService.requestCategory(supplierId, name, parentId);
+                    write(resp, ok("Demande envoyée, en attente de validation", id), 201);
+                } catch (com.ecommerce.util.AppException ae) {
+                    write(resp, err(ae.getMessage()), ae.getHttpStatus() > 0 ? ae.getHttpStatus() : 400);
+                }
+                return;
+            }
+
+            // POST payments/request
+            if (path.equals("/payments/request")) {                BufferedReader reader = req.getReader();
                 StringBuilder sb = new StringBuilder();
                 String line;
                 while ((line = reader.readLine()) != null) sb.append(line);
@@ -368,6 +431,7 @@ public class SupplierApiServlet extends HttpServlet {
                     p.setOldPrice(optInt(req.getParameter("oldPrice")));
                     p.setDiscount(parseInt(req.getParameter("discount")));
                     p.setStock(parseInt(req.getParameter("stock")));
+                    p.setDeliveryPrice(parseInt(req.getParameter("deliveryPrice")));
                     p.setSizes(parseJsonList(req.getParameter("sizes")));
                     p.setColors(parseJsonList(req.getParameter("colors")));
                     String existingImages = req.getParameter("existingImages");
@@ -388,6 +452,7 @@ public class SupplierApiServlet extends HttpServlet {
                     p.setOldPrice(body.get("oldPrice") == null ? null : num(body.get("oldPrice")));
                     p.setDiscount(num(body.get("discount")));
                     p.setStock(num(body.get("stock")));
+                    p.setDeliveryPrice(num(body.get("deliveryPrice")));
                     p.setSizes(stringList(body.get("sizes")));
                     p.setColors(stringList(body.get("colors")));
                     images = stringList(body.get("images"));
@@ -456,7 +521,7 @@ public class SupplierApiServlet extends HttpServlet {
                 String contentType = req.getContentType();
                 String logo = null;
                 if (contentType != null && contentType.contains("multipart/form-data")) {
-                    List<String> saved = saveParts(req);
+                    List<String> saved = saveParts(req, UploadUtil.SUBDIR_LOGOS);
                     if (!saved.isEmpty()) logo = saved.get(0);
                 } else {
                     BufferedReader reader = req.getReader();
@@ -497,6 +562,15 @@ public class SupplierApiServlet extends HttpServlet {
                 boolean ok = supplierService.deleteProductForSupplier(supplierId, pid);
                 if (!ok) { write(resp, err("Produit introuvable"), 404); return; }
                 write(resp, ok("Produit supprimé", null), 200);
+                return;
+            }
+            // DELETE notifications/{id} (propriété vérifiée côté service)
+            if (path.startsWith("/notifications/")) {
+                int nid = parseInt(path.substring("/notifications/".length()));
+                if (nid <= 0) { write(resp, err("Notification introuvable"), 404); return; }
+                boolean ok = supplierService.deleteNotification(supplierId, nid);
+                if (!ok) { write(resp, err("Notification introuvable"), 404); return; }
+                write(resp, ok("Notification supprimée", null), 200);
                 return;
             }
             write(resp, err("Route inconnue"), 404);
@@ -575,6 +649,24 @@ public class SupplierApiServlet extends HttpServlet {
                 return;
             }
 
+            // PATCH notifications/{id}/archive {archived:true|false} (défaut true : sauvegarder)
+            if (path.startsWith("/notifications/") && path.endsWith("/archive")) {
+                int nid = Integer.parseInt(path.substring("/notifications/".length(), path.indexOf("/archive")));
+                BufferedReader areader = req.getReader();
+                StringBuilder asb = new StringBuilder();
+                String aline;
+                while ((aline = areader.readLine()) != null) asb.append(aline);
+                boolean archived = true;
+                try {
+                    Map<String, Object> abody = JsonUtil.fromJson(asb.toString(), Map.class);
+                    if (abody.get("archived") instanceof Boolean) archived = (Boolean) abody.get("archived");
+                } catch (Exception ignored) {}
+                boolean done = supplierService.archiveNotification(supplierId, nid, archived);
+                if (!done) { write(resp, err("Notification introuvable"), 404); return; }
+                write(resp, ok(archived ? "Notification sauvegardée" : "Notification restaurée", null), 200);
+                return;
+            }
+
             write(resp, err("Route inconnue"), 404);
         } catch (Exception e) {
             write(resp, err("Impossible de traiter votre demande."), 500);
@@ -610,13 +702,17 @@ public class SupplierApiServlet extends HttpServlet {
     }
 
     private List<String> saveParts(HttpServletRequest req) throws IOException, ServletException {
+        return saveParts(req, UploadUtil.SUBDIR_PRODUCTS);
+    }
+
+    private List<String> saveParts(HttpServletRequest req, String subdir) throws IOException, ServletException {
         // Stockage persistant : les images survivent aux redeploys du WAR
         // et sont servies par UploadServlet (mappé sur /uploads/*).
         List<String> urls = new ArrayList<>();
         for (Part part : req.getParts()) {
             if ("file".equals(part.getName()) || part.getContentType() != null && part.getContentType().startsWith("image/")) {
                 if (part.getSize() == 0) continue;
-                urls.add(UploadUtil.saveImage(part, UploadUtil.SUBDIR_PRODUCTS, req));
+                urls.add(UploadUtil.saveImage(part, subdir, req));
             }
         }
         return urls;

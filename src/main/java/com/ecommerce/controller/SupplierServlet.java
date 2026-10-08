@@ -23,25 +23,48 @@ public class SupplierServlet extends HttpServlet {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
         try {
+            // Vitrine publique : jamais de hash, email, téléphones, soldes.
+            // Le dashboard admin joint son Bearer et reçoit les fiches complètes.
+            boolean admin = com.ecommerce.util.AdminAuth.validateAdmin(req) > 0;
             String action = req.getParameter("action");
             if ("active".equals(action)) {
-                resp.getWriter().write(JsonUtil.toJson(supplierService.getActive()));
+                resp.getWriter().write(JsonUtil.toJson(admin
+                    ? supplierService.getActive() : publicShops(supplierService.getActive())));
             } else if ("find".equals(action)) {
                 int id = Integer.parseInt(req.getParameter("id"));
                 Supplier s = supplierService.getById(id);
-                if (s != null) {
-                    resp.getWriter().write(JsonUtil.toJson(s));
-                } else {
+                if (s == null || (!admin && !s.isActive())) {
                     resp.setStatus(404);
                     resp.getWriter().write("{\"error\":\"Fournisseur non trouvé\"}");
+                } else {
+                    resp.getWriter().write(JsonUtil.toJson(admin ? s : publicShop(s)));
                 }
             } else {
-                resp.getWriter().write(JsonUtil.toJson(supplierService.getAll()));
+                resp.getWriter().write(JsonUtil.toJson(admin
+                    ? supplierService.getAll() : publicShops(supplierService.getActive())));
             }
         } catch (Exception e) {
             resp.setStatus(500);
             com.ecommerce.util.ApiResponse.internalError(resp);
         }
+    }
+
+    /** Vue vitrine : champs d'affichage boutique uniquement (aucune PII, aucun secret). */
+    private static java.util.Map<String, Object> publicShop(Supplier s) {
+        java.util.Map<String, Object> m = new java.util.LinkedHashMap<>();
+        m.put("id", s.getId());
+        m.put("name", s.getName());
+        m.put("logo", s.getLogo());
+        m.put("city", s.getCity());
+        m.put("address", s.getAddress());
+        m.put("description", s.getDescription());
+        return m;
+    }
+
+    private static java.util.List<java.util.Map<String, Object>> publicShops(java.util.List<Supplier> list) {
+        java.util.List<java.util.Map<String, Object>> out = new java.util.ArrayList<>();
+        if (list != null) for (Supplier s : list) out.add(publicShop(s));
+        return out;
     }
 
     @Override
@@ -65,7 +88,8 @@ public class SupplierServlet extends HttpServlet {
             s.setCity((String) body.get("city"));
             s.setAddress((String) body.get("address"));
             s.setDescription((String) body.get("description"));
-            s.setActive(body.get("active") == null || (Boolean) body.get("active"));
+            Boolean createdActive = com.ecommerce.util.ServiceErrors.toBoolean(body.get("active"));
+            s.setActive(createdActive == null || createdActive);
             s.setCommissionRate(10.0);
 
             String password = (String) body.get("password");
@@ -76,8 +100,10 @@ public class SupplierServlet extends HttpServlet {
             int id = supplierService.createSupplier(s);
             resp.getWriter().write("{\"id\":" + id + ",\"success\":true}");
         } catch (Exception e) {
-            resp.setStatus(500);
-            com.ecommerce.util.ApiResponse.internalError(resp);
+            com.ecommerce.util.ServiceErrors.send(resp, e,
+                "L'email est obligatoire",
+                "Un compte existe déjà avec cet email",
+                "Impossible de créer le compte");
         }
     }
 
@@ -94,15 +120,38 @@ public class SupplierServlet extends HttpServlet {
             while ((line = reader.readLine()) != null) sb.append(line);
             Map<String, Object> body = JsonUtil.fromJson(sb.toString(), Map.class);
 
+            Integer id = com.ecommerce.util.ServiceErrors.toId(body.get("id"));
+            if (id == null) {
+                resp.setStatus(400);
+                resp.getWriter().write("{\"error\":\"Identifiant fournisseur requis\"}");
+                return;
+            }
+            Boolean active = com.ecommerce.util.ServiceErrors.toBoolean(body.get("active"));
+
+            // Suspension/activation : mise à jour du seul statut (le dashboard
+            // n'envoie que {id, active}). Sans ce chemin, les champs NULL
+            // écrasaient la fiche (name NOT NULL => 500).
+            if (active != null && body.get("name") == null && body.get("email") == null) {
+                supplierService.updateStatus(id, active);
+                try {
+                    new com.ecommerce.dao.ActivityLogDAO().log(adminId,
+                        active ? "SUPPLIER_ACTIVATED" : "SUPPLIER_SUSPENDED",
+                        "supplier", id,
+                        "Fournisseur " + (active ? "activé" : "suspendu"), req.getRemoteAddr());
+                } catch (Exception ignored) {}
+                resp.getWriter().write("{\"success\":true}");
+                return;
+            }
+
             Supplier s = new Supplier();
-            s.setId(((Number) body.get("id")).intValue());
+            s.setId(id);
             s.setName((String) body.get("name"));
             s.setPhone((String) body.get("phone"));
             s.setWhatsapp((String) body.get("whatsapp"));
             s.setEmail((String) body.get("email"));
             s.setCity((String) body.get("city"));
             s.setAddress((String) body.get("address"));
-            s.setActive(body.get("active") == null || (Boolean) body.get("active"));
+            s.setActive(active == null || active);
 
             supplierService.updateSupplier(s);
             try {
@@ -113,8 +162,9 @@ public class SupplierServlet extends HttpServlet {
             } catch (Exception ignored) {}
             resp.getWriter().write("{\"success\":true}");
         } catch (Exception e) {
-            resp.setStatus(500);
-            com.ecommerce.util.ApiResponse.internalError(resp);
+            com.ecommerce.util.ServiceErrors.send(resp, e,
+                "Fournisseur introuvable",
+                "Nom de boutique obligatoire");
         }
     }
 
@@ -125,7 +175,12 @@ public class SupplierServlet extends HttpServlet {
         try {
             if (com.ecommerce.util.AdminRole.requireAction(req, resp,
                     com.ecommerce.util.AdminRole.DESTRUCTIVE) <= 0) return;
-            int id = Integer.parseInt(req.getParameter("id"));
+            Integer id = com.ecommerce.util.ServiceErrors.toId(req.getParameter("id"));
+            if (id == null) {
+                resp.setStatus(400);
+                resp.getWriter().write("{\"error\":\"Identifiant fournisseur requis\"}");
+                return;
+            }
             supplierService.deleteSupplier(id);
             resp.getWriter().write("{\"success\":true}");
         } catch (Exception e) {

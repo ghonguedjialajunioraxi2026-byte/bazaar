@@ -26,12 +26,18 @@ public class PromotionServlet extends HttpServlet {
             String action = req.getParameter("action");
             if ("active".equals(action)) {
                 resp.getWriter().write(JsonUtil.toJson(promotionDAO.findActive()));
+            } else if ("all".equals(action)) {
+                // Gestion admin : toutes les promos (actives + inactives).
+                if (com.ecommerce.util.AdminAuth.requireAdmin(req, resp) <= 0) return;
+                resp.getWriter().write(JsonUtil.toJson(promotionDAO.findAll()));
             } else if ("byProduct".equals(action)) {
                 int productId = Integer.parseInt(req.getParameter("productId"));
                 Promotion p = promotionDAO.findByProductId(productId);
                 resp.getWriter().write(JsonUtil.toJson(p));
             } else {
-                resp.getWriter().write(JsonUtil.toJson(promotionDAO.findAll()));
+                // Vitrine publique : seules les promotions actives.
+                // (findAll exposerait les promos inactives/futures.)
+                resp.getWriter().write(JsonUtil.toJson(promotionDAO.findActive()));
             }
         } catch (Exception e) {
             resp.setStatus(500);
@@ -57,7 +63,8 @@ public class PromotionServlet extends HttpServlet {
             p.setPromoPercent(body.get("promoPercent") != null ? ((Number) body.get("promoPercent")).intValue() : 0);
             p.setStartDate((String) body.get("startDate"));
             p.setEndDate((String) body.get("endDate"));
-            p.setActive(body.get("active") == null || (Boolean) body.get("active"));
+            Boolean createdActive = com.ecommerce.util.ServiceErrors.toBoolean(body.get("active"));
+            p.setActive(createdActive == null || createdActive);
 
             int id = promotionDAO.create(p);
             resp.getWriter().write("{\"id\":" + id + ",\"success\":true}");
@@ -85,7 +92,8 @@ public class PromotionServlet extends HttpServlet {
             p.setPromoPercent(body.get("promoPercent") != null ? ((Number) body.get("promoPercent")).intValue() : 0);
             p.setStartDate((String) body.get("startDate"));
             p.setEndDate((String) body.get("endDate"));
-            p.setActive(body.get("active") == null || (Boolean) body.get("active"));
+            Boolean updatedActive = com.ecommerce.util.ServiceErrors.toBoolean(body.get("active"));
+            p.setActive(updatedActive == null || updatedActive);
 
             promotionDAO.update(p);
             resp.getWriter().write("{\"success\":true}");
@@ -102,7 +110,12 @@ public class PromotionServlet extends HttpServlet {
         try {
             if (com.ecommerce.util.AdminRole.requireAction(req, resp,
                     com.ecommerce.util.AdminRole.DESTRUCTIVE) <= 0) return;
-            int id = Integer.parseInt(req.getParameter("id"));
+            Integer id = com.ecommerce.util.ServiceErrors.toId(req.getParameter("id"));
+            if (id == null) {
+                resp.setStatus(400);
+                resp.getWriter().write("{\"error\":\"Identifiant promotion requis\"}");
+                return;
+            }
             promotionDAO.delete(id);
             resp.getWriter().write("{\"success\":true}");
         } catch (Exception e) {

@@ -17,6 +17,7 @@ public class Notification {
     private String readAt;
     private String priority = "NORMAL";
     private boolean read;
+    private boolean archived;
     private String link;
     private String createdAt;
 
@@ -71,6 +72,9 @@ public class Notification {
 
     public boolean isRead() { return read; }
     public void setRead(boolean read) { this.read = read; }
+
+    public boolean isArchived() { return archived; }
+    public void setArchived(boolean archived) { this.archived = archived; }
 
     public String getLink() { return link; }
     public void setLink(String link) { this.link = link; }

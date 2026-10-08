@@ -108,6 +108,13 @@ public class ShipmentService {
         if (!ShipmentStatus.isKnown(toStatus)) {
             throw new AppException(ErrorCodes.INVALID_ORDER_STATUS, 400, "Statut inconnu");
         }
+        if (ShipmentStatus.DELIVERED.equals(toStatus)) {
+            // Workflow v2 : plus de passage direct à LIVRÉ (ni fournisseur ni
+            // admin) — seule la validation après confirmation client
+            // (DeliveryFlowService.validateDelivery) peut solder une livraison.
+            throw new AppException(ErrorCodes.VALIDATION_ERROR, 400,
+                "Validez la livraison après confirmation client (nouveau workflow)");
+        }
         Shipment s = getScoped(shipmentId, supplierId);
         if (!ShipmentStatus.canTransition(s.getStatus(), toStatus)) {
             throw new AppException(ErrorCodes.INVALID_ORDER_STATUS, 400,
@@ -182,6 +189,25 @@ public class ShipmentService {
                     "SHIPMENT:" + shipmentId + ":" + eventCode);
             }
         } catch (Exception ignored) {}
+        // Email client (best-effort) pour les étapes clés : remplace WhatsApp.
+        try {
+            if (o == null || o.getEmail() == null
+                    || !EmailService.isValidEmail(o.getEmail())) return;
+            String label = null;
+            if ("DELIVERY_DELIVERED".equals(eventCode)) label = "livrée";
+            else if ("DELIVERY_OUT_FOR_DELIVERY".equals(eventCode)) label = "en cours de livraison";
+            else if ("DELIVERY_SHIPPED".equals(eventCode)) label = "expédiée";
+            if (label == null) return;
+            String tracking = null;
+            try {
+                Shipment s = shipmentDAO.findByOrder(o.getId());
+                if (s != null) tracking = s.getTrackingNumber();
+            } catch (Exception ignored) {}
+            new EmailService().queueAndSend(o.getEmail(),
+                EmailService.shipmentSubject(o.getOrderNumber(), "Commande " + label),
+                EmailService.shipmentBody(o.getFullname(), o.getOrderNumber(), label, tracking),
+                eventCode, o.getId());
+        } catch (Exception ignored) {}
     }
 
     private Shipment getScoped(int shipmentId, Integer supplierId) throws AppException, SQLException {
@@ -233,6 +259,15 @@ public class ShipmentService {
     }
 
     public Map<String, Object> detailForGuest(String trackingNumber, String phone) throws AppException, SQLException {
+        return detailForGuest(trackingNumber, phone, null);
+    }
+
+    /**
+     * Détail suivi : preuve téléphone + propriété du compte si une
+     * session client est présente (anti-IDOR entre comptes).
+     */
+    public Map<String, Object> detailForGuest(String trackingNumber, String phone, Integer sessionCustomerId)
+            throws AppException, SQLException {
         if (trackingNumber == null || trackingNumber.trim().isEmpty()) {
             throw new AppException(ErrorCodes.VALIDATION_ERROR, 400, "Numéro de suivi requis");
         }
@@ -254,6 +289,7 @@ public class ShipmentService {
         if (o == null || phone == null || !phone.trim().equals(o.getPhone() == null ? "" : o.getPhone().trim())) {
             throw new AppException(ErrorCodes.ORDER_ACCESS_DENIED, 403, "Suivi inaccessible");
         }
+        CustomerIsolation.requireOrderVisible(o, sessionCustomerId);
         List<ShipmentEvent> events;
         try {
             events = shipmentDAO.events(s.getId(), 200);
@@ -265,6 +301,19 @@ public class ShipmentService {
         m.put("events", events);
         m.put("orderNumber", o.getOrderNumber());
         m.put("orderStatus", o.getStatus());
+        // Protection acheteur (best-effort) : litige + remboursement visibles
+        // par le propriétaire dans son suivi.
+        try {
+            com.ecommerce.model.Dispute dispute =
+                new com.ecommerce.dao.DisputeDAO().findByOrderId(o.getId());
+            m.put("dispute", dispute);
+        } catch (Exception ignored) {}
+        try {
+            com.ecommerce.model.Refund refund =
+                new com.ecommerce.dao.RefundDAO().findLatestByOrderId(o.getId());
+            m.put("refund", refund == null ? null
+                : com.ecommerce.pawapay.PawaPayRefundService.maskedView(refund));
+        } catch (Exception ignored) {}
         return m;
     }
 
@@ -292,14 +341,92 @@ public class ShipmentService {
         }
     }
 
-    /** Confirmation de réception par le client (OUT_FOR_DELIVERY → DELIVERED). */
+    /**
+     * Résolution expédition → commande pour le bouton « VOIR LA COMMANDE »
+     * des notifications fournisseur. Propriété vérifiée (404 hors périmètre,
+     * anti-IDOR/anti-énumération). Lecture seule, aucun effet de bord.
+     */
+    public Map<String, Object> shipmentOrderForSupplier(int shipmentId, int supplierId)
+            throws AppException, SQLException {
+        Shipment s = findShipmentChecked(shipmentId, supplierId);
+        Order o;
+        try {
+            o = orderDAO.findById(s.getOrderId());
+        } catch (SQLException e) {
+            throw new AppException(ErrorCodes.DATABASE_ERROR, 500, "Impossible de traiter votre demande.", e);
+        }
+        if (o == null) {
+            throw new AppException(ErrorCodes.RESOURCE_NOT_FOUND, 404, "Commande introuvable");
+        }
+        Map<String, Object> m = new LinkedHashMap<>();
+        m.put("orderId", o.getId());
+        m.put("orderNumber", o.getOrderNumber());
+        m.put("orderStatus", o.getStatus());
+        return m;
+    }
+
+    /**
+     * Confirmation de réception par le client (chemin historique, conservé
+     * pour les expéditions déjà DELIVERED avant le workflow v2).
+     * Workflow v2 : utiliser DeliveryFlowService.confirmReceipt (exige
+     * DELIVERY_STARTED). Ne déclenche JAMAIS le payout : seul
+     * validateDelivery peut lancer le règlement (règle absolue).
+     */
     public Shipment confirmReceipt(String trackingNumber, String phone) throws AppException, SQLException {
-        Map<String, Object> d = detailForGuest(trackingNumber, phone);
+        return confirmReceipt(trackingNumber, phone, null);
+    }
+
+    public Shipment confirmReceipt(String trackingNumber, String phone, Integer sessionCustomerId)
+            throws AppException, SQLException {
+        Map<String, Object> d = detailForGuest(trackingNumber, phone, sessionCustomerId);
         Shipment s = (Shipment) d.get("shipment");
-        if (!ShipmentStatus.OUT_FOR_DELIVERY.equals(s.getStatus())) {
+        Shipment current = s;
+        if (ShipmentStatus.DELIVERED.equals(s.getStatus())) {
+            if (!s.isReceiptConfirmed()) {
+                markConfirmed(s.getId(), "CLIENT");
+            }
+        } else {
             throw new AppException(ErrorCodes.INVALID_ORDER_STATUS, 400, "Réception non confirmable à ce stade");
         }
-        return advance(s.getId(), ShipmentStatus.DELIVERED, "Réception confirmée par le client.", "CLIENT", null);
+        try {
+            return shipmentDAO.findByOrder(current.getOrderId());
+        } catch (SQLException e) {
+            return current;
+        }
+    }
+
+    /** Confirmation admin (chemin historique). Ne déclenche jamais le payout. */
+    public Shipment confirmReceiptByAdmin(int orderId) throws AppException, SQLException {
+        Shipment s;
+        try {
+            s = shipmentDAO.findByOrder(orderId);
+        } catch (SQLException e) {
+            throw new AppException(ErrorCodes.DATABASE_ERROR, 500, "Impossible de traiter votre demande.", e);
+        }
+        if (s == null) {
+            throw new AppException(ErrorCodes.RESOURCE_NOT_FOUND, 404, "Expédition introuvable");
+        }
+        if (!ShipmentStatus.DELIVERED.equals(s.getStatus())) {
+            throw new AppException(ErrorCodes.INVALID_ORDER_STATUS, 400, "Réception non confirmable à ce stade");
+        }
+        if (!s.isReceiptConfirmed()) markConfirmed(s.getId(), "ADMIN");
+        try {
+            Shipment fresh = shipmentDAO.findByOrder(s.getOrderId());
+            return fresh != null ? fresh : s;
+        } catch (SQLException e) {
+            return s;
+        }
+    }
+
+    private void markConfirmed(int shipmentId, String by) {
+        try {
+            if (shipmentDAO.markReceiptConfirmed(shipmentId, by)) {
+                try {
+                    shipmentDAO.addEvent(shipmentId, "RECEIPT_CONFIRMED",
+                        "Réception confirmée", "Confirmée par " + by + ".", by);
+                } catch (SQLException ignored) {}
+            }
+        } catch (SQLException ignored) {}
     }
 
     /** Annulation commande → annulation expédition non terminale. */

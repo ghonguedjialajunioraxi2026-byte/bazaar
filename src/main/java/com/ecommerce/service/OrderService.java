@@ -35,6 +35,10 @@ public class OrderService {
             throw new AppException(ErrorCodes.PROVIDER_UNAVAILABLE, 400, "Moyen de paiement indisponible");
         }
         int itemsTotal = 0;
+        // Frais de livraison saisis par le fournisseur (max des lignes > 0),
+        // sinon tarif de la zone par ville. Commandes mono-fournisseur :
+        // le max reflète le tarif du vendeur. Calcul 100 % serveur.
+        int supplierDeliveryFee = 0;
         java.util.List<com.ecommerce.model.Offer> consumedOffers = new java.util.ArrayList<>();
         for (OrderItem item : order.getItems()) {
             if (item.getQty() <= 0 || item.getQty() > 99) {
@@ -65,11 +69,13 @@ public class OrderService {
                     "« " + p.getName() + " » n'appartient pas à ce vendeur");
             }
             if (item.getOfferId() != null && item.getOfferId() > 0) {
-                // Ligne au prix négocié : offre ACCEPTED du même téléphone, mêmes variantes.
+                // Ligne au prix négocié : offre ACCEPTED du même téléphone, mêmes variantes,
+                // et conversation du compte connecté (isolation entre comptes clients).
                 com.ecommerce.model.Offer off;
                 try {
                     off = new OfferService().consumeForOrder(item.getOfferId(), order.getPhone(),
-                        item.getQty(), item.getSize(), item.getColor());
+                        item.getQty(), item.getSize(), item.getColor(),
+                        CustomerIsolation.sessionOf(order.getCustomerId()));
                 } catch (SQLException e) {
                     throw new AppException(ErrorCodes.DATABASE_ERROR, 500, "Impossible de traiter votre demande.", e);
                 }
@@ -86,6 +92,9 @@ public class OrderService {
                 item.setUnitPrice(p.getPrice());
             }
             itemsTotal += item.getUnitPrice() * item.getQty();
+            if (p.getDeliveryPrice() > 0) {
+                supplierDeliveryFee = Math.max(supplierDeliveryFee, p.getDeliveryPrice());
+            }
         }
         int deliveryFee = 0;
         try {
@@ -93,9 +102,16 @@ public class OrderService {
         } catch (SQLException e) {
             throw new AppException(ErrorCodes.DATABASE_ERROR, 500, "Impossible de traiter votre demande.", e);
         }
+        if (supplierDeliveryFee > 0) deliveryFee = supplierDeliveryFee;
         order.setTotal(itemsTotal + deliveryFee);
+        // Email optionnel mais validé s'il est fourni.
+        if (order.getEmail() != null && !order.getEmail().trim().isEmpty()
+                && !com.ecommerce.service.EmailService.isValidEmail(order.getEmail().trim())) {
+            throw new AppException(ErrorCodes.VALIDATION_ERROR, 400, "Email invalide");
+        }
+        final int createdId;
         try {
-            return orderDAO.create(order);
+            createdId = orderDAO.create(order);
         } catch (SQLException e) {
             if (e.getMessage() != null && e.getMessage().startsWith("STOCK_INSUFFISANT:")) {
                 throw new AppException(ErrorCodes.VALIDATION_ERROR, 400,
@@ -103,6 +119,18 @@ public class OrderService {
             }
             throw e;
         }
+        // Email de confirmation (best-effort : jamais bloquant).
+        if (order.getEmail() != null && !order.getEmail().trim().isEmpty()) {
+            try {
+                EmailService emails = new EmailService();
+                emails.queueAndSend(order.getEmail().trim(),
+                    EmailService.orderCreatedSubject(order.getOrderNumber()),
+                    EmailService.orderCreatedBody(order.getFullname(),
+                        order.getOrderNumber(), order.getTotal()),
+                    "ORDER_CREATED", createdId);
+            } catch (Exception ignored) {}
+        }
+        return createdId;
     }
 
     public List<Order> getAllOrders() throws SQLException {
@@ -114,6 +142,25 @@ public class OrderService {
     }
 
     public void updateStatus(int id, String status) throws AppException, SQLException {
+        updateStatus(id, status, false);
+    }
+
+    /**
+     * Workflow v2 : transitions internes du flux de livraison
+     * (start-delivery → EN_LIVRAISON, validate-delivery → LIVREE).
+     * Les gardes métier (paiement, transition, compta) restent actives ;
+     * seules les gardes d'orchestration v2 (départeffectif/réception
+     * effective) sont levées car le flux les a déjà vérifiées juste avant.
+     */
+    public void transitionForFlow(int id, String status) throws AppException, SQLException {
+        if (!"EN_LIVRAISON".equals(status) && !"LIVREE".equals(status)) {
+            throw new AppException(ErrorCodes.VALIDATION_ERROR, 400, "Transition interne invalide");
+        }
+        updateStatus(id, status, true);
+    }
+
+    private void updateStatus(int id, String status, boolean flowInternal)
+            throws AppException, SQLException {
         if (!com.ecommerce.util.OrderStatus.isKnown(status)) {
             throw new AppException(ErrorCodes.INVALID_ORDER_STATUS, 400, "Statut inconnu");
         }
@@ -137,14 +184,48 @@ public class OrderService {
             }
             boolean cod = "PAIEMENT_LIVRAISON".equals(o.getPaymentMethod());
             boolean legacy = pay == null && "WHATSAPP".equals(o.getPaymentMethod());
-            boolean paid = pay != null && "REUSSIE".equals(pay.getStatus());
+            // PawaPay : COMPLETED (confirmé par callback/polling serveur) vaut paiement vérifié.
+            boolean paid = pay != null
+                && ("REUSSIE".equals(pay.getStatus()) || "COMPLETED".equals(pay.getStatus()));
             if (!cod && !paid && !legacy) {
                 throw new AppException(ErrorCodes.PAYMENT_REQUIRED, 400,
                     "Paiement vérifié requis avant confirmation");
             }
         }
-        orderDAO.updateStatus(id, status);
-        // Notifications fournisseur déduites du serveur (destinataire = propriétaire).
+        if ("ANNULEE".equals(status)) {
+            // Workflow v2 : après confirmation de réception par le client,
+            // plus d'annulation normale (passer par litige/remboursement).
+            try {
+                com.ecommerce.model.Shipment sh =
+                    new com.ecommerce.dao.ShipmentDAO().findByOrder(id);
+                if (sh != null && sh.isReceiptConfirmed()) {
+                    throw new AppException(ErrorCodes.CONFLICT, 409,
+                        "Réception déjà confirmée : utilisez le litige/remboursement");
+                }
+            } catch (AppException ae) {
+                throw ae;
+            } catch (SQLException e) {
+                throw new AppException(ErrorCodes.DATABASE_ERROR, 500, "Impossible de traiter votre demande.", e);
+            }
+        }
+        if ("LIVREE".equals(status)) {
+            // Workflow v2 : aucune commande ne passe LIVRÉE sans confirmation
+            // de réception client (ni admin, ni fournisseur, ni expédition).
+            // Seul validateDelivery réunit réception + validation + payout.
+            try {
+                com.ecommerce.model.Shipment sh =
+                    new com.ecommerce.dao.ShipmentDAO().findByOrder(id);
+                if (sh == null || !sh.isReceiptConfirmed()) {
+                    throw new AppException(ErrorCodes.CONFLICT, 409,
+                        "Réception client requise avant de solder la commande");
+                }
+            } catch (AppException ae) {
+                throw ae;
+            } catch (SQLException e) {
+                throw new AppException(ErrorCodes.DATABASE_ERROR, 500, "Impossible de traiter votre demande.", e);
+            }
+        }
+        orderDAO.updateStatus(id, status);        // Notifications fournisseur déduites du serveur (destinataire = propriétaire).
         try {
             NotificationService notifs = new NotificationService();
             com.ecommerce.model.Order updated = orderDAO.findById(id);
@@ -202,7 +283,25 @@ public class OrderService {
         return orderDAO.findByPhone(phone.trim());
     }
 
+    /** Commandes d'un client connecté (session Bearer, sans numéro à saisir). */
+    public java.util.List<com.ecommerce.model.Order> getOrdersByCustomer(int customerId) throws AppException, SQLException {
+        if (customerId <= 0) {
+            throw new AppException(ErrorCodes.AUTH_REQUIRED, 401, "Authentification requise");
+        }
+        return orderDAO.findByCustomer(customerId);
+    }
+
     public com.ecommerce.model.Order trackOrder(String number, String phone) throws AppException, SQLException {
+        return trackOrder(number, phone, null);
+    }
+
+    /**
+     * Suivi avec isolation de compte : si une session client est présente,
+     * la commande doit appartenir au compte (ou être une commande invitée
+     * historique au même téléphone, déjà prouvé par le finder).
+     */
+    public com.ecommerce.model.Order trackOrder(String number, String phone, Integer sessionCustomerId)
+            throws AppException, SQLException {
         if (number == null || number.trim().isEmpty() || phone == null || phone.trim().isEmpty()) {
             throw new AppException(ErrorCodes.VALIDATION_ERROR, 400, "Numéro de commande et téléphone requis");
         }
@@ -210,11 +309,99 @@ public class OrderService {
         if (o == null) {
             throw new AppException(ErrorCodes.ORDER_NOT_FOUND, 404, "Commande introuvable");
         }
+        CustomerIsolation.requireOrderVisible(o, sessionCustomerId);
         return o;
     }
 
+    /**
+     * Vue complète d'une commande pour le suivi client (1 seul appel) :
+     * commande + paiement + livraison (+événements) + litige + remboursement
+     * + écritures financières. Propriété vérifiée comme trackOrder.
+     * Aucune logique métier modifiée : simple agrégation en lecture.
+     */
+    public java.util.Map<String, Object> getOrderFullView(String number, String phone)
+            throws AppException, SQLException {
+        return getOrderFullView(number, phone, null);
+    }
+
+    public java.util.Map<String, Object> getOrderFullView(String number, String phone, Integer sessionCustomerId)
+            throws AppException, SQLException {
+        com.ecommerce.model.Order o = trackOrder(number, phone, sessionCustomerId);
+        java.util.Map<String, Object> out = new java.util.LinkedHashMap<>();
+        out.put("order", o);
+        try {
+            // Boutique (facture client) : champs publics uniquement, jamais le hash.
+            com.ecommerce.model.Supplier shop = null;
+            try {
+                if (o.getSupplierId() > 0) {
+                    shop = new com.ecommerce.dao.SupplierDAO().findById(o.getSupplierId());
+                }
+            } catch (Exception ignored) {}
+            if (shop != null) {
+                java.util.Map<String, Object> sm = new java.util.LinkedHashMap<>();
+                sm.put("id", shop.getId());
+                sm.put("name", shop.getName());
+                sm.put("phone", shop.getPhone());
+                sm.put("city", shop.getCity());
+                sm.put("address", shop.getAddress());
+                sm.put("email", shop.getEmail());
+                out.put("supplier", sm);
+            } else {
+                out.put("supplier", null);
+            }
+        } catch (Exception ignored) {
+            out.put("supplier", null);
+        }
+        try {
+            out.put("payment", new com.ecommerce.dao.PaymentDAO().findByOrderId(o.getId()));
+        } catch (SQLException e) {
+            throw new AppException(ErrorCodes.DATABASE_ERROR, 500, "Impossible de traiter votre demande.", e);
+        }
+        try {
+            com.ecommerce.model.Shipment s =
+                new com.ecommerce.dao.ShipmentDAO().findByOrder(o.getId());
+            out.put("shipment", s);
+            out.put("shipmentEvents", s == null ? new java.util.ArrayList<>()
+                : new com.ecommerce.dao.ShipmentDAO().events(s.getId(), 200));
+            // Workflow v2 : état du flux (mêmes flags que l'espace fournisseur).
+            java.util.Map<String, Object> flow = new java.util.LinkedHashMap<>();
+            flow.put("deliveryStarted", s != null && s.isDeliveryStarted());
+            flow.put("deliveryStartedAt", s == null ? null : s.getDeliveryStartedAt());
+            flow.put("receiptConfirmed", s != null && s.isReceiptConfirmed());
+            flow.put("receiptConfirmedAt", s == null ? null : s.getReceiptConfirmedAt());
+            flow.put("deliveryValidated", s != null && s.isDeliveryValidated());
+            flow.put("deliveryValidatedAt", s == null ? null : s.getDeliveryValidatedAt());
+            out.put("flow", flow);
+        } catch (SQLException e) {
+            throw new AppException(ErrorCodes.DATABASE_ERROR, 500, "Impossible de traiter votre demande.", e);
+        }
+        try {
+            out.put("dispute", new com.ecommerce.dao.DisputeDAO().findByOrderId(o.getId()));
+        } catch (SQLException e) {
+            throw new AppException(ErrorCodes.DATABASE_ERROR, 500, "Impossible de traiter votre demande.", e);
+        }
+        try {
+            out.put("refund", new com.ecommerce.dao.RefundDAO().findLatestByOrderId(o.getId()));
+        } catch (SQLException e) {
+            throw new AppException(ErrorCodes.DATABASE_ERROR, 500, "Impossible de traiter votre demande.", e);
+        }
+        try {
+            java.util.Map<String, Object> journal =
+                new com.ecommerce.service.FinanceJournalService().forOrder(o.getId());
+            out.put("journal", journal == null ? null : journal.get("entries"));
+        } catch (SQLException e) {
+            throw new AppException(ErrorCodes.DATABASE_ERROR, 500, "Impossible de traiter votre demande.", e);
+        }
+        return out;
+    }
+
     public void cancelGuestOrder(String number, String phone) throws AppException, SQLException {
-        com.ecommerce.model.Order o = trackOrder(number, phone);
+        cancelGuestOrder(number, phone, null);
+    }
+
+    public void cancelGuestOrder(String number, String phone, Integer sessionCustomerId)
+            throws AppException, SQLException {
+        com.ecommerce.model.Order o = trackOrder(number, phone, sessionCustomerId);
         boolean ok;
         try {
             ok = orderDAO.cancelGuestOrder(o.getId());

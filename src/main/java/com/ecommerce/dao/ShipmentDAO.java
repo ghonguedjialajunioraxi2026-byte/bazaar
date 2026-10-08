@@ -74,8 +74,54 @@ public class ShipmentDAO {
         }
     }
 
-    public void addEvent(int shipmentId, String status, String label, String detail, String source) throws SQLException {
-        String sql = "INSERT INTO shipment_events (shipment_id, status, label, detail, source) VALUES (?,?,?,?,?)";
+    /**
+     * Marque la réception comme confirmée (acte client/admin daté).
+     * Idempotent : une seconde confirmation ne change rien.
+     */
+    public boolean markReceiptConfirmed(int id, String confirmedBy) throws SQLException {
+        String sql = "UPDATE shipments SET receipt_confirmed = 1,"
+            + " receipt_confirmed_at = IF(receipt_confirmed_at IS NULL, NOW(), receipt_confirmed_at),"
+            + " receipt_confirmed_by = ? WHERE id = ? AND receipt_confirmed = 0";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, confirmedBy);
+            ps.setInt(2, id);
+            return ps.executeUpdate() > 0;
+        }
+    }
+
+    /**
+     * Workflow v2 : le fournisseur se déclare en route.
+     * Atomique + idempotent : un double clic ne crée qu'un seul départ
+     * (retourne false si déjà démarré, sans erreur).
+     */
+    public boolean markDeliveryStarted(int id, String startedBy) throws SQLException {
+        String sql = "UPDATE shipments SET delivery_started_at = IF(delivery_started_at IS NULL, NOW(), delivery_started_at),"
+            + " delivery_started_by = ? WHERE id = ? AND delivery_started_at IS NULL";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, startedBy);
+            ps.setInt(2, id);
+            return ps.executeUpdate() > 0;
+        }
+    }
+
+    /**
+     * Workflow v2 : le fournisseur valide après confirmation client.
+     * Atomique + idempotent (un seul payout déclenchable en aval).
+     */
+    public boolean markDeliveryValidated(int id, String validatedBy) throws SQLException {
+        String sql = "UPDATE shipments SET delivery_validated_at = IF(delivery_validated_at IS NULL, NOW(), delivery_validated_at),"
+            + " delivery_validated_by = ? WHERE id = ? AND delivery_validated_at IS NULL";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, validatedBy);
+            ps.setInt(2, id);
+            return ps.executeUpdate() > 0;
+        }
+    }
+
+    public void addEvent(int shipmentId, String status, String label, String detail, String source) throws SQLException {        String sql = "INSERT INTO shipment_events (shipment_id, status, label, detail, source) VALUES (?,?,?,?,?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, shipmentId);
@@ -192,6 +238,13 @@ public class ShipmentDAO {
         s.setFailureReason(rs.getString("failure_reason"));
         s.setShippedAt(rs.getString("shipped_at"));
         s.setDeliveredAt(rs.getString("delivered_at"));
+        try { s.setReceiptConfirmed(rs.getBoolean("receipt_confirmed")); } catch (SQLException ignored) {}
+        try { s.setReceiptConfirmedAt(rs.getString("receipt_confirmed_at")); } catch (SQLException ignored) {}
+        try { s.setReceiptConfirmedBy(rs.getString("receipt_confirmed_by")); } catch (SQLException ignored) {}
+        try { s.setDeliveryStartedAt(rs.getString("delivery_started_at")); } catch (SQLException ignored) {}
+        try { s.setDeliveryStartedBy(rs.getString("delivery_started_by")); } catch (SQLException ignored) {}
+        try { s.setDeliveryValidatedAt(rs.getString("delivery_validated_at")); } catch (SQLException ignored) {}
+        try { s.setDeliveryValidatedBy(rs.getString("delivery_validated_by")); } catch (SQLException ignored) {}
         s.setCreatedAt(rs.getString("created_at"));
         return s;
     }

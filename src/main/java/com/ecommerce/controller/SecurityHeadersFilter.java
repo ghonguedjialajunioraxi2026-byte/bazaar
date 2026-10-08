@@ -38,6 +38,16 @@ public class SecurityHeadersFilter implements Filter {
             resp.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
             // Surface navigateur réduite.
             resp.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+            // Workflow livraison : l'interface pilote les boutons sur l'état
+            // SERVEUR (GET /api/delivery-flow/state). Aucune réponse d'API
+            // ne doit être servie depuis le cache du navigateur.
+            if (request instanceof jakarta.servlet.http.HttpServletRequest) {
+                String uri = ((jakarta.servlet.http.HttpServletRequest) request).getRequestURI();
+                if (uri != null && uri.contains("/api/")) {
+                    resp.setHeader("Cache-Control", "no-store");
+                    resp.setHeader("Pragma", "no-cache");
+                }
+            }
         }
         chain.doFilter(request, response);
     }

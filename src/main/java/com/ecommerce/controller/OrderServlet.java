@@ -49,18 +49,48 @@ public class OrderServlet extends HttpServlet {
                 String query = req.getParameter("q");
                 resp.getWriter().write(JsonUtil.toJson(orderService.searchOrders(query)));
             } else if ("myorders".equals(action)) {
-                // Historique invité : téléphone requis (facteur d'appartenance).
+                // MES COMMANDES (isolation de compte) : client connecté ->
+                // UNIQUEMENT ses commandes (le téléphone éventuel est ignoré,
+                // jamais une source d'identité). Invité sans session ->
+                // téléphone requis comme preuve d'appartenance.
+                // Sans les deux : 401 (on ne liste jamais tout le monde).
                 try {
-                    resp.getWriter().write(JsonUtil.toJson(
-                        orderService.getOrdersByPhone(req.getParameter("phone"))));
+                    int sessionId = com.ecommerce.util.CustomerAuth.validateCustomer(req);
+                    if (sessionId > 0) {
+                        resp.getWriter().write(JsonUtil.toJson(
+                            orderService.getOrdersByCustomer(sessionId)));
+                    } else {
+                        String phoneParam = req.getParameter("phone");
+                        if (phoneParam != null && !phoneParam.trim().isEmpty()) {
+                            resp.getWriter().write(JsonUtil.toJson(
+                                orderService.getOrdersByPhone(phoneParam)));
+                        } else {
+                            resp.getWriter().write(JsonUtil.toJson(
+                                orderService.getOrdersByCustomer(sessionId)));
+                        }
+                    }
                 } catch (AppException ae) {
                     ApiResponse.fromException(resp, ae);
                 }
             } else if ("track".equals(action)) {
-                // Détail invité : numéro + téléphone requis (anti-IDOR).
+                // Détail : numéro + téléphone requis, propriété du compte
+                // vérifiée si une session est présente (anti-IDOR).
                 try {
+                    Integer session = com.ecommerce.service.CustomerIsolation.sessionOf(
+                        com.ecommerce.util.CustomerAuth.validateCustomer(req));
                     resp.getWriter().write(JsonUtil.toJson(orderService.trackOrder(
-                        req.getParameter("number"), req.getParameter("phone"))));
+                        req.getParameter("number"), req.getParameter("phone"), session)));
+                } catch (AppException ae) {
+                    ApiResponse.fromException(resp, ae);
+                }
+            } else if ("full".equals(action)) {
+                // Vue complète suivi client (1 appel) : commande + paiement +
+                // livraison + litige + refund + journal. Même preuve que track.
+                try {
+                    Integer session = com.ecommerce.service.CustomerIsolation.sessionOf(
+                        com.ecommerce.util.CustomerAuth.validateCustomer(req));
+                    resp.getWriter().write(JsonUtil.toJson(orderService.getOrderFullView(
+                        req.getParameter("number"), req.getParameter("phone"), session)));
                 } catch (AppException ae) {
                     ApiResponse.fromException(resp, ae);
                 }
@@ -101,18 +131,27 @@ public class OrderServlet extends HttpServlet {
             while ((line = reader.readLine()) != null) sb.append(line);
             Map<String, Object> body = JsonUtil.fromJson(sb.toString(), Map.class);
 
-            // Annulation invitée (numéro + téléphone, EN_ATTENTE uniquement).
+            // Annulation invitée (numéro + téléphone, EN_ATTENTE uniquement,
+            // propriété du compte vérifiée si une session est présente).
             if ("cancel".equals(body.get("action"))) {
                 try {
+                    Integer session = com.ecommerce.service.CustomerIsolation.sessionOf(
+                        com.ecommerce.util.CustomerAuth.validateCustomer(req));
                     orderService.cancelGuestOrder(
                         body.get("orderNumber") == null ? null : String.valueOf(body.get("orderNumber")),
-                        body.get("phone") == null ? null : String.valueOf(body.get("phone")));
+                        body.get("phone") == null ? null : String.valueOf(body.get("phone")),
+                        session);
                     resp.getWriter().write("{\"success\":true,\"status\":\"ANNULEE\"}");
                 } catch (AppException ae) {
                     ApiResponse.fromException(resp, ae);
                 }
                 return;
             }
+
+            // Création : session client OBLIGATOIRE (l'API seule ne suffit pas ;
+            // le téléphone reste la preuve d'appartenance pour PawaPay/suivi).
+            int customerId = com.ecommerce.util.CustomerAuth.requireCustomer(req, resp);
+            if (customerId <= 0) return;
 
             // Validation serveur (le frontend valide aussi, sans être une frontière).
             String fullname = RequestValidator.required(body, "fullname", "Nom complet");
@@ -127,6 +166,12 @@ public class OrderServlet extends HttpServlet {
             Order order = new Order();
             order.setFullname(fullname);
             order.setPhone(phone);
+            // Email optionnel (notifications email ; vide = pas d'email).
+            String email = RequestValidator.optional(body, "email", 160);
+            if (email != null && !email.trim().isEmpty()) {
+                RequestValidator.email(email.trim(), "Email");
+                order.setEmail(email.trim().toLowerCase());
+            }
             order.setCity(city);
             order.setDistrict(RequestValidator.optional(body, "district", 80));
             order.setAddress(address);
@@ -137,6 +182,7 @@ public class OrderServlet extends HttpServlet {
             if (body.get("supplierId") != null) {
                 order.setSupplierId(((Number) body.get("supplierId")).intValue());
             }
+            order.setCustomerId(customerId);
 
             double total = 0;
             ArrayList<OrderItem> items = new ArrayList<>();
@@ -169,13 +215,26 @@ public class OrderServlet extends HttpServlet {
                 total += item.getUnitPrice() * item.getQty();
                 items.add(item);
             }
-            // Dynamic delivery fee
+            // Dynamic delivery fee (estimation affichée ; le total effectif est
+            // recalculé côté OrderService : prix fournisseur prioritaire,
+            // sinon tarif zone).
             int deliveryFee = deliveryDAO.getFee(order.getCity());
+            int itemsSum = (int) total;
             total += deliveryFee;
             order.setTotal((int) total);
             order.setItems(items);
 
             int orderId = orderService.createOrder(order);
+            // Sous-total recalculé depuis les lignes SERVEUR (le service impose
+            // les prix catalogue : la somme client est ignorée et fausserait
+            // l'affichage des frais si les prix envoyés étaient manipulés).
+            int serverItemsSum = 0;
+            if (order.getItems() != null) {
+                for (OrderItem it : order.getItems()) {
+                    serverItemsSum += it.getUnitPrice() * it.getQty();
+                }
+            }
+            deliveryFee = Math.max(0, order.getTotal() - serverItemsSum);
 
             // Format historique conservé + champs standardisés (additif).
             resp.getWriter().write("{\"success\":true,\"orderId\":" + orderId

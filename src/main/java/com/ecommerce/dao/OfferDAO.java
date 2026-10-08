@@ -151,8 +151,8 @@ public class OfferDAO {
         }
         return 0;
     }
-
-    public int countToday(int conversationId) throws SQLException {        String sql = "SELECT COUNT(*) FROM offers WHERE conversation_id = ? AND created_at >= NOW() - INTERVAL 1 DAY";
+            public int countToday(int conversationId) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM offers WHERE conversation_id = ? AND created_at >= NOW() - INTERVAL 1 DAY";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, conversationId);
@@ -161,6 +161,23 @@ public class OfferDAO {
             }
         }
         return 0;
+    }
+
+    /**
+     * Suppression par le fournisseur propriétaire : uniquement les offres sans
+     * effet financier (PENDING / REJECTED). ACCEPTED / CONSUMED = historique
+     * intangible. Retourne true si supprimée.
+     */
+    public boolean deleteScoped(int offerId, int supplierId) throws SQLException {
+        String sql = "DELETE o FROM offers o "
+            + "JOIN conversations c ON c.id = o.conversation_id "
+            + "WHERE o.id = ? AND c.supplier_id = ? AND o.status IN ('PENDING','REJECTED')";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, offerId);
+            ps.setInt(2, supplierId);
+            return ps.executeUpdate() > 0;
+        }
     }
 
     private Offer mapRow(ResultSet rs) throws SQLException {

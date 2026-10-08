@@ -32,7 +32,11 @@ public class SupplierService {
         s.setEmail(s.getEmail().trim());
         s.setPasswordHash(com.ecommerce.util.PasswordUtil.hash(password));
         s.setActive(true);
-        if (s.getCommissionRate() == 0) s.setCommissionRate(10.0);
+        // Photo facultative : sans logo, la boutique reçoit le visuel réservé.
+        if (s.getLogo() == null || s.getLogo().trim().isEmpty()) {
+            s.setLogo(com.ecommerce.util.AvatarDefaults.DEFAULT_SUPPLIER_LOGO);
+        }
+        if (s.getCommissionRate() == 0) s.setCommissionRate(1.0);
         int id = supplierDAO.create(s);
         if (id <= 0) throw new SQLException("Impossible de créer le compte");
         return supplierDAO.findById(id);
@@ -51,6 +55,12 @@ public class SupplierService {
         com.ecommerce.util.RequestValidator.maxLen(data.getName().trim(), 120, "Nom de boutique");
         if (data.getEmail() != null && !data.getEmail().trim().isEmpty()) {
             com.ecommerce.util.RequestValidator.email(data.getEmail().trim(), "Email");
+            // Email déjà utilisé par UNE AUTRE boutique : message clair (pas d'erreur 500 générique).
+            Supplier other = supplierDAO.findByEmail(data.getEmail().trim().toLowerCase());
+            if (other != null && other.getId() != id) {
+                throw new com.ecommerce.util.AppException(com.ecommerce.util.ErrorCodes.CONFLICT, 409,
+                    "Cet email est déjà utilisé par une autre boutique");
+            }
         }
         if (data.getPhone() != null && !data.getPhone().trim().isEmpty()) {
             com.ecommerce.util.RequestValidator.phone(data.getPhone().trim(), "Téléphone");
@@ -114,6 +124,9 @@ public class SupplierService {
         if (p.getStock() < 0) {
             throw new com.ecommerce.util.AppException(com.ecommerce.util.ErrorCodes.VALIDATION_ERROR, 400, "Stock invalide");
         }
+        if (p.getDeliveryPrice() < 0) {
+            throw new com.ecommerce.util.AppException(com.ecommerce.util.ErrorCodes.VALIDATION_ERROR, 400, "Frais de livraison invalides");
+        }
         if (new com.ecommerce.dao.CategoryDAO().findById(p.getCategoryId()) == null) {
             throw new com.ecommerce.util.AppException(com.ecommerce.util.ErrorCodes.VALIDATION_ERROR, 400, "Catégorie introuvable");
         }
@@ -144,8 +157,7 @@ public class SupplierService {
         return true;
     }
 
-    public boolean setProductStock(int supplierId, int productId, int stock) throws SQLException {
-        if (!productDAO.isOwner(productId, supplierId)) return false;
+    public boolean setProductStock(int supplierId, int productId, int stock) throws SQLException {        if (!productDAO.isOwner(productId, supplierId)) return false;
         productDAO.updateStock(productId, stock);
         // Seuils réels (LOW_STOCK_THRESHOLD centralisé) : notification fournisseur + admin.
         try {
@@ -173,8 +185,59 @@ public class SupplierService {
         return true;
     }
 
-    public boolean setProductActive(int supplierId, int productId, boolean active) throws SQLException {
-        if (!productDAO.isOwner(productId, supplierId)) return false;
+    /**
+     * Demande de catégorie (validation admin requise, jamais directe).
+     * Vérifie : nom non vide, parent existant si précisé, pas de doublon
+     * (catégorie existante au même niveau, ni demande PENDING identique).
+     */
+    public int requestCategory(int supplierId, String name, Integer parentId)
+            throws SQLException, com.ecommerce.util.AppException {
+        String clean = name == null ? "" : name.trim();
+        if (clean.isEmpty() || clean.length() > 120) {
+            throw new com.ecommerce.util.AppException(
+                com.ecommerce.util.ErrorCodes.VALIDATION_ERROR, 400, "Nom de catégorie invalide");
+        }
+        com.ecommerce.dao.CategoryDAO categoryDAO = new com.ecommerce.dao.CategoryDAO();
+        if (parentId != null && parentId > 0) {
+            if (categoryDAO.findById(parentId) == null) {
+                throw new com.ecommerce.util.AppException(
+                    com.ecommerce.util.ErrorCodes.VALIDATION_ERROR, 400, "Catégorie parente introuvable");
+            }
+        } else {
+            parentId = null;
+        }
+        for (com.ecommerce.model.Category c : categoryDAO.search(clean, null, null, 50, 0)) {
+            Integer cp = c.getParentId();
+            boolean sameLevel = (parentId == null && cp == null)
+                || (parentId != null && parentId.equals(cp));
+            if (sameLevel && clean.equalsIgnoreCase(c.getName().trim())) {
+                throw new com.ecommerce.util.AppException(
+                    com.ecommerce.util.ErrorCodes.CONFLICT, 409, "Cette catégorie existe déjà");
+            }
+        }
+        com.ecommerce.dao.CategoryRequestDAO reqDAO = new com.ecommerce.dao.CategoryRequestDAO();
+        if (reqDAO.existsPending(supplierId, clean, parentId)) {
+            throw new com.ecommerce.util.AppException(
+                com.ecommerce.util.ErrorCodes.CONFLICT, 409, "Demande déjà en attente de validation");
+        }
+        int id = reqDAO.create(supplierId, clean, parentId);
+        try {
+            new NotificationService().notifyAdmins("CATEGORY_REQUESTED",
+                "Demande de catégorie : " + clean,
+                "Fournisseur #" + supplierId + " propose « " + clean + " »"
+                    + (parentId != null ? " (sous-catégorie)" : " (catégorie)"),
+                "CATEGORY_REQUEST", id, null,
+                "CATREQ:" + id + ":PENDING");
+        } catch (Exception ignored) {}
+        return id;
+    }
+
+    public java.util.List<com.ecommerce.model.CategoryRequest> getCategoryRequests(int supplierId)
+            throws SQLException {
+        return new com.ecommerce.dao.CategoryRequestDAO().findBySupplier(supplierId);
+    }
+
+    public boolean setProductActive(int supplierId, int productId, boolean active) throws SQLException {        if (!productDAO.isOwner(productId, supplierId)) return false;
         String status = productDAO.getStatus(productId);
         if (active) {
             // Un produit ne peut être visible sur la boutique qu'après validation admin (APPROVED)
@@ -222,6 +285,62 @@ public class SupplierService {
         return orderDAO.findBySupplier(supplierId);
     }
 
+    /**
+     * Liste enrichie (1 requête) : commande + statut payout + finance
+     * (commission figée, net). Lecture seule, même périmètre fournisseur.
+     */
+    public List<Map<String, Object>> getOrdersEnriched(int supplierId) throws SQLException {
+        return orderDAO.findBySupplierEnriched(supplierId);
+    }
+
+    /**
+     * Finance d'une commande pour SON fournisseur : payout (ligne auto) +
+     * écritures ledger (brut/commission/frais/net figés). 403 hors périmètre
+     * via null (le servlet répond 404). Montants 100 % serveur.
+     */
+    public Map<String, Object> getOrderFinance(int supplierId, int orderId) throws SQLException {
+        Order o = orderDAO.findById(orderId);
+        if (o == null || o.getSupplierId() != supplierId) return null;
+        Map<String, Object> out = new LinkedHashMap<>();
+        out.put("orderId", o.getId());
+        out.put("orderNumber", o.getOrderNumber());
+        out.put("orderStatus", o.getStatus());
+        out.put("orderTotal", o.getTotal());
+        SupplierPayment sp = new PayoutDAO().findByOrderId(orderId);
+        if (sp != null) {
+            Map<String, Object> p = new LinkedHashMap<>();
+            p.put("id", sp.getId());
+            p.put("reference", sp.getReference());
+            p.put("payoutId", sp.getPayoutId());
+            p.put("provider", sp.getProvider());
+            p.put("amount", sp.getAmount());
+            p.put("grossAmount", sp.getGrossAmount());
+            p.put("commission", sp.getCommission());
+            p.put("pawapayFee", sp.getPawapayFee());
+            p.put("status", sp.getStatus());
+            p.put("failureReason", sp.getFailureReason());
+            p.put("createdAt", sp.getCreatedAt());
+            out.put("payout", p);
+        } else {
+            out.put("payout", null);
+        }
+        List<Map<String, Object>> ledger = new ArrayList<>();
+        for (com.ecommerce.model.LedgerEntry e : new MonetizationDAO().findByOrder(orderId)) {
+            Map<String, Object> m = new LinkedHashMap<>();
+            m.put("reference", e.getReference());
+            m.put("kind", e.getKind());
+            m.put("gross", e.getGross());
+            m.put("commission", e.getCommission());
+            m.put("commissionBps", e.getCommissionBps());
+            m.put("fixedFee", e.getFixedFee());
+            m.put("supplierEarnings", e.getSupplierEarnings());
+            m.put("status", e.getStatus());
+            ledger.add(m);
+        }
+        out.put("ledger", ledger);
+        return out;
+    }
+
     public Order getOrderForSupplier(int supplierId, int orderId) throws SQLException {
         Order o = orderDAO.findById(orderId);
         if (o == null) return null;
@@ -233,11 +352,29 @@ public class SupplierService {
         if (!com.ecommerce.util.OrderStatus.isKnown(status)) {
             throw new com.ecommerce.util.AppException(com.ecommerce.util.ErrorCodes.INVALID_ORDER_STATUS, 400, "Statut inconnu");
         }
+        // Workflow v2 : l'interface n'avance plus les statuts un par un.
+        // EN_LIVRAISON = via [EN COURS DE LIVRAISON] (start-delivery),
+        // LIVREE = via [VALIDER LA LIVRAISON] (validate-delivery).
+        if ("EN_LIVRAISON".equals(status) || "LIVREE".equals(status)) {
+            throw new com.ecommerce.util.AppException(com.ecommerce.util.ErrorCodes.VALIDATION_ERROR, 400,
+                "Utilisez le workflow de livraison (EN COURS DE LIVRAISON / VALIDER LA LIVRAISON)");
+        }
         Order o = orderDAO.findById(orderId);
         if (o == null || o.getSupplierId() != supplierId) return false;
         if (!com.ecommerce.util.OrderStatus.canTransition(o.getStatus(), status)) {
             throw new com.ecommerce.util.AppException(com.ecommerce.util.ErrorCodes.INVALID_ORDER_STATUS, 400,
                 "Transition refusée : " + o.getStatus() + " → " + status);
+        }
+        boolean toShipping = "EN_LIVRAISON".equals(status) && !"EN_LIVRAISON".equals(o.getStatus());
+        if (toShipping) {
+            // Le bouton « Commande reçue » côté client exige un n° de suivi :
+            // l'expédition est créée ici (avant le changement de statut, car
+            // createShipment n'accepte que CONFIRMEE/EN_PREPARATION).
+            // Sans elle, le bouton ne pourrait pas fonctionner.
+            try {
+                new com.ecommerce.service.ShipmentService()
+                    .createShipment(orderId, supplierId, "SUPPLIER");
+            } catch (Exception ignored) {}
         }
         orderDAO.updateStatus(orderId, status);
         return true;
@@ -293,7 +430,7 @@ public class SupplierService {
 
     // --------------------------- REVENUS (ledger Phase 10) ---------------------------
     public Map<String, Object> getRevenue(int supplierId) throws SQLException {
-        double commissionRate = 10.0;
+        double commissionRate = 1.0;
         Supplier s = supplierDAO.findById(supplierId);
         if (s != null) commissionRate = s.getCommissionRate();
 
@@ -337,7 +474,7 @@ public class SupplierService {
 
     // --------------------------- STATISTIQUES ---------------------------
     public Map<String, Object> getStatistics(int supplierId) throws SQLException {
-        double commissionRate = 10.0;
+        double commissionRate = 1.0;
         try { commissionRate = supplierDAO.findById(supplierId).getCommissionRate(); } catch (Exception ignored) {}
 
         List<Order> orders = orderDAO.findBySupplier(supplierId);
@@ -438,8 +575,9 @@ public class SupplierService {
         int available = 0, pending = 0, paid = 0;
         for (SupplierPayment sp : history) {
             switch (sp.getStatus()) {
-                case "PAID": paid += sp.getAmount(); break;
-                case "PENDING": case "PROCESSING": pending += sp.getAmount(); break;
+                case "PAID": case "COMPLETED": paid += sp.getAmount(); break;
+                case "PENDING": case "PROCESSING": case "ACCEPTED": case "ENQUEUED":
+                    pending += sp.getAmount(); break;
                 default: break;
             }
         }
@@ -525,8 +663,24 @@ public class SupplierService {
         return notificationDAO.findForSupplierPaged(supplierId, category, unreadOnly, limit, offset);
     }
 
+    public List<Notification> getNotificationsPaged(int supplierId, String category, Boolean unreadOnly, Boolean archivedOnly, int limit, int offset) throws SQLException {
+        return notificationDAO.findForSupplierPaged(supplierId, category, unreadOnly, archivedOnly, limit, offset);
+    }
+
     public int countNotifications(int supplierId, String category, Boolean unreadOnly) throws SQLException {
         return notificationDAO.countForSupplierPaged(supplierId, category, unreadOnly);
+    }
+
+    public int countNotifications(int supplierId, String category, Boolean unreadOnly, Boolean archivedOnly) throws SQLException {
+        return notificationDAO.countForSupplierPaged(supplierId, category, unreadOnly, archivedOnly);
+    }
+
+    public boolean deleteNotification(int supplierId, int id) throws SQLException {
+        return notificationDAO.deleteForSupplier(supplierId, id);
+    }
+
+    public boolean archiveNotification(int supplierId, int id, boolean archived) throws SQLException {
+        return notificationDAO.archiveForSupplier(supplierId, id, archived);
     }
 
     public int getUnreadNotifications(int supplierId) throws SQLException {

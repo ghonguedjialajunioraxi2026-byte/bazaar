@@ -2,8 +2,12 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#B7F000">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MBOA STYLE — Espace Fournisseur</title>
+<title>BAZAAR — Espace Fournisseur</title>
 <meta name="robots" content="noindex, nofollow">
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
@@ -12,7 +16,7 @@ tailwind.config = { theme: { extend: {
   colors: {
     primary: { 50:'#F7FFDC',100:'#EEFFC2',200:'#DFFF8F',300:'#CFFF5C',400:'#C8FF1A',500:'#B7F000',600:'#65A30D',700:'#4D7C0F',800:'#3F6212',900:'#123B16' },
     accent: { 50:'#F7FFDC',100:'#EEFFC2',200:'#DFFF8F',400:'#C8FF1A',500:'#65A30D',600:'#4D7C0F',700:'#3F6212' },
-    dark: { 800:'#123B16',900:'#0B2410' },
+    dark: { 800:'#1A1A1A',900:'#0A0A0A' },
     mboa: { black:'#0B2410', surface:'#0B2410', secondary:'#123B16', white:'#FFFFFF', whiteSoft:'#F7FAF5', lime:'#B7F000', limeBright:'#C8FF1A', limeActive:'#9ED600', greenDeep:'#123B16', greenDark:'#0B2410', gray:'#5F6B61', grayLight:'#DDE6DC', border:'#DDE6DC', borderDark:'#123B16' }
   },
   fontFamily: { sans:['Manrope','system-ui','sans-serif'], serif:['DM Serif Display','Georgia','serif'] }
@@ -20,12 +24,12 @@ tailwind.config = { theme: { extend: {
 </script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
-<script src="assets/js/showcase.js" defer></script>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="assets/js/showcase.js?v=20260929" defer></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Nunito:wght@800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-<link rel="stylesheet" href="assets/css/tokens.css">
-<link rel="stylesheet" href="assets/css/showcase.css">
-<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/tokens.css?v=20260929">
+<link rel="stylesheet" href="assets/css/showcase.css?v=20260929">
+<link rel="stylesheet" href="assets/css/components.css?v=20260929">
 <style>
   :root { --mboa-lime:#B7F000; --mboa-lime-bright:#C8FF1A; --brand:#B7F000; --brand-dark:#C8FF1A; --gold:#B7F000; --navy:#0B2410; --mboa-green-deep:#123B16; --mboa-green-dark:#0B2410; --mboa-white-soft:#F7FAF5; --mboa-gray:#5F6B61; --mboa-border:#DDE6DC; }
   * { font-family:'Manrope','Segoe UI',system-ui,sans-serif; }
@@ -39,9 +43,6 @@ tailwind.config = { theme: { extend: {
   @media(min-width:1024px){.auth-big-card{min-height:680px}}
   .auth-big-form{padding:56px 60px;display:flex;flex-direction:column;justify-content:center;min-width:0}
   .auth-logo{display:flex;align-items:center;gap:10px;margin-bottom:30px;text-decoration:none;color:#123B16}
-  .auth-logo .mark{width:38px;height:38px;border-radius:11px;background:#B7F000;color:#0B2410;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800}
-  .auth-logo .word{font-weight:800;font-size:18px;letter-spacing:-.01em}
-  .auth-logo .word span{color:#4D7C0F}
   .mini-label{display:block;font-size:13px;font-weight:600;color:#123B16;margin-bottom:8px}
   .mini-input{height:50px;font-size:14.5px !important;border-radius:12px !important;width:100%;padding:0 14px;border:1px solid #DDE6DC;background:#fff;color:#123B16;outline:none;transition:border-color 200ms ease,box-shadow 200ms ease}
   .mini-input::placeholder{color:#5F6B61}
@@ -50,7 +51,7 @@ tailwind.config = { theme: { extend: {
   .pw-wrap .mini-input{padding-right:44px}
   .pw-toggle{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:34px;height:34px;border:none;border-radius:8px;background:transparent;color:#5F6B61;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
   .pw-toggle:hover{color:#123B16;background:#F7FAF5}
-  .btn-olive{display:block;width:100%;height:52px;border:none;border-radius:12px;background:#B7F000;color:#0B2410;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;transition:background 200ms ease,transform 150ms ease}
+  .btn-olive{display:block;width:100%;height:52px;border:none;border-radius:12px;background:#B7F000;color:#0A0A0A;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;transition:background 200ms ease,transform 150ms ease}
   .btn-olive:hover{background:#C8FF1A}
   .btn-olive:active{background:#9ED600;transform:scale(.99)}
   .btn-olive:disabled{opacity:.65;cursor:wait}
@@ -66,13 +67,13 @@ tailwind.config = { theme: { extend: {
   .stat-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.45);border-color:rgba(183,240,0,0.35)}
   .nav-link{display:flex;align-items:center;gap:.75rem;padding:.65rem .9rem;border-radius:.75rem;color:#FFFFFF;font-weight:500;font-size:.9rem;cursor:pointer;transition:background 120ms ease-out,color 120ms ease-out}
   .nav-link:hover{background:rgba(255,255,255,.08);color:#3F6212}
-  .nav-link.active{background:#B7F000;color:#0B2410;box-shadow:0 10px 30px rgba(183,240,0,.18)}
+  .nav-link.active{background:#B7F000;color:#0A0A0A;box-shadow:0 10px 30px rgba(183,240,0,.18)}
   .storefront-premium{background:linear-gradient(180deg,#0B2410,#123B16);color:#fff;border-radius:1.5rem}
-  .gold-badge{background:#B7F000;color:#0B2410;border:1px solid #B7F000}
+  .gold-badge{background:#B7F000;color:#0A0A0A;border:1px solid #B7F000}
   .nav-link .bi{margin-right:.2rem}
   .badge{display:inline-flex;align-items:center;padding:.2rem .55rem;border-radius:9999px;font-size:.7rem;font-weight:600}
   .btn{display:inline-flex;align-items:center;gap:.4rem;font-weight:600;border-radius:.7rem;padding:.6rem 1rem;transition:.15s;cursor:pointer;font-size:.875rem}
-  .btn-primary{background:var(--brand);color:#0B2410}
+  .btn-primary{background:var(--brand);color:#0A0A0A}
   .btn-primary:hover{background:var(--brand-dark)}
   .btn-outline{border:1px solid #DDE6DC;color:#123B16;background:#FFFFFF}
   .btn-outline:hover{background:#F7FAF5}
@@ -93,7 +94,7 @@ tailwind.config = { theme: { extend: {
   .chat-body{display:flex;flex-direction:column;gap:.5rem}
   .msg{max-width:75%;padding:.6rem .9rem;border-radius:1rem;font-size:.85rem;line-height:1.4;white-space:pre-wrap;word-break:break-word}
   .msg.mine{background:#123B16;color:#FFFFFF;align-self:flex-end;border-bottom-right-radius:.25rem}
-  .msg.theirs{background:#F0F0F0;color:#123B16;align-self:flex-start;border-bottom-left-radius:.25rem}
+  .msg.theirs{background:#F0F5EF;color:#123B16;align-self:flex-start;border-bottom-left-radius:.25rem}
   .tab-content{display:none}
   .tab-content.active{display:block}
   .convo-list-item{display:flex;gap:.75rem;padding:.75rem;border-radius:.75rem;cursor:pointer;transition:.15s}
@@ -115,8 +116,8 @@ tailwind.config = { theme: { extend: {
 <div id="loginView" class="min-h-screen flex items-center justify-center" style="padding:40px 4vw">
   <div class="auth-big-card">
     <div class="auth-big-form">
-      <a class="auth-logo" href="index.html" aria-label="MBOA STYLE — accueil">
-        <span class="mark">M</span><span class="word">MBOA <span>STYLE</span></span>
+      <a class="auth-logo" href="index.html" aria-label="BAZAAR — accueil">
+        <img src="logo/BAZAAR.png" alt="BAZAAR" width="135" height="45" style="height:36px;width:auto">
       </a>
       <h1 id="authTitle" class="font-bold text-[#123B16]" style="font-size:30px;letter-spacing:-.02em;line-height:1.2;margin-bottom:10px">Welcome Back</h1>
       <p class="text-sm text-[#5F6B61] mb-8" style="font-size:14.5px;line-height:1.6">Espace Fournisseur · Connectez-vous pour gérer votre boutique.</p>
@@ -170,6 +171,37 @@ tailwind.config = { theme: { extend: {
   </div>
 </div>
 
+<!-- ===================== VÉRIFICATION EMAIL (code à 6 chiffres) ===================== -->
+<div id="verifyView" class="min-h-screen hidden items-center justify-center" style="padding:40px 4vw">
+  <div class="auth-big-card" style="grid-template-columns:1fr;max-width:560px">
+    <div class="auth-big-form" style="padding:48px 44px">
+      <a class="auth-logo" href="index.html" aria-label="BAZAAR — accueil">
+        <img src="logo/BAZAAR.png" alt="BAZAAR" width="135" height="45" style="height:36px;width:auto">
+      </a>
+      <div class="flex items-center gap-2 mb-3">
+        <span class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-primary-100 text-[#4D7C0F]">Sécurité</span>
+        <span class="text-[11px] font-medium text-[#5F6B61]">Étape 2/2</span>
+      </div>
+      <h1 class="font-bold text-[#123B16]" style="font-size:26px;letter-spacing:-.02em;line-height:1.25;margin-bottom:10px">Vérifiez votre email</h1>
+      <p class="text-sm text-[#5F6B61] mb-2" style="font-size:14px;line-height:1.6">Votre compte est en train d'être utilisé pour se connecter à BAZAAR.</p>
+      <p class="text-sm text-[#5F6B61] mb-6" style="font-size:14px;line-height:1.6">Nous avons envoyé un code à 6 chiffres à <span id="verifyMaskedEmail" class="font-bold text-[#123B16]">votre adresse</span>. Saisissez-le ci-dessous. Sans ce code, l'accès à l'espace fournisseur est refusé.</p>
+      <form id="verifyForm" class="space-y-5">
+        <div>
+          <label class="mini-label" for="verifyCode">Code à 6 chiffres</label>
+          <input id="verifyCode" inputmode="numeric" autocomplete="one-time-code" maxlength="6" minlength="6" pattern="[0-9]{6}" required class="input mini-input text-center" style="font-size:24px !important;letter-spacing:10px;font-weight:800" placeholder="••••••">
+          <p class="text-xs text-[#5F6B61] mt-2">Code valable <span id="verifyExpires" class="font-semibold">10 minutes</span>. Ne le partagez avec personne.</p>
+        </div>
+        <button type="submit" id="verifyBtn" class="btn-olive">Vérifier et se connecter</button>
+      </form>
+      <div class="flex items-center justify-between mt-6" style="font-size:13.5px">
+        <button type="button" id="verifyBackBtn" class="font-semibold" style="color:#5F6B61;background:none;border:none;cursor:pointer">← Retour</button>
+        <button type="button" id="resendBtn" class="font-bold" style="color:#4D7C0F;background:none;border:none;cursor:pointer">Renvoyer le code</button>
+      </div>
+      <p id="resendTimer" class="text-xs text-[#5F6B61] text-right mt-1 hidden"></p>
+    </div>
+  </div>
+</div>
+
 <!-- ===================== FINALISATION BOUTIQUE (après Google) ===================== -->
 <div id="completeView" class="login-bg min-h-screen hidden items-center justify-center p-4">
   <div class="bg-[#FFFFFF] rounded-2xl shadow-2xl p-8 w-full max-w-lg">
@@ -204,7 +236,7 @@ tailwind.config = { theme: { extend: {
           <input id="cpPhone" required class="input" placeholder="+237 6XX XX XX XX">
         </div>
         <div>
-          <label class="block text-sm font-medium text-[#5F6B61] mb-1">WhatsApp</label>
+          <label class="block text-sm font-medium text-[#5F6B61] mb-1">Téléphone</label>
           <input id="cpWhatsapp" class="input" placeholder="+237 6XX XX XX XX">
         </div>
       </div>
@@ -215,6 +247,15 @@ tailwind.config = { theme: { extend: {
       <div>
         <label class="block text-sm font-medium text-[#5F6B61] mb-1">Description (optionnel)</label>
         <textarea id="cpDesc" rows="2" class="input" placeholder="Décrivez votre boutique en quelques mots..."></textarea>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-[#5F6B61] mb-1">Photo de la boutique (optionnel)</label>
+        <div class="flex items-center gap-3">
+          <img id="cpLogoPreview" src="assets/img/default-supplier.svg" alt="Aperçu du logo" class="w-14 h-14 rounded-2xl object-cover border border-[#DDE6DC] bg-[#F7FAF5]">
+          <label for="cpLogo" class="btn btn-outline text-sm cursor-pointer"><i class="bi bi-image"></i> Choisir une photo</label>
+          <input type="file" id="cpLogo" accept="image/*" class="hidden">
+        </div>
+        <p class="text-xs text-[#5F6B61] mt-1">JPG, PNG, GIF ou WebP · 10 Mo max. Sans photo, BAZAAR attribue le visuel boutique par défaut.</p>
       </div>
       <button type="submit" id="cpBtn" class="btn btn-primary w-full justify-center py-3 text-base">Finaliser et accéder à ma boutique</button>
       <p class="text-xs text-[#5F6B61] text-center">Ces informations seront visibles par vos clients.</p>
@@ -229,14 +270,13 @@ tailwind.config = { theme: { extend: {
     <!-- SIDEBAR -->
     <aside id="sidebar" class="w-64 shrink-0 bg-[#0B2410] flex flex-col">
       <div class="flex items-center gap-3 p-5">
-        <div class="w-10 h-10 rounded-xl text-[#0B2410] flex items-center justify-center text-lg shadow-lg" style="background:linear-gradient(135deg,#B7F000,#C8FF1A)"><i class="bi bi-box-seam"></i></div>
+        <img src="logo/BAZAAR-white.png" alt="BAZAAR" width="120" height="40" style="height:32px;width:auto">
         <div>
-          <p class="text-white font-bold leading-tight tracking-tight">MBOA <span style="color:#B7F000">STYLE</span></p>
           <p class="text-[#5F6B61] text-xs">Espace Fournisseur Pro</p>
         </div>
       </div>
       <div class="flex items-center gap-3 px-5 pb-4 border-b border-[#DDE6DC]">
-        <div id="avatarLogo" class="w-10 h-10 rounded-full bg-[#B7F000] flex items-center justify-center text-[#0B2410] font-bold"><i class="bi bi-shop"></i></div>
+        <div id="avatarLogo" class="w-10 h-10 rounded-full bg-[#B7F000] flex items-center justify-center text-[#0A0A0A] font-bold"><i class="bi bi-shop"></i></div>
         <div class="min-w-0">
           <p id="supplierName" class="text-white text-sm font-semibold truncate">—</p>
           <p class="text-[#5F6B61] text-xs truncate" id="supplierEmail">—</p>
@@ -248,10 +288,8 @@ tailwind.config = { theme: { extend: {
         <a class="nav-link" data-view="commandes"><i class="bi bi-cart-check"></i>Commandes</a>
         <a class="nav-link" data-view="revenus"><i class="bi bi-currency-exchange"></i>Revenus</a>
         <a class="nav-link" data-view="statistiques"><i class="bi bi-graph-up-arrow"></i>Statistiques</a>
-        <a class="nav-link" data-view="paiements"><i class="bi bi-wallet2"></i>Paiements</a>
-        <a class="nav-link" data-view="messages"><i class="bi bi-chat-dots"></i>Messages<span id="badgeMsgs" class="ml-auto bg-[#B7F000] text-[#0B2410] text-[10px] rounded-full px-2 py-0.5 hidden">0</span></a>
-        <a class="nav-link" data-view="negociations"><i class="bi bi-tag"></i>Négociations<span id="badgeNegos" class="ml-auto bg-[#B7F000] text-[#0B2410] text-[10px] rounded-full px-2 py-0.5 hidden">0</span></a>
-        <a class="nav-link" data-view="notifications" aria-label="Notifications"><i class="bi bi-bell"></i>Notifications<span id="badgeNotifs" role="status" class="ml-auto bg-[#B7F000] text-[#0B2410] text-[10px] rounded-full px-2 py-0.5 hidden">0</span></a>
+        <a class="nav-link" data-view="messages"><i class="bi bi-chat-dots"></i>Messages<span id="badgeMsgs" class="ml-auto bg-[#B7F000] text-[#0A0A0A] text-[10px] rounded-full px-2 py-0.5 hidden">0</span></a>
+        <a class="nav-link" data-view="notifications" aria-label="Notifications"><i class="bi bi-bell"></i>Notifications<span id="badgeNotifs" role="status" class="ml-auto bg-[#B7F000] text-[#0A0A0A] text-[10px] rounded-full px-2 py-0.5 hidden">0</span></a>
         <a class="nav-link" data-view="profil"><i class="bi bi-person-circle"></i>Mon profil</a>
       </nav>
       <div class="p-4 border-t border-[#DDE6DC]">
@@ -280,13 +318,23 @@ tailwind.config = { theme: { extend: {
 
 <script>
 /* ==================== STATE ==================== */
-let TOKEN = localStorage.getItem('supplier_token') || '';
-let SUPPLIER = JSON.parse(localStorage.getItem('supplier') || '{}');
+// Lecture protégée : une donnée locale corrompue ne doit jamais casser
+// tout le script (ce qui bloquerait sur la page d'auth).
+let TOKEN = '';
+let SUPPLIER = {};
+try {
+  TOKEN = localStorage.getItem('supplier_token') || '';
+  SUPPLIER = JSON.parse(localStorage.getItem('supplier') || '{}') || {};
+} catch (e) {
+  try { localStorage.removeItem('supplier_token'); localStorage.removeItem('supplier'); } catch(e2){}
+  TOKEN = ''; SUPPLIER = {};
+}
 let currentView = 'dashboard';
 let charts = {};
 let categoryCache = [];
 
-const API = '/api/supplier';
+const SUP_BASE = (window.location.pathname.includes('/mboa-style') ? '/mboa-style' : '');
+const API = SUP_BASE + '/api/supplier';
 // Client ID Google : récupéré du backend (source unique), repli en dur
 // 748209712105-k04jfq3re9gvc1scmfj6djr9vg2uhfd7.apps.googleusercontent.com
 let GOOGLE_CLIENT_ID = '748209712105-k04jfq3re9gvc1scmfj6djr9vg2uhfd7.apps.googleusercontent.com';
@@ -298,7 +346,12 @@ const money = n => fmt(n) + ' FCFA';
 
 /* ==================== API HELPER ==================== */
 async function api(path, opts={}) {
-  const headers = Object.assign({'Content-Type':'application/json'}, opts.headers||{});
+  // FormData (upload photo) : ne JAMAIS forcer Content-Type, le navigateur
+  // pose lui-même le boundary multipart. Le forcer cassait tous les uploads
+  // (logo boutique) avec une erreur 500 générique.
+  const isForm = opts.body instanceof FormData;
+  const headers = Object.assign({}, opts.headers||{});
+  if (!isForm && !headers['Content-Type']) headers['Content-Type'] = 'application/json';
   if (TOKEN) headers['Authorization'] = 'Bearer ' + TOKEN;
   const res = await fetch(API + path, Object.assign({}, opts, {headers}));
   if (res.status === 401) { forceLogout(); throw new Error('Session expirée'); }
@@ -379,6 +432,8 @@ function enterAfterAuth(data, welcomeMsg) {
 
 function showCompleteProfile() {
   document.getElementById('loginView').classList.add('hidden');
+  document.getElementById('verifyView').classList.add('hidden');
+  document.getElementById('verifyView').classList.remove('flex');
   document.getElementById('appView').classList.add('hidden');
   const cv = document.getElementById('completeView');
   cv.classList.remove('hidden');
@@ -407,6 +462,17 @@ async function loadCompleteProfile() {
   } catch (e) { /* pré-remplissage best-effort */ }
 }
 
+document.getElementById('cpLogo').addEventListener('change', function() {
+  const f = this.files[0];
+  const prev = document.getElementById('cpLogoPreview');
+  if (!f) { prev.src = 'assets/img/default-supplier.svg'; return; }
+  if (!f.type || !f.type.startsWith('image/')) { toast('Choisissez une image (JPG, PNG, GIF ou WebP)', 'error'); this.value = ''; return; }
+  if (f.size > 10*1024*1024) { toast('Image trop lourde (10 Mo max)', 'error'); this.value = ''; return; }
+  const r = new FileReader();
+  r.onload = e => { prev.src = e.target.result; };
+  r.readAsDataURL(f);
+});
+
 document.getElementById('completeForm').addEventListener('submit', async e => {
   e.preventDefault();
   const btn = document.getElementById('cpBtn');
@@ -434,6 +500,17 @@ document.getElementById('completeForm').addEventListener('submit', async e => {
     const res = await api('/profile', { method: 'PUT', body: JSON.stringify(body) });
     if (!res.success) throw new Error(res.message || 'Enregistrement impossible');
     const p = res.data || {};
+    // Photo de boutique (facultative) : upload best-effort, le profil reste sauvé.
+    const logoFile = document.getElementById('cpLogo').files[0];
+    if (logoFile) {
+      try {
+        const fd = new FormData(); fd.append('file', logoFile, logoFile.name);
+        const lr = await api('/logo', { method: 'PUT', body: fd });
+        if (lr && lr.data) p.logo = lr.data;
+      } catch (logoErr) {
+        toast('Profil enregistré, mais photo refusée : ' + logoErr.message, 'error');
+      }
+    }
     SUPPLIER = Object.assign({}, SUPPLIER, { name: p.name || name, phone: p.phone || phone, city: p.city || city, address: p.address || address, logo: p.logo || SUPPLIER.logo });
     localStorage.setItem('supplier', JSON.stringify(SUPPLIER));
     showApp();
@@ -458,6 +535,57 @@ document.querySelectorAll('[data-pw-for]').forEach(btn => btn.addEventListener('
 }));
 
 /* ==================== AUTH ==================== */
+let PENDING_EMAIL = '';
+let RESEND_COUNTDOWN = null;
+
+function showVerifyView(email, maskedEmail, expiresIn) {
+  PENDING_EMAIL = email || '';
+  document.getElementById('loginView').classList.add('hidden');
+  document.getElementById('completeView').classList.add('hidden');
+  document.getElementById('completeView').classList.remove('flex');
+  document.getElementById('appView').classList.add('hidden');
+  const vv = document.getElementById('verifyView');
+  vv.classList.remove('hidden');
+  vv.classList.add('flex');
+  document.getElementById('verifyMaskedEmail').textContent = maskedEmail || email || 'votre adresse';
+  const mins = Math.max(1, Math.round((expiresIn || 600) / 60));
+  document.getElementById('verifyExpires').textContent = mins + ' minute' + (mins > 1 ? 's' : '');
+  const codeInput = document.getElementById('verifyCode');
+  codeInput.value = '';
+  setTimeout(() => codeInput.focus(), 100);
+  startResendCooldown(60);
+}
+
+function hideVerifyView() {
+  const vv = document.getElementById('verifyView');
+  vv.classList.add('hidden');
+  vv.classList.remove('flex');
+  document.getElementById('loginView').classList.remove('hidden');
+  if (RESEND_COUNTDOWN) { clearInterval(RESEND_COUNTDOWN); RESEND_COUNTDOWN = null; }
+}
+
+function startResendCooldown(seconds) {
+  const btn = document.getElementById('resendBtn');
+  const timer = document.getElementById('resendTimer');
+  if (RESEND_COUNTDOWN) clearInterval(RESEND_COUNTDOWN);
+  let left = seconds;
+  btn.disabled = true;
+  btn.style.opacity = '.5';
+  timer.classList.remove('hidden');
+  const tick = () => {
+    if (left <= 0) {
+      clearInterval(RESEND_COUNTDOWN); RESEND_COUNTDOWN = null;
+      btn.disabled = false; btn.style.opacity = '1';
+      timer.classList.add('hidden');
+      return;
+    }
+    timer.textContent = 'Nouveau code possible dans ' + left + ' s';
+    left--;
+  };
+  tick();
+  RESEND_COUNTDOWN = setInterval(tick, 1000);
+}
+
 document.getElementById('loginForm').addEventListener('submit', async e => {
   e.preventDefault();
   const btn = document.getElementById('loginBtn');
@@ -468,6 +596,11 @@ document.getElementById('loginForm').addEventListener('submit', async e => {
     const res = await fetch(API + '/login', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email, password})});
     const data = await res.json();
     if (!res.ok || !data.success) throw new Error(data.message || 'Identifiants incorrects');
+    if (data.requiresVerification) {
+      showVerifyView(data.email || email, data.maskedEmail, data.expiresIn);
+      toast('Code à 6 chiffres envoyé à votre adresse email', 'info');
+      return;
+    }
     enterAfterAuth(data);
   } catch(err) {
     toast(err.message, 'error');
@@ -500,6 +633,11 @@ document.getElementById('registerForm').addEventListener('submit', async e => {
     const res = await fetch(API + '/register', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
     const data = await res.json();
     if (!res.ok || !data.success) throw new Error(data.message || 'Inscription impossible');
+    if (data.requiresVerification) {
+      showVerifyView(data.email || body.email, data.maskedEmail, data.expiresIn);
+      toast('Compte créé ! Code à 6 chiffres envoyé à votre adresse email', 'info');
+      return;
+    }
     enterAfterAuth(data, 'Bienvenue ' + ((data.supplier || {}).name || '') + ' — compte créé !');
   } catch(err) {
     toast(err.message, 'error');
@@ -508,9 +646,64 @@ document.getElementById('registerForm').addEventListener('submit', async e => {
   }
 });
 
+/* ---- Étape 2 : saisie du code à 6 chiffres (aléatoire, par tentative) ---- */
+document.getElementById('verifyCode').addEventListener('input', function() {
+  this.value = this.value.replace(/\D/g, '').slice(0, 6);
+});
+
+document.getElementById('verifyForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = document.getElementById('verifyBtn');
+  const code = document.getElementById('verifyCode').value.trim();
+  if (!/^[0-9]{6}$/.test(code)) {
+    toast('Saisissez le code à 6 chiffres reçu par email', 'error');
+    return;
+  }
+  btn.disabled = true; btn.innerHTML = 'Vérification…';
+  try {
+    const res = await fetch(API + '/verify-code', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email: PENDING_EMAIL, code})});
+    const data = await res.json();
+    if (!res.ok || !data.success) throw new Error(data.message || 'Code incorrect');
+    if (RESEND_COUNTDOWN) { clearInterval(RESEND_COUNTDOWN); RESEND_COUNTDOWN = null; }
+    const vv = document.getElementById('verifyView');
+    vv.classList.add('hidden'); vv.classList.remove('flex');
+    PENDING_EMAIL = '';
+    enterAfterAuth(data);
+  } catch(err) {
+    toast(err.message, 'error');
+  } finally {
+    btn.disabled = false; btn.innerHTML = 'Vérifier et se connecter';
+  }
+});
+
+document.getElementById('resendBtn').addEventListener('click', async () => {
+  if (!PENDING_EMAIL) { toast('Reconnectez-vous pour recevoir un code', 'error'); return; }
+  const btn = document.getElementById('resendBtn');
+  btn.disabled = true;
+  try {
+    const res = await fetch(API + '/resend-code', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email: PENDING_EMAIL})});
+    const data = await res.json();
+    if (!res.ok || !data.success) throw new Error(data.message || 'Renvoi impossible');
+    if (data.email) PENDING_EMAIL = data.email;
+    toast('Nouveau code à 6 chiffres envoyé à votre adresse email', 'info');
+    startResendCooldown(60);
+  } catch(err) {
+    toast(err.message, 'error');
+    btn.disabled = false;
+  }
+});
+
+document.getElementById('verifyBackBtn').addEventListener('click', () => {
+  PENDING_EMAIL = '';
+  hideVerifyView();
+});
+
 function forceLogout() {
   TOKEN=''; localStorage.removeItem('supplier_token'); localStorage.removeItem('supplier');
   googleSignOut();
+  PENDING_EMAIL = '';
+  document.getElementById('verifyView').classList.add('hidden');
+  document.getElementById('verifyView').classList.remove('flex');
   document.getElementById('appView').classList.add('hidden');
   document.getElementById('completeView').classList.add('hidden');
   document.getElementById('completeView').classList.remove('flex');
@@ -522,6 +715,9 @@ async function logout() {
   try { await api('/logout', {method:'POST'}); } catch(e){}
   TOKEN=''; localStorage.removeItem('supplier_token'); localStorage.removeItem('supplier');
   googleSignOut();
+  PENDING_EMAIL = '';
+  document.getElementById('verifyView').classList.add('hidden');
+  document.getElementById('verifyView').classList.remove('flex');
   document.getElementById('appView').classList.add('hidden');
   document.getElementById('completeView').classList.add('hidden');
   document.getElementById('completeView').classList.remove('flex');
@@ -531,17 +727,19 @@ async function logout() {
 
 function showApp() {
   document.getElementById('loginView').classList.add('hidden');
+  document.getElementById('verifyView').classList.add('hidden');
+  document.getElementById('verifyView').classList.remove('flex');
   document.getElementById('completeView').classList.add('hidden');
   document.getElementById('completeView').classList.remove('flex');
   document.getElementById('appView').classList.remove('hidden');
   document.getElementById('supplierName').textContent = SUPPLIER.name || 'Fournisseur';
   document.getElementById('supplierEmail').textContent = SUPPLIER.email || '';
   document.getElementById('shopNameHdr').textContent = SUPPLIER.name || '';
-    if (SUPPLIER.logo) {
-      document.getElementById('avatarLogo').innerHTML = '<img loading="lazy" src="' + esc(SUPPLIER.logo) + '" class="w-full h-full object-cover rounded-full" onerror="this.style.display=\'none\'">';
-    }
+    // Photo boutique : logo réel ou visuel fournisseur réservé (jamais vide).
+    document.getElementById('avatarLogo').innerHTML = '<img loading="lazy" src="' + esc(SUPPLIER.logo || 'assets/img/default-supplier.svg') + '" class="w-full h-full object-cover rounded-full" onerror="this.onerror=null;this.src=\'assets/img/default-supplier.svg\'">';
   goView('dashboard');
   refreshBadges();
+  try { ensurePayoutPhones(); } catch (e) {}
 }
 
 /* ==================== NAV ==================== */
@@ -555,7 +753,7 @@ function setActiveNav(v) {
 function goView(v) {
   currentView = v;
   setActiveNav(v);
-  const titles = {dashboard:'Tableau de bord',produits:'Produits',commandes:'Commandes',revenus:'Revenus',statistiques:'Statistiques',paiements:'Paiements',messages:'Messagerie',negociations:'Négociations',notifications:'Notifications',profil:'Mon profil'};
+  const titles = {dashboard:'Tableau de bord',produits:'Produits',commandes:'Commandes',revenus:'Revenus',statistiques:'Statistiques',messages:'Messagerie',notifications:'Notifications',profil:'Mon profil'};
   document.getElementById('pageTitle').textContent = titles[v]||'';
   document.getElementById('sidebar').classList.remove('open');
   loadView(v);
@@ -564,25 +762,69 @@ document.querySelectorAll('.nav-link').forEach(n => n.addEventListener('click', 
 
 function loadView(v) {
   const content = document.getElementById('mainContent');
+  if (v!=='messages') {
+    // Restaure la mise en page standard (la messagerie occupe tout l'espace).
+    content.style.padding=''; content.style.height=''; content.style.overflow='';
+    if (typeof stopConvoPoll==='function') stopConvoPoll();
+  }
   if (v==='dashboard') renderDashboard();
   else if (v==='produits') renderProduits();
-  else if (v==='commandes') renderCommandes();
+  else if (v==='commandes') { renderCommandes(); startSupOrdersPoll(); }
   else if (v==='revenus') renderRevenus();
   else if (v==='statistiques') renderStatistiques();
-  else if (v==='paiements') renderPaiements();
   else if (v==='messages') renderMessages();
-  else if (v==='negociations') renderNegociations();
   else if (v==='notifications') renderNotifications();
   else if (v==='profil') renderProfil();
+  if (v!=='commandes' && typeof stopSupOrdersPoll==='function') stopSupOrdersPoll();
+}
+
+/* ============ SYNCHRO COMMANDES (workflow livraison) ============
+   Polling léger 15 s, actif UNIQUEMENT sur la vue Commandes et onglet
+   visible : quand le client confirme la réception (ou que le payout
+   avance), la carte passe à COMMANDE LIVRÉE sans rechargement
+   manuel. Re-rendu seulement si la signature change. */
+let supOrdersTimer = null;
+function supOrdersSig() {
+  try {
+    return (window._supOrders || []).map(o => [o.id, o.status,
+      o.paymentConfirmed ? 1 : 0, o.deliveryStarted ? 1 : 0,
+      o.receiptConfirmed ? 1 : 0, o.deliveryValidated ? 1 : 0,
+      o.payoutStatus || ''].join(':')).join('|');
+  } catch (e) { return ''; }
+}
+function startSupOrdersPoll() {
+  stopSupOrdersPoll();
+  supOrdersTimer = setInterval(async () => {
+    try {
+      if (document.hidden) return;
+      if (typeof currentView !== 'undefined' && currentView !== 'commandes') return;
+      if (!TOKEN) return;
+      if (window._supFlowBusy) return;
+      if (!document.getElementById('mainContent')) return;
+      const orders = (await api('/orders')).data;
+      const next = Array.isArray(orders) ? orders : [];
+      const before = supOrdersSig();
+      const after = next.map(o => [o.id, o.status,
+        o.paymentConfirmed ? 1 : 0, o.deliveryStarted ? 1 : 0,
+        o.receiptConfirmed ? 1 : 0, o.deliveryValidated ? 1 : 0,
+        o.payoutStatus || ''].join(':')).join('|');
+      if (before !== after) {
+        try { await renderCommandes(window._supFilter || 'all'); } catch (e) {}
+        if (window._supModalOrderId && document.getElementById('supFlowBox')) {
+          renderSupplierFlow(window._supModalOrderId);
+          renderSupplierFinance(window._supModalOrderId);
+        }
+      }
+    } catch (e) {}
+  }, 15000);
+}
+function stopSupOrdersPoll() {
+  if (supOrdersTimer) { clearInterval(supOrdersTimer); supOrdersTimer = null; }
 }
 
 /* ==================== BADGES ==================== */
 async function refreshBadges() {
-  // Badges + offres en parallèle (indépendants).
-  const [d, o] = await Promise.all([
-    api('/badges').catch(() => null),
-    api('/offers').catch(() => null)
-  ]);
+  const d = await api('/badges').catch(() => null);
   try {
     if (!d) return;
     const nm = d.data.messages||0, nn = d.data.notifications||0;
@@ -590,11 +832,6 @@ async function refreshBadges() {
     document.getElementById('badgeMsgs').classList.toggle('hidden', nm<=0);
     document.getElementById('badgeNotifs').textContent = nn;
     document.getElementById('badgeNotifs').classList.toggle('hidden', nn<=0);
-  } catch(e){}
-  try {
-    const n = ((o||{}).data||[]).length;
-    const b = document.getElementById('badgeNegos');
-    if (b) { b.textContent = n; b.classList.toggle('hidden', n<=0); }
   } catch(e){}
 }
 setInterval(() => { if (!document.hidden) refreshBadges(); }, 45000);
@@ -630,7 +867,7 @@ async function renderDashboard() {
 /* ==================== PRODUITS ==================== */
 async function loadCategories() {
   try {
-    const res = await fetch('/api/categories');
+    const res = await fetch(SUP_BASE + '/api/categories');
     categoryCache = await res.json();
   } catch(e){ categoryCache = []; }
 }
@@ -639,7 +876,7 @@ let productStatusFilter = 'all';
 
 function emptyState(msg){ msg = esc(msg); return '<div class="empty"><div class="text-4xl mb-3 opacity-40"><i class="bi bi-inbox"></i></div><p>'+msg+'</p></div>'; }
 function statusBadge(st) {
-  const map = {PENDING:'bg-[#B7F000] text-[#0B2410]',APPROVED:'bg-[#123B16] text-white',ACTIVE:'bg-[#123B16] text-white',REJECTED:'bg-[#DC2626] text-white',INACTIVE:'bg-[#F7FAF5] text-[#5F6B61] border border-[#DDE6DC]'};
+  const map = {PENDING:'bg-[#B7F000] text-[#0A0A0A]',APPROVED:'bg-[#123B16] text-white',ACTIVE:'bg-[#123B16] text-white',REJECTED:'bg-[#DC2626] text-white',INACTIVE:'bg-[#F7FAF5] text-[#5F6B61] border border-[#DDE6DC]'};
   const labels = {PENDING:'En attente',APPROVED:'Approuvé',ACTIVE:'Actif',REJECTED:'Refusé',INACTIVE:'Inactif'};
   return '<span class="badge '+(map[st]||'bg-[#DDE6DC] text-[#123B16]')+'">'+(labels[st]||st||'Actif')+'</span>';
 }
@@ -694,7 +931,7 @@ async function renderProductsTable() {
 }
 function isActivable(p){ return (p.status==='APPROVED' || p.status==='ACTIVE' || p.status==='INACTIVE'); }
 function imgSrc(p){ return (p.images&&p.images[0])?p.images[0]:'https://placehold.co/80x80/e2e8f0/64748b?text=+'; }
-function esc(s){ s=s||''; return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function esc(s){ s=s||''; return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
 
 function openModal(html){ document.getElementById('modalBox').innerHTML=html; document.getElementById('modalOverlay').classList.add('show'); }
 function closeModal(){ document.getElementById('modalOverlay').classList.remove('show'); }
@@ -761,23 +998,40 @@ async function openProductModal(id) {
             <input id="pPrice" type="number" value="${p.price||''}" placeholder="Ex: 25000" required class="w-full px-4 py-2.5 rounded-xl border border-[#DDE6DC] text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
           </div>
         </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-sm font-semibold text-[#123B16] mb-1">Quantité en stock *</label>
+            <input id="pStock" type="number" min="0" step="1" value="${p.stock ?? ''}" placeholder="Ex: 20" required class="w-full px-4 py-2.5 rounded-xl border border-[#DDE6DC] text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-[#123B16] mb-1">Livraison (FCFA)</label>
+            <input id="pDelivery" type="number" min="0" step="1" value="${p.deliveryPrice ?? ''}" placeholder="0 = tarif zone" class="w-full px-4 py-2.5 rounded-xl border border-[#DDE6DC] text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+            <p class="text-[11px] text-[#5F6B61] mt-1">Frais appliqués à vos commandes. 0 = tarif de la zone.</p>
+          </div>
+        </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label class="block text-sm font-semibold text-[#123B16] mb-1">Catégorie *</label>
-            <select id="pCategoryParent" class="w-full px-4 py-2.5 rounded-xl border border-[#DDE6DC] text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500" required onchange="updateSubCategoryOptions()">
-              <option value="">— Choisir —</option>
-              ${parentCatOptions(selParentId)}
-            </select>
-            <p class="text-[11px] text-[#5F6B61] mt-1">Ex : Mode &amp; Vêtements</p>
+            <div class="relative">
+              <input id="pCategorySearch" placeholder="Rechercher une catégorie…" autocomplete="off" class="w-full px-4 py-2.5 rounded-xl border border-[#DDE6DC] text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+              <input type="hidden" id="pCategoryParent" value="">
+              <div id="pCategoryList" class="hidden absolute z-30 left-0 right-0 mt-1 bg-[#FFFFFF] rounded-xl border border-[#DDE6DC] shadow-card max-h-56 overflow-y-auto"></div>
+            </div>
+            <p class="text-[11px] text-[#5F6B61] mt-1">Ex : Mode &amp; Vêtements — tapez pour filtrer</p>
+            <div id="pCatProposeSlot"></div>
           </div>
           <div>
             <label class="block text-sm font-semibold text-[#123B16] mb-1">Sous-catégorie *</label>
-            <select id="pCategory" class="w-full px-4 py-2.5 rounded-xl border border-[#DDE6DC] text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500" required>
-              <option value="">— Choisir d'abord une catégorie —</option>
-            </select>
+            <div class="relative">
+              <input id="pSubSearch" placeholder="Rechercher une sous-catégorie…" autocomplete="off" class="w-full px-4 py-2.5 rounded-xl border border-[#DDE6DC] text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+              <input type="hidden" id="pCategory" value="">
+              <div id="pSubList" class="hidden absolute z-30 left-0 right-0 mt-1 bg-[#FFFFFF] rounded-xl border border-[#DDE6DC] shadow-card max-h-56 overflow-y-auto"></div>
+            </div>
             <p class="text-[11px] text-[#5F6B61] mt-1">Ex : Polo</p>
+            <div id="pSubProposeSlot"></div>
           </div>
         </div>
+        <div id="pCatPending" class="text-xs space-y-1"></div>
         <div>
           <label class="block text-sm font-semibold text-[#123B16] mb-1">Photos du produit</label>
           <div id="pFilesDrop" class="relative border-2 border-dashed border-[#DDE6DC] rounded-xl p-4 text-center hover:border-primary-400 hover:bg-primary-50/30 transition cursor-pointer" onclick="document.getElementById('pFiles').click()" ondragover="event.preventDefault();this.classList.add('border-primary-400')" ondragleave="this.classList.remove('border-primary-400')" ondrop="handleFilesDrop(event)">
@@ -799,26 +1053,129 @@ async function openProductModal(id) {
   window._pendingImgs = [];
   renderImgPreview();
   document.getElementById('pFiles').addEventListener('change', e => handleFilesAdd(e.target.files));
-  // Initialise le double select : catégorie -> sous-catégorie (ex. Mode & Vêtements -> Polo)
-  (function initCatDoubleSelect(){
-    const parentSel = document.getElementById('pCategoryParent');
-    const childSel = document.getElementById('pCategory');
-    if (selParentId && parentSel) {
-      parentSel.value = String(selParentId);
-      updateSubCategoryOptions();
-      if (selChildId && childSel) {
-        const hasChild = [...childSel.options].some(o => String(o.value) === String(selChildId));
-        if (hasChild) childSel.value = String(selChildId);
-        else {
-          // La catégorie enregistrée est une racine sans enfant : on la porte sur le parent
-          childSel.disabled = true;
-          childSel.innerHTML = '<option value="">— Aucune sous-catégorie —</option>';
-        }
-      }
-    } else {
-      updateSubCategoryOptions();
+  // Combobox catégories recherchables + proposition (cf. moteur ci-dessous).
+  initCatCombos(selParentId, selChildId);
+  loadMyCatRequests();
+}
+
+/* ============ Combobox catégories recherchables + proposition ============ */
+function catComboFilter(items, q) {
+  q = (q || '').trim().toLowerCase();
+  if (!q) return items;
+  return items.filter(c => (c.name || '').toLowerCase().includes(q));
+}
+function catComboRender(inputId, listId, items, query, onPick, proposeLabel, onPropose) {
+  const box = document.getElementById(listId);
+  if (!box) return;
+  const rows = catComboFilter(items, query);
+  let html = rows.map(c => `<button type="button" data-catpick="${c.id}" class="w-full text-left px-4 py-2.5 text-sm hover:bg-[#F7FAF5] transition truncate">${esc(c.name)}</button>`).join('');
+  if (!rows.length) html += `<p class="px-4 py-2.5 text-xs text-[#5F6B61]">Aucun résultat.</p>`;
+  html += `<button type="button" data-catpropose="1" class="w-full text-left px-4 py-2.5 text-sm font-bold text-[#4D7C0F] hover:bg-primary-50 border-t border-[#DDE6DC] transition"><i class="bi bi-plus-lg mr-1"></i>${esc(proposeLabel)}</button>`;
+  box.innerHTML = html;
+  box.classList.remove('hidden');
+  box.querySelectorAll('[data-catpick]').forEach(b => b.onclick = () => onPick(parseInt(b.getAttribute('data-catpick'))));
+  const pb = box.querySelector('[data-catpropose]');
+  if (pb) pb.onclick = onPropose;
+}
+function catComboHide(listId) {
+  const box = document.getElementById(listId);
+  if (box) box.classList.add('hidden');
+}
+function catNameById(id) {
+  const c = (categoryCache || []).find(x => String(x.id) === String(id));
+  return c ? c.name : '';
+}
+function initCatCombos(selParentId, selChildId) {
+  const pSearch = document.getElementById('pCategorySearch');
+  const pHidden = document.getElementById('pCategoryParent');
+  const sSearch = document.getElementById('pSubSearch');
+  const sHidden = document.getElementById('pCategory');
+  const roots = () => { const r = catRoots(); return r.length ? r : (categoryCache || []); };
+  const kids = () => { const pid = pHidden.value ? parseInt(pHidden.value) : null; return pid ? catChildren(pid) : []; };
+  const pickParent = (id) => {
+    pHidden.value = id || '';
+    pSearch.value = id ? catNameById(id) : '';
+    catComboHide('pCategoryList');
+    // Réinitialise l'enfant au changement de parent.
+    sHidden.value = '';
+    sSearch.value = '';
+    sSearch.placeholder = 'Rechercher une sous-catégorie…';
+  };
+  const pickChild = (id) => {
+    sHidden.value = id || '';
+    sSearch.value = id ? catNameById(id) : '';
+    catComboHide('pSubList');
+  };
+  pSearch.addEventListener('focus', () => catComboRender('pCategorySearch', 'pCategoryList', roots(), pSearch.value, pickParent, 'Proposer une catégorie', () => openCatPropose('root')));
+  pSearch.addEventListener('input', () => { if (!pSearch.value) pHidden.value = ''; catComboRender('pCategorySearch', 'pCategoryList', roots(), pSearch.value, pickParent, 'Proposer une catégorie', () => openCatPropose('root')); });
+  sSearch.addEventListener('focus', () => {
+    const k = kids();
+    if (!pHidden.value) { sSearch.placeholder = 'Choisissez d\u2019abord une catégorie'; }
+    catComboRender('pSubSearch', 'pSubList', k, sSearch.value, pickChild, 'Proposer une sous-catégorie', () => openCatPropose('child'));
+  });
+  sSearch.addEventListener('input', () => { if (!sSearch.value) sHidden.value = ''; const k = kids(); catComboRender('pSubSearch', 'pSubList', k, sSearch.value, pickChild, 'Proposer une sous-catégorie', () => openCatPropose('child')); });
+  document.addEventListener('click', function catComboOutside(e) {
+    if (!e.target.closest || (!e.target.closest('#pCategoryList') && !e.target.closest('#pCategorySearch')
+        && !e.target.closest('#pSubList') && !e.target.closest('#pSubSearch')
+        && !e.target.closest('#pCatProposeSlot') && !e.target.closest('#pSubProposeSlot'))) {
+      catComboHide('pCategoryList'); catComboHide('pSubList');
     }
-  })();
+  });
+  // Présélection (édition) : libellés depuis le cache.
+  if (selParentId) { pHidden.value = selParentId; pSearch.value = catNameById(selParentId); }
+  if (selChildId) { sHidden.value = selChildId; sSearch.value = catNameById(selChildId); }
+}
+/* Mini-formulaire de proposition (validation admin, jamais directe). */
+function openCatPropose(kind) {
+  const isChild = kind === 'child';
+  const slot = document.getElementById(isChild ? 'pSubProposeSlot' : 'pCatProposeSlot');
+  if (!slot) return;
+  catComboHide('pCategoryList'); catComboHide('pSubList');
+  if (isChild) {
+    const pid = document.getElementById('pCategoryParent').value;
+    if (!pid) { toast('Choisissez d\u2019abord une catégorie parente', 'error'); return; }
+  }
+  const parentName = isChild ? catNameById(document.getElementById('pCategoryParent').value) : null;
+  slot.innerHTML = `<div class="mt-2 p-3 rounded-xl border border-dashed border-primary-300 bg-primary-50/40 space-y-2">
+    <p class="text-xs font-bold">${isChild ? 'Proposer une sous-catégorie' + (parentName ? ' de « ' + esc(parentName) + ' »' : '') : 'Proposer une catégorie'}</p>
+    <input id="catPropName" maxlength="120" placeholder="Nom (ex : ${isChild ? 'Polo' : 'Épicerie fine'})" class="w-full px-3 py-2 rounded-xl border border-[#DDE6DC] text-sm">
+    <p class="text-[11px] text-[#5F6B61]">Envoyée à l'administrateur pour validation avant utilisation.</p>
+    <div class="flex gap-2">
+      <button type="button" onclick="submitCatPropose('${kind}')" class="px-3 py-2 bg-[#123B16] hover:bg-[#0B2410] text-white text-xs font-bold rounded-xl transition">Envoyer</button>
+      <button type="button" onclick="document.getElementById('${isChild ? 'pSubProposeSlot' : 'pCatProposeSlot'}').innerHTML=''" class="px-3 py-2 border border-[#DDE6DC] text-xs font-bold rounded-xl">Annuler</button>
+    </div>
+  </div>`;
+  const inp = document.getElementById('catPropName');
+  if (inp) inp.focus();
+}
+async function submitCatPropose(kind) {
+  const inp = document.getElementById('catPropName');
+  const name = inp ? inp.value.trim() : '';
+  if (!name) { toast('Nom de catégorie requis', 'error'); return; }
+  let parentId = null;
+  if (kind === 'child') {
+    parentId = parseInt(document.getElementById('pCategoryParent').value) || null;
+    if (!parentId) { toast('Choisissez d\u2019abord une catégorie parente', 'error'); return; }
+  }
+  try {
+    await api('/category-requests', { method: 'POST', body: JSON.stringify({ name, parentId }) });
+    document.getElementById(kind === 'child' ? 'pSubProposeSlot' : 'pCatProposeSlot').innerHTML = '';
+    toast('Demande envoyée, en attente de validation');
+    loadMyCatRequests();
+  } catch (e) { toast(e.message, 'error'); }
+}
+/* Demandes du fournisseur : pastilles "en attente" sous le formulaire. */
+async function loadMyCatRequests() {
+  const box = document.getElementById('pCatPending');
+  if (!box) return;
+  try {
+    const data = (await api('/category-requests')).data || [];
+    const pend = data.filter(r => r.status === 'PENDING');
+    box.innerHTML = pend.length
+      ? '<p class="font-semibold text-[#5F6B61]">Demandes en attente de validation :</p>'
+        + pend.map(r => `<span class="inline-block mr-1.5 mb-1 px-2.5 py-1 rounded-full bg-[#FFF8E1] border border-[#E5C558] text-[#5F6B61]">⏳ ${esc(r.name)}${r.parentName ? ' · ' + esc(r.parentName) : ''}</span>`).join('')
+      : '';
+  } catch (e) { box.innerHTML = ''; }
 }
 function handleFilesAdd(files) {
   [...files].forEach(f=>{
@@ -839,8 +1196,8 @@ function handleFilesDrop(e) {
 function renderImgPreview() {
   const box=document.getElementById('imgPreview'); if(!box) return;
   let html='';
-  (window._pimages||[]).forEach((u,i)=>{ html+=`<div class="relative">${i===0?'<span class="absolute -top-2 -left-2 bg-primary-600 text-white text-[9px] px-1 rounded-full z-10">PRINCIPALE</span>':''}<img src="${u}" class="w-16 h-16 rounded-lg object-cover border"><button type="button" onclick="removeImg(${i})" class="absolute -top-2 -right-2 bg-[#B7F000] text-[#0B2410] rounded-full w-5 h-5 text-xs">&times;</button></div>`; });
-  (window._pendingImgs||[]).forEach((p,i)=>{ html+=`<div class="relative">${(window._pimages||[]).length===0&&i===0?'<span class="absolute -top-2 -left-2 bg-primary-600 text-white text-[9px] px-1 rounded-full z-10">PRINCIPALE</span>':''}<img src="${p.data}" class="w-16 h-16 rounded-lg object-cover border opacity-70"><button type="button" onclick="removePending(${i})" class="absolute -top-2 -right-2 bg-[#B7F000] text-[#0B2410] rounded-full w-5 h-5 text-xs">&times;</button></div>`; });
+  (window._pimages||[]).forEach((u,i)=>{ const src=String(u||''); if(!/^(https?:\/\/|uploads\/|assets\/)/.test(src)) return; html+=`<div class="relative">${i===0?'<span class="absolute -top-2 -left-2 bg-primary-600 text-white text-[9px] px-1 rounded-full z-10">PRINCIPALE</span>':''}<img src="${esc(src)}" class="w-16 h-16 rounded-lg object-cover border"><button type="button" onclick="removeImg(${i})" class="absolute -top-2 -right-2 bg-[#B7F000] text-[#0A0A0A] rounded-full w-5 h-5 text-xs">&times;</button></div>`; });
+  (window._pendingImgs||[]).forEach((p,i)=>{ const d=String((p&&p.data)||''); if(!d.startsWith('data:image/')) return; html+=`<div class="relative">${(window._pimages||[]).length===0&&i===0?'<span class="absolute -top-2 -left-2 bg-primary-600 text-white text-[9px] px-1 rounded-full z-10">PRINCIPALE</span>':''}<img src="${d}" class="w-16 h-16 rounded-lg object-cover border opacity-70"><button type="button" onclick="removePending(${i})" class="absolute -top-2 -right-2 bg-[#B7F000] text-[#0A0A0A] rounded-full w-5 h-5 text-xs">&times;</button></div>`; });
   box.innerHTML=html;
 }
 function removeImg(i){ window._pimages.splice(i,1); renderImgPreview(); }
@@ -852,6 +1209,10 @@ async function saveProduct(e, id){
   const name=document.getElementById('pName').value.trim();
   const brand=document.getElementById('pBrand').value.trim();
   const price=parseInt(document.getElementById('pPrice').value);
+  const stockRaw=document.getElementById('pStock').value;
+  const stock=stockRaw===''||stockRaw==null?NaN:parseInt(stockRaw);
+  const delRaw=document.getElementById('pDelivery').value;
+  const deliveryPrice=delRaw===''||delRaw==null?0:Math.max(0,parseInt(delRaw)||0);
   const parentCatVal = document.getElementById('pCategoryParent') ? document.getElementById('pCategoryParent').value : '';
   const childCatVal = document.getElementById('pCategory') ? document.getElementById('pCategory').value : '';
   // Double select : la sous-catégorie prime, sinon la catégorie principale (cas sans enfant)
@@ -859,6 +1220,7 @@ async function saveProduct(e, id){
   if(!name) return toast('Le nom du produit est obligatoire','error');
   if(!brand) return toast('La marque est obligatoire','error');
   if(!price || price<=0) return toast('Le prix est obligatoire','error');
+  if(isNaN(stock) || stock<0) return toast('La quantité en stock est obligatoire (0 ou plus)','error');
   if(!parentCatVal) return toast('La catégorie est obligatoire','error');
   if(!categoryId) return toast('La sous-catégorie est obligatoire','error');
   btn.disabled=true; btn.innerHTML='<i class="bi bi-arrow-repeat animate-spin"></i> Enregistrement...';
@@ -867,6 +1229,8 @@ async function saveProduct(e, id){
     fd.append('name',name);
     fd.append('brand',brand);
     fd.append('price',price);
+    fd.append('stock',stock);
+    fd.append('deliveryPrice',deliveryPrice);
     fd.append('categoryId',categoryId);
     fd.append('existingImages', JSON.stringify(window._pimages||[]));
     (window._pendingImgs||[]).forEach(f=>fd.append('file',f.file,f.file.name));
@@ -899,93 +1263,318 @@ async function deleteProduct(id){
   try{ await api('/products/'+id,{method:'DELETE'}); renderProductsTable(); toast('Produit supprimé'); }catch(err){ toast(err.message,'error'); }
 }
 
-/* ==================== COMMANDES ==================== */
+/* ==================== COMMANDES (workflow v2 : 2 actions) ==================== */
 const STATUSES = ['EN_ATTENTE','CONFIRMEE','EN_PREPARATION','EN_LIVRAISON','LIVREE','ANNULEE'];
-const statusLabel = {EN_ATTENTE:'En attente',CONFIRMEE:'Confirmée',EN_PREPARATION:'En préparation',EN_LIVRAISON:'En livraison',LIVREE:'Livrée',ANNULEE:'Annulée'};
-const statusColor = {EN_ATTENTE:'bg-[#B7F000] text-[#0B2410]',CONFIRMEE:'bg-[#DDE6DC] text-[#123B16]',EN_PREPARATION:'bg-[#DDE6DC] text-[#123B16]',EN_LIVRAISON:'bg-[#DDE6DC] text-[#123B16]',LIVREE:'bg-[#123B16] text-white',ANNULEE:'bg-[#DC2626] text-white'};
+/* Libellés livraison v2 : l'interface ne présente plus les étapes multiples. */
+const statusLabel = {EN_ATTENTE:'En attente',CONFIRMEE:'À livrer',EN_PREPARATION:'À livrer',EN_LIVRAISON:'En cours de livraison',LIVREE:'Livrée',ANNULEE:'Annulée'};
+const statusColor = {EN_ATTENTE:'bg-[#B7F000] text-[#0A0A0A]',CONFIRMEE:'bg-[#DDE6DC] text-[#123B16]',EN_PREPARATION:'bg-[#DDE6DC] text-[#123B16]',EN_LIVRAISON:'bg-[#B7F000] text-[#0A0A0A]',LIVREE:'bg-[#123B16] text-white',ANNULEE:'bg-[#DC2626] text-white'};
 
-async function renderCommandes(){
+/* Appels workflow livraison (base /api/delivery-flow, Bearer fournisseur).
+   SUP_BASE gère le contexte Tomcat (/mboa-style ou ROOT) : sans lui, tous les
+   appels livraison répondaient 404 et aucun bouton ne s'affichait. */
+function supFlowBase() { return (window.location.pathname.includes('/mboa-style') ? '/mboa-style' : '') + '/api/delivery-flow'; }
+async function flowApi(path, opts) {
+  const headers = {'Content-Type':'application/json'};
+  if (typeof TOKEN !== 'undefined' && TOKEN) headers['Authorization'] = 'Bearer ' + TOKEN;
+  const res = await fetch(supFlowBase() + path, Object.assign({}, opts || {}, {headers}));
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const err = new Error((data && (data.message || data.error)) || ('Erreur ' + res.status));
+    err.status = res.status; err.code = data && data.errorCode;
+    throw err;
+  }
+  return data && data.data !== undefined ? data.data : data;
+}
+/* Message utilisateur franc et actionnable selon le code HTTP réel. */
+function supFlowErrorMessage(e, fallback) {
+  const s = e && e.status;
+  if (s === 400) return e.message || 'Action impossible à ce stade de la commande.';
+  if (s === 401) return 'Session expirée. Reconnectez-vous puis réessayez.';
+  if (s === 403) return e.message || 'Accès refusé pour cette commande.';
+  if (s === 404) return 'Commande introuvable dans votre boutique.';
+  if (s === 409) return e.message || 'Conflit : cette action a déjà été effectuée.';
+  if (s >= 500) return 'Service momentanément indisponible. Réessayez dans un instant.';
+  return (e && e.message) || fallback || 'Opération impossible.';
+}
+
+async function renderCommandes(filter){
   const content=document.getElementById('mainContent');
   content.innerHTML='<div class="card p-6"><h3 class="font-semibold mb-4">Commandes</h3><div class="skeleton h-40"></div></div>';
   try{
     const orders=(await api('/orders')).data;
-    content.innerHTML=`<div class="card overflow-hidden"><table class="table"><thead><tr><th>N° Commande</th><th>Client</th><th>Total</th><th>Statut</th><th>Date</th><th class="text-right">Action</th></tr></thead><tbody>
-      ${orders.length?orders.map(o=>`<tr>
-        <td class="font-semibold">#${esc(o.orderNumber||o.id)}</td>
-        <td>${esc(o.fullname||'')}<br><span class="text-xs text-[#5F6B61]">${esc(o.phone||'')} · ${esc(o.city||'')}</span></td>
-        <td class="font-semibold">${money(o.total)}</td>
-        <td><span class="status-chip ${statusColor[o.status]||'bg-[#DDE6DC] text-[#123B16]'}">${esc(statusLabel[o.status]||o.status)}</span></td>
-        <td class="text-[#5F6B61]">${fmtDate(o.createdAt)}</td>
-        <td class="text-right"><button onclick="openOrderModal(${o.id})" class="btn btn-outline text-xs"><i class="bi bi-eye"></i> Détails</button></td>
-      </tr>`).join(''):'<tr><td colspan="6">'+emptyState('Aucune commande')+'</td></tr>'}
-    </tbody></table></div>`;
+    window._supOrders = Array.isArray(orders) ? orders : [];
+    const counts = { all: window._supOrders.length, active: 0, delivered: 0, cancelled: 0 };
+    window._supOrders.forEach(o => { const t = supOrderTab(o.status); counts[t] = (counts[t] || 0) + 1; });
+    const tabs = [['all','Toutes'],['active','En cours'],['delivered','Livrées'],['cancelled','Annulées']];
+    const f = filter || window._supFilter || 'all';
+    window._supFilter = f;
+    const rows = window._supOrders.filter(o => f === 'all' || supOrderTab(o.status) === f);
+    const payoutChip = (s) => !s ? '<span class="text-[#5F6B61] text-xs">—</span>'
+      : (s === 'COMPLETED' || s === 'PAID') ? '<span class="status-chip bg-[#123B16] text-white">Versé</span>'
+      : (s === 'FAILED' || s === 'CANCELLED') ? '<span class="status-chip bg-[#DC2626] text-white">' + esc(s) + '</span>'
+      : '<span class="status-chip bg-[#B7F000] text-[#0A0A0A]">' + esc(s) + '</span>';
+    const supClientInitial = (n) => { n = String(n || '?').trim(); return (n.charAt(0) || '?').toUpperCase(); };
+    const supProdImg = (u) => u || 'https://placehold.co/80x80/e2e8f0/64748b?text=+';
+    const supItemHTML = (it) => {
+      const line = (it.unitPrice || 0) * (it.qty || 0);
+      return `<div class="flex items-center gap-3 p-2 rounded-2xl border border-[#DDE6DC] bg-[#FFFFFF]">
+        <img src="${esc(supProdImg(it.image))}" alt="" class="w-14 h-14 rounded-xl object-cover shrink-0 bg-[#F7FAF5]" onerror="this.onerror=null;this.src='https://placehold.co/80x80/e2e8f0/64748b?text=+'">
+        <div class="min-w-0 flex-1">
+          <p class="text-sm font-bold truncate">${esc(it.productName || ('Produit #' + it.productId))}</p>
+          <p class="text-[11px] text-[#5F6B61] font-mono">N° ${esc(it.reference || ('P-' + it.productId))}${it.size ? ' · Taille ' + esc(it.size) : ''}${it.color ? ' · ' + esc(it.color) : ''}</p>
+          <p class="text-xs text-[#5F6B61]">${it.qty || 1} × <span class="tabular-nums font-semibold text-[#123B16]">${money(it.unitPrice || 0)}</span></p>
+        </div>
+        <p class="text-sm font-bold tabular-nums shrink-0">${money(line)}</p>
+      </div>`;
+    };
+    content.innerHTML=`<div class="flex flex-wrap items-center gap-2 mb-4">
+        <h3 class="font-semibold mr-2">Commandes</h3>
+        ${tabs.map(t=>`<button onclick="renderCommandes('${t[0]}')" class="px-3 py-1.5 rounded-xl text-xs font-bold border transition ${f===t[0]?'bg-[#123B16] text-white border-[#123B16]':'bg-[#FFFFFF] border-[#DDE6DC] hover:border-[#B7F000]'}">${t[1]} (${counts[t[0]]||0})</button>`).join('')}
+      </div>
+      <div class="space-y-4">${rows.length ? rows.map(o => {
+        const cname = o.fullname || 'Client';
+        const items = Array.isArray(o.items) ? o.items : [];
+        const nb = items.reduce((a, i) => a + (i.qty || 0), 0);
+        return `<div class="card p-4 space-y-3">
+        <div class="flex flex-wrap items-center gap-2">
+          <p class="font-mono font-bold text-sm">#${esc(o.orderNumber || o.id)}</p>
+          <span class="text-xs text-[#5F6B61]">${fmtDate(o.createdAt)}</span>
+          <span class="flex-1"></span>
+          <span class="status-chip ${statusColor[o.status] || 'bg-[#DDE6DC] text-[#123B16]'}">${esc(statusLabel[o.status] || o.status)}</span>
+          ${payoutChip(o.payoutStatus)}
+        </div>
+        <div class="flex items-center gap-3 p-3 rounded-2xl bg-[#F7FAF5] border border-[#DDE6DC]">
+          <span class="w-11 h-11 rounded-full bg-[#123B16] text-white font-bold flex items-center justify-center shrink-0">${esc(supClientInitial(cname))}</span>
+          <div class="min-w-0 flex-1">
+            <p class="text-sm font-bold truncate">${esc(cname)}</p>
+            <p class="text-xs text-[#5F6B61] truncate"><i class="bi bi-telephone mr-1"></i>${esc(o.phone || '—')} · ${esc(o.city || '')}${o.district ? ', ' + esc(o.district) : ''}</p>
+            ${o.address ? `<p class="text-xs text-[#5F6B61] truncate"><i class="bi bi-geo-alt mr-1"></i>${esc(o.address)}</p>` : ''}
+          </div>
+        </div>
+        <div class="space-y-2">
+          <p class="text-[11px] font-bold uppercase tracking-wider text-[#5F6B61]">Articles (${nb})</p>
+          ${items.length ? items.map(supItemHTML).join('') : '<p class="text-xs text-[#5F6B61]">Détail indisponible.</p>'}
+        </div>
+        <div class="flex flex-wrap items-center gap-2 pt-1 border-t border-[#DDE6DC]">
+          <p class="font-bold tabular-nums">Total : ${money(o.total)}</p>
+          <span class="flex-1"></span>
+          <span class="text-xs font-bold ${o.paymentConfirmed ? 'text-[#4D7C0F]' : 'text-[#5F6B61]'}">Paiement : ${o.paymentConfirmed ? '✓ CONFIRMÉ' : 'En attente'}</span>
+        </div>
+        <div id="supCardAct-${o.id}" data-sup-action="${o.id}">${supCardActionHTML(o)}</div>
+      </div>`;
+      }).join('') : emptyState('Aucune commande') + ''}</div>`;
   }catch(e){ content.innerHTML=emptyState('Erreur: '+e.message); }
+}
+function supOrderTab(st) {
+  if (st === 'LIVREE') return 'delivered';
+  if (st === 'ANNULEE') return 'cancelled';
+  return 'active';
 }
 
 async function openOrderModal(id){
   try{
     window._shipOrderId = id;
+    window._supModalOrderId = id;
     const o=(await api('/orders/'+id)).data;
     openModal(`
-      <div class="flex items-center justify-between mb-4"><h3 class="text-lg font-bold">Commande #${esc(o.orderNumber||o.id)}</h3><button onclick="closeModal()" class="text-[#5F6B61] hover:text-[#5F6B61]"><i class="bi bi-x-lg"></i></button></div>
-      <div class="grid grid-cols-2 gap-3 mb-4 text-sm">
-        <div class="bg-[#FFFFFF] p-3 rounded-lg"><p class="text-xs text-[#5F6B61]">Client</p><p class="font-semibold">${esc(o.fullname)}</p><p>${esc(o.phone)}</p></div>
-        <div class="bg-[#FFFFFF] p-3 rounded-lg"><p class="text-xs text-[#5F6B61]">Adresse</p><p>${esc(o.city)}${o.district?', '+esc(o.district):''}</p><p>${esc(o.address||'')}</p></div>
-        <div class="bg-[#FFFFFF] p-3 rounded-lg"><p class="text-xs text-[#5F6B61]">Paiement</p><p class="font-semibold">${esc(o.paymentMethod||'WHATSAPP')}</p><p class="text-xs mt-1">${o.paymentStatus==='REUSSIE'?'<span class="badge bg-[#123B16] text-white">Payé</span>':o.paymentStatus==='EN_ATTENTE'?'<span class="badge bg-[#B7F000] text-[#0B2410]">En attente</span>':o.paymentStatus?`<span class="badge bg-[#DDE6DC] text-[#123B16]">${esc(o.paymentStatus)}</span>`:''}</p></div>
-        <div class="bg-[#FFFFFF] p-3 rounded-lg"><p class="text-xs text-[#5F6B61]">Date</p><p>${fmtDate(o.createdAt)}</p></div>
+      <div class="flex items-center justify-between mb-4"><h3 class="text-lg font-bold">COMMANDE #${esc(o.orderNumber||o.id)}</h3><button onclick="closeModal()" aria-label="Fermer" class="text-[#5F6B61] hover:text-[#0A0A0A] w-10 h-10 rounded-xl hover:bg-[#F7FAF5]"><i class="bi bi-x-lg"></i></button></div>
+      <div class="rounded-2xl border border-[#DDE6DC] p-4 mb-3">
+        <p class="text-xs font-bold uppercase tracking-wider text-[#5F6B61] mb-2">Commande</p>
+        <p class="text-sm"><span class="text-[#5F6B61]">Numéro :</span> <strong class="font-mono">#${esc(o.orderNumber||o.id)}</strong></p>
+        <p class="text-sm"><span class="text-[#5F6B61]">Date :</span> ${fmtDate(o.createdAt)}</p>
+        <p class="text-sm"><span class="text-[#5F6B61]">Statut :</span> <strong>${esc(statusLabel[o.status] || o.status)}</strong></p>
       </div>
       <table class="table mb-3"><thead><tr><th>Produit</th><th>Qté</th><th>Prix</th></tr></thead><tbody>
-        ${(o.items||[]).map(i=>`<tr><td>Produit #${i.productId}</td><td>${i.qty}</td><td>${money(i.unitPrice*i.qty)}</td></tr>`).join('')||'<tr><td colspan="3" class="text-[#5F6B61] text-center">Aucun détail</td></tr>'}
+        ${((o.items||[]).map(i=>{
+          const enr = ((window._supOrders||[]).find(x => x.id === id) || {}).items || [];
+          const e = enr.find(x => x.productId === i.productId) || {};
+          const img = e.image || 'https://placehold.co/80x80/e2e8f0/64748b?text=+';
+          const ref = e.reference || ('P-' + i.productId);
+          return `<tr><td><div class="flex items-center gap-3"><img src="${esc(img)}" alt="" class="w-10 h-10 rounded-lg object-cover bg-[#F7FAF5]" onerror="this.onerror=null;this.src='https://placehold.co/80x80/e2e8f0/64748b?text=+'"><div class="min-w-0"><p class="font-semibold text-sm truncate">${esc(i.productName || e.productName || ('Produit #' + i.productId))}</p><p class="text-[11px] text-[#5F6B61] font-mono">N° ${esc(ref)}${i.size ? ' · ' + esc(i.size) : ''}${i.color ? ' · ' + esc(i.color) : ''}</p></div></div></td><td>${i.qty}</td><td>${money(i.unitPrice*i.qty)}</td></tr>`;
+        }).join(''))||'<tr><td colspan="3" class="text-[#5F6B61] text-center">Aucun détail</td></tr>'}
       </tbody></table>
-      <div id="supShipBox" class="mb-3"><p class="text-xs text-[#5F6B61]">Chargement livraison…</p></div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3 text-sm">
+        <div class="rounded-2xl border border-[#DDE6DC] p-3"><p class="text-xs font-bold uppercase tracking-wider text-[#5F6B61] mb-1">Client</p><p class="font-semibold">${esc(o.fullname||'—')}</p><p>${esc(o.phone||'—')}</p><p>${esc(o.city||'')}${o.district?', '+esc(o.district):''}</p><p>${esc(o.address||'')}</p>${o.comment?`<p class="text-xs text-[#5F6B61] mt-1 italic">« ${esc(o.comment)} »</p>`:''}</div>
+        <div class="rounded-2xl border border-[#DDE6DC] p-3"><p class="text-xs font-bold uppercase tracking-wider text-[#5F6B61] mb-1">Paiement</p><p class="font-semibold">${esc(o.paymentMethod||'WHATSAPP')}</p><p class="text-xs mt-1">${o.paymentStatus==='REUSSIE'||o.paymentStatus==='COMPLETED'?'<span class="badge bg-[#123B16] text-white">✓ Paiement confirmé</span>':o.paymentStatus==='EN_ATTENTE'?'<span class="badge bg-[#B7F000] text-[#0A0A0A]">En attente</span>':o.paymentStatus?`<span class="badge bg-[#DDE6DC] text-[#123B16]">${esc(o.paymentStatus)}</span>`:'<span class="text-xs text-[#5F6B61]">Vérification côté serveur…</span>'}</p></div>
+      </div>
+      <div id="supFlowBox" class="mb-3" aria-live="polite"><p class="text-xs text-[#5F6B61]">Chargement livraison…</p></div>
+      <div id="supFinanceBox" class="mb-3"><p class="text-xs text-[#5F6B61]">Chargement finance…</p></div>
       <div class="flex items-center justify-between border-t pt-3">
         <div><p class="text-sm text-[#5F6B61]">Total</p><p class="text-xl font-bold text-[#123B16]">${money(o.total)}</p></div>
-        <div><label class="text-xs font-semibold text-[#5F6B61] mr-2">Statut</label>
-          <select id="orderStatus" class="select inline w-48">${STATUSES.map(s=>`<option value="${s}" ${o.status===s?'selected':''}>${statusLabel[s]}</option>`).join('')}</select>
-          <button onclick="updateOrderStatus(${o.id})" class="btn btn-primary ml-2"><i class="bi bi-check2"></i></button>
+        <div class="text-right">
+          <p class="text-xs font-semibold text-[#5F6B61] mb-2">Livraison : <strong class="text-[#123B16]">${esc(statusLabel[o.status] || o.status)}</strong></p>
+          ${o.status === 'ANNULEE'
+            ? '<p class="text-xs text-[#DC2626] font-semibold">Commande annulée — aucune action possible.</p>'
+            : ''}
         </div>
       </div>`);
-  }catch(e){ toast(e.message,'error'); }
-  renderSupplierShipment(id);
+  }catch(e){ toast(e.message,'error'); return; }
+  renderSupplierFlow(id);
+  renderSupplierFinance(id);
 }
-const SHIP_NEXT = { PREPARING:['READY_FOR_PICKUP'], READY_FOR_PICKUP:['PICKED_UP'], PICKED_UP:['IN_TRANSIT'], IN_TRANSIT:['OUT_FOR_DELIVERY'], OUT_FOR_DELIVERY:['DELIVERED'] };
-const SHIP_LABEL = { PREPARING:'Préparation', READY_FOR_PICKUP:'Prête à expédier', PICKED_UP:'Prise en charge', IN_TRANSIT:'En transit', OUT_FOR_DELIVERY:'En livraison', DELIVERED:'Livrée', FAILED:'Échec', RETURNED:'Retournée', CANCELLED:'Annulée' };
-async function renderSupplierShipment(orderId) {
-  const box = document.getElementById('supShipBox');
+/* Action inline de la carte commande (workflow v2, SANS bouton DÉTAIL).
+   Mêmes branches que DeliveryFlowService.supplierAction côté serveur :
+   l'état affiché vient de la liste enrichie (0 appel supplémentaire).
+   Après chaque action, la liste est rechargée depuis le serveur. */
+function supCardActionHTML(o) {
+  const id = o.id;
+  const poStatus = o.payoutStatus || '';
+  const payoutDone = (poStatus === 'COMPLETED' || poStatus === 'PAID');
+  if (o.status === 'ANNULEE') {
+    return `<p class="text-xs text-[#DC2626] font-semibold">Commande annulée — aucune action possible.</p>`;
+  }
+  if (o.deliveryValidated) {
+    if (payoutDone) {
+      return `<div class="rounded-2xl bg-[#0A0A0A] text-white p-4 text-sm space-y-1" role="status"><p class="font-bold">✓ COMMANDE TERMINÉE</p><p class="text-xs opacity-90">✓ FOURNISSEUR PAYÉ${o.payoutAmount != null ? ' · ' + money(o.payoutAmount) : ''}.</p></div>`;
+    }
+    return `<div class="rounded-2xl bg-[#F7FAF5] border border-[#DDE6DC] p-4 text-sm space-y-1" role="status"><p class="font-bold text-[#0A0A0A]">✓ LIVRAISON VALIDÉE</p><p class="text-xs text-[#5F6B61]">💰 RÈGLEMENT EN COURS${poStatus ? ' · Payout ' + esc(poStatus) : ''}.</p></div>`;
+  }
+  if (o.receiptConfirmed) {
+    if (!o.deliveryStarted) {
+      return `<p class="text-xs text-[#5F6B61]">En attente de synchronisation… <button onclick="supRefreshCard(${id})" class="underline font-bold">Actualiser</button></p>`;
+    }
+    return `<div class="rounded-2xl bg-[#F7FAF5] border-2 border-[#0A0A0A] p-4 text-sm space-y-2" role="status"><p class="font-bold text-[#0A0A0A]">✓ CLIENT A CONFIRMÉ LA RÉCEPTION</p><p class="text-xs text-[#5F6B61]">Le client a confirmé avoir reçu sa commande. Vous pouvez maintenant valider la livraison.</p><button id="supLivreBtn-${id}" onclick="supValidateDelivery(${id},'supLivreBtn-${id}')" class="w-full px-4 py-3.5 bg-[#C40000] hover:bg-[#9E0000] disabled:opacity-60 text-white text-sm font-bold rounded-xl transition min-h-[52px]">CONFIRMER LA COMMANDE</button></div>`;
+  }
+  if (o.deliveryStarted) {
+    return `<div class="rounded-2xl bg-[#F7FAF5] border border-[#DDE6DC] p-4 text-sm space-y-1" role="status"><p class="font-bold text-[#0A0A0A]">🚚 LIVRAISON EN COURS</p><p class="text-xs text-[#5F6B61]">En attente de confirmation du client.</p></div>`;
+  }
+  if (o.paymentConfirmed && ['CONFIRMEE','EN_PREPARATION','EN_LIVRAISON'].includes(o.status)) {
+    return `<button id="supStartBtn-${id}" onclick="supStartDelivery(${id},'supStartBtn-${id}')" class="w-full px-4 py-3.5 bg-[#0A0A0A] hover:bg-[#222222] disabled:opacity-60 text-white text-sm font-bold rounded-xl transition min-h-[52px]">EN COURS DE LIVRAISON</button>`;
+  }
+  const why = !o.paymentConfirmed
+    ? 'Paiement client non confirmé : la livraison ne peut pas démarrer.'
+    : 'Commande non éligible à ce stade (' + esc(o.status || '—') + ').';
+  return `<div class="rounded-xl bg-[#F7FAF5] border border-[#DDE6DC] p-3 text-xs text-[#5F6B61]"><p class="font-bold text-[#0A0A0A] text-sm mb-1">En attente de livraison</p><p>${why}</p></div>`;
+}
+async function supRefreshCard(orderId) {
+  try { await renderCommandes(window._supFilter || 'all'); }
+  catch (e) { toast(e.message || 'Actualisation impossible', 'error'); }
+}
+/* Après une action : recharge la liste depuis le serveur ; si la modale de
+   la commande est ouverte (notification VOIR LA COMMANDE), rafraîchit la
+   zone livraison sur place sans rouvrir de fenêtre. */
+async function supAfterFlowChange(orderId) {
+  try { await renderCommandes(window._supFilter || 'all'); } catch (e) {}
+  if (window._supModalOrderId === orderId && document.getElementById('supFlowBox')) {
+    renderSupplierFlow(orderId);
+    renderSupplierFinance(orderId);
+  }
+}
+/* Zone LIVRAISON v2 : EN COURS DE LIVRAISON puis CONFIRMER LA COMMANDE.
+   Tout le calcul et toutes les vérifications sont côté serveur.
+   États serveur (GET /api/delivery-flow/state) :
+   Cas 1 paiement confirmé + non démarrée -> [ EN COURS DE LIVRAISON ]
+   Cas 2 démarrée + client non confirmé    -> attente client
+   Cas 3 client confirmé + non validée     -> [ CONFIRMER LA COMMANDE ]
+   Cas 4 validée + payout en cours        -> Règlement en cours...
+   Cas 5 payout COMPLETED/PAID            -> COMMANDE TERMINÉE + Fournisseur payé */
+async function renderSupplierFlow(orderId) {
+  const box = document.getElementById('supFlowBox');
+  if (!box) return;
+  box.innerHTML = '<p class="text-xs text-[#5F6B61]">Chargement livraison…</p>';
+  try {
+    const f = await flowApi('/state?orderId=' + orderId);
+    const step = (done, label) => `<div class="flex items-center gap-2 text-sm ${done ? 'text-[#123B16] font-bold' : 'text-[#5F6B61]'}"><i class="bi ${done ? 'bi-check-circle-fill' : 'bi-circle'}"></i><span>${label}</span></div>`;
+    const po = f.payout || {};
+    const poStatus = po.status || '';
+    const payoutDone = (poStatus === 'COMPLETED' || poStatus === 'PAID');
+    let action = '';
+    if (f.deliveryValidated && payoutDone) {
+      action = `<div class="rounded-2xl bg-[#123B16] text-white p-4 text-sm space-y-1" role="status"><p class="font-bold"><i class="bi bi-check-circle-fill mr-1"></i>✓ LIVRAISON TERMINÉE</p><p class="text-xs opacity-90">✓ Paiement fournisseur effectué${po.amount != null ? ' · ' + money(po.amount) : ''}${po.reference ? ' · ' + esc(po.reference) : ''}.</p></div>`;
+    } else if (f.deliveryValidated) {
+      action = `<div class="rounded-2xl bg-[#F7FAF5] border border-[#DDE6DC] p-4 text-sm space-y-1" role="status"><p class="font-bold text-[#123B16]"><i class="bi bi-check-circle-fill mr-1"></i>✓ LIVRAISON VALIDÉE</p><p class="text-xs text-[#5F6B61]">💰 Règlement fournisseur en cours${poStatus ? ' · Payout ' + esc(poStatus) : ' (PawaPay réconcilie automatiquement)'}.</p></div>`;
+    } else if (f.receiptConfirmed) {
+      action = `<div class="rounded-2xl bg-[#F7FAF5] border-2 border-[#B7F000] p-4 text-sm space-y-2" role="status"><p class="font-bold text-[#123B16]"><i class="bi bi-check-circle-fill mr-1"></i>✓ CLIENT AYANT CONFIRMÉ LA RÉCEPTION</p><p class="text-xs text-[#5F6B61]">Le client a confirmé avoir reçu sa commande. Confirmez que la livraison est terminée.</p><button id="supValidateBtn" onclick="supValidateDelivery(${f.orderId})" class="w-full px-4 py-3.5 bg-[#DC2626] hover:bg-[#B91C1C] disabled:opacity-60 text-white text-sm font-bold rounded-xl transition min-h-[52px]">CONFIRMER LA COMMANDE</button></div>`;
+    } else if (f.deliveryStarted) {
+      action = `<div class="rounded-2xl bg-[#F7FAF5] border border-[#DDE6DC] p-4 text-sm space-y-1" role="status"><p class="font-bold text-[#123B16]"><i class="bi bi-truck mr-1"></i>✓ EN COURS DE LIVRAISON</p><p class="text-xs text-[#5F6B61]">Le client a été informé. En attente de confirmation de réception.</p></div>`;
+    } else if (f.orderStatus === 'ANNULEE') {
+      action = `<p class="text-xs text-[#DC2626] font-semibold">Commande annulée — aucune action possible.</p>`;
+    } else if (f.paymentConfirmed && ['CONFIRMEE','EN_PREPARATION','EN_LIVRAISON'].includes(f.orderStatus)) {
+      action = `<button id="supStartBtn" onclick="supStartDelivery(${f.orderId})" class="w-full px-4 py-3.5 bg-[#0A0A0A] hover:bg-[#123B16] disabled:opacity-60 text-white text-sm font-bold rounded-xl transition min-h-[52px]"><i class="bi bi-truck mr-1"></i>EN COURS DE LIVRAISON</button><p class="text-[11px] text-[#5F6B61] text-center">Le client sera informé que vous êtes en route.</p>`;
+    } else {
+      const why = !f.paymentConfirmed
+        ? 'Paiement client non confirmé : la livraison ne peut pas démarrer.'
+        : 'Commande non éligible à ce stade (' + esc(f.orderStatus || '—') + ').';
+      action = `<div class="rounded-xl bg-[#F7FAF5] border border-[#DDE6DC] p-3 text-xs text-[#5F6B61]"><p class="font-bold text-[#123B16] text-sm mb-1">Livraison indisponible pour le moment</p><p>${why}</p><p class="mt-1">État actuel : ${esc(f.orderStatus || '—')} · Paiement ${f.paymentConfirmed ? 'confirmé' : 'non confirmé'}.</p></div>`;
+    }
+    box.innerHTML = `<div class="rounded-2xl border-2 border-[#0A0A0A] bg-[#FFFFFF] p-4 space-y-2">
+      <p class="text-xs font-bold uppercase tracking-wider text-[#0A0A0A]">Livraison${f.trackingNumber ? ' · <span class="font-mono">' + esc(f.trackingNumber) + '</span>' : ''}</p>
+      <p class="text-xs text-[#5F6B61]">État actuel : <strong class="text-[#123B16]">${f.deliveryValidated && payoutDone ? 'Commande terminée' : f.deliveryValidated ? 'Livraison validée — règlement en cours' : f.receiptConfirmed ? 'Réception confirmée — à valider' : f.deliveryStarted ? 'En cours de livraison' : 'Non démarrée'}</strong></p>
+      ${step(f.deliveryStarted, 'En cours de livraison (vous êtes en route)')}
+      ${step(f.receiptConfirmed, 'Client a reçu le colis (confirmé par le client)')}
+      ${step(f.deliveryValidated, 'Livraison validée (règlement lancé)')}
+      ${payoutDone ? step(true, 'Payout PawaPay effectué') : ''}
+      <div class="pt-1">${action}</div>
+    </div>`;
+  } catch (e) { box.innerHTML = '<p class="text-xs text-[#DC2626]">Livraison illisible : ' + esc(supFlowErrorMessage(e)) + ' <button onclick="renderSupplierFlow(' + orderId + ')" class="underline font-bold">Réessayer</button></p>'; }
+}
+if (typeof window !== 'undefined') window._supFlowBusy = false;
+async function supStartDelivery(orderId, btnId) {
+  if (window._supFlowBusy) return;
+  window._supFlowBusy = true;
+  const btn = document.getElementById(btnId || 'supStartBtn');
+  const prev = btn ? btn.innerHTML : '';
+  if (btn) { btn.disabled = true; btn.textContent = 'DÉMARRAGE DE LA LIVRAISON...'; }
+  try {
+    await flowApi('/start-delivery', {method:'POST', body: JSON.stringify({orderId})});
+    toast('✓ LIVRAISON EN COURS — Le client a été informé que votre commande est en cours de livraison.');
+    await supAfterFlowChange(orderId);
+  } catch (e) { toast(supFlowErrorMessage(e, 'Impossible de démarrer la livraison. Le paiement n\u2019est pas confirmé.'), 'error'); if (btn) { btn.disabled = false; btn.innerHTML = prev || 'EN COURS DE LIVRAISON'; } }
+  finally { window._supFlowBusy = false; }
+}
+async function supValidateDelivery(orderId, btnId) {
+  if (window._supFlowBusy) return;
+  window._supFlowBusy = true;
+  const btn = document.getElementById(btnId || 'supValidateBtn');
+  const prev = btn ? btn.innerHTML : '';
+  if (btn) { btn.disabled = true; btn.textContent = 'VALIDATION EN COURS...'; }
+  try {
+    const f = await flowApi('/validate-delivery', {method:'POST', body: JSON.stringify({orderId})});
+    if (f && f.payoutOutcome === 'BLOCKED') {
+      toast('✓ LIVRAISON VALIDÉE — règlement à compléter : ' + (f.payoutDetail || 'vérifiez le téléphone payout de la boutique.'), 'info');
+    } else {
+      toast('✓ LIVRAISON VALIDÉE — Le règlement du fournisseur est en cours.');
+    }
+    await supAfterFlowChange(orderId);
+  } catch (e) {
+    let msg = supFlowErrorMessage(e, 'Impossible de valider la livraison.');
+    if (e && e.status === 400 && /réception/i.test(e.message || '')) msg = 'Impossible de valider la livraison. Le client doit d\u2019abord confirmer la réception de la commande.';
+    if (e && e.status === 409) msg = e.message || 'Le règlement est déjà en cours.';
+    toast(msg, 'error');
+    if (btn) { btn.disabled = false; btn.innerHTML = prev || 'COMMANDE LIVRÉE'; }
+  }
+  finally { window._supFlowBusy = false; }
+}
+/* Finance commande : montants 100 % serveur (brut, commission 1 %, frais, net, payout). */
+async function renderSupplierFinance(orderId) {
+  const box = document.getElementById('supFinanceBox');
   if (!box) return;
   try {
-    const d = await api('/shipments/order/' + orderId);
-    const s = d && d.shipment;
-    if (!s) {
-      box.innerHTML = `<button onclick="createShipment(${orderId})" class="w-full py-2.5 border border-dashed border-primary-300 text-[#4D7C0F] text-sm font-bold rounded-xl hover:bg-primary-50 transition"><i class="bi bi-truck"></i> Créer l'expédition</button>`;
-      return;
-    }
-    const nexts = SHIP_NEXT[s.status] || [];
-    box.innerHTML = `<div class="rounded-xl border border-[#DDE6DC] bg-[#FFFFFF]/70 p-3 text-sm space-y-2">
-      <div class="flex items-center justify-between gap-2">
-        <p class="font-mono font-bold text-[#4D7C0F]">${esc(s.trackingNumber)}</p>
-        <span class="badge ${s.status==='DELIVERED'?'bg-[#123B16] text-white':['FAILED','RETURNED','CANCELLED'].includes(s.status)?'bg-[#DC2626] text-white':'bg-[#DDE6DC] text-[#123B16]'}">${SHIP_LABEL[s.status]||s.status}</span>
-      </div>
-      ${nexts.length ? `<div class="flex flex-wrap gap-2">${nexts.map(n => `<button onclick="advanceShipment(${s.id},'${n}')" class="px-3 py-1.5 bg-[#B7F000] hover:bg-[#C8FF1A] text-[#0B2410] text-xs font-bold rounded-lg transition">→ ${SHIP_LABEL[n]}</button>`).join('')}
-      ${['IN_TRANSIT','OUT_FOR_DELIVERY','PICKED_UP'].includes(s.status) ? `<button onclick="failShipment(${s.id})" class="px-3 py-1.5 border border-[rgba(220,38,38,0.35)] text-[#DC2626] text-xs font-bold rounded-lg hover:bg-[rgba(183,240,0,0.12)] transition">Échec</button>` : ''}</div>` : ''}
+    const f = (await api('/orders/' + orderId + '/finance')).data;
+    const led = (f && f.ledger) || [];
+    const sale = led.find(e => e.kind === 'SALE') || {};
+    const po = (f && f.payout) || null;
+    const moneyState = (v) => (v === null || v === undefined) ? '—' : money(v);
+    const payoutState = !po ? '<span class="badge bg-[#DDE6DC] text-[#123B16]">En attente de confirmation client</span>'
+      : (po.status === 'COMPLETED' || po.status === 'PAID') ? '<span class="badge bg-[#123B16] text-white">Payout effectué</span>'
+      : (po.status === 'FAILED' || po.status === 'CANCELLED') ? '<span class="badge bg-[#DC2626] text-white">Payout ' + esc(po.status) + '</span>'
+      : '<span class="badge bg-[#B7F000] text-[#0A0A0A]">Payout ' + esc(po.status) + '</span>';
+    box.innerHTML = `<div class="rounded-xl border border-[#DDE6DC] bg-[#FFFFFF]/70 p-3 text-sm space-y-1.5">
+      <p class="text-xs font-bold uppercase tracking-wider text-[#5F6B61]">Finance (calcul serveur)</p>
+      <div class="flex justify-between"><span class="text-[#5F6B61]">Vente brute</span><strong class="tabular-nums">${money(f.orderTotal || 0)}</strong></div>
+      <div class="flex justify-between"><span class="text-[#5F6B61]">Commission BAZAAR 1 %</span><strong class="tabular-nums">${moneyState(sale.commission)}</strong></div>
+      <div class="flex justify-between"><span class="text-[#5F6B61]">Frais PawaPay payout</span><strong class="tabular-nums">${moneyState(po ? po.pawapayFee : sale.fixedFee)}</strong></div>
+      <div class="flex justify-between border-t border-[#DDE6DC] pt-1.5"><span class="font-bold">Net fournisseur</span><strong class="tabular-nums text-[#4D7C0F]">${moneyState(po ? po.amount : sale.supplierEarnings)}</strong></div>
+      <div class="flex items-center justify-between pt-1"><span class="text-xs text-[#5F6B61]">Payout${po && po.reference ? ' · ' + esc(po.reference) : ''}</span>${payoutState}</div>
+      ${po && po.failureReason ? `<p class="text-xs text-[#DC2626]">${esc(po.failureReason)}</p>` : ''}
     </div>`;
-  } catch (e) { box.innerHTML = '<p class="text-xs text-[#DC2626]">Livraison illisible.</p>'; }
+  } catch (e) { box.innerHTML = '<p class="text-xs text-[#DC2626]">Finance illisible.</p>'; }
 }
-async function createShipment(orderId) {
-  try { await api('/shipments', { method: 'POST', body: JSON.stringify({ orderId }) }); toast('Expédition créée'); openOrderModal(orderId); } catch (e) { toast(e.message, 'error'); }
-}
-async function advanceShipment(id, status) {
-  try { await api('/shipments/' + id + '/status', { method: 'PATCH', body: JSON.stringify({ status }) }); toast('Expédition mise à jour'); const m = document.getElementById('supShipBox'); if (m) { const oid = currentShipOrder(); if (oid) openOrderModal(oid); } } catch (e) { toast(e.message, 'error'); }
-}
-function currentShipOrder() { return window._shipOrderId || 0; }
-async function failShipment(id) {
-  const reason = prompt('Motif de l\u2019échec (client absent, adresse incorrecte…) :') || 'Échec de livraison';
-  try { await api('/shipments/' + id + '/status', { method: 'PATCH', body: JSON.stringify({ status: 'FAILED', reason }) }); toast('Signalé', 'info'); const oid = currentShipOrder(); if (oid) openOrderModal(oid); } catch (e) { toast(e.message, 'error'); }
-}
-async function updateOrderStatus(id){
-  const status=document.getElementById('orderStatus').value;
-  try{ await api('/orders/'+id+'/status',{method:'PATCH',body:JSON.stringify({status})}); closeModal(); renderCommandes(); toast('Statut mis à jour'); }catch(e){ toast(e.message,'error'); }
-}
+/* Ancien système multi-statuts supprimé (workflow v2 : EN COURS DE
+   LIVRAISON -> COMMANDE REÇUE -> COMMANDE LIVRÉE).
+   Le suivi interne (tracking) reste visible en lecture seule dans la
+   zone LIVRAISON ci-dessus ; les transitions serveur historiques
+   (PATCH /api/shipments) ne sont plus appelées par cette interface. */
 
 /* ==================== REVENUS ==================== */
 async function renderRevenus(){
@@ -1004,7 +1593,7 @@ async function renderRevenus(){
         <h3 class="font-bold text-[#123B16] mb-3">Détail du CA</h3>
         <div class="space-y-3">
           <div class="flex justify-between border-b pb-2"><span class="text-[#5F6B61]">CA brut (total)</span><span class="font-semibold">${money(r.grossTotal)}</span></div>
-          <div class="flex justify-between border-b pb-2"><span class="text-[#5F6B61]">Commission MBOA STYLE (${r.commissionRate}%)</span><span class="text-[#DC2626] font-semibold">- ${money(r.commissionTotal)}</span></div>
+          <div class="flex justify-between border-b pb-2"><span class="text-[#5F6B61]">Commission BAZAAR (${r.commissionRate}%)</span><span class="text-[#DC2626] font-semibold">- ${money(r.commissionTotal)}</span></div>
           <div class="flex justify-between border-b pb-2"><span class="text-[#5F6B61]">Autres frais</span><span class="text-[#DC2626] font-semibold">- ${money(r.otherFees)}</span></div>
           <div class="flex justify-between pt-2"><span class="font-bold">Revenu net total</span><span class="font-bold text-[#123B16] text-lg">${money(r.netTotal)}</span></div>
         </div>
@@ -1063,205 +1652,418 @@ async function renderStatistiques(){
 }
 
 /* ==================== PAIEMENTS ==================== */
-async function renderPaiements(){
-  const content=document.getElementById('mainContent');
-  content.innerHTML='<div class="skeleton h-40"></div>';
-  try{
-    const p=(await api('/payments')).data;
-    content.innerHTML=`
-      <div class="grid-cards mb-6">
-        <div class="card p-5"><p class="text-xs text-[#5F6B61]">Solde disponible</p><p class="text-2xl font-bold mt-1 text-[#123B16]">${money(p.available)}</p></div>
-        <div class="card p-5"><p class="text-xs text-[#5F6B61]">En attente</p><p class="text-2xl font-bold mt-1 text-[#123B16]">${money(p.pending)}</p></div>
-        <div class="card p-5"><p class="text-xs text-[#5F6B61]">Déjà payé</p><p class="text-2xl font-bold mt-1 text-[#123B16]">${money(p.paid)}</p></div>
-        <div class="card p-5"><p class="text-xs text-[#5F6B61]">Solde total</p><p class="text-2xl font-bold mt-1">${money(p.balance)}</p></div>
-      </div>
-      <div class="card p-5 mb-6 flex flex-wrap items-center justify-between gap-3">
-        <div><h3 class="font-bold">Demander un paiement</h3><p class="text-xs text-[#5F6B61]">Minimal : <b>${money(1000)}</b> · Disponible : <b>${money(p.available)}</b></p></div>
-        <div class="flex gap-2">
-          <input id="payAmount" type="number" min="1000" class="input w-40" placeholder="Montant">
-          <select id="payMethod" class="select">
-            <option value="MOBILE_MONEY_MTN">Mobile Money MTN</option>
-            <option value="MOBILE_MONEY_ORANGE">Mobile Money Orange</option>
-            <option value="CART_BANCAIRE">Carte bancaire</option>
-          </select>
-          <button class="btn btn-primary" onclick="requestPayment()">Demander</button>
-        </div>
-      </div>
-      <div class="card overflow-hidden">
-        <h3 class="font-semibold p-4 border-b">Historique des paiements</h3>
-        <table class="table"><thead><tr><th>Date</th><th>Référence</th><th>Montant</th><th>Méthode</th><th>Statut</th></tr></thead><tbody>
-          ${(p.history||[]).map(h=>`<tr><td>${fmtDate(h.createdAt)}</td><td>${esc(h.reference)}</td><td class="font-semibold">${money(h.amount)}</td><td>${esc(h.method||'—')}</td><td>${payStatus(h.status)}</td></tr>`).join('')||'<tr><td colspan="5">'+emptyState('Aucun paiement')+'</td></tr>'}
-        </tbody></table>
-      </div>`;
-  }catch(e){ content.innerHTML=emptyState('Erreur: '+e.message); }
+/* ============ NUMÉROS DE VERSEMENT MTN + ORANGE ============
+   Règle : payout vers le numéro du MÊME opérateur que le dépôt client.
+   Les deux numéros sont exigés ensemble, chacun retapé à l'identique
+   (confirmation anti-erreur, vérifiée aussi côté serveur). */
+/* Expéditions : base /api/shipments (Bearer fournisseur).
+   /api/supplier/shipments n'existe pas (404) : ne pas utiliser api(). */
+async function shipApi(path, opts={}) {
+  const headers = Object.assign({'Content-Type':'application/json'}, opts.headers||{});
+  if (TOKEN) headers['Authorization'] = 'Bearer ' + TOKEN;
+  const res = await fetch(SUP_BASE + '/api/shipments' + path, Object.assign({}, opts, {headers}));
+  if (res.status === 401) { forceLogout(); throw new Error('Session expirée'); }
+  let data = {};
+  try { data = await res.json(); } catch(e) {}
+  if (!res.ok) throw new Error((data && (data.message || data.error)) || 'Erreur (' + res.status + ')');
+  return data;
 }
-function payStatus(s){ const m={PENDING:'bg-[#B7F000] text-[#0B2410]',PROCESSING:'bg-[#DDE6DC] text-[#123B16]',PAID:'bg-[#123B16] text-white',FAILED:'bg-[#DC2626] text-white'}; return '<span class="status-chip '+(m[s]||'')+'">'+(s||'—')+'</span>'; }
-async function requestPayment(){
-  const amount=parseInt(document.getElementById('payAmount').value)||0;
-  const method=document.getElementById('payMethod').value;
-  if(amount<1000){ toast('Montant minimum 1000 FCFA','error'); return; }
-  try{ await api('/payments/request',{method:'POST',body:JSON.stringify({amount,method})}); renderPaiements(); toast('Demande de paiement envoyée'); }catch(e){ toast(e.message,'error'); }
+async function payoutApi(path, opts={}) {
+  const headers = Object.assign({'Content-Type':'application/json'}, opts.headers||{});
+  if (TOKEN) headers['Authorization'] = 'Bearer ' + TOKEN;
+  const res = await fetch(SUP_BASE + '/api/payouts' + path, Object.assign({}, opts, {headers}));
+  if (res.status === 401) { forceLogout(); throw new Error('Session expirée'); }
+  let data = {};
+  try { data = await res.json(); } catch(e) {}
+  if (!res.ok) throw new Error((data && (data.message || data.error)) || 'Erreur (' + res.status + ')');
+  return data && data.data !== undefined ? data.data : data;
+}
+async function payoutPhonesStatus() {
+  try {
+    const d = await payoutApi('/my');
+    return (d && d.settings) || {};
+  } catch(e) { return {}; }
+}
+/* Après authentification : si numéros manquants, écran de saisie bloquant. */
+async function ensurePayoutPhones() {
+  const st = await payoutPhonesStatus();
+  if (st.mtnConfigured && st.orangeConfigured) return true;
+  openModal(`
+    <div class="p-6">
+      <div class="flex items-center gap-3 mb-2">
+        <img src="logo/BAZAAR.png" alt="BAZAAR" class="h-8 w-auto">
+        <h3 class="text-lg font-bold">Vos numéros de versement</h3>
+      </div>
+      <p class="text-sm text-[#5F6B61] mb-4">Pour recevoir votre argent : si un client paie avec <b>MTN</b>, BAZAAR verse sur votre numéro <b>MTN</b> ; s'il paie avec <b>Orange</b>, sur votre numéro <b>Orange</b>. Retapez chaque numéro à l'identique pour valider.</p>
+      <div class="space-y-3">
+        <div>
+          <label class="block text-sm font-semibold text-[#123B16] mb-1">Numéro MTN Mobile Money *</label>
+          <input id="obMtn" type="tel" inputmode="numeric" placeholder="Ex : 690123456" class="w-full px-4 py-2.5 rounded-xl border border-[#DDE6DC] text-sm">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-[#123B16] mb-1">Confirmez le numéro MTN *</label>
+          <input id="obMtn2" type="tel" inputmode="numeric" placeholder="Retapez le même numéro" class="w-full px-4 py-2.5 rounded-xl border border-[#DDE6DC] text-sm">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-[#123B16] mb-1">Numéro Orange Money *</label>
+          <input id="obOrange" type="tel" inputmode="numeric" placeholder="Ex : 655123456" class="w-full px-4 py-2.5 rounded-xl border border-[#DDE6DC] text-sm">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-[#123B16] mb-1">Confirmez le numéro Orange *</label>
+          <input id="obOrange2" type="tel" inputmode="numeric" placeholder="Retapez le même numéro" class="w-full px-4 py-2.5 rounded-xl border border-[#DDE6DC] text-sm">
+        </div>
+        <p id="obErr" class="hidden text-sm text-[#DC2626]"></p>
+        <button onclick="saveOnboardingPhones()" id="obBtn" class="btn btn-primary w-full justify-center">Enregistrer mes numéros</button>
+        <p class="text-[11px] text-[#5F6B61]">Modifiables à tout moment dans Mon profil. Sans ces numéros, aucun versement ne peut partir.</p>
+      </div>
+    </div>`);
+  return false;
+}
+function obError(msg) {
+  const el = document.getElementById('obErr');
+  if (!el) return;
+  if (!msg) { el.classList.add('hidden'); el.textContent = ''; return; }
+  el.textContent = msg;
+  el.classList.remove('hidden');
+}
+async function saveOnboardingPhones() {
+  const g = id => (document.getElementById(id).value || '').trim();
+  const mtn = g('obMtn'), mtn2 = g('obMtn2'), orange = g('obOrange'), orange2 = g('obOrange2');
+  if (!mtn || mtn !== mtn2) { obError('Les deux numéros MTN doivent être identiques.'); return; }
+  if (!orange || orange !== orange2) { obError('Les deux numéros Orange doivent être identiques.'); return; }
+  if (mtn === orange) { obError('Les numéros MTN et Orange doivent être différents.'); return; }
+  obError('');
+  const btn = document.getElementById('obBtn');
+  btn.disabled = true;
+  try {
+    await payoutApi('/settings', { method: 'PUT', body: JSON.stringify({ mtnPhone: mtn, mtnPhoneConfirm: mtn2, orangePhone: orange, orangePhoneConfirm: orange2 }) });
+    closeModal();
+    toast('Numéros enregistrés, vos versements sont activés');
+  } catch (e) { obError(e.message); }
+  finally { btn.disabled = false; }
 }
 
-/* ==================== MESSAGES ==================== */
-let convos=[], currentConvo=null;
+/* ==================== MESSAGES (même UX que la messagerie index.html) ==================== */
+let convos=[], currentConvo=null, supSending=false;
+function supAvatar(name){ const n=String(name||'?').trim(); return (n.charAt(0)||'?').toUpperCase(); }
 async function renderMessages(){
   const content=document.getElementById('mainContent');
-  content.innerHTML=`<div class="card h-[75vh] flex overflow-hidden">
-    <div class="w-72 border-r shrink-0 flex flex-col">
-      <div class="p-3 border-b"><input id="convSearch" class="input" placeholder="Rechercher..." oninput="filterConvos(this.value)"></div>
-      <div id="convosList" class="flex-1 overflow-auto"></div>
-    </div>
-    <div id="chatPanel" class="flex-1 flex flex-col">
-      <div class="p-3 border-b flex items-center gap-3" id="chatHeader"><p class="text-[#5F6B61] text-sm">Sélectionnez une conversation</p></div>
-      <div id="chatMessages" class="flex-1 overflow-auto p-4 chat-body bg-[#FFFFFF]"></div>
-      <div class="p-3 border-t flex gap-2" id="chatInputWrap">
-        <textarea id="chatInput" class="input flex-1 h-10" placeholder="Votre message..."></textarea>
-        <button class="btn btn-primary" onclick="sendMessage()"><i class="bi bi-send"></i></button>
+  // Plein espace : pas de marges internes, hauteur = viewport - en-tête.
+  const hdr=document.querySelector('#appView header');
+  const top=(hdr?hdr.offsetHeight:61);
+  content.style.padding='0';
+  content.style.height='calc(100vh - '+top+'px)';
+  content.style.overflow='hidden';
+  content.innerHTML=`<div class="flex h-full min-h-0 w-full bg-[#FFFFFF]">
+    <aside id="sup-list-pane" class="w-full md:w-80 shrink-0 bg-[#FFFFFF] border-r border-[#DDE6DC] flex flex-col min-h-0">
+      <div class="p-3 border-b border-[#DDE6DC]">
+        <div class="relative">
+          <i class="bi bi-search absolute left-4 top-1/2 -translate-y-1/2 text-[#5F6B61] text-sm"></i>
+          <input type="search" id="convSearch" placeholder="Rechercher une conversation..." aria-label="Rechercher une conversation" oninput="filterConvos(this.value)" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#DDE6DC] text-sm focus:border-primary-500 outline-none">
+        </div>
       </div>
-    </div>
+      <div id="convosList" class="flex-1 overflow-y-auto p-2 space-y-0.5"></div>
+    </aside>
+    <main id="sup-chat-pane" class="flex-1 hidden md:flex flex-col min-w-0 min-h-0">
+      <div id="sup-empty" class="flex-1 flex flex-col items-center justify-center text-center p-8">
+        <img src="logo/BAZAAR.png" alt="BAZAAR" class="h-10 w-auto mb-4 opacity-90">
+        <p class="font-bold text-xl text-[#123B16]">Sélectionnez une conversation</p>
+        <p class="text-sm text-[#5F6B61] mt-2 max-w-sm">Répondez directement à vos clients à propos de leurs commandes et produits.</p>
+      </div>
+      <div id="sup-active" class="hidden flex-1 flex-col min-h-0">
+        <div class="px-3 sm:px-4 py-2.5 bg-[#FFFFFF] border-b border-[#DDE6DC] shrink-0">
+          <div class="flex items-center gap-3">
+            <button onclick="supBackToList()" class="md:hidden w-9 h-9 rounded-full hover:bg-[#F7FAF5] flex items-center justify-center" aria-label="Retour aux conversations"><i class="bi bi-arrow-left"></i></button>
+            <span id="sup-avatar" class="w-10 h-10 rounded-full bg-[#B7F000] text-[#0A0A0A] font-bold flex items-center justify-center shrink-0">?</span>
+            <div class="min-w-0 flex-1">
+              <p id="sup-client" class="font-bold text-sm truncate">—</p>
+              <p id="sup-sub" class="text-[11px] text-[#5F6B61] truncate">—</p>
+            </div>
+          </div>
+          <div id="sup-product" class="mt-2"></div>
+        </div>
+        <div id="chatMessages" class="flex-1 overflow-y-auto px-3 sm:px-5 py-4 space-y-2 bg-[#F7FAF5]" aria-live="polite"></div>
+        <div class="p-3 sm:p-4 bg-[#FFFFFF] border-t border-[#DDE6DC] shrink-0" id="chatInputWrap">
+          <div class="flex items-end gap-2 max-w-3xl mx-auto">
+            <textarea id="chatInput" rows="1" maxlength="2000" placeholder="Écrire un message..." aria-label="Écrire un message" oninput="this.style.height='auto';this.style.height=Math.min(128,this.scrollHeight)+'px'" class="flex-1 px-4 py-3 rounded-2xl border border-[#DDE6DC] text-sm resize-none focus:border-primary-500 outline-none max-h-32"></textarea>
+            <button onclick="sendMessage()" aria-label="Envoyer" class="w-12 h-12 rounded-2xl bg-[#123B16] hover:bg-[#0B2410] text-white flex items-center justify-center shrink-0 transition"><i class="bi bi-send-fill"></i></button>
+          </div>
+          <p class="text-[11px] text-[#5F6B61] text-center mt-1.5">Entrée pour envoyer · Maj+Entrée pour une nouvelle ligne</p>
+        </div>
+      </div>
+    </main>
   </div>`;
-  document.getElementById('chatInput').disabled=true;
-  document.getElementById('chatInputWrap').style.opacity='0.4';
-  loadConvos();
+  await loadConvos();
+  if (window.innerWidth >= 768 && convos.length) {
+    const again = currentConvo && convos.some(c=>c.id===currentConvo.id) ? currentConvo.id : (!currentConvo ? convos[0].id : 0);
+    if (again) openConvo(again);
+  }
+}
+function supBackToList(){
+  document.getElementById('sup-active').classList.add('hidden');
+  document.getElementById('sup-active').classList.remove('flex');
+  document.getElementById('sup-chat-pane').classList.add('hidden');
+  document.getElementById('sup-chat-pane').classList.remove('flex');
+  document.getElementById('sup-list-pane').classList.remove('hidden');
 }
 async function loadConvos(){
-  try{ convos=(await api('/conversations')).data; filterConvos(''); }catch(e){ toast(e.message,'error'); }
+  try{
+    const res=await api('/conversations');
+    convos=Array.isArray(res.data)?res.data:[];
+    filterConvos((document.getElementById('convSearch')||{}).value||'');
+  }catch(e){ toast(e.message,'error'); }
 }
 function filterConvos(q){
-  const list=convos.filter(c=>(c.clientName||'').toLowerCase().includes((q||'').toLowerCase()));
-  document.getElementById('convosList').innerHTML = list.length?list.map(c=>`
-    <div class="convo-list-item ${currentConvo&&currentConvo.id===c.id?'active':''}" onclick="openConvo(${c.id})">
-      <div class="w-10 h-10 rounded-full bg-primary-100 text-[#4D7C0F] flex items-center justify-center shrink-0"><i class="bi bi-person-fill"></i></div>
-      <div class="min-w-0 flex-1">
-        <div class="flex justify-between"><p class="font-semibold text-sm truncate">${esc(c.clientName||'Client')}</p>${c.unreadCount>0?'<span class="badge bg-[#B7F000] text-[#0B2410]">'+c.unreadCount+'</span>':''}</div>
-        <p class="text-xs text-[#5F6B61] truncate">${esc(c.lastMessage||'')}</p>
-      </div>
-    </div>`).join(''):'<p class="text-center text-[#5F6B61] text-sm p-4">Aucune conversation</p>';
+  q=(q||'').trim().toLowerCase();
+  const box=document.getElementById('convosList');
+  if(!box) return;
+  const rows=convos.filter(c=>{
+    if(!q) return true;
+    return String(c.clientName||'').toLowerCase().includes(q)
+      || String(c.lastMessage||'').toLowerCase().includes(q);
+  });
+  if(!rows.length){
+    box.innerHTML='<div class="p-6 text-center"><p class="font-bold text-sm">Aucune conversation</p><p class="text-xs text-[#5F6B61] mt-1">'
+      + (q?'Aucun résultat pour cette recherche.':'Les clients qui vous contactent apparaîtront ici.') + '</p></div>';
+    return;
+  }
+  box.innerHTML=rows.map(c=>{
+    const name=c.clientName||'Client';
+    const active=currentConvo&&currentConvo.id===c.id;
+    return `<button onclick="openConvo(${c.id})" class="w-full flex items-center gap-3 px-3 py-3 rounded-2xl text-left transition ${active?'bg-primary-50':'hover:bg-[#F7FAF5]'}">
+      <span class="w-11 h-11 rounded-full ${active?'bg-[#123B16] text-white':'bg-[#B7F000] text-[#0A0A0A]'} font-bold flex items-center justify-center shrink-0">${esc(supAvatar(name))}</span>
+      <span class="min-w-0 flex-1">
+        <span class="flex items-baseline justify-between gap-2">
+          <span class="text-sm font-bold truncate">${esc(name)}</span>
+          <span class="text-[11px] text-[#5F6B61] shrink-0">${esc(fmtTime(c.lastMessageAt))}</span>
+        </span>
+        <span class="flex items-center justify-between gap-2">
+          <span class="text-xs text-[#5F6B61] truncate">${esc((c.lastMessage||'').slice(0,60))}</span>
+          ${(c.unreadCount>0)?`<span class="min-w-5 h-5 px-1.5 bg-[#B7F000] text-[#0A0A0A] text-[10px] font-bold rounded-full flex items-center justify-center shrink-0">${c.unreadCount}</span>`:''}
+        </span>
+      </span>
+    </button>`;
+  }).join('');
 }
 function escMsg(m){ return esc(m).replace(/\n/g,'<br>'); }
 async function openConvo(id){
   try{
     const d=(await api('/conversations/'+id)).data;
     currentConvo=d.conversation;
-    await api('/conversations/'+id+'/read',{method:'PATCH'});
-    document.getElementById('chatHeader').innerHTML=`<div class="w-9 h-9 rounded-full bg-primary-100 text-[#4D7C0F] flex items-center justify-center"><i class="bi bi-person-fill"></i></div><div><p class="font-semibold">${esc(currentConvo.clientName||'Client')}</p><p class="text-xs text-[#5F6B61]">${esc(currentConvo.clientPhone||'')}${currentConvo.orderId?' · Commande #'+currentConvo.orderId:''}</p></div>`;
-    document.getElementById('chatInputWrap').style.opacity='1';
-    renderMessagesList(d.messages);
-    renderSupplierOffers(d.offers||[], d.conversation);
-    document.getElementById('chatInput').disabled=false;
-    document.getElementById('chatInputWrap').style.opacity='1';
+    currentConvoLastId=0;
+    filterConvos((document.getElementById('convSearch')||{}).value||'');
+    const pane=document.getElementById('sup-chat-pane');
+    if(pane){ pane.classList.remove('hidden'); pane.classList.add('flex'); }
+    document.getElementById('sup-empty').classList.add('hidden');
+    const act=document.getElementById('sup-active');
+    act.classList.remove('hidden'); act.classList.add('flex');
+    if(window.innerWidth<768) document.getElementById('sup-list-pane').classList.add('hidden');
+    const name=currentConvo.clientName||'Client';
+    document.getElementById('sup-avatar').textContent=supAvatar(name);
+    document.getElementById('sup-client').textContent=name;
+    document.getElementById('sup-sub').textContent=(currentConvo.clientPhone||'')
+      + (d.orderNumber?' · Commande '+d.orderNumber:(currentConvo.orderId?' · Commande #'+currentConvo.orderId:''));
+    const prod=d.product||null;
+    const pbox=document.getElementById('sup-product');
+    if(prod&&prod.id){
+      pbox.innerHTML=`<div class="w-full flex items-center gap-3 p-2 rounded-2xl border border-[#DDE6DC] bg-[#F7FAF5] text-left">`
+        + (prod.image?`<img src="${esc(prod.image)}" alt="" class="w-11 h-11 rounded-xl object-cover shrink-0">`:`<span class="w-11 h-11 rounded-xl bg-[#DDE6DC] flex items-center justify-center shrink-0"><i class="bi bi-image text-[#5F6B61]"></i></span>`)
+        + `<span class="min-w-0 flex-1"><span class="block text-xs font-bold truncate">${esc(prod.name||'')}</span>`
+        + `<span class="block text-xs text-[#4D7C0F] font-bold tabular-nums">${(prod.price||0).toLocaleString('fr-FR')} FCFA</span></span>`
+        + (d.orderNumber?`<span class="text-[10px] font-mono text-[#5F6B61] shrink-0">${esc(d.orderNumber)}</span>`:'') + `</div>`;
+    } else if(d.orderNumber){
+      pbox.innerHTML=`<p class="text-[11px] text-[#5F6B61] font-mono">Commande ${esc(d.orderNumber)}</p>`;
+    } else pbox.innerHTML='';
+    document.getElementById('chatMessages').innerHTML='<p class="text-sm text-[#5F6B61] text-center py-8">Chargement…</p>';
+    renderMessagesList(d.messages||[]);
+    supScrollBottom();
+    try{ await api('/conversations/'+id+'/read',{method:'PATCH'}); }catch(e){}
     loadConvos();
+    if(typeof refreshBadges==='function') refreshBadges();
+    startConvoPoll();
   }catch(e){ toast(e.message,'error'); }
 }
-function offerBadgeSup(s){
-  const m={PENDING:['bg-[#B7F000] text-[#0B2410]','En attente'],ACCEPTED:['bg-[#123B16] text-white','Acceptée'],REJECTED:['bg-[#DC2626] text-white','Refusée'],COUNTERED:['bg-[#B7F000] text-[#0B2410]','Contre-offrée'],CONSUMED:['bg-[#123B16] text-white','Commandée'],CANCELLED:['bg-[#F7FAF5] text-[#5F6B61] border border-[#DDE6DC]','Annulée']};
-  const v=m[s]||m.PENDING; return `<span class="badge ${v[0]}">${v[1]}</span>`;
+/* Polling de la conversation ouverte (10 s, comme côté boutique). */
+let convoPollTimer=null, currentConvoLastId=0;
+function startConvoPoll(){
+  stopConvoPoll();
+  convoPollTimer=setInterval(async ()=>{
+    try{
+      if(!currentConvo||!currentConvo.id||document.hidden) return;
+      if(currentView!=='messages'||!document.getElementById('chatMessages')) return;
+      const d=(await api('/conversations/'+currentConvo.id)).data;
+      const msgs=(d&&d.messages)||[];
+      if(!msgs.length) return;
+      const fresh=msgs.filter(m=>m.id>currentConvoLastId);
+      if(fresh.length){ renderMessagesList(msgs); supScrollBottom(); loadConvos(); }
+    }catch(e){}
+  },10000);
 }
-function renderSupplierOffers(offers, conv){
-  let box=document.getElementById('supplierOffers');
-  if(!box){
-    const panel=document.getElementById('chatPanel');
-    box=document.createElement('div');
-    box.id='supplierOffers';
-    box.className='px-4 py-2 space-y-2 max-h-64 overflow-y-auto border-t border-[#DDE6DC] bg-[rgba(183,240,0,0.04)]';
-    panel.insertBefore(box, document.getElementById('chatInputWrap'));
-  }
-  if(!offers.length){ box.innerHTML=''; box.style.display='none'; return; }
-  box.style.display='';
-  box.innerHTML='<p class="text-[11px] font-bold uppercase tracking-wider text-[#4D7C0F]">Négociations</p>'+offers.map(o=>{
-    const mine=o.createdBy==='SUPPLIER';
-    const pending=o.status==='PENDING'&&!mine;
-    return `<div class="bg-[#FFFFFF] border ${o.status==='ACCEPTED'?'border-[#123B16]':'border-[rgba(183,240,0,0.35)]'} rounded-xl p-3">
-      <div class="flex items-center justify-between gap-2 mb-1">
-        <p class="text-[11px] font-bold uppercase tracking-wider text-[#4D7C0F]">Offre ${mine?'vendeur':'client'}</p>${offerBadgeSup(o.status)}
-      </div>
-      <p class="font-extrabold tabular-nums">${fmt(o.unitPrice)} <span class="text-xs font-medium text-[#5F6B61]">/ unité × ${o.qty} = ${fmt(o.unitPrice*o.qty)}</span></p>
-      <div class="flex flex-wrap gap-2 mt-2">
-        ${pending?`<button class="btn btn-primary text-xs !py-1.5" onclick="supplierOfferDecide(${o.id},true)">Accepter</button>
-        <button class="btn btn-outline !border-[#9ED600] !text-[#3F6212] text-xs !py-1.5" onclick="supplierOfferDecide(${o.id},false)">Refuser</button>
-        <span class="flex gap-1 items-center"><input type="number" min="1" id="counter-${o.id}" placeholder="Contre-offre" class="input !py-1.5 !w-32"><button class="btn btn-outline text-xs !py-1.5" onclick="supplierCounter(${o.id})">Envoyer</button></span>`:''}
-      </div>
-    </div>`;
-  }).join('');
+function stopConvoPoll(){ if(convoPollTimer){ clearInterval(convoPollTimer); convoPollTimer=null; } }
+function supBubbleHTML(m){
+  const mine=m.sender==='SUPPLIER';
+  const read=mine&&(m.read===true||m.is_read===1||m.is_read===true);
+  return `<div class="flex ${mine?'justify-end':'justify-start'}">`
+    + `<div class="max-w-[78%] sm:max-w-[65%]">`
+    + `<div class="${mine?'bg-[#123B16] text-white rounded-2xl rounded-br-md':'bg-[#FFFFFF] border border-[#DDE6DC] rounded-2xl rounded-bl-md'} px-3.5 py-2 shadow-sm">`
+    + `<p class="text-sm whitespace-pre-wrap break-words">${escMsg(m.body||'')}</p></div>`
+    + `<p class="text-[10px] text-[#5F6B61] mt-0.5 ${mine?'text-right':'text-left'}">${esc(fmtTime(m.createdAt||m.created_at))}${mine?(read?' <i class="bi bi-check-all text-[#4D7C0F]"></i>':' <i class="bi bi-check"></i>'):''}</p>`
+    + `</div></div>`;
 }
-async function supplierOfferDecide(id, accept){
-  try{ await api('/offers/'+id+(accept?'/accept':'/reject'),{method:'PATCH'}); toast(accept?'Offre acceptée':'Offre refusée', accept?'success':'info'); openConvo(currentConvo.id); }catch(e){ toast(e.message,'error'); }
-}
-async function supplierCounter(id){
-  const input=document.getElementById('counter-'+id);
-  const price=parseInt(input.value)||0;
-  if(price<=0){ toast('Prix invalide','error'); return; }
-  try{
-    await api('/offers',{method:'POST',body:JSON.stringify({conversationId:currentConvo.id,productId:currentConvo.productId,qty:1,unitPrice:price})});
-    toast('Contre-offre envoyée'); openConvo(currentConvo.id);
-  }catch(e){ toast(e.message,'error'); }
+function supScrollBottom(){
+  const box=document.getElementById('chatMessages');
+  if(box) box.scrollTop=box.scrollHeight;
 }
 function renderMessagesList(msgs){
-  document.getElementById('chatMessages').innerHTML=(msgs||[]).map(m=>`<div class="msg ${m.sender==='SUPPLIER'?'mine':'theirs'}"><span class="block text-[10px] opacity-70 mb-1">${m.sender==='SUPPLIER'?'Vous':''} ${fmtTime(m.createdAt)}</span>${escMsg(m.body)}</div>`).join('')||'<p class="text-[#5F6B61] text-sm text-center self-center">Aucun message</p>';
-  const box=document.getElementById('chatMessages'); box.scrollTop=box.scrollHeight;
+  const box=document.getElementById('chatMessages');
+  if(!box) return;
+  box.innerHTML=(msgs&&msgs.length)?msgs.map(supBubbleHTML).join(''):'<p class="text-[#5F6B61] text-sm text-center py-8">Démarrez la conversation avec ce client.</p>';
+  try { (msgs||[]).forEach(m=>{ if(m.id>currentConvoLastId) currentConvoLastId=m.id; }); } catch(e){}
 }
 async function sendMessage(){
   const input=document.getElementById('chatInput');
-  const body=input.value.trim(); if(!body||!currentConvo) return;
-  try{ await api('/conversations/'+currentConvo.id+'/messages',{method:'POST',body:JSON.stringify({body})}); input.value=''; openConvo(currentConvo.id); }catch(e){ toast(e.message,'error'); }
+  if(!input) return;
+  const body=input.value.trim(); if(!body||!currentConvo||supSending) return;
+  supSending=true;
+  try{
+    await api('/conversations/'+currentConvo.id+'/messages',{method:'POST',body:JSON.stringify({body})});
+    input.value=''; input.style.height='auto';
+    const d=(await api('/conversations/'+currentConvo.id)).data;
+    renderMessagesList((d&&d.messages)||[]);
+    supScrollBottom();
+    loadConvos();
+  }catch(e){ toast(e.message,'error'); }
+  finally{ supSending=false; }
 }
 document.addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKey&&currentView==='messages'&&document.getElementById('chatInput')===document.activeElement){ e.preventDefault(); sendMessage(); }});
 
-/* ==================== NÉGOCIATIONS ==================== */
-async function renderNegociations(){
-  const content=document.getElementById('mainContent');
-  content.innerHTML='<div class="skeleton h-40"></div>';
-  try{
-    const list=(await api('/offers')).data||[];
-    if(!list.length){
-      content.innerHTML=`<h3 class="font-bold mb-4">Négociations en attente</h3>`+emptyState('Aucune offre en attente. Les propositions de vos clients apparaîtront ici.');
-      return;
-    }
-    content.innerHTML=`<h3 class="font-bold mb-1">Négociations en attente <span class="badge bg-[#B7F000] text-[#0B2410] ml-1">${list.length}</span></h3>
-    <p class="text-sm text-[#5F6B61] mb-4">Répondez depuis la conversation pour garder tout l'historique.</p>
-    <div class="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">`+list.map(o=>`
-      <div class="card p-4">
-        <div class="flex items-center justify-between gap-2 mb-2">
-          <p class="text-[11px] font-bold uppercase tracking-wider text-[#4D7C0F]">Offre client</p>
-          <span class="badge bg-[#B7F000] text-[#0B2410]">En attente</span>
-        </div>
-        <p class="font-bold text-sm truncate">${esc(o.productName||('Produit #'+o.productId))}</p>
-        <p class="font-extrabold text-lg tabular-nums my-1">${fmt(o.unitPrice)} <span class="text-xs font-medium text-[#5F6B61]">/ unité × ${o.qty} = ${fmt(o.unitPrice*o.qty)}</span></p>
-        <p class="text-xs text-[#5F6B61] mb-3">Catalogue : ${fmt(o.catalogPrice)} · ${fmtDate(o.createdAt)}</p>
-        <div class="flex flex-wrap gap-2">
-          <button class="btn btn-primary text-xs !py-2" onclick="negoDecide(${o.id},${o.conversationId},true)">Accepter</button>
-          <button class="btn btn-outline !border-[#9ED600] !text-[#3F6212] text-xs !py-2" onclick="negoDecide(${o.id},${o.conversationId},false)">Refuser</button>
-          <button class="btn btn-outline text-xs !py-2" onclick="goConvo(${o.conversationId})"><i class="bi bi-chat-dots"></i> Discussion</button>
-        </div>
-      </div>`).join('')+`</div>`;
-  }catch(e){ content.innerHTML=emptyState('Erreur: '+e.message); }
-}
-async function negoDecide(id, convId, accept){
-  try{ await api('/offers/'+id+(accept?'/accept':'/reject'),{method:'PATCH'}); toast(accept?'Offre acceptée':'Offre refusée', accept?'success':'info'); renderNegociations(); refreshBadges(); }catch(e){ toast(e.message,'error'); }
-}
-function goConvo(id){ goView('messages'); setTimeout(()=>openConvo(id), 150); }
 
 /* ==================== NOTIFICATIONS ==================== */
+// Onglets : toutes / non lues / sauvegardées. Chaque notification peut être
+// marquée lue, sauvegardée (mise de côté) ou supprimée définitivement.
+let supNotifTab = 'all';
 async function renderNotifications(){
   const content=document.getElementById('mainContent');
   content.innerHTML='<div class="skeleton h-40"></div>';
   try{
-    const n=(await api('/notifications')).data;
-    content.innerHTML=`<div class="flex items-center justify-between mb-4"><h3 class="font-bold">Notifications <span class="badge bg-primary-600 text-white ml-1">${n.unread} non lues</span></h3><button class="btn btn-outline text-xs" onclick="markAllNotifs()"><i class="bi bi-check2-all"></i> Tout marquer lu</button></div>
+    const q = supNotifTab === 'saved' ? '?archived=true' : (supNotifTab === 'unread' ? '?status=unread' : '');
+    const n=(await api('/notifications' + q)).data;
+    const tabBtn = (id, label) => `<button onclick="supNotifTab='${id}';renderNotifications()" class="px-4 py-2 rounded-xl text-xs font-bold border transition ${supNotifTab === id ? 'bg-[#0A0A0A] text-white border-[#0A0A0A]' : 'bg-[#FFFFFF] text-[#5F6B61] border-[#DDE6DC] hover:border-[#0A0A0A]'}">${label}</button>`;
+    content.innerHTML=`<div class="flex flex-wrap items-center justify-between gap-2 mb-4"><h3 class="font-bold">Notifications <span class="badge bg-primary-600 text-white ml-1">${n.unread} non lues</span></h3><button class="btn btn-outline text-xs" onclick="markAllNotifs()"><i class="bi bi-check2-all"></i> Tout marquer lu</button></div>
+    <div class="flex gap-2 mb-4">${tabBtn('all', 'Toutes')}${tabBtn('unread', 'Non lues')}${tabBtn('saved', 'Sauvegardées')}</div>
     <div class="space-y-3" role="list" aria-label="Notifications">
       ${(n.list||[]).map(x=>`<div role="listitem" class="card p-4 flex items-start gap-3 ${x.read?'':'border-l-4 border-primary-500'}">
         <div class="w-9 h-9 rounded-full ${notifIcon(x.type)} flex items-center justify-center shrink-0" aria-hidden="true"><i class="bi ${notifIco(x.type)}"></i></div>
-        <div class="flex-1"><p class="font-semibold text-sm">${esc(x.title)}</p><p class="text-sm text-[#5F6B61]">${esc(x.message)}</p><p class="text-xs text-[#5F6B61] mt-1">${fmtDate(x.createdAt)}${x.eventCode?' · '+esc(x.eventCode):''}</p></div>
-        ${x.read?'':'<button class="text-xs text-[#4D7C0F] hover:underline" onclick="readNotif(${x.id})">Marquer lu</button>'}
-      </div>`).join('')||emptyState('Aucune notification')}
+        <div class="flex-1 min-w-0"><p class="font-semibold text-sm">${esc(x.title)}</p><p class="text-sm text-[#5F6B61]">${esc(x.message)}</p><p class="text-xs text-[#5F6B61] mt-1">${fmtDate(x.createdAt)}${x.eventCode?' · '+esc(x.eventCode):''}${x.archived?' · Sauvegardée':''}</p>
+        ${supNotifOrderBtn(x)}
+        <div class="flex flex-wrap gap-2 mt-2">
+          ${x.read?'':'<button class="text-xs text-[#4D7C0F] font-semibold hover:underline" onclick="readNotif('+x.id+')">Marquer lue</button>'}
+          ${x.archived
+            ? '<button class="text-xs text-[#5F6B61] font-semibold hover:underline" onclick="supArchiveNotif('+x.id+',false)">Retirer des sauvegardées</button>'
+            : '<button class="text-xs text-[#5F6B61] font-semibold hover:underline" onclick="supArchiveNotif('+x.id+',true)"><i class="bi bi-bookmark"></i> Sauvegarder</button>'}
+          <button class="text-xs text-[#DC2626] font-semibold hover:underline" onclick="supDeleteNotif('+x.id+')"><i class="bi bi-trash"></i> Supprimer</button>
+        </div>
+        </div>
+      </div>`).join('')||emptyState(supNotifTab === 'saved' ? 'Aucune notification sauvegardée' : 'Aucune notification')}
     </div>`;
   }catch(e){ content.innerHTML=emptyState('Erreur: '+e.message); }
 }
 function notifIco(t){ const m={ORDER:'bi-cart-check',PAYMENT:'bi-credit-card',DELIVERY:'bi-truck',MESSAGE:'bi-chat-dots',NEGOTIATION:'bi-arrow-left-right',PRODUCT:'bi-box-seam',STOCK:'bi-box-seam',SUPPLIER:'bi-shop',SECURITY:'bi-shield-lock',SYSTEM:'bi-bell'}; return m[t]||'bi-bell'; }
-function notifIcon(t){ const m={ORDER:'bg-[rgba(183,240,0,0.08)] text-[#4D7C0F]',PAYMENT:'bg-[#123B16] text-white',DELIVERY:'bg-[#DDE6DC] text-[#123B16]',MESSAGE:'bg-[#DDE6DC] text-[#123B16]',NEGOTIATION:'bg-[#DDE6DC] text-[#123B16]',PRODUCT:'bg-[rgba(183,240,0,0.08)] text-[#4D7C0F]',STOCK:'bg-[rgba(183,240,0,0.08)] text-[#4D7C0F]',SUPPLIER:'bg-[#DDE6DC] text-[#123B16]',SECURITY:'bg-[#B7F000] text-[#0B2410]',SYSTEM:'bg-[#DDE6DC] text-[#123B16]'}; return m[t]||'bg-[#DDE6DC] text-[#123B16]'; }
+function notifIcon(t){ const m={ORDER:'bg-[rgba(183,240,0,0.08)] text-[#4D7C0F]',PAYMENT:'bg-[#123B16] text-white',DELIVERY:'bg-[#DDE6DC] text-[#123B16]',MESSAGE:'bg-[#DDE6DC] text-[#123B16]',NEGOTIATION:'bg-[#DDE6DC] text-[#123B16]',PRODUCT:'bg-[rgba(183,240,0,0.08)] text-[#4D7C0F]',STOCK:'bg-[rgba(183,240,0,0.08)] text-[#4D7C0F]',SUPPLIER:'bg-[#DDE6DC] text-[#123B16]',SECURITY:'bg-[#B7F000] text-[#0A0A0A]',SYSTEM:'bg-[#DDE6DC] text-[#123B16]'}; return m[t]||'bg-[#DDE6DC] text-[#123B16]'; }
 async function readNotif(id){ try{ await api('/notifications/'+id+'/read',{method:'PATCH'}); renderNotifications(); refreshBadges(); }catch(e){} }
 async function markAllNotifs(){ try{ await api('/notifications/read-all',{method:'POST'}); renderNotifications(); refreshBadges(); }catch(e){} }
+/* Suppression définitive d'une notification (confirmation demandée). */
+async function supDeleteNotif(id){
+  if (!confirm('Supprimer définitivement cette notification ?')) return;
+  try{ await api('/notifications/'+id,{method:'DELETE'}); toast('Notification supprimée'); renderNotifications(); refreshBadges(); }
+  catch(e){ toast(e.message || 'Suppression impossible', 'error'); }
+}
+/* Sauvegarde (mise de côté) / restauration d'une notification. */
+async function supArchiveNotif(id, archived){
+  try{
+    await api('/notifications/'+id+'/archive',{method:'PATCH', body: JSON.stringify({archived: !!archived})});
+    toast(archived ? 'Notification sauvegardée' : 'Notification restaurée');
+    renderNotifications(); refreshBadges();
+  }catch(e){ toast(e.message || 'Opération impossible', 'error'); }
+}
+/* Bouton « VOIR LA COMMANDE » (§9) : ouvre le DÉTAIL depuis une notification.
+   Entité ORDER → directe ; entité SHIPMENT → résolue via
+   GET /api/supplier/shipments/by-id/{id} (propriété vérifiée serveur). */
+function supNotifOrderBtn(x){
+  if (!x) return '';
+  if (x.entityType === 'ORDER' && x.entityId) {
+    let b = `<button onclick="openOrderModal(${x.entityId})" class="mt-2 inline-flex items-center gap-1.5 px-4 py-2.5 bg-[#DC2626] hover:bg-[#B91C1C] text-white text-xs font-bold rounded-xl transition min-h-[44px]"><i class="bi bi-eye"></i>VOIR LA COMMANDE</button>`;
+    // Réception confirmée par le client -> valider déclenche le règlement (payout).
+    if (x.eventCode === 'RECEIPT_CONFIRMED') {
+      b += `<button id="supNotifValidate${x.id}" onclick="supValidateOrderNotif(${x.entityId},${x.id})" class="mt-2 ml-2 inline-flex items-center gap-1.5 px-4 py-2.5 bg-[#0A0A0A] hover:bg-[#123B16] text-white text-xs font-bold rounded-xl transition min-h-[44px]"><i class="bi bi-cash-coin"></i>VALIDER LA COMMANDE</button>`;
+    }
+    return b;
+  }
+  if (x.entityType === 'SHIPMENT' && x.entityId) {
+    let b = `<button id="supNotifShip${x.id}" onclick="supOpenShipmentOrder(${x.entityId},${x.id})" class="mt-2 inline-flex items-center gap-1.5 px-4 py-2.5 bg-[#DC2626] hover:bg-[#B91C1C] text-white text-xs font-bold rounded-xl transition min-h-[44px]"><i class="bi bi-eye"></i>VOIR LA COMMANDE</button>`;
+    // Réception confirmée par le client -> valider déclenche le règlement (payout).
+    if (x.eventCode === 'RECEIPT_CONFIRMED') {
+      b += `<button id="supNotifValidate${x.id}" onclick="supValidateFromNotif(${x.entityId},${x.id})" class="mt-2 ml-2 inline-flex items-center gap-1.5 px-4 py-2.5 bg-[#0A0A0A] hover:bg-[#123B16] text-white text-xs font-bold rounded-xl transition min-h-[44px]"><i class="bi bi-cash-coin"></i>VALIDER LA COMMANDE</button>`;
+    }
+    return b;
+  }
+  return '';
+}
+/* Bouton « VALIDER LA COMMANDE » depuis une notification de réception :
+   appelle POST /api/delivery-flow/validate-delivery (auth fournisseur) qui
+   déclenche le règlement (payout PawaPay, commission déduite, serveur = vérité).
+   Anti-double-clic global, notification marquée lue, listes rafraîchies. */
+async function supValidateOrderNotif(orderId, notifId){
+  if (window._supFlowBusy) return;
+  window._supFlowBusy = true;
+  const btn = document.getElementById('supNotifValidate' + notifId);
+  const prev = btn ? btn.innerHTML : '';
+  if (btn) { btn.disabled = true; btn.textContent = 'VALIDATION EN COURS...'; }
+  try{
+    const f = await flowApi('/validate-delivery', {method:'POST', body: JSON.stringify({orderId})});
+    if (f && f.payoutOutcome === 'BLOCKED') {
+      toast('✓ LIVRAISON VALIDÉE — règlement à compléter : ' + (f.payoutDetail || 'vérifiez le téléphone payout de la boutique.'), 'info');
+    } else {
+      toast('✓ COMMANDE VALIDÉE — Le paiement (règlement fournisseur) est en cours.');
+    }
+    try { await api('/notifications/' + notifId + '/read', {method:'PATCH'}); } catch(e){}
+    await renderNotifications();
+    try { await refreshBadges(); } catch(e){}
+    try { await renderCommandes(window._supFilter || 'all'); } catch(e){}
+  }catch(e){
+    let msg = supFlowErrorMessage(e, 'Impossible de valider la commande.');
+    if (e && e.status === 400 && /réception/i.test(e.message || '')) msg = 'Impossible de valider : le client doit d\u2019abord confirmer la réception.';
+    if (e && e.status === 409) msg = e.message || 'Le règlement est déjà en cours.';
+    toast(msg, 'error');
+    if (btn) { btn.disabled = false; btn.innerHTML = prev; }
+  }
+  finally { window._supFlowBusy = false; }
+}
+/* Variante notification liée au suivi : résout la commande via
+   GET /api/supplier/shipments/by-id/{id} (propriété vérifiée serveur). */
+async function supValidateFromNotif(shipmentId, notifId){
+  const btn = document.getElementById('supNotifValidate' + notifId);
+  if (btn) { btn.disabled = true; btn.textContent = 'VALIDATION EN COURS...'; }
+  try{
+    const d = (await api('/shipments/by-id/' + shipmentId)).data;
+    if (!d || !d.orderId) throw new Error('Commande introuvable');
+    if (btn) { btn.disabled = false; }
+    await supValidateOrderNotif(d.orderId, notifId);
+  }catch(e){
+    toast((e && e.message) || 'Validation impossible', 'error');
+    if (btn) { btn.disabled = false; btn.innerHTML = '<i class="bi bi-cash-coin"></i>VALIDER LA COMMANDE'; }
+  }
+}
+async function supOpenShipmentOrder(shipmentId, notifId){
+  const btn = document.getElementById('supNotifShip' + notifId);
+  if (btn) { btn.disabled = true; btn.textContent = 'Ouverture…'; }
+  try{
+    const d = (await api('/shipments/by-id/' + shipmentId)).data;
+    if (!d || !d.orderId) throw new Error('Commande introuvable');
+    try { await readNotif(notifId); } catch(e){}
+    await openOrderModal(d.orderId);
+  }catch(e){ toast(e.message || 'Ouverture impossible', 'error'); if (btn) { btn.disabled = false; btn.innerHTML = '<i class="bi bi-eye"></i>VOIR LA COMMANDE'; } }
+}
 
 /* ==================== PROFIL ==================== */
 async function renderProfil(){
@@ -1273,7 +2075,7 @@ async function renderProfil(){
       <div class="max-w-3xl space-y-6">
         <div class="card p-6">
           <div class="flex items-center gap-4 mb-6">
-            <div class="w-20 h-20 rounded-2xl bg-primary-50 flex items-center justify-center overflow-hidden">${s.logo?'<img src="'+s.logo+'" class="w-full h-full object-cover" onerror="this.style.display=\'none\'">':'<i class="bi bi-shop text-3xl text-[#4D7C0F]"></i>'}</div>
+            <div class="w-20 h-20 rounded-2xl bg-primary-50 flex items-center justify-center overflow-hidden"><img src="${(s.logo||'assets/img/default-supplier.svg')}" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='assets/img/default-supplier.svg'"></div>
             <div class="flex-1"><h3 class="font-bold text-lg">${esc(s.name||'')}</h3><p class="text-sm text-[#5F6B61]">${esc(s.email||'')}</p><p class="text-sm text-[#5F6B61]">Commission : <b>${s.commissionRate||0}%</b></p></div>
             <button class="btn btn-outline text-xs" onclick="document.getElementById('logoInput').click()"><i class="bi bi-image"></i> Changer le logo</button>
             <input type="file" id="logoInput" accept="image/*" class="hidden" onchange="uploadLogo(this)">
@@ -1283,12 +2085,17 @@ async function renderProfil(){
             <div><label class="text-xs font-semibold text-[#5F6B61]">Nom du responsable</label><input id="pf_contact" class="input" value="${esc(s.contactName||'')}"></div>
             <div><label class="text-xs font-semibold text-[#5F6B61]">Email</label><input id="pf_email" type="email" class="input" value="${esc(s.email||'')}"></div>
             <div><label class="text-xs font-semibold text-[#5F6B61]">Téléphone</label><input id="pf_phone" class="input" value="${esc(s.phone||'')}"></div>
-            <div><label class="text-xs font-semibold text-[#5F6B61]">WhatsApp</label><input id="pf_whatsapp" class="input" value="${esc(s.whatsapp||'')}"></div>
+            <div><label class="text-xs font-semibold text-[#5F6B61]">Téléphone</label><input id="pf_whatsapp" class="input" value="${esc(s.whatsapp||'')}"></div>
             <div><label class="text-xs font-semibold text-[#5F6B61]">Ville</label><input id="pf_city" class="input" value="${esc(s.city||'')}"></div>
             <div class="sm:col-span-2"><label class="text-xs font-semibold text-[#5F6B61]">Adresse</label><input id="pf_address" class="input" value="${esc(s.address||'')}"></div>
             <div class="sm:col-span-2"><label class="text-xs font-semibold text-[#5F6B61]">Description</label><textarea id="pf_desc" class="input h-20">${esc(s.description||'')}</textarea></div>
             <div class="sm:col-span-2"><button class="btn btn-primary w-full justify-center"><i class="bi bi-check2"></i> Enregistrer les modifications</button></div>
           </form>
+        </div>
+        <div class="card p-6">
+          <h3 class="font-bold mb-1">Numéros de versement</h3>
+          <p class="text-xs text-[#5F6B61] mb-4">MTN payé → versé sur MTN · Orange payé → versé sur Orange. Retapez chaque numéro à l'identique.</p>
+          <div id="pfPhones"><p class="text-xs text-[#5F6B61]">Chargement…</p></div>
         </div>
         <div class="card p-6">
           <h3 class="font-bold mb-4">Changer le mot de passe</h3>
@@ -1300,7 +2107,52 @@ async function renderProfil(){
           </form>
         </div>
       </div>`;
-  }catch(e){ content.innerHTML=emptyState('Erreur: '+e.message); }
+  }catch(e){ content.innerHTML=emptyState('Erreur: '+e.message); return; }
+  loadProfilePhones();
+}
+/* Numéros MTN/Orange modifiables depuis le profil (même règle : double saisie). */
+async function loadProfilePhones() {
+  const box = document.getElementById('pfPhones');
+  if (!box) return;
+  try {
+    const d = await payoutApi('/my');
+    const st = (d && d.settings) || {};
+    box.innerHTML = `
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div><label class="text-xs font-semibold text-[#5F6B61]">MTN : ${esc(st.mtnPhoneMasked || 'non renseigné')}</label>
+          <input id="pfMtn" type="tel" inputmode="numeric" placeholder="Nouveau numéro MTN" class="input mt-1"></div>
+        <div><label class="text-xs font-semibold text-[#5F6B61]">Confirmez MTN</label>
+          <input id="pfMtn2" type="tel" inputmode="numeric" placeholder="Retapez" class="input mt-1"></div>
+        <div><label class="text-xs font-semibold text-[#5F6B61]">Orange : ${esc(st.orangePhoneMasked || 'non renseigné')}</label>
+          <input id="pfOrange" type="tel" inputmode="numeric" placeholder="Nouveau numéro Orange" class="input mt-1"></div>
+        <div><label class="text-xs font-semibold text-[#5F6B61]">Confirmez Orange</label>
+          <input id="pfOrange2" type="tel" inputmode="numeric" placeholder="Retapez" class="input mt-1"></div>
+      </div>
+      <p id="pfPhonesErr" class="hidden text-sm text-[#DC2626] mt-2"></p>
+      <button onclick="saveProfilePhones()" class="btn btn-outline mt-3"><i class="bi bi-phone"></i> Mettre à jour les numéros</button>
+      <p class="text-[11px] text-[#5F6B61] mt-2">Laissez vide pour conserver les numéros actuels.</p>`;
+  } catch (e) { box.innerHTML = '<p class="text-xs text-[#DC2626]">Coordonnées illisibles.</p>'; }
+}
+async function saveProfilePhones() {
+  const g = id => ((document.getElementById(id) || {}).value || '').trim();
+  const err = msg => { const el = document.getElementById('pfPhonesErr'); if (!el) return; if (!msg) { el.classList.add('hidden'); } else { el.textContent = msg; el.classList.remove('hidden'); } };
+  const mtn = g('pfMtn'), mtn2 = g('pfMtn2'), orange = g('pfOrange'), orange2 = g('pfOrange2');
+  if (!mtn && !mtn2 && !orange && !orange2) { err('Renseignez au moins un numéro (avec sa confirmation).'); return; }
+  const body = {};
+  if (mtn || mtn2) {
+    if (!mtn || mtn !== mtn2) { err('Les deux numéros MTN doivent être identiques.'); return; }
+    body.mtnPhone = mtn; body.mtnPhoneConfirm = mtn2;
+  }
+  if (orange || orange2) {
+    if (!orange || orange !== orange2) { err('Les deux numéros Orange doivent être identiques.'); return; }
+    body.orangePhone = orange; body.orangePhoneConfirm = orange2;
+  }
+  err('');
+  try {
+    await payoutApi('/settings', { method: 'PUT', body: JSON.stringify(body) });
+    toast('Numéros de versement mis à jour');
+    loadProfilePhones();
+  } catch (e) { err(e.message); }
 }
 async function saveProfile(e){
   e.preventDefault();
@@ -1318,8 +2170,16 @@ async function saveProfile(e){
 }
 async function uploadLogo(input){
   const f=input.files[0]; if(!f) return;
+  if (!f.type || !f.type.startsWith('image/')) { toast('Choisissez une image (JPG, PNG, GIF ou WebP)', 'error'); input.value=''; return; }
+  if (f.size > 10*1024*1024) { toast('Image trop lourde (10 Mo max)', 'error'); input.value=''; return; }
   const fd=new FormData(); fd.append('file',f,f.name);
-  try{ await api('/logo',{method:'PUT',body:fd}); toast('Logo mis à jour'); renderProfil(); }catch(e){ toast(e.message,'error'); }
+  try{
+    const d=await api('/logo',{method:'PUT',body:fd});
+    const logo=(d && d.data) || null;
+    if (logo) { SUPPLIER={...SUPPLIER,logo}; try{ localStorage.setItem('supplier',JSON.stringify(SUPPLIER)); }catch(e){} }
+    toast('Logo mis à jour'); renderProfil();
+  }catch(e){ toast(e.message,'error'); }
+  finally { input.value=''; }
 }
 async function changePass(e){
   e.preventDefault();
@@ -1336,9 +2196,28 @@ function fmtTime(s){ if(!s) return ''; const d=new Date(s); if(isNaN(d)) return 
 (function init(){
   const urlParams = new URLSearchParams(window.location.search);
   const wantRegister = urlParams.get('register') === '1';
-  if (TOKEN && !wantRegister) { try{ api('/me').then(()=>showApp()).catch(()=>forceLogout()); }catch(e){ forceLogout(); } }
+  if (TOKEN) {
+    // Déjà connecté : on restaure l'espace SANS redemander les identifiants.
+    // Redirection vers l'auth uniquement si la session est réellement expirée
+    // (ou après appui explicite sur Déconnexion, qui supprime le token).
+    // NOTE : même avec ?register=1, une session valide reste prioritaire
+    // (on n'efface jamais un token valide au simple chargement de la page).
+    api('/me').then(d => {
+      try {
+        const p = (d && d.data) || {};
+        if (p && (p.id || p.email)) {
+          SUPPLIER = Object.assign({}, SUPPLIER, p);
+          localStorage.setItem('supplier', JSON.stringify(SUPPLIER));
+        }
+      } catch(e){}
+      // Une erreur d'affichage ne doit JAMAIS déconnecter : on l'isole.
+      try { showApp(); } catch(e) { console.error(e); toast("Erreur d'affichage, rechargez la page", 'error'); }
+    }).catch(() => forceLogout());
+  }
   else {
-    forceLogout();
+    // Jamais connecté : page d'auth, sans toast d'expiration.
+    document.getElementById('appView').classList.add('hidden');
+    document.getElementById('loginView').classList.remove('hidden');
     if (wantRegister) switchAuthTab('register');
     else switchAuthTab('login');
   }

@@ -63,16 +63,6 @@ public class SupplierPaymentDAO {
     }
 
     private SupplierPayment mapRow(ResultSet rs) throws SQLException {
-        SupplierPayment sp = new SupplierPayment();
-        sp.setId(rs.getInt("id"));
-        sp.setSupplierId(rs.getInt("supplier_id"));
-        sp.setReference(rs.getString("reference"));
-        sp.setAmount(rs.getInt("amount"));
-        sp.setMethod(rs.getString("method"));
-        sp.setStatus(rs.getString("status"));
-        sp.setNotes(rs.getString("notes"));
-        sp.setCreatedAt(rs.getString("created_at"));
-        sp.setUpdatedAt(rs.getString("updated_at"));
-        return sp;
+        return PayoutDAO.mapRow(rs);
     }
 }

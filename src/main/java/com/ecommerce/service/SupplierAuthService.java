@@ -13,10 +13,12 @@ public class SupplierAuthService {
     private final SupplierSessionDAO sessionDAO = new SupplierSessionDAO();
 
     /**
-     * Authentifie un fournisseur par email + mot de passe hasché.
+     * Vérifie email + mot de passe SANS effet de bord (sans session,
+     * sans last_login). Utilisé par l'étape 1 de la connexion en 2 étapes :
+     * le last_login n'est mis à jour qu'après validation du code email.
      * Retourne le fournisseur si ok, sinon null.
      */
-    public Supplier login(String email, String password) throws SQLException {
+    public Supplier checkPassword(String email, String password) throws SQLException {
         if (email == null || password == null) return null;
         Supplier s = supplierDAO.findByEmail(email.trim().toLowerCase());
         if (s == null) return null;
@@ -30,12 +32,33 @@ public class SupplierAuthService {
                 supplierDAO.updatePassword(s.getId(), PasswordUtil.hash(password));
             } catch (Exception ignored) {}
         }
+        return s;
+    }
+
+    /**
+     * Authentifie un fournisseur par email + mot de passe hasché.
+     * Retourne le fournisseur si ok, sinon null.
+     * (Conserve le comportement historique : connexion directe.
+     * La route /login utilise désormais checkPassword + code email.)
+     */
+    public Supplier login(String email, String password) throws SQLException {
+        Supplier s = checkPassword(email, password);
+        if (s == null) return null;
         supplierDAO.updateLastLogin(s.getId());
         return s;
     }
 
+    /** Marque la connexion comme effective (après validation du code email). */
+    public void markLoggedIn(int supplierId) throws SQLException {
+        supplierDAO.updateLastLogin(supplierId);
+    }
+
+    /** Durée de session : 30 jours + renouvellement glissant (voir validateToken).
+     *  Le fournisseur reste connecté jusqu'à déconnexion explicite. */
+    public static final int SESSION_HOURS = 720;
+
     public String createSession(int supplierId, String ip, String userAgent) throws SQLException {
-        return sessionDAO.createSession(supplierId, ip, userAgent, 12);
+        return sessionDAO.createSession(supplierId, ip, userAgent, SESSION_HOURS);
     }
 
     /**
@@ -84,7 +107,9 @@ public class SupplierAuthService {
         n.setName(shopName);
         n.setEmail(email.trim().toLowerCase());
         n.setContactName(name);
-        n.setLogo(picture);
+        // Photo facultative : photo Google si dispo, sinon visuel boutique réservé.
+        n.setLogo((picture == null || picture.trim().isEmpty())
+            ? com.ecommerce.util.AvatarDefaults.DEFAULT_SUPPLIER_LOGO : picture);
         n.setGoogleId(googleId);
         // Mot de passe aléatoire inutilisable : la connexion passe par Google
         n.setPasswordHash(PasswordUtil.hash("GOOGLE-" + googleId + "-" + System.nanoTime()));
@@ -96,7 +121,12 @@ public class SupplierAuthService {
     }
 
     public int validateToken(String token) throws SQLException {
-        return sessionDAO.validateSession(token);
+        int id = sessionDAO.validateSession(token);
+        if (id > 0) {
+            // Renouvellement glissant (best-effort : n'invalide jamais une session valide).
+            try { sessionDAO.refreshSession(token, SESSION_HOURS); } catch (Exception ignored) {}
+        }
+        return id;
     }
 
     public void logout(String token) throws SQLException {

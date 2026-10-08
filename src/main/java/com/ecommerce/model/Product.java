@@ -25,10 +25,13 @@ public class Product {
     private List<String> sizes;
     private List<String> colors;
     private int stock;
+    /** Frais de livraison saisis par le fournisseur (FCFA) ; 0 = tarif zone par ville. */
+    private int deliveryPrice;
     private int supplierId;
     private String status;
     private String supplierName;
     private String supplierWhatsapp;
+    private String supplierLogo;
     private String promoStart;
     private String promoEnd;
 
@@ -88,6 +91,9 @@ public class Product {
     public int getStock() { return stock; }
     public void setStock(int stock) { this.stock = stock; }
 
+    public int getDeliveryPrice() { return deliveryPrice; }
+    public void setDeliveryPrice(int deliveryPrice) { this.deliveryPrice = Math.max(0, deliveryPrice); }
+
     public int getSupplierId() { return supplierId; }
     public void setSupplierId(int supplierId) { this.supplierId = supplierId; }
 
@@ -99,6 +105,9 @@ public class Product {
 
     public String getSupplierWhatsapp() { return supplierWhatsapp; }
     public void setSupplierWhatsapp(String supplierWhatsapp) { this.supplierWhatsapp = supplierWhatsapp; }
+
+    public String getSupplierLogo() { return supplierLogo; }
+    public void setSupplierLogo(String supplierLogo) { this.supplierLogo = supplierLogo; }
 
     public String getPromoStart() { return promoStart; }
     public void setPromoStart(String promoStart) { this.promoStart = promoStart; }

@@ -3,17 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MBOA STYLE — Get Started</title>
+<title>BAZAAR — Connexion</title>
 <meta name="robots" content="noindex, nofollow">
-<meta name="description" content="Connectez-vous ou créez votre compte vendeur MBOA STYLE.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%23B7F000'/><text x='50' y='70' font-size='56' text-anchor='middle' fill='%230B2410' font-family='sans-serif' font-weight='bold'>M</text></svg>">
+<meta name="description" content="Connectez-vous ou créez votre compte BAZAAR.">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#B7F000">
+<style>.logo-wordmark{font-family:'Nunito','Manrope',system-ui,sans-serif;font-weight:900;letter-spacing:-.02em;line-height:1}.logo-wordmark--deep{color:#123B16}.logo-wordmark--light{color:#fff}</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Nunito:wght@800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-<link rel="stylesheet" href="assets/css/showcase.css">
+<link rel="stylesheet" href="assets/css/showcase.css?v=20260929">
 <script src="https://accounts.google.com/gsi/client" async defer></script>
-<script src="assets/js/showcase.js" defer></script>
+<script src="assets/js/showcase.js?v=20260929" defer></script>
 <style>
   :root {
     --mboa-lime: #B7F000;
@@ -78,19 +82,6 @@
     text-decoration: none;
     color: var(--ink);
   }
-  .brand .mark {
-    width: 38px; height: 38px;
-    border-radius: 11px;
-    background: var(--red);
-    color: #0B2410;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    font-weight: 800;
-  }
-  .brand .word { font-weight: 800; font-size: 18px; letter-spacing: -0.01em; }
-  .brand .word span { color: #4D7C0F; }
   .auth-form h1 {
     font-size: 30px;
     font-weight: 700;
@@ -178,7 +169,7 @@
     border: none;
     border-radius: 12px;
     background: var(--red);
-    color: #0B2410;
+    color: #0A0A0A;
     font-family: inherit;
     font-size: 15px;
     font-weight: 700;
@@ -288,8 +279,8 @@
 
 <main class="auth-card" aria-live="polite">
   <section class="auth-form">
-    <a class="brand" href="index.html" aria-label="MBOA STYLE — accueil">
-      <span class="mark">M</span><span class="word">MBOA <span>STYLE</span></span>
+    <a class="brand" href="index.html" aria-label="BAZAAR — accueil">
+      <img src="logo/BAZAAR.png" alt="BAZAAR" width="135" height="45" style="height:36px;width:auto">
     </a>
     <h1 id="auth-title">Get Started Now</h1>
     <p class="auth-sub" id="auth-sub"></p>
@@ -315,14 +306,14 @@
     <p class="auth-switch" id="auth-switch"></p>
   </section>
 
-  <aside class="auth-side" aria-label="Produits MBOA STYLE en avant-première">
+  <aside class="auth-side" aria-label="Produits BAZAAR en avant-première">
     <div class="ms-showcase" data-showcase style="height:100%"></div>
   </aside>
 </main>
 
 <script>
 /* ============================================================
-   MBOA STYLE — Page d'authentification unique (layout partagé)
+   BAZAAR — Page d'authentification unique (layout partagé)
    Modes : login | register | forgot | reset | verify (?mode=).
    Seuls titre, champs et bouton changent ; mise en page identique.
    Backend réel : /api/supplier/login, /api/supplier/register,
@@ -338,6 +329,10 @@ fetch(API + '/google-client-id').then(r => r.ok ? r.json() : null).then(d => {
 
 const $ = id => document.getElementById(id);
 const errBox = $('auth-error'), infoBox = $('auth-info');
+function escAuth(s) {
+  return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
 function showError(msg) {
   infoBox.classList.remove('show'); infoBox.textContent = '';
   errBox.textContent = msg; errBox.classList.add('show');
@@ -350,7 +345,7 @@ function clearMsg() {
   errBox.classList.remove('show'); errBox.textContent = '';
   infoBox.classList.remove('show'); infoBox.innerHTML = '';
 }
-const SUPPORT_HTML = 'Password reset is handled by our support team: <a href="https://wa.me/237690000000" target="_blank" rel="noopener">contact us on WhatsApp</a>.';
+const SUPPORT_HTML = 'Password reset is handled by our support team: <a href="mailto:support@mboastyle.cm">contact us by email</a>.';
 
 function pwField(f) {
   if (f.type !== 'password') {
@@ -395,7 +390,7 @@ const MODES = {
   },
   register: {
     title: 'Get Started Now',
-    sub: 'Rejoignez les boutiques qui vendent sur MBOA STYLE.',
+    sub: 'Rejoignez les boutiques qui vendent sur BAZAAR.',
     submit: 'Signup',
     fields: [
       { id: 'f-name', label: 'Name', type: 'text', placeholder: '', autocomplete: 'organization', required: true },
@@ -431,16 +426,18 @@ const MODES = {
   },
   verify: {
     title: 'Check Your Email',
-    sub: 'Enter the 6-digit code we sent you.',
+    sub: 'Votre compte est en train d\u2019être utilisé pour se connecter à BAZAAR. Saisissez le code à 6 chiffres envoyé à votre adresse email : sans ce code, l\u2019accès est refusé.',
     submit: 'Verify',
     fields: [
       { id: 'f-code', label: 'Verification code', type: 'text', placeholder: '', autocomplete: 'one-time-code', required: true, minlength: 6, maxlength: 6, inputmode: 'numeric' }
     ],
     extra: null,
     social: false,
-    switch: { text: 'Did not get it? ', link: 'Resend', mode: 'forgot' }
+    switch: { text: 'Did not get it? ', link: 'Resend code', action: 'resend' }
   }
 };
+
+let pendingAuthEmail = '';
 
 let currentMode = 'register';
 function modeFromURL() {
@@ -452,7 +449,7 @@ function renderMode(mode) {
   currentMode = MODES[mode] ? mode : 'register';
   const cfg = MODES[currentMode];
   try { history.replaceState(null, '', '?mode=' + currentMode); } catch (e) {}
-  document.title = 'MBOA STYLE — ' + cfg.title;
+  document.title = 'BAZAAR — ' + cfg.title;
   $('auth-title').textContent = cfg.title;
   $('auth-sub').textContent = cfg.sub;
   clearMsg();
@@ -470,12 +467,36 @@ function renderMode(mode) {
   }
   $('auth-submit').textContent = cfg.submit;
   $('auth-social-block').style.display = cfg.social ? '' : 'none';
-  $('auth-switch').innerHTML = cfg.switch.text + '<button type="button" data-goto="' + cfg.switch.mode + '">' + cfg.switch.link + '</button>';
-  extra.querySelectorAll('[data-goto]').forEach(b => b.addEventListener('click', () => renderMode(b.dataset.goto)));
-  $('auth-switch').querySelectorAll('[data-goto]').forEach(b => b.addEventListener('click', () => renderMode(b.dataset.goto)));
+  if (cfg.switch.action === 'resend') {
+    $('auth-switch').innerHTML = cfg.switch.text + '<button type="button" data-action="resend">' + cfg.switch.link + '</button>';
+    $('auth-switch').querySelector('[data-action="resend"]').addEventListener('click', resendVerifyCode);
+  } else {
+    $('auth-switch').innerHTML = cfg.switch.text + '<button type="button" data-goto="' + cfg.switch.mode + '">' + cfg.switch.link + '</button>';
+    $('auth-switch').querySelectorAll('[data-goto]').forEach(b => b.addEventListener('click', () => renderMode(b.dataset.goto)));
+  }
   const first = $('auth-fields').querySelector('input');
   if (first) first.focus();
 }
+
+async function resendVerifyCode() {
+  if (!pendingAuthEmail) { showError('Reconnectez-vous pour recevoir un code.'); return; }
+  try {
+    const res = await fetch(API + '/resend-code', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: pendingAuthEmail }) });
+    const data = await res.json();
+    if (!res.ok || !data.success) throw new Error(data.message || 'Resend failed');
+    showInfo('Un nouveau code à 6 chiffres a été envoyé à votre adresse email.');
+  } catch (err) {
+    showError(err.message || 'Something went wrong.');
+  }
+}
+
+/* Code à 6 chiffres uniquement (chiffres). */
+document.addEventListener('input', e => {
+  if (e.target && e.target.id === 'f-code') {
+    e.target.value = e.target.value.replace(/\D/g, '').slice(0, 6);
+  }
+});
 
 function enterAfterAuth(data, welcomeMsg) {
   localStorage.setItem('supplier_token', data.token);
@@ -496,6 +517,12 @@ $('auth-form').addEventListener('submit', async e => {
         body: JSON.stringify({ email: val('f-email'), password: document.getElementById('f-password').value }) });
       const data = await res.json();
       if (!res.ok || !data.success) throw new Error(data.message || 'Incorrect credentials');
+      if (data.requiresVerification) {
+        pendingAuthEmail = data.email || val('f-email');
+        renderMode('verify');
+        showInfo('Un code à 6 chiffres a été envoyé à <b>' + escAuth(data.maskedEmail || pendingAuthEmail) + '</b>. Saisissez-le pour vérifier qu\u2019il s\u2019agit bien de votre adresse email.');
+        return;
+      }
       enterAfterAuth(data);
       return;
     }
@@ -505,6 +532,24 @@ $('auth-form').addEventListener('submit', async e => {
       const res = await fetch(API + '/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
       const data = await res.json();
       if (!res.ok || !data.success) throw new Error(data.message || 'Signup failed');
+      if (data.requiresVerification) {
+        pendingAuthEmail = data.email || body.email;
+        renderMode('verify');
+        showInfo('Compte créé ! Un code à 6 chiffres a été envoyé à <b>' + escAuth(data.maskedEmail || pendingAuthEmail) + '</b>. Saisissez-le pour accéder à votre espace.');
+        return;
+      }
+      enterAfterAuth(data);
+      return;
+    }
+    if (currentMode === 'verify') {
+      if (!pendingAuthEmail) throw new Error('Reconnectez-vous pour recevoir un code.');
+      const code = val('f-code');
+      if (!/^[0-9]{6}$/.test(code)) throw new Error('Saisissez le code à 6 chiffres reçu par email.');
+      const res = await fetch(API + '/verify-code', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: pendingAuthEmail, code }) });
+      const data = await res.json();
+      if (!res.ok || !data.success) throw new Error(data.message || 'Code incorrect');
+      pendingAuthEmail = '';
       enterAfterAuth(data);
       return;
     }

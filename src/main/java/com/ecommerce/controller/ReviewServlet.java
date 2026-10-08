@@ -108,8 +108,11 @@ public class ReviewServlet extends HttpServlet {
                     new com.ecommerce.dao.ActivityLogDAO().log(modId, "REVIEW_APPROVED",
                         "review", id, "Avis approuvé", req.getRemoteAddr());
                 } catch (Exception ignored) {}
+                resp.getWriter().write("{\"success\":true}");
+            } else {
+                resp.setStatus(400);
+                resp.getWriter().write("{\"success\":false,\"message\":\"Action inconnue\"}");
             }
-            resp.getWriter().write("{\"success\":true}");
         } catch (Exception e) {
             resp.setStatus(500);
             com.ecommerce.util.ApiResponse.internalError(resp);
@@ -124,7 +127,12 @@ public class ReviewServlet extends HttpServlet {
             int delId = com.ecommerce.util.AdminRole.requireAction(req, resp,
                     com.ecommerce.util.AdminRole.DESTRUCTIVE);
             if (delId <= 0) return;
-            int id = Integer.parseInt(req.getParameter("id"));
+            Integer id = com.ecommerce.util.ServiceErrors.toId(req.getParameter("id"));
+            if (id == null) {
+                resp.setStatus(400);
+                resp.getWriter().write("{\"error\":\"Identifiant avis requis\"}");
+                return;
+            }
             reviewDAO.delete(id);
             try {
                 new com.ecommerce.dao.ActivityLogDAO().log(delId, "REVIEW_DELETED",

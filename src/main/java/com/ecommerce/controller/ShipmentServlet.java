@@ -21,10 +21,13 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
- * Expéditions Phase 12. Trois rôles :
+ * Expéditions Phase 12 + workflow livraison v2. Trois rôles :
  * - Invité : suivi par numéro + téléphone, confirmation de réception.
- * - Fournisseur : Bearer, uniquement ses commandes.
- * - Admin : token admin, supervision.
+ * - Fournisseur : Bearer, uniquement ses commandes (lecture + workflow v2
+ *   via /api/delivery-flow ; les transitions manuelles multi-statuts sont
+ *   SUPPRIMÉES côté fournisseur — ancien système remplacé).
+ * - Admin : token admin, supervision (seul rôle pouvant encore avancer
+ *   manuellement un statut, pour support/litiges).
  */
 @WebServlet("/api/shipments/*")
 public class ShipmentServlet extends HttpServlet {
@@ -77,10 +80,13 @@ public class ShipmentServlet extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
         try {
             String[] parts = pathParts(req);
+            // Session client éventuelle : restreint au compte si présente.
+            Integer guestSession = com.ecommerce.service.CustomerIsolation.sessionOf(
+                com.ecommerce.util.CustomerAuth.validateCustomer(req));
             // Suivi invité : numéro + téléphone.
             if (parts.length == 1 && "track".equals(parts[0])) {
                 ApiResponse.ok(resp, shipmentService.detailForGuest(
-                    req.getParameter("number"), req.getParameter("phone")));
+                    req.getParameter("number"), req.getParameter("phone"), guestSession));
                 return;
             }
             // Expédition d'une commande (invité propriétaire : numéro + téléphone).
@@ -89,7 +95,7 @@ public class ShipmentServlet extends HttpServlet {
                 String phone = req.getParameter("phone");
                 com.ecommerce.model.Order o;
                 try {
-                    o = new com.ecommerce.service.OrderService().trackOrder(orderNumber, phone);
+                    o = new com.ecommerce.service.OrderService().trackOrder(orderNumber, phone, guestSession);
                 } catch (AppException ae) {
                     ApiResponse.fromException(resp, ae);
                     return;
@@ -105,7 +111,7 @@ public class ShipmentServlet extends HttpServlet {
                     ApiResponse.ok(resp, null);
                     return;
                 }
-                ApiResponse.ok(resp, shipmentService.detailForGuest(s.getTrackingNumber(), phone));
+                ApiResponse.ok(resp, shipmentService.detailForGuest(s.getTrackingNumber(), phone, guestSession));
                 return;
             }
             // Détail par commande (fournisseur propriétaire ou admin).
@@ -143,10 +149,27 @@ public class ShipmentServlet extends HttpServlet {
         try {
             String[] parts = pathParts(req);
             Map<String, Object> body = readBody(req);
+            // Session client éventuelle : restreint au compte si présente.
+            Integer postSession = com.ecommerce.service.CustomerIsolation.sessionOf(
+                com.ecommerce.util.CustomerAuth.validateCustomer(req));
             // Confirmation de réception client : numéro + téléphone (pas de token).
             if (parts.length == 1 && "confirm-received".equals(parts[0])) {
-                Shipment s = shipmentService.confirmReceipt(str(body.get("trackingNumber")), str(body.get("phone")));
+                Shipment s = shipmentService.confirmReceipt(str(body.get("trackingNumber")), str(body.get("phone")), postSession);
                 ApiResponse.ok(resp, s);
+                return;
+            }
+            // Protection acheteur : "je n'ai pas reçu ma commande" (numéro + téléphone).
+            // Crée un litige (jamais de remboursement automatique) et bloque le payout.
+            if (parts.length == 1 && "report-not-received".equals(parts[0])) {
+                String orderNumber = str(body.get("orderNumber"));
+                if (orderNumber == null) orderNumber = str(body.get("trackingNumber"));
+                try {
+                    com.ecommerce.model.Dispute d = new com.ecommerce.service.DisputeService()
+                        .reportNotReceived(orderNumber, str(body.get("phone")), postSession);
+                    ApiResponse.ok(resp, d);
+                } catch (AppException ae) {
+                    ApiResponse.fromException(resp, ae);
+                }
                 return;
             }
             Integer supplierId = supplierIdOf(req);
@@ -193,12 +216,20 @@ public class ShipmentServlet extends HttpServlet {
             Map<String, Object> body = readBody(req);
             Integer supplierId = supplierIdOf(req);
             boolean admin = supplierId == null && adminIdOf(req) > 0;
-            if (supplierId == null && !admin) {
-                ApiResponse.fail(resp, 401, ErrorCodes.AUTH_REQUIRED, "Non autorisé");
+            if (!admin) {
+                // Ancien système multi-statuts SUPPRIMÉ côté fournisseur :
+                // utiliser POST /api/delivery-flow/start-delivery puis
+                // POST /api/delivery-flow/validate-delivery.
+                if (supplierId == null) {
+                    ApiResponse.fail(resp, 401, ErrorCodes.AUTH_REQUIRED, "Non autorisé");
+                } else {
+                    ApiResponse.fail(resp, 403, ErrorCodes.ACCESS_DENIED,
+                        "Utilisez le workflow de livraison (EN COURS DE LIVRAISON / VALIDER LA LIVRAISON)");
+                }
                 return;
             }
             Shipment s = shipmentService.advance(shipmentId, str(body.get("status")),
-                str(body.get("reason")), supplierId != null ? "SUPPLIER" : "ADMIN", supplierId);
+                str(body.get("reason")), "ADMIN", null);
             ApiResponse.ok(resp, s);
         } catch (AppException e) {
             ApiResponse.fromException(resp, e);

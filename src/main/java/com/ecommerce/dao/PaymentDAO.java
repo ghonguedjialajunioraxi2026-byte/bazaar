@@ -166,6 +166,12 @@ public class PaymentDAO {
         p.setCreatedAt(rs.getString("created_at"));
         try { p.setProvider(rs.getString("provider")); } catch (SQLException ignored) {}
         try { p.setIdempotenceKey(rs.getString("idempotence_key")); } catch (SQLException ignored) {}
+        try { p.setInternalReference(rs.getString("internal_reference")); } catch (SQLException ignored) {}
+        try { p.setProviderTransactionId(rs.getString("provider_transaction_id")); } catch (SQLException ignored) {}
+        try { p.setClientReferenceId(rs.getString("client_reference_id")); } catch (SQLException ignored) {}
+        try { p.setOperator(rs.getString("operator")); } catch (SQLException ignored) {}
+        try { p.setPhoneNumber(rs.getString("phone_number")); } catch (SQLException ignored) {}
+        try { p.setUpdatedAt(rs.getString("updated_at")); } catch (SQLException ignored) {}
         try { p.setFailureReason(rs.getString("failure_reason")); } catch (SQLException ignored) {}
         try {
             int vb = rs.getInt("verified_by");
@@ -246,13 +252,181 @@ public class PaymentDAO {
         }
     }
 
+    // ------------------------------------------------------------------
+    // PawaPay (colonnes migrate_pawapay.sql ; écritures conditionnelles
+    // pour une idempotence sûre sous retries/webhooks répétés).
+    // ------------------------------------------------------------------
+
+    /** Ligne PawaPay créée AVANT l'appel réseau (réconciliation garantie). */
+    public int createPawaPay(Payment p) throws SQLException {
+        String sql = "INSERT INTO payments (order_id, method, provider, amount, currency,"
+            + " transaction_ref, idempotence_key, internal_reference, provider_transaction_id,"
+            + " client_reference_id, operator, phone_number, status)"
+            + " VALUES (?, ?, 'PAWAPAY', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setInt(1, p.getOrderId());
+            ps.setString(2, p.getMethod());
+            ps.setInt(3, p.getAmount());
+            ps.setString(4, p.getCurrency() != null ? p.getCurrency() : "XAF");
+            ps.setString(5, p.getTransactionRef());
+            ps.setString(6, p.getIdempotenceKey());
+            ps.setString(7, p.getInternalReference());
+            ps.setString(8, p.getProviderTransactionId());
+            ps.setString(9, p.getClientReferenceId());
+            ps.setString(10, p.getOperator());
+            ps.setString(11, p.getPhoneNumber());
+            ps.setString(12, p.getStatus() != null ? p.getStatus() : "PENDING");
+            ps.executeUpdate();
+            try (ResultSet keys = ps.getGeneratedKeys()) {
+                if (keys.next()) return keys.getInt(1);
+            }
+            return 0;
+        }
+    }
+
+    /** Dernière tentative PawaPay d'une commande, quel que soit son statut. */
+    public Payment findLatestPawaPayByOrderId(int orderId) throws SQLException {
+        String sql = "SELECT * FROM payments WHERE order_id = ? AND provider = 'PAWAPAY'"
+            + " ORDER BY created_at DESC LIMIT 1";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, orderId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return mapRow(rs);
+            }
+        }
+        return null;
+    }
+
+    public Payment findByInternalReference(String ref) throws SQLException {
+        String sql = "SELECT * FROM payments WHERE internal_reference = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, ref);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return mapRow(rs);
+            }
+        }
+        return null;
+    }
+
+    public Payment findByProviderTransactionId(String depositId) throws SQLException {
+        String sql = "SELECT * FROM payments WHERE provider_transaction_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, depositId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return mapRow(rs);
+            }
+        }
+        return null;
+    }
+
+    /** Dernière tentative PawaPay non finale d'une commande (anti-doublon). */
+    public Payment findOpenPawaPayByOrderId(int orderId) throws SQLException {
+        String sql = "SELECT * FROM payments WHERE order_id = ? AND provider = 'PAWAPAY'"
+            + " AND status IN ('PENDING','PROCESSING','EN_ATTENTE')"
+            + " ORDER BY created_at DESC LIMIT 1";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, orderId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return mapRow(rs);
+            }
+        }
+        return null;
+    }
+
+    /** MAJ après initiation PawaPay (ACCEPTED → PROCESSING, etc.). */
+    public void updateAfterInitiation(int id, String status, String failureReason) throws SQLException {
+        String safe = failureReason == null ? null
+            : failureReason.substring(0, Math.min(255, failureReason.length()));
+        String sql = "UPDATE payments SET status = ?, failure_reason = ? WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, status);
+            ps.setString(2, safe);
+            ps.setInt(3, id);
+            ps.executeUpdate();
+        }
+    }
+
+    /**
+     * Transition webhook conditionnelle : ne touche que les lignes non
+     * finales. Retourne true si la ligne a basculé (false = doublon ou
+     * déjà finale → ne rien recompter).
+     */
+    public boolean transitionFromWebhook(int id, String toStatus, String failureReason) throws SQLException {
+        String safe = failureReason == null ? null
+            : failureReason.substring(0, Math.min(255, failureReason.length()));
+        String sql = "UPDATE payments SET status = ?, failure_reason = ?,"
+            + " paid_at = IF(? IN ('COMPLETED','REUSSIE'), NOW(), paid_at)"
+            + " WHERE id = ? AND status IN ('PENDING','PROCESSING','EN_ATTENTE')";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, toStatus);
+            ps.setString(2, safe);
+            ps.setString(3, toStatus);
+            ps.setInt(4, id);
+            return ps.executeUpdate() > 0;
+        }
+    }
+
     /** Rouvre une tentative après échec (nouvelle référence à fournir). */
     public void reopen(int id) throws SQLException {
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(
-                 "UPDATE payments SET status = 'EN_ATTENTE' WHERE id = ? AND status = 'ECHOUEE'")) {
+              PreparedStatement ps = conn.prepareStatement(
+                  "UPDATE payments SET status = 'EN_ATTENTE' WHERE id = ? AND status = 'ECHOUEE'")) {
             ps.setInt(1, id);
             ps.executeUpdate();
+        }
+    }
+
+    /**
+     * Confirmation MODE TEST (sandbox uniquement, jamais en production).
+     * Simule un dépôt réussi sans appel PawaPay : la référence est
+     * préfixée TEST- et traçable. Retourne false si déjà traité.
+     */
+    public boolean markTestConfirmed(int id, String ref) throws SQLException {
+        String safe = ref == null ? "TEST" : ref.substring(0, Math.min(120, ref.length()));
+        try (Connection conn = DBConnection.getConnection();
+              PreparedStatement ps = conn.prepareStatement(
+                  "UPDATE payments SET status = 'REUSSIE', transaction_ref = ?,"
+                  + " paid_at = NOW(), failure_reason = NULL"
+                  + " WHERE id = ? AND status IN ('EN_ATTENTE','ECHOUEE')")) {
+            ps.setString(1, safe);
+            ps.setInt(2, id);
+            return ps.executeUpdate() > 0;
+        }
+    }
+
+    /** Dépôt PawaPay soldé (COMPLETED) d'une commande, pour payout/refund. */
+    public Payment findCompletedPawaPayByOrderId(int orderId) throws SQLException {
+        String sql = "SELECT * FROM payments WHERE order_id = ? AND provider = 'PAWAPAY'"
+            + " AND status IN ('COMPLETED','REUSSIE')"
+            + " ORDER BY created_at DESC LIMIT 1";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, orderId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return mapRow(rs);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Bascule un dépôt COMPLETED → REFUNDED (remboursement PawaPay confirmé).
+     * Conditionnelle : un doublon de callback ne re-déclenche rien.
+     */
+    public boolean markRefundedIfCompleted(int id) throws SQLException {
+        String sql = "UPDATE payments SET status = 'REFUNDED'"
+            + " WHERE id = ? AND status IN ('COMPLETED','REUSSIE')";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            return ps.executeUpdate() > 0;
         }
     }
 }

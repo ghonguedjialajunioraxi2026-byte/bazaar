@@ -33,6 +33,18 @@ public final class ErrorCodes {
     public static final String PAYMENT_NOT_FOUND = "PAYMENT_NOT_FOUND";
     public static final String PAYMENT_INVALID = "PAYMENT_INVALID";
     public static final String PROVIDER_UNAVAILABLE = "PROVIDER_UNAVAILABLE";
+    public static final String ORDER_ALREADY_PAID = "ORDER_ALREADY_PAID";
+    public static final String DUPLICATE_DEPOSIT = "DUPLICATE_DEPOSIT";
+    public static final String PAYMENT_ALREADY_PROCESSING = "PAYMENT_ALREADY_PROCESSING";
+    public static final String PAWAPAY_TIMEOUT = "PAWAPAY_TIMEOUT";
+    public static final String PAWAPAY_REJECTED = "PAWAPAY_REJECTED";
+    public static final String PAYOUT_BLOCKED = "PAYOUT_BLOCKED";
+    public static final String PAYOUT_CANCEL_REFUSED = "PAYOUT_CANCEL_REFUSED";
+    public static final String REFUND_CANCEL_REFUSED = "REFUND_CANCEL_REFUSED";
+    public static final String PAYOUT_DETAILS_MISSING = "PAYOUT_DETAILS_MISSING";
+    public static final String REFUND_NOT_ALLOWED = "REFUND_NOT_ALLOWED";
+    public static final String ALREADY_REFUNDED = "ALREADY_REFUNDED";
+    public static final String DISPUTE_OPEN = "DISPUTE_OPEN";
     public static final String NOTIFICATION_NOT_FOUND = "NOTIFICATION_NOT_FOUND";
     public static final String NOTIFICATION_ACCESS_DENIED = "NOTIFICATION_ACCESS_DENIED";
 }

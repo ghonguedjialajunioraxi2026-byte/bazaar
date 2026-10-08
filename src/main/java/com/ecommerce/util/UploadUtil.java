@@ -35,6 +35,10 @@ public final class UploadUtil {
 
     public static final String SUBDIR_PRODUCTS = "products";
     public static final String SUBDIR_CATEGORIES = "categories";
+    /** Logos de boutiques fournisseurs (séparés des produits). */
+    public static final String SUBDIR_LOGOS = "logos";
+    /** Photos de profil clients (séparées des produits). */
+    public static final String SUBDIR_AVATARS = "avatars";
 
     /** Racine persistante (créée si absente). */
     public static File rootDir() {

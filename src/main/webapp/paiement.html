@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paiement sécurisé — BAZAAR</title>
+<meta name="description" content="BAZAAR : paiement sécurisé MTN Mobile Money et Orange Money. Montant calculé par nos serveurs, validation sur votre téléphone.">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        primary: { 50:'#F7FFDC',100:'#EEFFC2',200:'#DFFF8F',300:'#CFFF5C',400:'#C8FF1A',500:'#B7F000',600:'#65A30D',700:'#4D7C0F',800:'#3F6212',900:'#123B16' }
+      },
+      fontFamily: { sans:['Manrope','system-ui','-apple-system','sans-serif'], display:['DM Serif Display','Georgia','serif'] },
+      boxShadow: { 'soft':'0 1px 2px rgba(18,59,22,0.05)', 'card':'0 4px 12px rgba(18,59,22,0.08)', 'pop':'0 12px 30px rgba(18,59,22,0.12)' }
+    }
+  }
+}
+</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<style>
+  body{font-family:'Manrope',system-ui,-apple-system,sans-serif;background:#F7FAF5;color:#123B16}
+  .font-display{font-family:"DM Serif Display",Georgia,serif}
+  .eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#4D7C0F}
+  .op-card input{position:absolute;opacity:0;pointer-events:none}
+  .op-card{transition:border-color 150ms,background 150ms,box-shadow 150ms,transform 150ms}
+  .op-card:hover{transform:translateY(-1px)}
+  .op-card:has(input:checked){border-color:#4D7C0F;background:#F7FFDC;box-shadow:0 4px 12px rgba(18,59,22,0.10)}
+  .op-card:has(input:focus-visible){outline:2px solid #B7F000;outline-offset:2px}
+  input:focus{outline:none;box-shadow:0 0 0 3px rgba(183,240,0,0.25)}
+  input.field-ok{border-color:#4D7C0F!important;background:#F7FFDC}
+  input.field-ko{border-color:rgba(220,38,38,.5)!important}
+  .ms-spinner{width:1.1rem;height:1.1rem;border-radius:9999px;border:2px solid rgba(18,59,22,.2);border-top-color:#123B16;animation:spin 700ms linear infinite;display:inline-block}
+  .ms-spinner.light{border-color:rgba(255,255,255,.35);border-top-color:#fff}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @keyframes popIn{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+  .pop{animation:popIn 350ms ease-out}
+  @keyframes pulseSoft{0%,100%{opacity:1}50%{opacity:.45}}
+  .pulse-soft{animation:pulseSoft 1.6s ease-in-out infinite}
+  .step-dot{transition:all 200ms}
+  #pay-toast{transition:opacity 250ms,transform 250ms}
+</style>
+</head>
+<body>
+<header class="bg-[#123B16] text-white">
+  <div class="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between">
+    <a href="index.html" aria-label="BAZAAR — Accueil"><img src="logo/BAZAAR-white.png" alt="BAZAAR" width="120" height="40" class="h-8 w-auto"></a>
+    <p class="text-xs flex items-center gap-1.5 text-[#B7F000]"><i class="bi bi-lock-fill"></i> Paiement sécurisé</p>
+  </div>
+</header>
+
+<main class="max-w-3xl mx-auto px-4 py-6 sm:py-8">
+  <!-- Étapes -->
+  <ol class="flex items-center gap-1.5 sm:gap-2 mb-6 text-[11px] sm:text-xs font-semibold" aria-label="Étapes">
+    <li class="flex items-center gap-1.5 text-[#4D7C0F]"><span class="w-5 h-5 rounded-full bg-[#123B16] text-white flex items-center justify-center text-[10px]"><i class="bi bi-check"></i></span> Commande</li>
+    <li class="flex-1 h-px bg-[#123B16]" aria-hidden="true"></li>
+    <li class="flex items-center gap-1.5 text-[#123B16]"><span class="w-5 h-5 rounded-full bg-[#B7F000] text-[#0A0A0A] flex items-center justify-center text-[10px] font-bold">2</span> Paiement</li>
+    <li class="flex-1 h-px bg-[#DDE6DC]" aria-hidden="true"></li>
+    <li class="flex items-center gap-1.5 text-[#5F6B61]"><span class="w-5 h-5 rounded-full bg-[#DDE6DC] flex items-center justify-center text-[10px] font-bold">3</span> Confirmation</li>
+  </ol>
+
+  <div class="flex flex-wrap items-center gap-2 mb-4">
+    <p class="eyebrow">Paiement</p>
+    <span id="env-badge" class="hidden text-[10px] font-bold px-2 py-1 rounded-full bg-[#EEFFC2] text-[#4D7C0F] border border-[#DDE6DC]">MODE TEST — aucun argent réel</span>
+  </div>
+  <h1 class="font-display text-3xl font-bold mb-1">Paiement sécurisé</h1>
+  <p class="text-sm text-[#5F6B61] mb-6">Montant calculé par BAZAAR · validation sur votre téléphone · confirmation automatique.</p>
+
+  <div id="pay-toast" class="hidden mb-4 p-4 rounded-2xl text-sm font-medium opacity-0 -translate-y-1" role="alert"></div>
+  <div id="pay-loading" class="py-16 text-center"><span class="ms-spinner"></span><p class="text-sm text-[#5F6B61] mt-3">Chargement de votre commande…</p></div>
+
+  <div id="pay-main" class="hidden space-y-5">
+    <!-- Récapitulatif -->
+    <section class="bg-white rounded-3xl border border-[#DDE6DC] shadow-card p-5 sm:p-6" aria-label="Votre commande">
+      <div class="flex items-center justify-between mb-1">
+        <h2 class="font-semibold text-lg">Votre commande</h2>
+        <span id="pay-op-badge" class="hidden text-[10px] font-bold px-2 py-1 rounded-full bg-[#F7FAF5] border border-[#DDE6DC]"></span>
+      </div>
+      <p class="text-xs text-[#5F6B61] mb-4">Commande <strong id="pay-order-num" class="text-[#123B16]">—</strong> · Pays : <strong class="text-[#123B16]">Cameroun</strong></p>
+      <div id="pay-items" class="space-y-3 max-h-56 overflow-y-auto mb-4"></div>
+      <dl class="border-t border-[#DDE6DC] pt-3 space-y-1.5 text-sm">
+        <div class="flex justify-between"><dt class="text-[#5F6B61]">Sous-total</dt><dd id="pay-subtotal" class="tabular-nums">—</dd></div>
+        <div class="flex justify-between"><dt class="text-[#5F6B61]">Livraison</dt><dd id="pay-delivery" class="tabular-nums">—</dd></div>
+        <div class="flex justify-between font-bold text-base pt-1"><dt>Total à payer</dt><dd id="pay-total" class="tabular-nums">—</dd></div>
+      </dl>
+    </section>
+
+    <!-- Opérateur + numéro -->
+    <section id="pay-form-card" class="bg-white rounded-3xl border border-[#DDE6DC] shadow-card p-5 sm:p-6" aria-label="Mode de paiement">
+      <h2 class="font-semibold text-lg mb-1">Choisissez votre moyen de paiement</h2>
+      <p class="text-xs text-[#5F6B61] mb-3">MTN Mobile Money ou Orange Money — validation sur votre téléphone.</p>
+      <div id="pay-providers" class="grid grid-cols-1 sm:grid-cols-2 gap-3" role="radiogroup" aria-label="Opérateur"></div>
+      <div class="mt-4">
+        <label for="pay-phone" class="flex items-center justify-between text-sm font-medium mb-1.5">
+          <span>Numéro Mobile Money <span class="text-[#DC2626]">*</span></span>
+          <span id="pay-phone-check" class="hidden text-[#4D7C0F] text-xs font-bold"><i class="bi bi-check-circle-fill"></i> Valide</span>
+        </label>
+        <div class="flex">
+          <span class="px-4 py-3 rounded-l-xl border border-r-0 border-[#DDE6DC] bg-[#F7FAF5] text-sm font-bold">+237</span>
+          <input type="tel" id="pay-phone" required inputmode="tel" autocomplete="tel" maxlength="14" placeholder="690 00 00 00"
+            class="flex-1 min-w-0 px-4 py-3 rounded-r-xl border border-[#DDE6DC] text-sm tabular-nums" aria-describedby="pay-phone-hint">
+        </div>
+        <p id="pay-phone-hint" class="text-xs text-[#5F6B61] mt-1.5">Le compte débité. Votre code PIN reste sur votre téléphone, BAZAAR ne le demande jamais.</p>
+      </div>
+      <div class="mt-3 flex items-center gap-2 text-sm">
+        <span class="text-[#5F6B61]">Devise</span>
+        <span class="px-3 py-1.5 rounded-xl bg-[#F7FAF5] border border-[#DDE6DC] font-bold text-xs">XAF — Franc CFA</span>
+      </div>
+    </section>
+
+    <!-- Payer -->
+    <div id="pay-cta" class="sticky bottom-3">
+      <button id="pay-submit" disabled class="w-full py-4 bg-primary-700 hover:bg-primary-800 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-2xl transition shadow-card flex items-center justify-center gap-2 text-base">
+        <i class="bi bi-lock-fill"></i> <span id="pay-submit-label">Payer maintenant</span>
+      </button>
+      <button id="pay-test" class="hidden w-full py-4 mt-2 bg-[#0A0A0A] hover:bg-[#222222] text-white font-bold rounded-2xl transition shadow-card flex items-center justify-center gap-2 text-base">
+        <i class="bi bi-flask"></i> <span>Simuler le paiement (TEST — sans argent réel)</span>
+      </button>
+      <p id="pay-cta-hint" class="text-center text-[11px] text-[#5F6B61] mt-2">Saisissez un numéro valide pour activer le paiement.</p>
+      <div class="flex items-center justify-center gap-4 mt-3 text-[11px] text-[#5F6B61]">
+        <span class="flex items-center gap-1"><i class="bi bi-shield-check text-[#4D7C0F]"></i> Transaction chiffrée</span>
+        <span class="flex items-center gap-1"><i class="bi bi-phone text-[#4D7C0F]"></i> Aucun PIN demandé</span>
+        <span class="flex items-center gap-1"><i class="bi bi-lightning-charge text-[#4D7C0F]"></i> Reçu automatique</span>
+      </div>
+    </div>
+
+    <!-- Statut -->
+    <section id="pay-status" class="hidden bg-white rounded-3xl border border-[#DDE6DC] shadow-card p-5 sm:p-6" aria-live="polite" aria-label="Statut du paiement"></section>
+  </div>
+
+  <footer class="mt-8 text-center text-[11px] text-[#5F6B61] space-y-1">
+    <p>Un problème ? Écrivez à <a class="font-semibold text-[#4D7C0F]" href="mailto:support@mboastyle.cm">support@mboastyle.cm</a></p>
+    <p><a class="underline" id="pay-back" href="index.html">← Retour à la boutique</a></p>
+  </footer>
+</main>
+
+<script>
+(function () {
+  'use strict';
+  // Isolation des comptes : clés privées suffixées par le compte connecté
+  // (même convention que index.html). Invité = clés globales.
+  function payAccountKey(base) {
+    try {
+      const c = JSON.parse(localStorage.getItem('bazaar_customer') || 'null');
+      return (c && c.id) ? base + '_' + c.id : base;
+    } catch (e) { return base; }
+  }
+  const qs = new URLSearchParams(window.location.search);
+  const orderNumber = (qs.get('order') || '').trim();
+  const phone = (qs.get('phone') || '').trim();
+  const base = window.location.pathname.includes('/mboa-style') ? '/mboa-style' : '';
+  let order = null, providers = [], chosen = null, pollTimer = null, polls = 0, paying = false;
+
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const fmt = (n) => Number(n || 0).toLocaleString('fr-FR').replace(/[  ]/g, ' ') + ' XAF';
+  const digits = (v) => String(v || '').replace(/\D/g, '');
+
+  let toastTimer = null;
+  function toast(msg, kind) {
+    const b = $('pay-toast');
+    const ok = kind === 'success';
+    b.className = 'mb-4 p-4 rounded-2xl text-sm font-medium border ' + (ok
+      ? 'bg-[rgba(77,124,15,0.08)] border-[rgba(77,124,15,0.4)] text-[#3F6212]'
+      : 'bg-[rgba(220,38,38,0.07)] border-[rgba(220,38,38,0.35)] text-[#991B1B]');
+    b.textContent = msg;
+    requestAnimationFrame(() => b.classList.remove('opacity-0', '-translate-y-1'));
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => b.classList.add('opacity-0', '-translate-y-1'), 6000);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Logos officiels (assets locaux, aucune clé ni appel externe) ;
+  // repli lettre/badge si l'image est indisponible.
+  function logoFor(method) {
+    if (method === 'MOBILE_MONEY_ORANGE')
+      return { src: 'assets/payment/orange-money.svg', alt: 'Orange Money', wrap: 'bg-white' };
+    // Le blason MTN officiel est monochrome : fond jaune MTN pour le rendu marque.
+    return { src: 'assets/payment/mtn-momo.svg', alt: 'MTN Mobile Money', wrap: 'bg-[#FFCC00] px-2 py-1' };
+  }
+
+  function brandFor(method) {
+    if (method === 'MOBILE_MONEY_ORANGE') return { bg: 'bg-[#FF7900]', fg: 'text-white', letter: 'O' };
+    return { bg: 'bg-[#FFCC00]', fg: 'text-[#0A0A0A]', letter: 'M' };
+  }
+
+  function logoImg(p) {
+    const l = logoFor(p.method);
+    const b = brandFor(p.method);
+    return `<img src="${l.src}" alt="${esc(l.alt)}" loading="lazy" class="h-9 w-auto max-w-[112px] object-contain shrink-0 rounded-lg ${l.wrap || 'bg-white'}"`
+      + ` onerror="this.outerHTML='<span class=&quot;w-11 h-11 rounded-xl ${b.bg} ${b.fg} flex items-center justify-center font-black text-base shrink-0&quot; aria-hidden=&quot;true&quot;>${b.letter}</span>'">`;
+  }
+
+  function friendlyFailure(reason) {
+    const r = String(reason || '');
+    if (/INVALID_PHONE_NUMBER/.test(r)) return 'Ce numéro semble invalide pour cet opérateur. Vérifiez-le et réessayez.';
+    if (/AMOUNT_OUT_OF_BOUNDS/.test(r)) return 'Montant hors des limites de l’opérateur pour cette transaction.';
+    if (/INVALID_AMOUNT|INVALID_CURRENCY/.test(r)) return 'Montant ou devise refusé par l’opérateur.';
+    if (/PROVIDER_TEMPORARILY_UNAVAILABLE/.test(r)) return 'Opérateur momentanément indisponible. Réessayez dans quelques instants.';
+    if (/DEPOSITS_NOT_ALLOWED/.test(r)) return 'Paiements temporairement désactivés chez l’opérateur. Réessayez plus tard.';
+    return null;
+  }
+
+  async function boot() {
+    if (!orderNumber || digits(phone).length < 9) {
+      $('pay-loading').classList.add('hidden');
+      toast('Commande introuvable. Revenez à la boutique puis « Suivre ma commande ».', 'error');
+      return;
+    }
+    try {
+      const [oRes, pRes, cRes] = await Promise.all([
+        fetch(base + '/api/orders?action=track&number=' + encodeURIComponent(orderNumber) + '&phone=' + encodeURIComponent(phone)),
+        fetch(base + '/api/payments/pawapay/providers'),
+        fetch(base + '/api/payments/pawapay/config-status')
+      ]);
+      if (!oRes.ok) throw new Error('Commande introuvable. Vérifiez le numéro et le téléphone.');
+      order = await oRes.json();
+      providers = (pRes.ok ? (await pRes.json()).providers : null) || [
+        { method: 'MOBILE_MONEY_MTN', provider: 'MTN_MOMO_CMR', label: 'MTN Mobile Money' },
+        { method: 'MOBILE_MONEY_ORANGE', provider: 'ORANGE_CMR', label: 'Orange Money' }
+      ];
+      try {
+        const cfg = cRes.ok ? await cRes.json() : null;
+        if (cfg && String(cfg.environment || '').toUpperCase() !== 'PRODUCTION') $('env-badge').classList.remove('hidden');
+      } catch (e) {}
+      // Bouton TEST (sandbox uniquement, vérifié serveur : l'endpoint
+      // refuse en production et le bouton reste masqué).
+      try {
+        const tRes = await fetch(base + '/api/payments?action=test-mode');
+        const tMode = tRes.ok ? (await tRes.json().catch(() => ({}))) : {};
+        if (tMode && tMode.testMode) {
+          $('pay-test').classList.remove('hidden');
+          $('pay-test').addEventListener('click', testPay);
+        }
+      } catch (e) {}
+      render();
+    } catch (e) {
+      $('pay-loading').classList.add('hidden');
+      toast(e.message || 'Service indisponible.', 'error');
+    }
+  }
+
+  function render() {
+    $('pay-loading').classList.add('hidden');
+    $('pay-main').classList.remove('hidden');
+    $('pay-back').href = 'index.html';
+    $('pay-order-num').textContent = '#' + order.orderNumber;
+    const items = order.items || [];
+    $('pay-items').innerHTML = items.length ? items.map((it) => `
+      <div class="flex gap-3 items-center">
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-bold truncate">${esc(it.productName || ('Produit #' + it.productId))}</p>
+          <p class="text-xs text-[#5F6B61]">x${it.qty}${it.color ? ' · ' + esc(it.color) : ''}${it.size ? ' · ' + esc(it.size) : ''}</p>
+        </div>
+        <p class="text-sm font-bold tabular-nums whitespace-nowrap">${fmt(it.unitPrice * it.qty)}</p>
+      </div>`).join('') : '<p class="text-sm text-[#5F6B61]">Détail indisponible.</p>';
+    const sub = items.reduce((s, it) => s + it.unitPrice * it.qty, 0);
+    $('pay-subtotal').textContent = fmt(sub);
+    $('pay-delivery').textContent = fmt(Math.max(0, (order.total || 0) - sub));
+    $('pay-total').textContent = fmt(order.total);
+    $('pay-submit-label').textContent = 'Payer ' + fmt(order.total);
+    try {
+      const remembered = localStorage.getItem(payAccountKey('ms_phone')) || '';
+      if (remembered && !$('pay-phone').value) {
+        const d = digits(remembered).replace(/^237/, '');
+        if (d.length >= 9) $('pay-phone').value = d.replace(/(\d{3})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4');
+      }
+    } catch (e) {}
+    const usable = providers.filter((p) => p.available !== false);
+    const eligible = usable.filter((p) => p.method === order.paymentMethod);
+    chosen = (eligible[0] || usable[0] || {}).method || null;
+    $('pay-providers').innerHTML = providers.map((p) => {
+      const off = p.available === false;
+      return `
+      <label class="op-card relative flex items-center gap-3 p-4 rounded-2xl border border-[#DDE6DC] ${off ? 'opacity-50 cursor-not-allowed bg-[#F7FAF5]' : 'cursor-pointer bg-white'}">
+        <input type="radio" name="pay-op" value="${esc(p.method)}"${p.method === chosen ? ' checked' : ''}${off ? ' disabled' : ''}>
+        ${logoImg(p)}
+        <span class="min-w-0 flex-1">
+          <span class="block text-sm font-bold truncate">${esc(p.label)}</span>
+          <span class="block text-[11px] text-[#5F6B61]">${off ? 'Momentanément indisponible' : 'XAF · validation sur mobile'}</span>
+        </span>
+        ${off ? '<span class="text-[10px] font-bold px-2 py-1 rounded-full bg-[#DDE6DC] text-[#5F6B61]">INDISPONIBLE</span>'
+              : `<i class="bi bi-check-circle-fill text-[#4D7C0F] op-tick ${p.method === chosen ? '' : 'invisible'}"></i>`}
+      </label>`;
+    }).join('');
+    $('pay-providers').addEventListener('change', (e) => {
+      if (e.target && e.target.name === 'pay-op') {
+        chosen = e.target.value;
+        document.querySelectorAll('.op-tick').forEach((t) => t.classList.add('invisible'));
+        const card = e.target.closest('label');
+        const tick = card ? card.querySelector('.op-tick') : null;
+        if (tick) tick.classList.remove('invisible');
+        const badge = $('pay-op-badge');
+        const prov = providers.find((p) => p.method === chosen);
+        if (prov) { badge.textContent = prov.label; badge.classList.remove('hidden'); }
+        validate();
+      }
+    });
+    const first = providers.find((p) => p.method === chosen);
+    if (first) { const badge = $('pay-op-badge'); badge.textContent = first.label; badge.classList.remove('hidden'); }
+    $('pay-phone').addEventListener('input', validate);
+    $('pay-submit').addEventListener('click', pay);
+    validate();
+    refreshStatus(true);
+  }
+
+  function normalizeMsisdn(raw) {
+    let d = digits(raw).replace(/^00/, '');
+    if (d.length === 9 && d.charAt(0) === '6') d = '237' + d;
+    return d;
+  }
+
+  function phoneValid() {
+    return /^\d{9,15}$/.test(normalizeMsisdn($('pay-phone').value));
+  }
+
+  function validate() {
+    const usable = providers.filter((p) => p.available !== false);
+    const ok = phoneValid() && !!chosen && !paying && usable.length > 0;
+    $('pay-submit').disabled = !ok;
+    const input = $('pay-phone');
+    const check = $('pay-phone-check');
+    const has = digits(input.value).length > 0;
+    input.classList.toggle('field-ok', has && phoneValid());
+    input.classList.toggle('field-ko', has && !phoneValid());
+    check.classList.toggle('hidden', !phoneValid());
+    $('pay-cta-hint').textContent = usable.length === 0
+      ? 'Aucun opérateur disponible pour le moment. Réessayez plus tard.'
+      : ok
+        ? 'Vous allez recevoir une demande de validation sur votre téléphone.'
+        : 'Saisissez un numéro valide pour activer le paiement.';
+    return ok;
+  }
+
+  async function pay() {
+    if (paying || !validate()) return;
+    if (!chosen) { toast('Choisissez un opérateur (MTN ou Orange).', 'error'); return; }
+    const msisdn = normalizeMsisdn($('pay-phone').value);
+    paying = true;
+    validate();
+    const btn = $('pay-submit');
+    btn.innerHTML = '<span class="ms-spinner light"></span> Création du paiement…';
+    try {
+      const res = await fetch(base + '/api/payments/pawapay/deposit', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderNumber: order.orderNumber, phone, provider: chosen, phoneNumber: msisdn })
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.status === 409) { toast('Cette commande est déjà payée.', 'success'); await refreshStatus(true); return; }
+      if (!res.ok) throw new Error((data && (data.message || data.error)) || 'Paiement refusé.');
+      if (data.duplicate) toast('Demande déjà envoyée : suivi de votre paiement en cours.', 'success');
+      if (data.status === 'FAILED') {
+        showStatus('FAILED', data);
+        toast(friendlyFailure(data.failureReason) || 'Paiement refusé. Vérifiez le numéro et réessayez.', 'error');
+        return;
+      }
+      toast('Demande envoyée. Validez sur votre téléphone.', 'success');
+      showStatus(data.status || 'PROCESSING', data);
+      startPolling();
+    } catch (e) {
+      toast(e.message || 'Paiement indisponible.', 'error');
+    } finally {
+      paying = false;
+      validate();
+      btn.innerHTML = '<i class="bi bi-lock-fill"></i> <span id="pay-submit-label">Payer ' + fmt(order.total) + '</span>';
+    }
+  }
+
+  function stepsHTML(activeIdx) {
+    const steps = ['Demande créée', 'Validation sur mobile', 'Confirmation'];
+    return `<ol class="mt-3 space-y-0">` + steps.map((s, i) => `
+      <li class="flex gap-3">
+        <div class="flex flex-col items-center">
+          <span class="step-dot w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold ${i < activeIdx ? 'bg-[#123B16] text-white' : i === activeIdx ? 'bg-[#B7F000] text-[#0A0A0A] pulse-soft' : 'bg-[#DDE6DC] text-[#5F6B61]'}">${i < activeIdx ? '<i class="bi bi-check"></i>' : (i + 1)}</span>
+          ${i < steps.length - 1 ? `<span class="w-0.5 flex-1 ${i < activeIdx ? 'bg-[#123B16]' : 'bg-[#DDE6DC]'}"></span>` : ''}
+        </div>
+        <div class="pb-4"><p class="text-sm font-semibold ${i <= activeIdx ? '' : 'text-[#5F6B61]'}">${s}</p></div>
+      </li>`).join('') + `</ol>`;
+  }
+
+  function showStatus(status, data) {
+    const box = $('pay-status');
+    box.classList.remove('hidden');
+    const ref = data && (data.internalReference || data.depositId);
+    if (status === 'COMPLETED') {
+      // Succès réel confirmé par le serveur : écran unifié + redirection
+      // (l'ancienne timeline en 5 étapes n'est plus l'interface principale).
+      showPaymentSuccess(ref);
+      return;
+    } else if (status === 'FAILED') {
+      stopPolling();
+      const friendly = friendlyFailure(data && data.failureReason);
+      box.innerHTML = `
+      <div class="rounded-2xl border border-[rgba(220,38,38,0.35)] bg-[rgba(220,38,38,0.05)] p-4 pop">
+        <p class="font-bold flex items-center gap-2"><i class="bi bi-x-circle-fill text-[#DC2626]"></i> Paiement non confirmé</p>
+        <p class="text-sm mt-1">${esc(friendly || 'Aucun montant débité définitivement. Vous pouvez réessayer.')}</p>
+      </div>
+      <div class="flex gap-2 mt-3">
+        <button id="pay-retry" class="flex-1 py-3 bg-primary-700 hover:bg-primary-800 text-white text-sm font-bold rounded-xl transition">Réessayer le paiement</button>
+        <a href="index.html" class="flex-1 py-3 border border-[#DDE6DC] text-sm font-bold rounded-xl hover:border-[#B7F000] transition text-center">Ma commande</a>
+      </div>`;
+      const rt = $('pay-retry');
+      if (rt) rt.addEventListener('click', () => { box.classList.add('hidden'); pay(); });
+    } else {
+      const idx = status === 'PENDING' ? 0 : 1;
+      box.innerHTML = `
+      <div class="rounded-2xl border border-[rgba(77,124,15,0.35)] bg-[rgba(183,240,0,0.08)] p-4">
+        <p class="font-bold flex items-center gap-2"><span class="ms-spinner"></span> En attente de validation</p>
+        <p class="text-sm mt-1">Confirmez la demande de <strong>${fmt(order.total)}</strong> sur votre téléphone.</p>
+        <p id="pay-polls" class="text-[11px] text-[#5F6B61] mt-1">Vérification automatique en cours…</p>
+      </div>
+      ${stepsHTML(idx)}
+      <div class="flex gap-2 mt-1">
+        <button id="pay-refresh" class="flex-1 py-2.5 border border-[#DDE6DC] text-sm font-bold rounded-xl hover:border-[#B7F000] transition">Vérifier maintenant</button>
+        <button id="pay-cancel" class="flex-1 py-2.5 border border-[#DDE6DC] text-sm font-bold rounded-xl text-[#5F6B61] transition">Annuler le suivi</button>
+      </div>`;
+      const rf = $('pay-refresh');
+      if (rf) rf.addEventListener('click', () => refreshStatus(true));
+      const cn = $('pay-cancel');
+      if (cn) cn.addEventListener('click', () => { stopPolling(); toast('Suivi automatique arrêté. Utilisez « Vérifier maintenant ».', 'success'); });
+    }
+    box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  async function refreshStatus(show) {
+    try {
+      const res = await fetch(base + '/api/payments/pawapay/status?orderNumber=' + encodeURIComponent(order.orderNumber) + '&phone=' + encodeURIComponent(phone));
+      if (!res.ok) return null;
+      const data = await res.json();
+      if (show && data && data.status && data.status !== 'EN_ATTENTE') {
+        if (data.status === 'FAILED' && !data._announced) {
+          showStatus('FAILED', data);
+          data._announced = true;
+          toast(friendlyFailure(data.failureReason) || 'Paiement non confirmé.', 'error');
+        } else if (data.status !== 'FAILED') {
+          showStatus(data.status, data);
+        }
+      }
+      return data;
+    } catch (e) { return null; }
+  }
+
+  function startPolling() {
+    stopPolling();
+    polls = 0;
+    pollTimer = setInterval(async () => {
+      polls += 1;
+      const el = $('pay-polls');
+      if (el) el.textContent = 'Vérification automatique en cours… (' + polls + ')';
+      const data = await refreshStatus(false);
+      const st = data && data.status;
+      if (st === 'COMPLETED') { showStatus('COMPLETED', data); toast('Paiement confirmé. Merci !', 'success'); }
+      else if (st === 'FAILED') {
+        showStatus('FAILED', data);
+        toast(friendlyFailure(data.failureReason) || 'Paiement non confirmé.', 'error');
+      }
+      else if (polls >= 30) { stopPolling(); toast('Toujours en attente. Utilisez « Vérifier maintenant ».', 'error'); }
+      else if (st === 'PROCESSING' || st === 'PENDING') showStatus(st, data);
+    }, 4000);
+  }
+
+  function stopPolling() {
+    if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+  }
+
+  async function testPay() {
+    if (paying) return;
+    paying = true;
+    validate();
+    const btn = $('pay-test');
+    const prev = btn.innerHTML;
+    btn.innerHTML = '<span class="ms-spinner light"></span> Validation en cours…';
+    // Étape "validation téléphone" affichée PENDANT l'appel serveur réel :
+    // le succès n'est déclaré qu'après HTTP 200 du backend (jamais avant).
+    const box = $('pay-status');
+    box.classList.remove('hidden');
+    box.innerHTML = `
+      <div class="rounded-2xl border border-[#D9D9D9] bg-white p-4 pop">
+        <p class="font-bold flex items-center gap-2 text-[#0A0A0A]"><span class="ms-spinner"></span> Validation sur votre téléphone (simulation TEST)…</p>
+        <p class="text-sm text-[#6B6B6B] mt-1">Confirmez sur votre téléphone. Le serveur vérifie le paiement en temps réel.</p>
+      </div>`;
+    box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    try {
+      const minWait = new Promise((r) => setTimeout(r, 1500));
+      const req = fetch(base + '/api/payments', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'test-confirm', orderNumber: order.orderNumber, phone })
+      }).then(async (res) => ({ res, data: await res.json().catch(() => ({})) }));
+      const [{ res, data }] = await Promise.all([req, minWait]);
+      if (!res.ok) throw new Error((data && (data.message || data.error)) || 'Paiement test refusé.');
+      showPaymentSuccess();
+      toast('Paiement confirmé (mode TEST) — commande confirmée, aucun argent réel débité.', 'success');
+    } catch (e) {
+      showStatus('FAILED', { failureReason: e.message });
+      toast(e.message || 'Paiement test impossible.', 'error');
+    } finally {
+      paying = false;
+      btn.innerHTML = prev;
+      validate();
+    }
+  }
+
+  // Écran succès unifié (paiement réel ou TEST) : PAS de timeline —
+  // redirection vers Mes commandes après ~5 s, SEULEMENT si le serveur
+  // a confirmé (jamais en cas d'échec).
+  let redirectTimer = null;
+  function goOrders() {
+    if (redirectTimer) { clearInterval(redirectTimer); redirectTimer = null; }
+    window.location.href = 'index.html#mes-commandes';
+  }
+  function showPaymentSuccess(ref) {
+    stopPolling();
+    $('pay-form-card').classList.add('hidden');
+    $('pay-cta').classList.add('hidden');
+    const box = $('pay-status');
+    box.classList.remove('hidden');
+    try {
+      sessionStorage.setItem('bazaar_last_paid_order',
+        JSON.stringify({ orderNumber: order.orderNumber, phone, justPaid: true }));
+    } catch (e) {}
+    box.innerHTML = `
+      <div class="text-center py-6 pop">
+        <span class="inline-flex w-20 h-20 rounded-full bg-[#0A0A0A] text-white items-center justify-center text-4xl mb-4"><i class="bi bi-check"></i></span>
+        <p class="font-display text-3xl font-bold text-[#0A0A0A]">PAIEMENT EFFECTUÉ</p>
+        <p class="text-sm text-[#6B6B6B] mt-2">Votre commande <strong class="text-[#0A0A0A]">#${esc(order.orderNumber)}</strong> a été confirmée (${fmt(order.total)}).</p>
+        ${ref ? `<p class="text-[11px] text-[#6B6B6B] mt-2">Référence : ${esc(ref)}</p>` : ''}
+        <p class="text-sm text-[#6B6B6B] mt-4">Redirection vers <strong>Mes commandes</strong> dans <strong id="pay-count">5</strong> s…</p>
+        <button id="pay-go-orders" class="mt-4 px-6 py-3 bg-[#C40000] hover:bg-[#9E0000] text-white text-sm font-bold rounded-xl transition">Voir mes commandes</button>
+      </div>`;
+    let cd = 5;
+    redirectTimer = setInterval(() => {
+      cd -= 1;
+      const el = $('pay-count');
+      if (el) el.textContent = String(Math.max(0, cd));
+      if (cd <= 0) goOrders();
+    }, 1000);
+    $('pay-go-orders').addEventListener('click', goOrders);
+    box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  async function contactSeller() {
+    if (!order.supplierId) return;
+    try {
+      const cid = localStorage.getItem(payAccountKey('ms_cid')) || ('c' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10));
+      try { localStorage.setItem(payAccountKey('ms_cid'), cid); } catch (e) {}
+      await fetch(base + '/api/conversations', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ supplierId: order.supplierId, phone, cid, clientName: order.fullname || undefined })
+      });
+    } catch (e) {}
+    window.location.href = 'index.html#messages';
+  }
+
+  window.addEventListener('beforeunload', stopPolling);
+  boot();
+})();
+</script>
+</body>
+</html>

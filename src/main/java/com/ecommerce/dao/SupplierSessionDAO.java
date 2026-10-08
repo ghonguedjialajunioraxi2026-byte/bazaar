@@ -35,6 +35,22 @@ public class SupplierSessionDAO {
         return 0;
     }
 
+    /**
+     * Renouvellement glissant : chaque requête authentifiée repousse
+     * l'expiration (reste connecté tant que le compte est actif ;
+     * seule une déconnexion explicite invalide la session).
+     */
+    public void refreshSession(String token, int expiresHours) throws SQLException {
+        if (token == null || token.isEmpty()) return;
+        String sql = "UPDATE supplier_sessions SET expires_at = DATE_ADD(NOW(), INTERVAL ? HOUR) WHERE token = ? AND expires_at > NOW()";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, expiresHours);
+            ps.setString(2, token);
+            ps.executeUpdate();
+        }
+    }
+
     public void invalidateSession(String token) throws SQLException {
         if (token == null || token.isEmpty()) return;
         String sql = "DELETE FROM supplier_sessions WHERE token = ?";

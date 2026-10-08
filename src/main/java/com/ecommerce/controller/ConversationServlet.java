@@ -22,8 +22,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Messagerie côté invité (Phase 8). Identité = téléphone + clé navigateur.
- * Le serveur vérifie toujours les deux (anti-IDOR).
+ * Messagerie côté client (Phase 8).
+ * Identité = compte authentifié (Bearer, prioritaire) OU téléphone + clé
+ * navigateur (invité historique, lié au compte à la 1ère utilisation).
+ * Le serveur vérifie toujours la propriété (anti-IDOR).
  */
 @WebServlet("/api/conversations/*")
 public class ConversationServlet extends HttpServlet {
@@ -61,29 +63,49 @@ public class ConversationServlet extends HttpServlet {
             String[] parts = pathParts(req);
             String phone = req.getParameter("phone");
             String cid = req.getParameter("cid");
+            int customerId = com.ecommerce.util.CustomerAuth.validateCustomer(req);
 
             if (parts.length == 1 && "unread".equals(parts[0])) {
                 Map<String, Object> m = new LinkedHashMap<>();
-                m.put("unread", conversationService.unreadCount(phone, cid));
+                m.put("unread", customerId > 0
+                    ? conversationService.unreadCountForCustomer(customerId)
+                    : conversationService.unreadCount(phone, cid));
                 ApiResponse.ok(resp, m);
                 return;
             }
             if (parts.length == 0) {
-                ApiResponse.ok(resp, conversationService.listForGuest(phone, cid));
+                ApiResponse.ok(resp, customerId > 0
+                    ? conversationService.listForCustomerOrGuest(customerId, phone, cid)
+                    : conversationService.listForGuest(phone, cid));
                 return;
             }
             if (parts.length == 1) {
                 int convId = Integer.parseInt(parts[0]);
-                Conversation c = conversationService.getForGuest(convId, phone, cid);
+                Conversation c = customerId > 0
+                    ? conversationService.getForCustomerOrLink(convId, customerId, phone, cid)
+                    : conversationService.getForGuest(convId, phone, cid);
                 int after = 0;
                 try { after = Integer.parseInt(req.getParameter("after")); } catch (Exception ignored) {}
-                List<SupplierMessage> messages = after > 0
-                    ? conversationService.getMessagesAfter(convId, phone, cid, after)
-                    : conversationService.getMessages(convId, phone, cid);
-                conversationService.markRead(convId, phone, cid);
+                List<SupplierMessage> messages;
+                if (customerId > 0) {
+                    messages = after > 0
+                        ? conversationService.getMessagesAfterForCustomer(convId, customerId, after)
+                        : conversationService.getMessagesForCustomer(convId, customerId);
+                } else {
+                    messages = after > 0
+                        ? conversationService.getMessagesAfter(convId, phone, cid, after)
+                        : conversationService.getMessages(convId, phone, cid);
+                }
+                if (customerId > 0) {
+                    try { conversationService.markReadForCustomer(convId, customerId); }
+                    catch (Exception ignored) {}
+                } else {
+                    conversationService.markRead(convId, phone, cid);
+                }
                 Map<String, Object> m = new LinkedHashMap<>();
                 m.put("conversation", c);
                 m.put("messages", messages);
+                m.put("context", conversationService.detailContext(c));
                 m.put("offers", after > 0 ? new java.util.ArrayList<>()
                     : offerService.listForConversation(convId));
                 ApiResponse.ok(resp, m);
@@ -104,26 +126,43 @@ public class ConversationServlet extends HttpServlet {
         try {
             String[] parts = pathParts(req);
             Map<String, Object> body = readBody(req);
+            int customerId = com.ecommerce.util.CustomerAuth.validateCustomer(req);
+            String customerName = null;
+            if (customerId > 0) {
+                try {
+                    com.ecommerce.model.Customer cust =
+                        new com.ecommerce.dao.CustomerDAO().findById(customerId);
+                    if (cust == null) customerId = 0;
+                    else customerName = cust.getName();
+                } catch (Exception e) { customerId = 0; }
+            }
 
             if (parts.length == 0) {
                 int supplierId = num(body.get("supplierId"), 0);
                 int productId = num(body.get("productId"), 0);
+                int orderId = num(body.get("orderId"), 0);
                 Conversation c = conversationService.getOrCreate(supplierId,
                     productId > 0 ? productId : null,
-                    str(body.get("clientName")), str(body.get("phone")), str(body.get("cid")));
+                    orderId > 0 ? orderId : null,
+                    str(body.get("clientName")), str(body.get("phone")), str(body.get("cid")),
+                    customerId, customerName, null);
                 ApiResponse.created(resp, c);
                 return;
             }
             if (parts.length == 2 && "messages".equals(parts[1])) {
                 int convId = Integer.parseInt(parts[0]);
                 SupplierMessage m = conversationService.sendClientMessage(convId,
-                    str(body.get("phone")), str(body.get("cid")), str(body.get("body")));
+                    str(body.get("phone")), str(body.get("cid")), str(body.get("body")), customerId);
                 ApiResponse.created(resp, m);
                 return;
             }
             if (parts.length == 2 && "read".equals(parts[1])) {
                 int convId = Integer.parseInt(parts[0]);
-                conversationService.markRead(convId, str(body.get("phone")), str(body.get("cid")));
+                if (customerId > 0) {
+                    conversationService.markReadForCustomer(convId, customerId);
+                } else {
+                    conversationService.markRead(convId, str(body.get("phone")), str(body.get("cid")));
+                }
                 ApiResponse.ok(resp, null);
                 return;
             }

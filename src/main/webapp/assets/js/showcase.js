@@ -1,11 +1,15 @@
 /* ============================================================
-   MBOA STYLE — Showcase produits (panneau d'animation)
-   Images RÉELLES : assets/img/showcase (vendored depuis
-   "photo produit"). Crossfade premium : opacity + translate
-   + scale (900ms), pause 3000ms, pause au survol, flèches,
-   dots, preload progressif, prefers-reduced-motion respecté.
+   BAZAAR — Mur produits animé (panneaux d'authentification)
+   Images RÉELLES : assets/img/showcase (12 visuels, cache
+   navigateur : chaque URL chargée une seule fois).
+   Flux continu GAUCHE → DROITE : 3 rangées, piste dupliquée,
+   boucle translateX imperceptible (34s/39s/44s), images
+   collées sans gap, hauteur uniforme, flou modéré (CSS),
+   voile de lisibilité (CSS). Aucun setInterval, aucun
+   changement d'image : uniquement transform + opacity.
+   prefers-reduced-motion : mur statique (une seule rangée).
    Aucune donnée inventée, aucune logique métier.
-   Usage : <div class="ms-showcase" data-showcase>…</div>
+   Usage : <div class="ms-showcase" data-showcase></div>
    + initShowcase(root) au DOMContentLoaded.
    ============================================================ */
 (function () {
@@ -13,8 +17,7 @@
 
   var BASE = 'assets/img/showcase/p';
   var COUNT = 12;
-  var HOLD_MS = 3000;
-  var TRANS_MS = 900;
+  var DURS = ['34s', '39s', '44s'];
 
   function urls() {
     var list = [];
@@ -24,7 +27,7 @@
     return list;
   }
 
-  // Préchargement : 2 premières immédiates, la suite en chaîne.
+  // Préchargement en chaîne : chaque URL chargée une seule fois.
   function preload(list, from) {
     var i = from || 0;
     function next() {
@@ -48,6 +51,23 @@
     return n;
   }
 
+  // Une rangée = piste [groupe A | groupe B identique], défilement
+  // de -50% vers 0 : quand B prend la place de A, la boucle
+  // repart sans saut visible.
+  function buildRow(wall, list, dur, reduceMotion) {
+    var row = el('div', 'ms-wall-row', wall, { 'aria-hidden': 'true' });
+    var track = el('div', 'ms-wall-track', row);
+    track.style.setProperty('--dur', dur);
+    var groups = reduceMotion ? 1 : 2;
+    for (var g = 0; g < groups; g++) {
+      var group = el('div', 'ms-wall-group', track);
+      list.forEach(function (src) {
+        el('img', '', group, { src: src, alt: '', loading: 'lazy', decoding: 'async', draggable: 'false' });
+      });
+    }
+    return row;
+  }
+
   function initShowcase(root) {
     if (!root || root.dataset.showcaseInit) return;
     root.dataset.showcaseInit = '1';
@@ -57,102 +77,17 @@
     var list = urls();
 
     var brand = el('div', 'ms-showcase-brand', root);
-    brand.innerHTML = 'MBOA STYLE <span>· Sélection</span>';
+    brand.innerHTML = 'BAZAAR <span>· Sélection</span>';
 
-    var stage = el('div', 'ms-showcase-stage', root);
-    var peek = el('div', 'ms-showcase-peek', stage);
-    var peekImg = el('img', '', peek, { alt: '', 'aria-hidden': 'true', loading: 'lazy' });
-    var main = el('div', 'ms-showcase-main', stage);
-    var layerA = el('img', '', main, { alt: 'Produit MBOA STYLE' });
-    var layerB = el('img', '', main, { alt: '', 'aria-hidden': 'true' });
-
-    var nav = el('div', 'ms-showcase-nav', root);
-    var prev = el('button', 'ms-showcase-arrow', nav, { type: 'button', 'aria-label': 'Produit précédent' });
-    prev.textContent = '‹';
-    var dots = el('div', 'ms-showcase-dots', nav, { role: 'tablist', 'aria-label': 'Produits' });
-    var next = el('button', 'ms-showcase-arrow', nav, { type: 'button', 'aria-label': 'Produit suivant' });
-    next.textContent = '›';
-
-    var dotBtns = list.map(function (_, i) {
-      var d = el('button', '', dots, {
-        type: 'button', role: 'tab', 'aria-label': 'Produit ' + (i + 1)
-      });
-      d.addEventListener('click', function () { go(i, true); });
-      return d;
-    });
-
-    var idx = 0;
-    var showingA = true;
-    var timer = null;
-    var paused = false;
+    var wall = el('div', 'ms-wall', root, { 'aria-hidden': 'true' });
+    // Décalage circulaire par rangée pour varier la composition.
+    for (var r = 0; r < 3; r++) {
+      var rotated = list.slice(r * 4).concat(list.slice(0, r * 4));
+      buildRow(wall, rotated, DURS[r % DURS.length], reduceMotion);
+    }
+    el('div', 'ms-showcase-veil', root, { 'aria-hidden': 'true' });
 
     preload(list, 0);
-    layerA.src = list[0];
-    layerA.classList.add('is-active');
-    peekImg.src = list[1 % list.length];
-    paintDots();
-
-    function paintDots() {
-      dotBtns.forEach(function (d, i) {
-        d.classList.toggle('is-active', i === idx);
-        d.setAttribute('aria-selected', i === idx ? 'true' : 'false');
-      });
-    }
-
-    function show(i) {
-      idx = (i + list.length) % list.length;
-      var incoming = showingA ? layerB : layerA;
-      var outgoing = showingA ? layerA : layerB;
-      showingA = !showingA;
-      // L'image suivante est déjà préchargée (§44) : pas d'écran blanc.
-      incoming.classList.remove('is-exit');
-      incoming.src = list[idx];
-      outgoing.classList.remove('is-active');
-      outgoing.classList.add('is-exit');
-      // force reflow pour rejouer la transition d'entrée
-      void incoming.offsetWidth;
-      incoming.classList.add('is-active');
-      peekImg.src = list[(idx + 1) % list.length];
-      paintDots();
-    }
-
-    function go(i, manual) {
-      show(i);
-      if (manual) restart();
-    }
-
-    function tick() {
-      if (!paused && !reduceMotion) show(idx + 1);
-      schedule();
-    }
-
-    function schedule() {
-      stop();
-      if (reduceMotion) return;
-      timer = setTimeout(tick, HOLD_MS + TRANS_MS);
-    }
-
-    function stop() {
-      if (timer) { clearTimeout(timer); timer = null; }
-    }
-
-    function restart() {
-      stop();
-      schedule();
-    }
-
-    prev.addEventListener('click', function () { go(idx - 1, true); });
-    next.addEventListener('click', function () { go(idx + 1, true); });
-    root.addEventListener('mouseenter', function () { paused = true; });
-    root.addEventListener('mouseleave', function () { paused = false; });
-    root.addEventListener('focusin', function () { paused = true; });
-    root.addEventListener('focusout', function () { paused = false; });
-    document.addEventListener('visibilitychange', function () {
-      if (document.hidden) stop();
-      else schedule();
-    });
-
-    schedule();
   }
 
   window.initShowcase = initShowcase;

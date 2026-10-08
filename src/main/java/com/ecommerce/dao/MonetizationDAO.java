@@ -26,8 +26,8 @@ public class MonetizationDAO {
         }
         MonetizationRule d = new MonetizationRule();
         d.setId(0);
-        d.setName("Défaut 10 %");
-        d.setCommissionBps(1000);
+        d.setName("Défaut 1 %");
+        d.setCommissionBps(100);
         d.setFixedFee(0);
         d.setActive(true);
         return d;

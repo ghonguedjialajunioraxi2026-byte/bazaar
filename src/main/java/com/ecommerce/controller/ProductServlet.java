@@ -218,15 +218,16 @@ public class ProductServlet extends HttpServlet {
             int id = parseIntParam(req, "id", 0);
             if (id <= 0) {
                 resp.setStatus(400);
-                resp.getWriter().write("{\"error\":\"Missing product id\"}");
+                resp.getWriter().write("{\"error\":\"Identifiant produit requis\"}");
                 return;
             }
             ProductDAO productDAO = new ProductDAO();
             productDAO.delete(id);
             resp.getWriter().write("{\"success\":true}");
         } catch (Exception e) {
-            resp.setStatus(500);
-            com.ecommerce.util.ApiResponse.internalError(resp);
+            com.ecommerce.util.ServiceErrors.send(resp, e,
+                "Ce produit ne peut pas être supprimé",
+                "Produit introuvable");
         }
     }
 

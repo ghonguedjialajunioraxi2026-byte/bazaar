@@ -108,6 +108,16 @@ public class AdminServlet extends HttpServlet {
                 return;
             }
 
+            // Demandes de catégories fournisseurs (file de validation).
+            if ("/category-requests".equals(pathInfo)) {
+                String status = req.getParameter("status");
+                if (status == null || status.trim().isEmpty()) status = "PENDING";
+                int limit = boundedLimit(req, 50);
+                resp.getWriter().write(JsonUtil.toJson(
+                    new com.ecommerce.dao.CategoryRequestDAO().findByStatus(status, limit)));
+                return;
+            }
+
             // Control Center : supervision (tous rôles authentifiés, lecture seule).
             com.ecommerce.service.AdminControlService control = new com.ecommerce.service.AdminControlService();
             if ("/overview".equals(pathInfo)) {
@@ -122,6 +132,148 @@ public class AdminServlet extends HttpServlet {
             if ("/shipments".equals(pathInfo)) {
                 resp.getWriter().write(JsonUtil.toJson(control.shipments(
                     req.getParameter("filter"), boundedLimit(req, 50))));
+                return;
+            }
+            // Finance BAZAAR : payouts, refunds, litiges, journal, paramètres.
+            if ("/payouts".equals(pathInfo)) {
+                int page = boundedPage(req);
+                int limit = boundedLimit(req, 20);
+                resp.getWriter().write(JsonUtil.toJson(
+                    new com.ecommerce.dao.PayoutDAO().findPagedWithOrder(
+                        req.getParameter("status"), limit, (page - 1) * limit)));
+                return;
+            }
+            if ("/refunds".equals(pathInfo)) {
+                int page = boundedPage(req);
+                int limit = boundedLimit(req, 20);
+                java.util.List<com.ecommerce.model.Refund> rows =
+                    new com.ecommerce.dao.RefundDAO().findPaged(
+                        req.getParameter("status"), limit, (page - 1) * limit);
+                java.util.List<Map<String, Object>> out = new java.util.ArrayList<>();
+                com.ecommerce.dao.OrderDAO odao = new com.ecommerce.dao.OrderDAO();
+                for (com.ecommerce.model.Refund r : rows) {
+                    Map<String, Object> m = new LinkedHashMap<>(
+                        com.ecommerce.pawapay.PawaPayRefundService.maskedView(r));
+                    try {
+                        com.ecommerce.model.Order o = odao.findById(r.getOrderId());
+                        m.put("orderNumber", o == null ? null : o.getOrderNumber());
+                    } catch (Exception ignored) {}
+                    out.add(m);
+                }
+                resp.getWriter().write(JsonUtil.toJson(out));
+                return;
+            }
+            if ("/disputes".equals(pathInfo)) {
+                int page = boundedPage(req);
+                int limit = boundedLimit(req, 20);
+                java.util.List<com.ecommerce.model.Dispute> rows =
+                    new com.ecommerce.dao.DisputeDAO().findPaged(
+                        req.getParameter("status"), limit, (page - 1) * limit);
+                java.util.List<Map<String, Object>> out = new java.util.ArrayList<>();
+                com.ecommerce.dao.OrderDAO odao = new com.ecommerce.dao.OrderDAO();
+                for (com.ecommerce.model.Dispute d : rows) {
+                    Map<String, Object> m = new LinkedHashMap<>();
+                    m.put("id", d.getId());
+                    m.put("orderId", d.getOrderId());
+                    m.put("phone", d.getPhone());
+                    m.put("reason", d.getReason());
+                    m.put("status", d.getStatus());
+                    m.put("resolutionNote", d.getResolutionNote());
+                    m.put("resolvedAt", d.getResolvedAt());
+                    m.put("createdAt", d.getCreatedAt());
+                    try {
+                        com.ecommerce.model.Order o = odao.findById(d.getOrderId());
+                        m.put("orderNumber", o == null ? null : o.getOrderNumber());
+                        m.put("orderTotal", o == null ? null : o.getTotal());
+                        m.put("orderStatus", o == null ? null : o.getStatus());
+                    } catch (Exception ignored) {}
+                    out.add(m);
+                }
+                resp.getWriter().write(JsonUtil.toJson(out));
+                return;
+            }
+            if ("/finance/journal".equals(pathInfo)) {
+                int orderId = parseInt(req.getParameter("orderId"), 0);
+                if (orderId <= 0) {
+                    resp.setStatus(400);
+                    resp.getWriter().write("{\"error\":\"orderId requis\"}");
+                    return;
+                }
+                resp.getWriter().write(JsonUtil.toJson(
+                    new com.ecommerce.service.FinanceJournalService().forOrder(orderId)));
+                return;
+            }
+            if ("/finance/settings".equals(pathInfo)) {
+                resp.getWriter().write(JsonUtil.toJson(
+                    new com.ecommerce.dao.PlatformSettingsDAO().findAll()));
+                return;
+            }
+            // --- PawaPay Finances + Toolkit (diagnostic admin, lecture seule
+            // sauf initiation statement = opération PSP = MONEY) ---
+            com.ecommerce.pawapay.PawaPayToolkitService toolkit =
+                new com.ecommerce.pawapay.PawaPayToolkitService();
+            if ("/pawapay/wallet".equals(pathInfo)) {
+                try {
+                    resp.getWriter().write(JsonUtil.toJson(
+                        walletView(req.getParameter("country"))));
+                } catch (com.ecommerce.util.AppException ae) {
+                    com.ecommerce.util.ApiResponse.fromException(resp, ae);
+                }
+                return;
+            }
+            if ("/pawapay/statements".equals(pathInfo)) {
+                int limit = boundedLimit(req, 20);
+                java.util.List<com.ecommerce.model.PawaPayStatement> rows =
+                    new com.ecommerce.pawapay.PawaPayStatementService().recent(limit);
+                java.util.List<Map<String, Object>> out = new java.util.ArrayList<>();
+                for (com.ecommerce.model.PawaPayStatement s : rows) {
+                    out.add(com.ecommerce.pawapay.PawaPayStatementService.maskedView(s));
+                }
+                resp.getWriter().write(JsonUtil.toJson(out));
+                return;
+            }
+            if ("/pawapay/statements/status".equals(pathInfo)) {
+                try {
+                    resp.getWriter().write(JsonUtil.toJson(
+                        new com.ecommerce.pawapay.PawaPayStatementService()
+                            .getStatementStatus(req.getParameter("statementId"))));
+                } catch (com.ecommerce.util.AppException ae) {
+                    com.ecommerce.util.ApiResponse.fromException(resp, ae);
+                }
+                return;
+            }
+            if ("/pawapay/configuration".equals(pathInfo)) {
+                try {
+                    resp.getWriter().write(JsonUtil.toJson(toolkit.activeConfiguration(
+                        req.getParameter("country"), req.getParameter("operationType"))));
+                } catch (com.ecommerce.util.AppException ae) {
+                    com.ecommerce.util.ApiResponse.fromException(resp, ae);
+                }
+                return;
+            }
+            if ("/pawapay/availability".equals(pathInfo)) {
+                try {
+                    resp.getWriter().write(JsonUtil.toJson(toolkit.availability(
+                        req.getParameter("country"), req.getParameter("operationType"))));
+                } catch (com.ecommerce.util.AppException ae) {
+                    com.ecommerce.util.ApiResponse.fromException(resp, ae);
+                }
+                return;
+            }
+            if ("/pawapay/public-keys".equals(pathInfo)) {
+                try {
+                    resp.getWriter().write(JsonUtil.toJson(toolkit.publicKeys()));
+                } catch (com.ecommerce.util.AppException ae) {
+                    com.ecommerce.util.ApiResponse.fromException(resp, ae);
+                }
+                return;
+            }
+            if ("/pawapay/reconciliation".equals(pathInfo)) {
+                try {
+                    resp.getWriter().write(JsonUtil.toJson(reconciliationView()));
+                } catch (com.ecommerce.util.AppException ae) {
+                    com.ecommerce.util.ApiResponse.fromException(resp, ae);
+                }
                 return;
             }
             if ("/conversations".equals(pathInfo)) {
@@ -142,6 +294,13 @@ public class AdminServlet extends HttpServlet {
                 resp.getWriter().write(JsonUtil.toJson(control.audit(
                     req.getParameter("action"), boundedPage(req),
                     boundedLimit(req, 20))));
+                return;
+            }
+
+            // Tableau de bord SYNCHRONISÉ : admin + client + fournisseur,
+            // UN seul appel, UN seul instant T (anti-dérive entre onglets).
+            if ("/dashboard/synced".equals(pathInfo)) {
+                resp.getWriter().write(JsonUtil.toJson(control.syncedDashboard()));
                 return;
             }
 
@@ -208,7 +367,6 @@ public class AdminServlet extends HttpServlet {
                 resp.getWriter().write("{\"success\":true}");
                 return;
             }
-
             if ("/product/validate".equals(pathInfo) || "validateProduct".equals(action)) {
                 BufferedReader reader = req.getReader();
                 StringBuilder sb = new StringBuilder();
@@ -216,8 +374,35 @@ public class AdminServlet extends HttpServlet {
                 while ((line = reader.readLine()) != null) sb.append(line);
                 Map<String, Object> body = JsonUtil.fromJson(sb.toString(), Map.class);
 
-                int adminId = validateAndGetAdminId(req);
-                if (adminId <= 0) { resp.setStatus(401); resp.getWriter().write("{\"error\":\"Non autorisé\"}"); return; }
+                int adminId0 = validateAndGetAdminId(req);
+                if (adminId0 <= 0) { resp.setStatus(401); resp.getWriter().write("{\"error\":\"Non autorisé\"}"); return; }
+
+                // Validation d'une demande de catégorie fournisseur.
+                if (body.get("categoryRequestId") != null) {
+                    int reqId = body.get("categoryRequestId") instanceof Number
+                        ? ((Number) body.get("categoryRequestId")).intValue() : 0;
+                    boolean approved = body.get("approved") == null
+                        || Boolean.parseBoolean(body.get("approved").toString());
+                    String note = body.get("note") == null ? null : String.valueOf(body.get("note"));
+                    if (reqId <= 0) { resp.setStatus(400); resp.getWriter().write("{\"error\":\"Demande requise\"}"); return; }
+                    try {
+                        new com.ecommerce.service.CategoryService()
+                            .resolveCategoryRequest(reqId, approved, note);
+                        activityLogDAO.log(adminId0,
+                            approved ? "CATEGORY_REQUEST_APPROVED" : "CATEGORY_REQUEST_REJECTED",
+                            "category_request", reqId, approved ? "Demande acceptée" : "Demande refusée",
+                            req.getRemoteAddr());
+                        resp.getWriter().write("{\"success\":true}");
+                    } catch (Exception ex) {
+                        String msg = ex.getMessage() == null ? "Traitement impossible"
+                            : ex.getMessage().replace("\\", "\\\\").replace("\"", "\\\"");
+                        resp.setStatus(409);
+                        resp.getWriter().write("{\"error\":\"" + msg + "\"}");
+                    }
+                    return;
+                }
+
+                int adminId = adminId0;
 
                 int productId = body.get("productId") != null ? ((Number) body.get("productId")).intValue() : 0;
                 boolean approved = body.get("approved") == null || Boolean.parseBoolean(body.get("approved").toString());
@@ -354,7 +539,8 @@ public class AdminServlet extends HttpServlet {
                 return;
             }
 
-            if ("/monetization/rules/activate".equals(pathInfo)) {                BufferedReader reader = req.getReader();
+            if ("/monetization/rules/activate".equals(pathInfo)) {
+                BufferedReader reader = req.getReader();
                 StringBuilder sb = new StringBuilder();
                 String line;
                 while ((line = reader.readLine()) != null) sb.append(line);
@@ -374,6 +560,353 @@ public class AdminServlet extends HttpServlet {
                 return;
             }
 
+            // --- Finance BAZAAR : payout / refund / litiges / réception / paramètres ---
+            // Déclenche (ou réessaie) le versement PawaPay d'une commande (MONEY).
+            if ("/payouts/process".equals(pathInfo)) {
+                BufferedReader reader = req.getReader();
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) sb.append(line);
+                Map<String, Object> body = JsonUtil.fromJson(sb.toString(), Map.class);
+
+                int adminId = com.ecommerce.util.AdminRole.requireAction(req, resp,
+                    com.ecommerce.util.AdminRole.MONEY);
+                if (adminId <= 0) return;
+
+                int orderId = body.get("orderId") instanceof Number
+                    ? ((Number) body.get("orderId")).intValue() : 0;
+                if (orderId <= 0) { resp.setStatus(400); resp.getWriter().write("{\"error\":\"orderId requis\"}"); return; }
+                try {
+                    com.ecommerce.pawapay.PawaPayPayoutService.PayoutOutcome outcome =
+                        new com.ecommerce.pawapay.PawaPayPayoutService().initiateOrRetry(orderId);
+                    activityLogDAO.log(adminId, "PAYOUT_INITIATED", "payout", outcome.payout.getId(),
+                        "Commande " + orderId + " (" + outcome.payout.getStatus() + ")", req.getRemoteAddr());
+                    Map<String, Object> out = new LinkedHashMap<>();
+                    out.put("success", true);
+                    out.put("duplicate", outcome.duplicate);
+                    out.put("payout", com.ecommerce.pawapay.PawaPayPayoutService.maskedView(outcome.payout));
+                    resp.setStatus(outcome.duplicate ? 200 : 201);
+                    resp.getWriter().write(JsonUtil.toJson(out));
+                } catch (com.ecommerce.util.AppException ae) {
+                    com.ecommerce.util.ApiResponse.fromException(resp, ae);
+                }
+                return;
+            }
+            // Déclenche (ou réessaie) le remboursement PawaPay d'une commande (MONEY).
+            if ("/refunds/request".equals(pathInfo)) {
+                BufferedReader reader = req.getReader();
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) sb.append(line);
+                Map<String, Object> body = JsonUtil.fromJson(sb.toString(), Map.class);
+
+                int adminId = com.ecommerce.util.AdminRole.requireAction(req, resp,
+                    com.ecommerce.util.AdminRole.MONEY);
+                if (adminId <= 0) return;
+
+                int orderId = body.get("orderId") instanceof Number
+                    ? ((Number) body.get("orderId")).intValue() : 0;
+                if (orderId <= 0) { resp.setStatus(400); resp.getWriter().write("{\"error\":\"orderId requis\"}"); return; }
+                try {
+                    com.ecommerce.pawapay.PawaPayRefundService.RefundOutcome outcome =
+                        new com.ecommerce.pawapay.PawaPayRefundService().initiateOrRetry(orderId);
+                    activityLogDAO.log(adminId, "REFUND_INITIATED", "refund", outcome.refund.getId(),
+                        "Commande " + orderId + " (" + outcome.refund.getStatus() + ")", req.getRemoteAddr());
+                    Map<String, Object> out = new LinkedHashMap<>();
+                    out.put("success", true);
+                    out.put("duplicate", outcome.duplicate);
+                    out.put("refund", com.ecommerce.pawapay.PawaPayRefundService.maskedView(outcome.refund));
+                    resp.setStatus(outcome.duplicate ? 200 : 201);
+                    resp.getWriter().write(JsonUtil.toJson(out));
+                } catch (com.ecommerce.util.AppException ae) {
+                    com.ecommerce.util.ApiResponse.fromException(resp, ae);
+                }
+                return;
+            }
+            // Annule un remboursement ENQUEUED côté PawaPay (MONEY).
+            // Garde : refusé si non annulable (COMPLETED/FAILED/PROCESSING...).
+            if ("/refunds/cancel".equals(pathInfo)) {
+                BufferedReader reader = req.getReader();
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) sb.append(line);
+                Map<String, Object> body = JsonUtil.fromJson(sb.toString(), Map.class);
+
+                int adminId = com.ecommerce.util.AdminRole.requireAction(req, resp,
+                    com.ecommerce.util.AdminRole.MONEY);
+                if (adminId <= 0) return;
+
+                int orderId = body.get("orderId") instanceof Number
+                    ? ((Number) body.get("orderId")).intValue() : 0;
+                if (orderId <= 0) { resp.setStatus(400); resp.getWriter().write("{\"error\":\"orderId requis\"}"); return; }
+                try {
+                    Map<String, Object> out =
+                        new com.ecommerce.pawapay.PawaPayRefundService().cancelEnqueued(orderId);
+                    activityLogDAO.log(adminId, "REFUND_CANCELLED", "refund", orderId,
+                        "Annulation ENQUEUED acceptée", req.getRemoteAddr());
+                    out.put("success", true);
+                    resp.getWriter().write(JsonUtil.toJson(out));
+                } catch (com.ecommerce.util.AppException ae) {
+                    com.ecommerce.util.ApiResponse.fromException(resp, ae);
+                }
+                return;
+            }
+            // Résolution d'un litige : REFUND (rembourse) ou REJECT (rejette) (MONEY).
+            if ("/disputes/resolve".equals(pathInfo)) {
+                BufferedReader reader = req.getReader();
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) sb.append(line);
+                Map<String, Object> body = JsonUtil.fromJson(sb.toString(), Map.class);
+
+                int adminId = com.ecommerce.util.AdminRole.requireAction(req, resp,
+                    com.ecommerce.util.AdminRole.MONEY);
+                if (adminId <= 0) return;
+
+                int orderId = body.get("orderId") instanceof Number
+                    ? ((Number) body.get("orderId")).intValue() : 0;
+                String decision = body.get("decision") == null ? null : String.valueOf(body.get("decision"));
+                String note = body.get("note") == null ? null : String.valueOf(body.get("note"));
+                if (orderId <= 0) { resp.setStatus(400); resp.getWriter().write("{\"error\":\"orderId requis\"}"); return; }
+                try {
+                    Map<String, Object> out =
+                        new com.ecommerce.service.DisputeService().resolve(orderId, decision, note);
+                    activityLogDAO.log(adminId, "DISPUTE_RESOLVED", "dispute", orderId,
+                        String.valueOf(decision), req.getRemoteAddr());
+                    out.put("success", true);
+                    resp.getWriter().write(JsonUtil.toJson(out));
+                } catch (com.ecommerce.util.AppException ae) {
+                    com.ecommerce.util.ApiResponse.fromException(resp, ae);
+                }
+                return;
+            }
+            // Confirmation de réception admin (déclenche le payout si éligible) (MONEY).
+            if ("/shipments/confirm".equals(pathInfo)) {
+                BufferedReader reader = req.getReader();
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) sb.append(line);
+                Map<String, Object> body = JsonUtil.fromJson(sb.toString(), Map.class);
+
+                int adminId = com.ecommerce.util.AdminRole.requireAction(req, resp,
+                    com.ecommerce.util.AdminRole.MONEY);
+                if (adminId <= 0) return;
+
+                int orderId = body.get("orderId") instanceof Number
+                    ? ((Number) body.get("orderId")).intValue() : 0;
+                if (orderId <= 0) { resp.setStatus(400); resp.getWriter().write("{\"error\":\"orderId requis\"}"); return; }
+                try {
+                    com.ecommerce.model.Shipment s =
+                        new com.ecommerce.service.ShipmentService().confirmReceiptByAdmin(orderId);
+                    activityLogDAO.log(adminId, "RECEIPT_CONFIRMED", "shipment", s.getId(),
+                        "Commande " + orderId, req.getRemoteAddr());
+                    Map<String, Object> out = new LinkedHashMap<>();
+                    out.put("success", true);
+                    out.put("receiptConfirmed", s.isReceiptConfirmed());
+                    resp.getWriter().write(JsonUtil.toJson(out));
+                } catch (com.ecommerce.util.AppException ae) {
+                    com.ecommerce.util.ApiResponse.fromException(resp, ae);
+                }
+                return;
+            }
+            // Paramètre financier (MONEY) : seul pawapay.payout.fee est modifiable ici.
+            if ("/finance/settings".equals(pathInfo)) {
+                BufferedReader reader = req.getReader();
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) sb.append(line);
+                Map<String, Object> body = JsonUtil.fromJson(sb.toString(), Map.class);
+
+                int adminId = com.ecommerce.util.AdminRole.requireAction(req, resp,
+                    com.ecommerce.util.AdminRole.MONEY);
+                if (adminId <= 0) return;
+
+                String key = body.get("key") == null ? "" : String.valueOf(body.get("key"));
+                if ("pawapay.payout.fee".equals(key)) {
+                    int value = body.get("value") instanceof Number
+                        ? ((Number) body.get("value")).intValue() : -1;
+                    if (value < 0) {
+                        resp.setStatus(400);
+                        resp.getWriter().write("{\"error\":\"Paramètre invalide\"}");
+                        return;
+                    }
+                    try {
+                        new com.ecommerce.dao.PlatformSettingsDAO().set(key, String.valueOf(value));
+                    } catch (java.sql.SQLException e) {
+                        throw new com.ecommerce.util.AppException(
+                            com.ecommerce.util.ErrorCodes.DATABASE_ERROR, 500,
+                            "Impossible de traiter votre demande.", e);
+                    }
+                    activityLogDAO.log(adminId, "FINANCE_SETTING_UPDATED", "platform_setting", 0,
+                        key + "=" + value, req.getRemoteAddr());
+                    resp.getWriter().write("{\"success\":true}");
+                    return;
+                }
+                // URL publique HTTPS recevant les callbacks statements PawaPay
+                // (exigée par POST /v2/statements : INVALID_CALLBACK_URL sinon).
+                if ("pawapay.statement.callback_url".equals(key)) {
+                    String value = body.get("value") == null ? ""
+                        : String.valueOf(body.get("value")).trim();
+                    if (!value.toLowerCase().startsWith("https://") || value.length() > 500) {
+                        resp.setStatus(400);
+                        resp.getWriter().write("{\"error\":\"URL HTTPS valide requise\"}");
+                        return;
+                    }
+                    try {
+                        new com.ecommerce.dao.PlatformSettingsDAO().set(key, value);
+                    } catch (java.sql.SQLException e) {
+                        throw new com.ecommerce.util.AppException(
+                            com.ecommerce.util.ErrorCodes.DATABASE_ERROR, 500,
+                            "Impossible de traiter votre demande.", e);
+                    }
+                    activityLogDAO.log(adminId, "FINANCE_SETTING_UPDATED", "platform_setting", 0,
+                        key + " configurée", req.getRemoteAddr());
+                    resp.getWriter().write("{\"success\":true}");
+                    return;
+                }
+                resp.setStatus(400);
+                resp.getWriter().write("{\"error\":\"Paramètre invalide\"}");
+                return;
+            }
+
+            // Annule un versement ENQUEUED côté PawaPay (MONEY).
+            // Garde : refusé si non annulable (COMPLETED/FAILED/PROCESSING...).
+            if ("/payouts/cancel".equals(pathInfo)) {
+                BufferedReader reader = req.getReader();
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) sb.append(line);
+                Map<String, Object> body = JsonUtil.fromJson(sb.toString(), Map.class);
+
+                int adminId = com.ecommerce.util.AdminRole.requireAction(req, resp,
+                    com.ecommerce.util.AdminRole.MONEY);
+                if (adminId <= 0) return;
+
+                int orderId = body.get("orderId") instanceof Number
+                    ? ((Number) body.get("orderId")).intValue() : 0;
+                if (orderId <= 0) { resp.setStatus(400); resp.getWriter().write("{\"error\":\"orderId requis\"}"); return; }
+                try {
+                    Map<String, Object> out =
+                        new com.ecommerce.pawapay.PawaPayPayoutService().cancelEnqueued(orderId);
+                    activityLogDAO.log(adminId, "PAYOUT_CANCELLED", "payout", orderId,
+                        "Annulation ENQUEUED acceptée", req.getRemoteAddr());
+                    out.put("success", true);
+                    resp.getWriter().write(JsonUtil.toJson(out));
+                } catch (com.ecommerce.util.AppException ae) {
+                    com.ecommerce.util.ApiResponse.fromException(resp, ae);
+                }
+                return;
+            }
+            // Versements groupés admin (MONEY) : UN appel PawaPay bulk (max 20).
+            // Complément du payout individuel (N fournisseurs en un traitement).
+            if ("/payouts/bulk".equals(pathInfo)) {
+                BufferedReader reader = req.getReader();
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) sb.append(line);
+                Map<String, Object> body = JsonUtil.fromJson(sb.toString(), Map.class);
+
+                int adminId = com.ecommerce.util.AdminRole.requireAction(req, resp,
+                    com.ecommerce.util.AdminRole.MONEY);
+                if (adminId <= 0) return;
+
+                java.util.List<Integer> orderIds = new java.util.ArrayList<>();
+                Object raw = body.get("orderIds");
+                if (raw instanceof java.util.List) {
+                    for (Object o : (java.util.List<?>) raw) {
+                        if (o instanceof Number) orderIds.add(((Number) o).intValue());
+                    }
+                } else if (body.get("orderId") instanceof Number) {
+                    orderIds.add(((Number) body.get("orderId")).intValue());
+                }
+                if (orderIds.isEmpty()) { resp.setStatus(400); resp.getWriter().write("{\"error\":\"orderIds requis\"}"); return; }
+                try {
+                    java.util.List<com.ecommerce.pawapay.PawaPayPayoutService.BulkItemResult> results =
+                        new com.ecommerce.pawapay.PawaPayPayoutService().initiateBulk(orderIds);
+                    java.util.List<Map<String, Object>> items = new java.util.ArrayList<>();
+                    int ok = 0;
+                    for (com.ecommerce.pawapay.PawaPayPayoutService.BulkItemResult r : results) {
+                        Map<String, Object> m = new LinkedHashMap<>();
+                        m.put("orderId", r.orderId);
+                        m.put("orderNumber", r.orderNumber);
+                        m.put("payoutId", r.payoutId);
+                        m.put("status", r.status);
+                        m.put("duplicate", r.duplicate);
+                        m.put("error", r.error);
+                        if (r.error == null
+                                && ("ACCEPTED".equals(r.status) || "PROCESSING".equals(r.status)
+                                    || "ENQUEUED".equals(r.status))) ok++;
+                        items.add(m);
+                    }
+                    activityLogDAO.log(adminId, "PAYOUT_BULK_INITIATED", "payout", 0,
+                        ok + "/" + items.size() + " acceptés", req.getRemoteAddr());
+                    Map<String, Object> out = new LinkedHashMap<>();
+                    out.put("success", true);
+                    out.put("accepted", ok);
+                    out.put("total", items.size());
+                    out.put("items", items);
+                    resp.getWriter().write(JsonUtil.toJson(out));
+                } catch (com.ecommerce.util.AppException ae) {
+                    com.ecommerce.util.ApiResponse.fromException(resp, ae);
+                }
+                return;
+            }
+            // Demande de relevé PawaPay (MONEY : opération PSP, même sans
+            // mouvement d'argent). Plage ≤ 31 jours, callback HTTPS configurée.
+            if ("/pawapay/statements".equals(pathInfo)) {
+                BufferedReader reader = req.getReader();
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) sb.append(line);
+                Map<String, Object> body = JsonUtil.fromJson(sb.toString(), Map.class);
+
+                int adminId = com.ecommerce.util.AdminRole.requireAction(req, resp,
+                    com.ecommerce.util.AdminRole.MONEY);
+                if (adminId <= 0) return;
+
+                try {
+                    Object comp = body.get("compressed");
+                    boolean compressed = Boolean.TRUE.equals(comp)
+                        || "true".equalsIgnoreCase(String.valueOf(comp));
+                    com.ecommerce.model.PawaPayStatement s =
+                        new com.ecommerce.pawapay.PawaPayStatementService().initiate(
+                            str(body.get("country")), str(body.get("currency")),
+                            str(body.get("provider")), str(body.get("startDate")),
+                            str(body.get("endDate")), compressed, adminId);
+                    activityLogDAO.log(adminId, "STATEMENT_REQUESTED", "statement", s.getId(),
+                        s.getWalletCountry() + "/" + s.getWalletCurrency()
+                            + " " + s.getStartDate() + "→" + s.getEndDate(),
+                        req.getRemoteAddr());
+                    Map<String, Object> out = new LinkedHashMap<>();
+                    out.put("success", true);
+                    out.put("statement",
+                        com.ecommerce.pawapay.PawaPayStatementService.maskedView(s));
+                    resp.setStatus(201);
+                    resp.getWriter().write(JsonUtil.toJson(out));
+                } catch (com.ecommerce.util.AppException ae) {
+                    com.ecommerce.util.ApiResponse.fromException(resp, ae);
+                }
+                return;
+            }
+            // Prédiction provider (diagnostic admin, lecture seule).
+            if ("/pawapay/predict".equals(pathInfo)) {
+                if (com.ecommerce.util.AdminAuth.requireAdmin(req, resp) <= 0) return;
+                BufferedReader reader = req.getReader();
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) sb.append(line);
+                Map<String, Object> body = JsonUtil.fromJson(sb.toString(), Map.class);
+
+                try {
+                    resp.getWriter().write(JsonUtil.toJson(
+                        new com.ecommerce.pawapay.PawaPayToolkitService()
+                            .predict(str(body.get("phoneNumber")))));
+                } catch (com.ecommerce.util.AppException ae) {
+                    com.ecommerce.util.ApiResponse.fromException(resp, ae);
+                }
+                return;
+            }
+
             resp.setStatus(400);
             resp.getWriter().write("{\"error\":\"Action requise\"}");
         } catch (com.ecommerce.util.AppException ae) {
@@ -389,6 +922,9 @@ public class AdminServlet extends HttpServlet {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
         try {
+            // Jamais d'invalidation sans session valide : sinon n'importe qui
+            // peut déconnecter un admin (DoS) et sonder la validité d'un token.
+            if (com.ecommerce.util.AdminAuth.requireAdmin(req, resp) <= 0) return;
             String token = extractToken(req);
             if (token != null) sessionDAO.invalidateSession(token);
             resp.getWriter().write("{\"success\":true}");
@@ -407,6 +943,10 @@ public class AdminServlet extends HttpServlet {
         }
     }
 
+    private static String str(Object o) {
+        return o == null ? null : String.valueOf(o);
+    }
+
     /** Bornes serveur (Phase 20) : page/limit hostiles => 500 (OFFSET négatif). */
     private int boundedPage(jakarta.servlet.http.HttpServletRequest req) {
         return com.ecommerce.util.Pagination.clampPage(parseInt(req.getParameter("page"), 1));
@@ -414,6 +954,76 @@ public class AdminServlet extends HttpServlet {
 
     private int boundedLimit(jakarta.servlet.http.HttpServletRequest req, int def) {
         return com.ecommerce.util.Pagination.clampLimit(parseInt(req.getParameter("limit"), def), 100);
+    }
+
+    /**
+     * Soldes wallets PawaPay (diagnostic admin, lecture seule).
+     * Information DISTANTE horodatée — jamais fusionnée à la comptabilité
+     * interne (le journal BAZAAR reste la source comptable).
+     */
+    private Map<String, Object> walletView(String country)
+            throws com.ecommerce.util.AppException {
+        String c = (country == null || country.trim().isEmpty()) ? null
+            : com.ecommerce.pawapay.PawaPayToolkitService.requireCountry(country);
+        com.ecommerce.pawapay.PawaPayConfig.requireConfigured();
+        Map<String, Object> remote;
+        try {
+            remote = new com.ecommerce.pawapay.PawaPayClient().getWalletBalances(c);
+        } catch (com.ecommerce.util.AppException e) {
+            throw e;
+        }
+        Map<String, Object> out = new LinkedHashMap<>();
+        out.put("fetchedAt",
+            java.time.OffsetDateTime.now(java.time.ZoneOffset.UTC).toString());
+        out.put("environment", com.ecommerce.pawapay.PawaPayConfig.getEnvironment().toUpperCase());
+        out.put("balances", remote == null ? new java.util.ArrayList<>() : remote.get("balances"));
+        out.put("note", "Solde distant PawaPay (diagnostic) — distinct du journal"
+            + " comptable BAZAAR, aucune écriture n'en découle.");
+        return out;
+    }
+
+    /**
+     * Vue réconciliation PawaPay vs BAZAAR (diagnostic, lecture seule).
+     * Affiche côte à côte SANS fusion : tout écart = ALERTE à instruire,
+     * jamais de correction silencieuse.
+     */
+    private Map<String, Object> reconciliationView()
+            throws com.ecommerce.util.AppException {
+        Map<String, Object> out = new LinkedHashMap<>();
+        out.put("fetchedAt",
+            java.time.OffsetDateTime.now(java.time.ZoneOffset.UTC).toString());
+        // Distant : wallet (best-effort, jamais bloquant).
+        try {
+            out.put("pawapayWallet", walletView(null));
+        } catch (Exception e) {
+            out.put("pawapayWallet", null);
+            out.put("pawapayWalletError", "Prestataire injoignable");
+        }
+        // Local : compteurs par statut + ledger.
+        try {
+            Map<String, Object> local = new LinkedHashMap<>();
+            com.ecommerce.dao.PaymentDAO payDAO = new com.ecommerce.dao.PaymentDAO();
+            Map<String, Integer> deposits = new LinkedHashMap<>();
+            for (String st : new String[]{"PENDING", "PROCESSING", "COMPLETED", "FAILED"}) {
+                deposits.put(st, payDAO.countByStatus(st));
+            }
+            local.put("deposits", deposits);
+            local.put("payouts", new com.ecommerce.dao.PayoutDAO().countByStatus());
+            local.put("refunds", new com.ecommerce.dao.RefundDAO().countByStatus());
+            local.put("statements",
+                new com.ecommerce.dao.StatementDAO().countByStatus());
+            local.put("ledger", new com.ecommerce.service.MonetizationService().platformOverview());
+            out.put("bazaar", local);
+        } catch (Exception e) {
+            throw new com.ecommerce.util.AppException(
+                com.ecommerce.util.ErrorCodes.DATABASE_ERROR, 500,
+                "Impossible de traiter votre demande.", e);
+        }
+        out.put("note", "Comparaison indicative : le wallet PawaPay (portefeuille"
+            + " PSP) et le ledger BAZAAR (comptabilité interne) sont deux concepts"
+            + " différents. Tout écart constaté doit être instruit, jamais"
+            + " corrigé automatiquement.");
+        return out;
     }
 
     private Map<String, Object> getDashboard() throws SQLException {        Map<String, Object> dash = new LinkedHashMap<>();

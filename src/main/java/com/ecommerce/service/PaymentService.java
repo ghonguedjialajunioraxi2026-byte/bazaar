@@ -27,6 +27,15 @@ public class PaymentService {
     public static final String CURRENCY = "FCFA";
 
     private Order ownedOrder(String orderNumber, String phone) throws AppException, SQLException {
+        return ownedOrder(orderNumber, phone, null);
+    }
+
+    /**
+     * Commande du demandeur : preuve téléphone + propriété du compte si
+     * une session client est présente (anti-IDOR entre comptes).
+     */
+    private Order ownedOrder(String orderNumber, String phone, Integer sessionCustomerId)
+            throws AppException, SQLException {
         if (orderNumber == null || orderNumber.trim().isEmpty()) {
             throw new AppException(ErrorCodes.VALIDATION_ERROR, 400, "Numéro de commande requis");
         }
@@ -39,6 +48,7 @@ public class PaymentService {
         if (o == null) {
             throw new AppException(ErrorCodes.PAYMENT_NOT_FOUND, 404, "Commande introuvable");
         }
+        CustomerIsolation.requireOrderVisible(o, sessionCustomerId);
         return o;
     }
 
@@ -47,7 +57,12 @@ public class PaymentService {
      * La méthode doit faire partie des méthodes proposées.
      */
     public Payment initPayment(String orderNumber, String phone, String method) throws AppException, SQLException {
-        Order o = ownedOrder(orderNumber, phone);
+        return initPayment(orderNumber, phone, method, null);
+    }
+
+    public Payment initPayment(String orderNumber, String phone, String method, Integer sessionCustomerId)
+            throws AppException, SQLException {
+        Order o = ownedOrder(orderNumber, phone, sessionCustomerId);
         if (!PaymentProviders.offeredMethods().contains(method)) {
             throw new AppException(ErrorCodes.PROVIDER_UNAVAILABLE, 400, "Moyen de paiement indisponible");
         }
@@ -85,7 +100,12 @@ public class PaymentService {
     }
 
     public Payment getStatus(String orderNumber, String phone) throws AppException, SQLException {
-        Order o = ownedOrder(orderNumber, phone);
+        return getStatus(orderNumber, phone, null);
+    }
+
+    public Payment getStatus(String orderNumber, String phone, Integer sessionCustomerId)
+            throws AppException, SQLException {
+        Order o = ownedOrder(orderNumber, phone, sessionCustomerId);
         Payment p;
         try {
             p = paymentDAO.findByOrderId(o.getId());
@@ -100,7 +120,12 @@ public class PaymentService {
 
     /** Le client transmet sa référence MoMo (vérification admin ultérieure). */
     public Payment submitReference(String orderNumber, String phone, String transactionRef) throws AppException, SQLException {
-        Order o = ownedOrder(orderNumber, phone);
+        return submitReference(orderNumber, phone, transactionRef, null);
+    }
+
+    public Payment submitReference(String orderNumber, String phone, String transactionRef, Integer sessionCustomerId)
+            throws AppException, SQLException {
+        Order o = ownedOrder(orderNumber, phone, sessionCustomerId);
         Payment p;
         try {
             p = paymentDAO.findByOrderId(o.getId());
@@ -147,6 +172,10 @@ public class PaymentService {
         if (p == null) {
             throw new AppException(ErrorCodes.PAYMENT_NOT_FOUND, 404, "Paiement introuvable");
         }
+        if ("PAWAPAY".equals(p.getProvider())) {
+            throw new AppException(ErrorCodes.PAYMENT_INVALID, 409,
+                "Paiement PawaPay : confirmation automatique uniquement");
+        }
         if (!"EN_ATTENTE".equals(p.getStatus())) {
             throw new AppException(ErrorCodes.PAYMENT_INVALID, 409, "Paiement déjà traité");
         }
@@ -157,6 +186,7 @@ public class PaymentService {
         }
         notifyParties(p, "PAYMENT_SUCCEEDED", "Paiement confirmé",
             "Le paiement de la commande a été confirmé.");
+        sendClientEmail(p, true);
     }
 
     public void failPayment(int paymentId, int adminId, String reason) throws AppException, SQLException {
@@ -169,6 +199,10 @@ public class PaymentService {
         if (p == null) {
             throw new AppException(ErrorCodes.PAYMENT_NOT_FOUND, 404, "Paiement introuvable");
         }
+        if ("PAWAPAY".equals(p.getProvider())) {
+            throw new AppException(ErrorCodes.PAYMENT_INVALID, 409,
+                "Paiement PawaPay : statut géré automatiquement");
+        }
         if (!"EN_ATTENTE".equals(p.getStatus())) {
             throw new AppException(ErrorCodes.PAYMENT_INVALID, 409, "Paiement déjà traité");
         }
@@ -180,6 +214,7 @@ public class PaymentService {
         notifyParties(p, "PAYMENT_FAILED", "Paiement échoué",
             "Le paiement de la commande a échoué."
                 + (reason != null && !reason.trim().isEmpty() ? " Motif : " + reason.trim() : ""));
+        sendClientEmail(p, false);
     }
 
     /** Confirmation COD à la livraison (événement serveur réel). */
@@ -188,6 +223,86 @@ public class PaymentService {
         if (p != null && "EN_ATTENTE".equals(p.getStatus()) && "PAIEMENT_LIVRAISON".equals(p.getMethod())) {
             paymentDAO.updateStatus(p.getId(), "REUSSIE", p.getTransactionRef());
         }
+    }
+
+    /**
+     * Confirmation MODE TEST (sandbox uniquement, JAMAIS en production).
+     * Permet de tester le système de commande de bout en bout sans
+     * validation mobile PawaPay : marque le paiement REUSSIE (référence
+     * TEST- traçable) puis confirme la commande. Idempotent : un paiement
+     * déjà confirmé retourne duplicate=true. Montants toujours serveur.
+     */
+    public java.util.Map<String, Object> testConfirm(String orderNumber, String phone)
+            throws AppException, SQLException {
+        return testConfirm(orderNumber, phone, null);
+    }
+
+    public java.util.Map<String, Object> testConfirm(String orderNumber, String phone, Integer sessionCustomerId)
+            throws AppException, SQLException {
+        if (!com.ecommerce.pawapay.PawaPayConfig.isSandbox()) {
+            throw new AppException(ErrorCodes.ACCESS_DENIED, 403,
+                "Mode test désactivé en production");
+        }
+        Order o = ownedOrder(orderNumber, phone, sessionCustomerId);
+        if (!"EN_ATTENTE".equals(o.getStatus()) && !"CONFIRMEE".equals(o.getStatus())) {
+            throw new AppException(ErrorCodes.PAYMENT_INVALID, 400,
+                "Commande non payable à ce stade");
+        }
+        Payment p;
+        try {
+            p = paymentDAO.findByOrderId(o.getId());
+        } catch (SQLException e) {
+            throw new AppException(ErrorCodes.DATABASE_ERROR, 500,
+                "Impossible de traiter votre demande.", e);
+        }
+        if (p == null) {
+            p = initPayment(orderNumber, phone, "MOBILE_MONEY_MTN", sessionCustomerId);
+        }
+        if ("REUSSIE".equals(p.getStatus()) || "COMPLETED".equals(p.getStatus())) {
+            ensureConfirmed(o);
+            return testResult(o, p, true);
+        }
+        boolean ok;
+        try {
+            ok = paymentDAO.markTestConfirmed(p.getId(),
+                "TEST-" + o.getId() + "-" + System.currentTimeMillis());
+        } catch (SQLException e) {
+            throw new AppException(ErrorCodes.DATABASE_ERROR, 500,
+                "Impossible de traiter votre demande.", e);
+        }
+        if (!ok) {
+            throw new AppException(ErrorCodes.PAYMENT_INVALID, 409, "Paiement déjà traité");
+        }
+        try {
+            p = paymentDAO.findByOrderId(o.getId());
+        } catch (SQLException e) {
+            throw new AppException(ErrorCodes.DATABASE_ERROR, 500,
+                "Impossible de traiter votre demande.", e);
+        }
+        ensureConfirmed(o);
+        notifyParties(p, "PAYMENT_SUCCEEDED", "Paiement confirmé (mode test)",
+            "Le paiement de la commande a été confirmé (mode test, sans argent réel).");
+        return testResult(orderDAO.findById(o.getId()), p, false);
+    }
+
+    private void ensureConfirmed(Order o) throws AppException, SQLException {
+        Order fresh = orderDAO.findById(o.getId());
+        if (fresh != null && "EN_ATTENTE".equals(fresh.getStatus())) {
+            new OrderService().updateStatus(fresh.getId(), "CONFIRMEE");
+        }
+    }
+
+    private java.util.Map<String, Object> testResult(Order o, Payment p, boolean duplicate) {
+        java.util.Map<String, Object> m = new java.util.LinkedHashMap<>();
+        m.put("orderId", o.getId());
+        m.put("orderNumber", o.getOrderNumber());
+        m.put("orderStatus", o.getStatus());
+        m.put("paymentId", p.getId());
+        m.put("paymentStatus", p.getStatus());
+        m.put("amount", p.getAmount());
+        m.put("testMode", true);
+        m.put("duplicate", duplicate);
+        return m;
     }
 
     /** Remboursement comptable : marque ANNULEE (le mouvement PSP reste manuel, documenté). */
@@ -214,6 +329,28 @@ public class PaymentService {
 
     public List<Payment> allPayments() throws SQLException {
         return paymentDAO.findAll();
+    }
+
+    /** Email client (best-effort) si la commande porte un email. */
+    private void sendClientEmail(Payment p, boolean succeeded) {
+        try {
+            Order o = orderDAO.findById(p.getOrderId());
+            if (o == null || o.getEmail() == null
+                    || !EmailService.isValidEmail(o.getEmail())) return;
+            EmailService emails = new EmailService();
+            if (succeeded) {
+                emails.queueAndSend(o.getEmail(),
+                    EmailService.paymentSucceededSubject(o.getOrderNumber()),
+                    EmailService.paymentSucceededBody(o.getFullname(),
+                        o.getOrderNumber(), p.getAmount()),
+                    "PAYMENT_SUCCEEDED", o.getId());
+            } else {
+                emails.queueAndSend(o.getEmail(),
+                    EmailService.paymentFailedSubject(o.getOrderNumber()),
+                    EmailService.paymentFailedBody(o.getFullname(), o.getOrderNumber()),
+                    "PAYMENT_FAILED", o.getId());
+            }
+        } catch (Exception ignored) {}
     }
 
     private void notifyParties(Payment p, String eventCode, String title, String message) {

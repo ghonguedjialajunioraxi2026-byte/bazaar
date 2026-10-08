@@ -29,12 +29,16 @@ public class PaymentServlet extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
         try {
             String pubAction = req.getParameter("action");
+            // Session client éventuelle : si présente, les lectures/écritures
+            // sont en plus restreintes aux commandes du compte (anti-IDOR).
+            Integer session = com.ecommerce.service.CustomerIsolation.sessionOf(
+                com.ecommerce.util.CustomerAuth.validateCustomer(req));
             // Statut invité : numéro + téléphone (propriété vérifiée serveur).
             if ("status".equals(pubAction)) {
                 try {
                     resp.getWriter().write(JsonUtil.toJson(
                         new com.ecommerce.service.PaymentService().getStatus(
-                            req.getParameter("orderNumber"), req.getParameter("phone"))));
+                            req.getParameter("orderNumber"), req.getParameter("phone"), session)));
                 } catch (com.ecommerce.util.AppException ae) {
                     com.ecommerce.util.ApiResponse.fromException(resp, ae);
                 }
@@ -44,6 +48,14 @@ public class PaymentServlet extends HttpServlet {
             if ("methods".equals(pubAction)) {
                 resp.getWriter().write(JsonUtil.toJson(
                     com.ecommerce.service.PaymentProviders.offeredMethods()));
+                return;
+            }
+            // Mode test : visible uniquement hors production (jamais de
+            // secret exposé, simple interrupteur d'affichage du bouton TEST).
+            if ("test-mode".equals(pubAction)) {
+                java.util.Map<String, Object> m = new java.util.LinkedHashMap<>();
+                m.put("testMode", com.ecommerce.pawapay.PawaPayConfig.isSandbox());
+                resp.getWriter().write(JsonUtil.toJson(m));
                 return;
             }
             if (com.ecommerce.util.AdminAuth.requireAdmin(req, resp) <= 0) return;
@@ -77,12 +89,15 @@ public class PaymentServlet extends HttpServlet {
             Map<String, Object> body = JsonUtil.fromJson(sb.toString(), Map.class);
             String action = body.get("action") == null ? null : String.valueOf(body.get("action"));
             com.ecommerce.service.PaymentService paymentService = new com.ecommerce.service.PaymentService();
+            // Session client éventuelle (voir doGet) : restreint au compte si présente.
+            Integer postSession = com.ecommerce.service.CustomerIsolation.sessionOf(
+                com.ecommerce.util.CustomerAuth.validateCustomer(req));
 
             // Actions invité (propriété numéro + téléphone vérifiée serveur).
             if ("init".equals(action)) {
                 try {
                     com.ecommerce.model.Payment p = paymentService.initPayment(
-                        str(body.get("orderNumber")), str(body.get("phone")), str(body.get("method")));
+                        str(body.get("orderNumber")), str(body.get("phone")), str(body.get("method")), postSession);
                     resp.setStatus(201);
                     resp.getWriter().write(JsonUtil.toJson(p));
                 } catch (com.ecommerce.util.AppException ae) {
@@ -93,8 +108,24 @@ public class PaymentServlet extends HttpServlet {
             if ("submit-reference".equals(action)) {
                 try {
                     com.ecommerce.model.Payment p = paymentService.submitReference(
-                        str(body.get("orderNumber")), str(body.get("phone")), str(body.get("transactionRef")));
+                        str(body.get("orderNumber")), str(body.get("phone")), str(body.get("transactionRef")), postSession);
                     resp.getWriter().write(JsonUtil.toJson(p));
+                } catch (com.ecommerce.util.AppException ae) {
+                    com.ecommerce.util.ApiResponse.fromException(resp, ae);
+                }
+                return;
+            }
+            // Paiement simulé MODE TEST (sandbox uniquement, vérifié serveur
+            // dans PaymentService : 403 en production). Propriété numéro +
+            // téléphone vérifiée comme init/submit-reference.
+            if ("test-confirm".equals(action)) {
+                try {
+                    java.util.Map<String, Object> out = paymentService.testConfirm(
+                        str(body.get("orderNumber")), str(body.get("phone")), postSession);
+                    java.util.Map<String, Object> env = new java.util.LinkedHashMap<>();
+                    env.put("success", true);
+                    env.put("data", out);
+                    resp.getWriter().write(JsonUtil.toJson(env));
                 } catch (com.ecommerce.util.AppException ae) {
                     com.ecommerce.util.ApiResponse.fromException(resp, ae);
                 }

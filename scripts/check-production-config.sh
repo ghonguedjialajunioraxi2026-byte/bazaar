@@ -26,6 +26,16 @@ check_set APP_BASE_URL no
 check_set MBOA_UPLOADS_DIR no
 check_set GOOGLE_CLIENT_ID no
 
+echo "== pawapay (sandbox d'abord, valeurs masquées) =="
+check_set PAWAPAY_API_TOKEN no
+check_set PAWAPAY_API_URL no
+check_set PAWAPAY_ENVIRONMENT no
+case "${PAWAPAY_ENVIRONMENT:-sandbox}" in
+  production)
+    echo "AVERTISSEMENT: PAWAPAY_ENVIRONMENT=production (argent réel — valider le sandbox d'abord)."
+    ;;
+esac
+
 echo "== garde-fous =="
 if [ "${DB_URL:-}" = "*localhost*" ]; then :; fi
 case "${DB_URL:-}" in

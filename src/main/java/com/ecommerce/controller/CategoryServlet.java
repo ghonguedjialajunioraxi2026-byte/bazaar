@@ -211,8 +211,7 @@ public class CategoryServlet extends HttpServlet {
             int id = categoryService.createCategory(cat);
             resp.getWriter().write("{\"id\":" + id + ",\"success\":true}");
         } catch (Exception e) {
-            resp.setStatus(400);
-            com.ecommerce.util.ApiResponse.internalError(resp);
+            sendServiceError(resp, e);
         }
     }
 
@@ -234,8 +233,7 @@ public class CategoryServlet extends HttpServlet {
             categoryService.updateCategory(cat);
             resp.getWriter().write("{\"success\":true}");
         } catch (Exception e) {
-            resp.setStatus(400);
-            com.ecommerce.util.ApiResponse.internalError(resp);
+            sendServiceError(resp, e);
         }
     }
 
@@ -270,8 +268,7 @@ public class CategoryServlet extends HttpServlet {
             else categoryService.setActive(id, active);
             resp.getWriter().write("{\"success\":true}");
         } catch (Exception e) {
-            resp.setStatus(400);
-            com.ecommerce.util.ApiResponse.internalError(resp);
+            sendServiceError(resp, e);
         }
     }
 
@@ -289,13 +286,18 @@ public class CategoryServlet extends HttpServlet {
             if (parts.length == 1 && parts[0].matches("\\d+")) {
                 id = Integer.parseInt(parts[0]);
             } else {
-                id = Integer.parseInt(req.getParameter("id"));
+                String idStr = req.getParameter("id");
+                if (idStr == null || !idStr.matches("\\d+")) {
+                    resp.setStatus(400);
+                    resp.getWriter().write("{\"success\":false,\"message\":\"Identifiant catégorie requis\"}");
+                    return;
+                }
+                id = Integer.parseInt(idStr);
             }
             categoryService.deleteCategory(id);
             resp.getWriter().write("{\"success\":true}");
         } catch (Exception e) {
-            resp.setStatus(400);
-            com.ecommerce.util.ApiResponse.internalError(resp);
+            sendServiceError(resp, e);
         }
     }
 
@@ -348,7 +350,18 @@ public class CategoryServlet extends HttpServlet {
         return toBoolean(o);
     }
 
-    private String safe(String s) {
-        return s == null ? "Erreur" : s.replace("\\", "\\\\").replace("\"", "'");
+    /**
+     * Erreurs métier de CategoryService : messages propres affichés tels quels
+     * (400). Tout le reste reste générique (500), sans fuite de détail interne.
+     */
+    private void sendServiceError(HttpServletResponse resp, Exception e) throws IOException {
+        com.ecommerce.util.ServiceErrors.send(resp, e,
+            "Suppression impossible",
+            "Catégorie introuvable",
+            "Catégorie invalide",
+            "Catégorie parent",
+            "Le nom de la catégorie",
+            "Une catégorie ne peut pas",
+            "Hiérarchie invalide");
     }
 }
