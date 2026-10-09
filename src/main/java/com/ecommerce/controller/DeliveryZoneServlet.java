@@ -26,7 +26,10 @@ public class DeliveryZoneServlet extends HttpServlet {
             String city = req.getParameter("city");
             if (city != null) {
                 int fee = deliveryDAO.getFee(city);
-                resp.getWriter().write("{\"city\":\"" + city + "\",\"fee\":" + fee + "}");
+                java.util.Map<String, Object> out = new java.util.LinkedHashMap<>();
+                out.put("city", city);
+                out.put("fee", fee);
+                resp.getWriter().write(JsonUtil.toJson(out));
             } else {
                 resp.getWriter().write(JsonUtil.toJson(deliveryDAO.findAll()));
             }

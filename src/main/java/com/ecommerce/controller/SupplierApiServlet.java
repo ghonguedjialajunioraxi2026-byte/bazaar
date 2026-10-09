@@ -94,7 +94,7 @@ public class SupplierApiServlet extends HttpServlet {
                 if (sub.isEmpty()) {
                     write(resp, ok("Produits", supplierService.getProductsBySupplier(supplierId)), 200);
                 } else {
-                    int pid = Integer.parseInt(sub.substring(1));
+                    int pid = parseInt(sub.substring(1));
                     Product p = supplierService.getProductForSupplier(supplierId, pid);
                     if (p == null) { write(resp, err("Produit introuvable"), 404); return; }
                     write(resp, ok("Produit", p), 200);
@@ -107,12 +107,12 @@ public class SupplierApiServlet extends HttpServlet {
                 if (sub.isEmpty()) {
                     write(resp, ok("Commandes", supplierService.getOrdersEnriched(supplierId)), 200);
                 } else if (sub.endsWith("/finance")) {
-                    int oid = Integer.parseInt(sub.substring(1, sub.length() - "/finance".length()));
+                    int oid = parseInt(sub.substring(1, sub.length() - "/finance".length()));
                     java.util.Map<String, Object> fin = supplierService.getOrderFinance(supplierId, oid);
                     if (fin == null) { write(resp, err("Commande introuvable"), 404); return; }
                     write(resp, ok("Finance commande", fin), 200);
                 } else {
-                    int oid = Integer.parseInt(sub.substring(1));
+                    int oid = parseInt(sub.substring(1));
                     Order o = supplierService.getOrderForSupplier(supplierId, oid);
                     if (o == null) { write(resp, err("Commande introuvable"), 404); return; }
                     write(resp, ok("Commande", o), 200);
@@ -137,7 +137,7 @@ public class SupplierApiServlet extends HttpServlet {
             }
             // /api/supplier/conversations/{id}
             if (path.startsWith("/conversations/") && !path.endsWith("/messages")) {
-                int cid = Integer.parseInt(path.substring("/conversations/".length()));
+                int cid = parseInt(path.substring("/conversations/".length()));
                 Conversation c = supplierService.getConversationForSupplier(supplierId, cid);
                 if (c == null) { write(resp, err("Conversation introuvable"), 404); return; }
                 Map<String, Object> data = new LinkedHashMap<>();
@@ -219,7 +219,7 @@ public class SupplierApiServlet extends HttpServlet {
             // /api/supplier/ledger — écritures comptables (limite 50, bornée Phase 20)
             if (path.equals("/ledger")) {
                 int limit = 50;
-                try { limit = Integer.parseInt(req.getParameter("limit")); } catch (Exception ignored) {}
+                try { limit = parseInt(req.getParameter("limit")); } catch (Exception ignored) {}
                 limit = com.ecommerce.util.Pagination.clampLimit(limit, 50);
                 write(resp, ok("Grand-livre",
                     new com.ecommerce.service.MonetizationService().entriesForSupplier(supplierId, limit)), 200);
@@ -307,7 +307,7 @@ public class SupplierApiServlet extends HttpServlet {
 
             // POST conversations/{id}/messages
             if (path.startsWith("/conversations/") && path.endsWith("/messages")) {
-                int cid = Integer.parseInt(path.substring("/conversations/".length(), path.indexOf("/messages")));
+                int cid = parseInt(path.substring("/conversations/".length(), path.indexOf("/messages")));
                 BufferedReader reader = req.getReader();
                 StringBuilder sb = new StringBuilder();
                 String line;
@@ -417,7 +417,7 @@ public class SupplierApiServlet extends HttpServlet {
 
             // PUT products/{id}  (exclut /stock et /toggle)
             if (path.matches("/products/\\d+")) {
-                int pid = Integer.parseInt(path.substring("/products/".length()));
+                int pid = parseInt(path.substring("/products/".length()));
                 String contentType = req.getContentType();
                 Product p = new Product();
                 List<String> images = new ArrayList<>();
@@ -469,7 +469,7 @@ public class SupplierApiServlet extends HttpServlet {
 
             // PUT products/{id}/stock
             if (path.startsWith("/products/") && path.endsWith("/stock")) {
-                int pid = Integer.parseInt(path.substring("/products/".length(), path.indexOf("/stock")));
+                int pid = parseInt(path.substring("/products/".length(), path.indexOf("/stock")));
                 BufferedReader reader = req.getReader();
                 StringBuilder sb = new StringBuilder();
                 String line;
@@ -558,7 +558,7 @@ public class SupplierApiServlet extends HttpServlet {
             if (supplierId <= 0) return;
 
             if (path.startsWith("/products/")) {
-                int pid = Integer.parseInt(path.substring("/products/".length()));
+                int pid = parseInt(path.substring("/products/".length()));
                 boolean ok = supplierService.deleteProductForSupplier(supplierId, pid);
                 if (!ok) { write(resp, err("Produit introuvable"), 404); return; }
                 write(resp, ok("Produit supprimé", null), 200);
@@ -598,7 +598,7 @@ public class SupplierApiServlet extends HttpServlet {
 
             // PATCH products/{id}/toggle
             if (path.startsWith("/products/") && path.endsWith("/toggle")) {
-                int pid = Integer.parseInt(path.substring("/products/".length(), path.indexOf("/toggle")));
+                int pid = parseInt(path.substring("/products/".length(), path.indexOf("/toggle")));
                 BufferedReader reader = req.getReader();
                 StringBuilder sb = new StringBuilder();
                 String line;
@@ -613,7 +613,7 @@ public class SupplierApiServlet extends HttpServlet {
 
             // PATCH orders/{id}/status
             if (path.startsWith("/orders/") && path.endsWith("/status")) {
-                int oid = Integer.parseInt(path.substring("/orders/".length(), path.indexOf("/status")));
+                int oid = parseInt(path.substring("/orders/".length(), path.indexOf("/status")));
                 BufferedReader reader = req.getReader();
                 StringBuilder sb = new StringBuilder();
                 String line;
@@ -634,7 +634,7 @@ public class SupplierApiServlet extends HttpServlet {
 
             // PATCH conversations/{id}/read
             if (path.startsWith("/conversations/") && path.endsWith("/read")) {
-                int cid = Integer.parseInt(path.substring("/conversations/".length(), path.indexOf("/read")));
+                int cid = parseInt(path.substring("/conversations/".length(), path.indexOf("/read")));
                 boolean ok = supplierService.markConversationRead(supplierId, cid);
                 if (!ok) { write(resp, err("Conversation introuvable"), 404); return; }
                 write(resp, ok("Conversation marquée comme lue", null), 200);
@@ -643,7 +643,7 @@ public class SupplierApiServlet extends HttpServlet {
 
             // PATCH notifications/{id}/read
             if (path.startsWith("/notifications/") && path.endsWith("/read")) {
-                int nid = Integer.parseInt(path.substring("/notifications/".length(), path.indexOf("/read")));
+                int nid = parseInt(path.substring("/notifications/".length(), path.indexOf("/read")));
                 supplierService.markNotificationRead(supplierId, nid);
                 write(resp, ok("Notification lue", null), 200);
                 return;
@@ -651,7 +651,7 @@ public class SupplierApiServlet extends HttpServlet {
 
             // PATCH notifications/{id}/archive {archived:true|false} (défaut true : sauvegarder)
             if (path.startsWith("/notifications/") && path.endsWith("/archive")) {
-                int nid = Integer.parseInt(path.substring("/notifications/".length(), path.indexOf("/archive")));
+                int nid = parseInt(path.substring("/notifications/".length(), path.indexOf("/archive")));
                 BufferedReader areader = req.getReader();
                 StringBuilder asb = new StringBuilder();
                 String aline;

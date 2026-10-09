@@ -418,15 +418,20 @@ public class ShipmentService {
         }
     }
 
-    private void markConfirmed(int shipmentId, String by) {
+    private void markConfirmed(int shipmentId, String by) throws AppException {
         try {
             if (shipmentDAO.markReceiptConfirmed(shipmentId, by)) {
                 try {
                     shipmentDAO.addEvent(shipmentId, "RECEIPT_CONFIRMED",
                         "Réception confirmée", "Confirmée par " + by + ".", by);
-                } catch (SQLException ignored) {}
+                } catch (SQLException ignored) {
+                    // Événement d'historique best-effort : le flag reste la vérité.
+                }
             }
-        } catch (SQLException ignored) {}
+        } catch (SQLException e) {
+            throw new AppException(ErrorCodes.DATABASE_ERROR, 500,
+                "Confirmation non enregistrée, réessayez.", e);
+        }
     }
 
     /** Annulation commande → annulation expédition non terminale. */

@@ -915,7 +915,7 @@ async function renderProductsTable() {
     if (list.length===0) { wrap.innerHTML = emptyState('Aucun produit trouvé'); return; }
     wrap.innerHTML = `<table class="table"><thead><tr><th>Produit</th><th>Catégorie</th><th>Prix</th><th>Stock</th><th>Statut</th><th class="text-right">Actions</th></tr></thead><tbody>
       ${list.map(p => `<tr>
-        <td><div class="flex items-center gap-3"><img src="${esc(imgSrc(p))}" class="w-10 h-10 rounded-lg object-cover bg-[#F7FAF5]" onerror="this.src='https://placehold.co/80x80/e2e8f0/64748b?text=+'">${esc(p.name)}<br><span class="text-xs text-[#5F6B61]">${esc(p.brand||'')}${p.reference?' · '+esc(p.reference):''}</span></div></td>
+        <td><div class="flex items-center gap-3"><img src="${esc(imgSrc(p))}" class="w-10 h-10 rounded-lg object-cover bg-[#F7FAF5]" onerror="this.onerror=null;this.src='https://placehold.co/80x80/e2e8f0/64748b?text=+'">${esc(p.name)}<br><span class="text-xs text-[#5F6B61]">${esc(p.brand||'')}${p.reference?' · '+esc(p.reference):''}</span></div></td>
         <td class="text-[#5F6B61]">${esc(p.categoryName||'')}</td>
         <td class="font-semibold">${money(p.price)}</td>
         <td><button onclick="openStockModal(${p.id},${p.stock||0})" class="text-sm px-2 py-1 rounded-lg ${(p.stock||0)<=5?'bg-[rgba(220,38,38,0.12)] text-[#DC2626]':'bg-[#DDE6DC] text-[#123B16]'} hover:bg-[#F7FAF5] transition"><i class="bi bi-box-seam mr-1"></i>${p.stock||0}</button></td>

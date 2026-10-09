@@ -40,7 +40,8 @@ public class ShipmentServlet extends HttpServlet {
         StringBuilder sb = new StringBuilder();
         String line;
         while ((line = reader.readLine()) != null) sb.append(line);
-        return JsonUtil.fromJson(sb.toString(), Map.class);
+        Map<String, Object> body = JsonUtil.fromJson(sb.toString(), Map.class);
+        return body == null ? new java.util.LinkedHashMap<>() : body;
     }
 
     private String str(Object o) { return o == null ? null : String.valueOf(o); }
@@ -116,7 +117,14 @@ public class ShipmentServlet extends HttpServlet {
             }
             // Détail par commande (fournisseur propriétaire ou admin).
             if (parts.length == 2 && "order".equals(parts[0])) {
-                int orderId = Integer.parseInt(parts[1]);
+                int orderId;
+                try {
+                    orderId = Integer.parseInt(parts[1]);
+                    if (orderId <= 0) throw new NumberFormatException("id");
+                } catch (NumberFormatException e) {
+                    ApiResponse.fail(resp, 400, ErrorCodes.VALIDATION_ERROR, "Identifiant invalide");
+                    return;
+                }
                 Integer supplierId = supplierIdOf(req);
                 if (supplierId == null && adminIdOf(req) <= 0) {
                     ApiResponse.fail(resp, 401, ErrorCodes.AUTH_REQUIRED, "Non autorisé");

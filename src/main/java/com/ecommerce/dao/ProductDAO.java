@@ -511,9 +511,10 @@ public class ProductDAO {
             // Vérifier si le produit existe
             try (PreparedStatement check = conn.prepareStatement("SELECT id FROM products WHERE id = ?")) {
                 check.setInt(1, id);
-                ResultSet rs = check.executeQuery();
+                try (ResultSet rs = check.executeQuery()) {
                 if (!rs.next()) {
                     throw new SQLException("Produit introuvable (id=" + id + ")");
+                }
                 }
             }
 
@@ -521,9 +522,10 @@ public class ProductDAO {
             try (PreparedStatement orderCheck = conn.prepareStatement(
                     "SELECT COUNT(*) FROM order_items WHERE product_id = ?")) {
                 orderCheck.setInt(1, id);
-                ResultSet rs = orderCheck.executeQuery();
+                try (ResultSet rs = orderCheck.executeQuery()) {
                 if (rs.next() && rs.getInt(1) > 0) {
                     throw new SQLException("Ce produit ne peut pas être supprimé car il est lié à des commandes existantes.");
+                }
                 }
             }
 

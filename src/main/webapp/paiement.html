@@ -428,11 +428,14 @@ tailwind.config = {
     box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
+  // Compteur d'échecs réseau consécutifs : un seul avertissement, pas de spam.
+  let netFails = 0;
   async function refreshStatus(show) {
     try {
       const res = await fetch(base + '/api/payments/pawapay/status?orderNumber=' + encodeURIComponent(order.orderNumber) + '&phone=' + encodeURIComponent(phone));
       if (!res.ok) return null;
       const data = await res.json();
+      netFails = 0;
       if (show && data && data.status && data.status !== 'EN_ATTENTE') {
         if (data.status === 'FAILED' && !data._announced) {
           showStatus('FAILED', data);
@@ -443,7 +446,12 @@ tailwind.config = {
         }
       }
       return data;
-    } catch (e) { return null; }
+    } catch (e) {
+      // Panne réseau / serveur injoignable : visible une seule fois.
+      netFails += 1;
+      if (netFails === 1) toast('Connexion impossible : vérifiez votre réseau.', 'error');
+      return null;
+    }
   }
 
   function startPolling() {
@@ -549,12 +557,15 @@ tailwind.config = {
     try {
       const cid = localStorage.getItem(payAccountKey('ms_cid')) || ('c' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10));
       try { localStorage.setItem(payAccountKey('ms_cid'), cid); } catch (e) {}
-      await fetch(base + '/api/conversations', {
+      const res = await fetch(base + '/api/conversations', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ supplierId: order.supplierId, phone, cid, clientName: order.fullname || undefined })
       });
-    } catch (e) {}
-    window.location.href = 'index.html#messages';
+      if (!res.ok) throw new Error('conversation');
+      window.location.href = 'index.html#messages';
+    } catch (e) {
+      toast('Discussion vendeur indisponible pour le moment.', 'error');
+    }
   }
 
   window.addEventListener('beforeunload', stopPolling);

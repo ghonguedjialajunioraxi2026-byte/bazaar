@@ -36,7 +36,8 @@ public class OrderServlet extends HttpServlet {
                 // Lecture admin uniquement (PII : nom/téléphone/adresse).
                 // Les invités utilisent track (numéro + téléphone).
                 if (com.ecommerce.util.AdminAuth.requireAdmin(req, resp) <= 0) return;
-                int id = Integer.parseInt(req.getParameter("id"));
+                int id = parseIdParam(req.getParameter("id"), resp);
+                if (id < 0) return;
                 Order order = orderService.getOrderById(id);
                 if (order != null) {
                     resp.getWriter().write(JsonUtil.toJson(order));
@@ -102,12 +103,21 @@ public class OrderServlet extends HttpServlet {
                 // IDOR corrigé : seul le périmètre admin (ou l'API fournisseur
                 // scopée au token) expose les commandes d'un vendeur.
                 if (com.ecommerce.util.AdminAuth.requireAdmin(req, resp) <= 0) return;
-                int supplierId = Integer.parseInt(req.getParameter("supplierId"));
+                int supplierId = parseIdParam(req.getParameter("supplierId"), resp);
+                if (supplierId < 0) return;
                 resp.getWriter().write(JsonUtil.toJson(orderService.getOrdersBySupplier(supplierId)));
             } else if ("delivery-fee".equals(action)) {
                 String city = req.getParameter("city");
+                if (city == null || city.trim().isEmpty()) {
+                    resp.setStatus(400);
+                    resp.getWriter().write("{\"error\":\"Ville requise\"}");
+                    return;
+                }
                 int fee = deliveryDAO.getFee(city);
-                resp.getWriter().write("{\"city\":\"" + city + "\",\"fee\":" + fee + "}");
+                java.util.Map<String, Object> out = new java.util.LinkedHashMap<>();
+                out.put("city", city);
+                out.put("fee", fee);
+                resp.getWriter().write(JsonUtil.toJson(out));
             } else {
                 // Liste complète : admin uniquement (dashboard avec token).
                 if (com.ecommerce.util.AdminAuth.requireAdmin(req, resp) <= 0) return;
@@ -130,6 +140,11 @@ public class OrderServlet extends HttpServlet {
             String line;
             while ((line = reader.readLine()) != null) sb.append(line);
             Map<String, Object> body = JsonUtil.fromJson(sb.toString(), Map.class);
+            if (body == null) {
+                resp.setStatus(400);
+                resp.getWriter().write("{\"error\":\"Corps JSON requis\"}");
+                return;
+            }
 
             // Annulation invitée (numéro + téléphone, EN_ATTENTE uniquement,
             // propriété du compte vérifiée si une session est présente).
@@ -260,7 +275,8 @@ public class OrderServlet extends HttpServlet {
             while ((line = reader.readLine()) != null) sb.append(line);
             Map<String, Object> body = JsonUtil.fromJson(sb.toString(), Map.class);
 
-            int id = ((Number) body.get("id")).intValue();
+            int id = parseBodyId(body, resp);
+            if (id < 0) return;
             String status = (String) body.get("status");
             try {
                 orderService.updateStatus(id, status);
@@ -275,14 +291,16 @@ public class OrderServlet extends HttpServlet {
         }
     }
 
-    @Override
+        @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
         try {
             if (com.ecommerce.util.AdminRole.requireAction(req, resp,
                     com.ecommerce.util.AdminRole.DESTRUCTIVE) <= 0) return;
-            int id = Integer.parseInt(req.getParameter("id"));
+            int id = parseIdParam(req.getParameter("id"), resp);
+            if (id < 0) return;
             try {
                 orderService.deleteOrder(id);
             } catch (AppException ae) {
@@ -294,5 +312,34 @@ public class OrderServlet extends HttpServlet {
             resp.setStatus(500);
             com.ecommerce.util.ApiResponse.internalError(resp);
         }
+    }
+
+    /** Parse un id de query (?id=, ?supplierId=) : 400 au lieu de 500 si invalide. */
+    private int parseIdParam(String raw, HttpServletResponse resp) throws IOException {
+        try {
+            int id = Integer.parseInt(raw);
+            if (id <= 0) throw new NumberFormatException("id");
+            return id;
+        } catch (Exception e) {
+            resp.setStatus(400);
+            resp.getWriter().write("{\"error\":\"Identifiant invalide\"}");
+            return -1;
+        }
+    }
+
+    /** Parse un id de corps JSON (Gson -> Number ou String) : 400 si absent/invalide. */
+    private int parseBodyId(Map<String, Object> body, HttpServletResponse resp) throws IOException {
+        Object o = body == null ? null : body.get("id");
+        int id = -1;
+        if (o instanceof Number) id = ((Number) o).intValue();
+        else if (o != null) {
+            try { id = Integer.parseInt(String.valueOf(o).trim()); } catch (NumberFormatException ignored) {}
+        }
+        if (id <= 0) {
+            resp.setStatus(400);
+            resp.getWriter().write("{\"error\":\"Identifiant invalide\"}");
+            return -1;
+        }
+        return id;
     }
 }

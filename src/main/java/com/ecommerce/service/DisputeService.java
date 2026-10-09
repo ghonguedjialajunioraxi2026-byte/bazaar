@@ -189,20 +189,19 @@ public class DisputeService {
         // (onRefundCompleted) ; on garde OPEN jusqu'au COMPLETED, mais on
         // trace la décision admin dans la note (visible au dashboard) pour
         // ne jamais afficher "remboursé" avant les fonds réels.
-        try {
-            java.sql.Connection conn = com.ecommerce.config.DBConnection.getConnection();
-            try (java.sql.PreparedStatement ps = conn.prepareStatement(
+        try (java.sql.Connection conn = com.ecommerce.config.DBConnection.getConnection();
+             java.sql.PreparedStatement ps = conn.prepareStatement(
                     "UPDATE disputes SET resolution_note = ? WHERE order_id = ? AND status = 'OPEN'")) {
-                String trace = "Décision admin : REMBOURSEMENT"
-                    + (note == null || note.isEmpty() ? "" : " — " + note)
-                    + " (refund " + outcome.refund.getRefundId()
-                    + ", statut " + outcome.refund.getStatus() + ").";
-                ps.setString(1, trace.substring(0, Math.min(500, trace.length())));
-                ps.setInt(2, orderId);
-                ps.executeUpdate();
-            }
-            conn.close();
-        } catch (SQLException ignored) {}
+            String trace = "Décision admin : REMBOURSEMENT"
+                + (note == null || note.isEmpty() ? "" : " — " + note)
+                + " (refund " + outcome.refund.getRefundId()
+                + ", statut " + outcome.refund.getStatus() + ").";
+            ps.setString(1, trace.substring(0, Math.min(500, trace.length())));
+            ps.setInt(2, orderId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            LOG.warning(() -> "Dispute resolution note NOT saved for orderId=" + orderId + ": " + e.getMessage());
+        }
         LOG.info(() -> "Dispute refund decided: orderId=" + orderId);
         out.put("status", Dispute.STATUS_OPEN);
         out.put("refundId", outcome.refund.getRefundId());

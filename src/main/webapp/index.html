@@ -4720,7 +4720,6 @@ function ensureMsgIdentity() {
   }
   return id;
 }
-function msgHeaders() { return { 'Content-Type': 'application/json' }; }
 
 async function openClientChatForProduct() {
   const p = PRODUCTS.find(x => x.id === currentProductId);

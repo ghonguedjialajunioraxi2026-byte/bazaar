@@ -825,7 +825,9 @@ function toggleSidebar() {
 function showPage(page) {
   currentPage = page;
   document.querySelectorAll('.page-content').forEach(el => el.classList.add('hidden'));
-  document.getElementById('page-' + page).classList.remove('hidden');
+  const target = document.getElementById('page-' + page);
+  if (!target) return;
+  target.classList.remove('hidden');
   document.querySelectorAll('.sidebar-link[data-page]').forEach(el => el.classList.remove('active'));
   const activeLink = document.querySelector(`.sidebar-link[data-page="${page}"]`);
   if (activeLink) activeLink.classList.add('active');
@@ -1728,7 +1730,7 @@ function renderProducts() {
     : `<table class="w-full text-sm"><thead><tr class="text-left text-[#5F6B61] text-xs uppercase bg-[#FFFFFF]"><th class="px-4 py-3">Produit</th><th class="px-4 py-3">Prix</th><th class="px-4 py-3">Images</th><th class="px-4 py-3">Actions</th></tr></thead><tbody>${filtered.map(p => {
       const promo = getPromoForProduct(p.id);
       return `<tr class="table-row border-t border-[rgba(255,255,255,0.06)]">
-        <td class="px-4 py-3"><div class="flex items-center gap-3"><img src="${notifEsc((p.images && p.images[0]) || 'https://placehold.co/80x80/e2e8f0/94a3b8?text=Produit')}" class="w-10 h-10 rounded-lg object-cover bg-[#F7FAF5]" onerror="this.src='https://placehold.co/80x80/e2e8f0/94a3b8?text=Produit'"><div><p class="font-medium">${notifEsc(p.name)}</p><p class="text-xs text-[#5F6B61]">${notifEsc(p.brand || '')}</p></div></div></td>
+        <td class="px-4 py-3"><div class="flex items-center gap-3"><img src="${notifEsc((p.images && p.images[0]) || 'https://placehold.co/80x80/e2e8f0/94a3b8?text=Produit')}" class="w-10 h-10 rounded-lg object-cover bg-[#F7FAF5]" onerror="this.onerror=null;this.src='https://placehold.co/80x80/e2e8f0/94a3b8?text=Produit'"><div><p class="font-medium">${notifEsc(p.name)}</p><p class="text-xs text-[#5F6B61]">${notifEsc(p.brand || '')}</p></div></div></td>
         <td class="px-4 py-3"><span class="font-semibold">${formatMoney(p.price)}</span>${promo ? `<br><span class="text-xs text-[#4D7C0F]">Promo: ${formatMoney(promo.promoPrice)}</span>` : ''}</td>
         <td class="px-4 py-3"><button onclick="openImageManager(${p.id})" class="text-xs text-[#4D7C0F] hover:underline font-medium"><i class="bi bi-images mr-1"></i>Gérer</button></td>
         <td class="px-4 py-3"><div class="flex gap-1">
@@ -1942,7 +1944,7 @@ function renderImageManager(product, images) {
       <div id="imageGrid" class="grid grid-cols-3 gap-3">
         ${images.length === 0 ? '<p class="col-span-3 text-sm text-[#5F6B61] text-center py-6">Aucune photo. Ajoutez-en une ci-dessus.</p>' : images.map((img, idx) => `
           <div class="relative group bg-[#F7FAF5] rounded-xl overflow-hidden aspect-square" data-id="${img.id}">
-            <img src="${img.url}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/200x200/e2e8f0/94a3b8?text=Erreur'">
+            <img src="${img.url}" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='https://placehold.co/200x200/e2e8f0/94a3b8?text=Erreur'">
             ${img.isPrimary ? '<span class="absolute top-1 left-1 bg-primary-600 text-white text-[9px] px-1.5 py-0.5 rounded font-bold shadow">PRINCIPALE</span>' : ''}
             <div class="absolute inset-0 bg-black/40 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition">
               ${!img.isPrimary ? `<button onclick="setImagePrimary(${product.id}, ${img.id})" class="w-8 h-8 bg-primary-500 text-[#0A0A0A] rounded-full flex items-center justify-center text-xs" title="Définir principale"><i class="bi bi-star"></i></button>` : ''}

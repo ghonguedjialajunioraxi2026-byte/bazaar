@@ -61,12 +61,24 @@ public class PaymentServlet extends HttpServlet {
             if (com.ecommerce.util.AdminAuth.requireAdmin(req, resp) <= 0) return;
             String action = req.getParameter("action");
             if ("find".equals(action)) {
-                int orderId = Integer.parseInt(req.getParameter("orderId"));
+                int orderId = parseIdParam(req.getParameter("orderId"), resp);
+                if (orderId < 0) return;
                 Payment p = paymentDAO.findByOrderId(orderId);
+                if (p == null) {
+                    resp.setStatus(404);
+                    resp.getWriter().write("{\"error\":\"Paiement introuvable\"}");
+                    return;
+                }
                 resp.getWriter().write(JsonUtil.toJson(p));
             } else if ("byId".equals(action)) {
-                int id = Integer.parseInt(req.getParameter("id"));
+                int id = parseIdParam(req.getParameter("id"), resp);
+                if (id < 0) return;
                 Payment p = paymentDAO.findById(id);
+                if (p == null) {
+                    resp.setStatus(404);
+                    resp.getWriter().write("{\"error\":\"Paiement introuvable\"}");
+                    return;
+                }
                 resp.getWriter().write(JsonUtil.toJson(p));
             } else {
                 resp.getWriter().write(JsonUtil.toJson(paymentDAO.findAll()));
@@ -87,6 +99,11 @@ public class PaymentServlet extends HttpServlet {
             String line;
             while ((line = reader.readLine()) != null) sb.append(line);
             Map<String, Object> body = JsonUtil.fromJson(sb.toString(), Map.class);
+            if (body == null) {
+                resp.setStatus(400);
+                resp.getWriter().write("{\"error\":\"Corps JSON requis\"}");
+                return;
+            }
             String action = body.get("action") == null ? null : String.valueOf(body.get("action"));
             com.ecommerce.service.PaymentService paymentService = new com.ecommerce.service.PaymentService();
             // Session client éventuelle (voir doGet) : restreint au compte si présente.
@@ -164,6 +181,35 @@ public class PaymentServlet extends HttpServlet {
         try { return Integer.parseInt(String.valueOf(o)); } catch (Exception e) { return 0; }
     }
 
+    /** Parse un id de query : 400 au lieu de 500 si invalide. */
+    private int parseIdParam(String raw, HttpServletResponse resp) throws IOException {
+        try {
+            int id = Integer.parseInt(raw);
+            if (id <= 0) throw new NumberFormatException("id");
+            return id;
+        } catch (Exception e) {
+            resp.setStatus(400);
+            resp.getWriter().write("{\"error\":\"Identifiant invalide\"}");
+            return -1;
+        }
+    }
+
+    /** Parse un id de corps JSON (Number ou String) : 400 si absent/invalide. */
+    private int parseBodyId(Map<String, Object> body, HttpServletResponse resp) throws IOException {
+        Object o = body == null ? null : body.get("id");
+        int id = -1;
+        if (o instanceof Number) id = ((Number) o).intValue();
+        else if (o != null) {
+            try { id = Integer.parseInt(String.valueOf(o).trim()); } catch (NumberFormatException ignored) {}
+        }
+        if (id <= 0) {
+            resp.setStatus(400);
+            resp.getWriter().write("{\"error\":\"Identifiant invalide\"}");
+            return -1;
+        }
+        return id;
+    }
+
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("application/json");
@@ -176,7 +222,8 @@ public class PaymentServlet extends HttpServlet {
             while ((line = reader.readLine()) != null) sb.append(line);
             Map<String, Object> body = JsonUtil.fromJson(sb.toString(), Map.class);
 
-            int id = ((Number) body.get("id")).intValue();
+            int id = parseBodyId(body, resp);
+            if (id < 0) return;
             String status = (String) body.get("status");
             String transactionRef = (String) body.get("transactionRef");
 

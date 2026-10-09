@@ -24,24 +24,26 @@ public class SupplierServlet extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
         try {
             // Vitrine publique : jamais de hash, email, téléphones, soldes.
-            // Le dashboard admin joint son Bearer et reçoit les fiches complètes.
+            // Le dashboard admin joint son Bearer et reçoit les fiches complètes
+            // (hash mot de passe exclu dans tous les cas, jamais exposé).
             boolean admin = com.ecommerce.util.AdminAuth.validateAdmin(req) > 0;
             String action = req.getParameter("action");
             if ("active".equals(action)) {
                 resp.getWriter().write(JsonUtil.toJson(admin
-                    ? supplierService.getActive() : publicShops(supplierService.getActive())));
+                    ? safeShops(supplierService.getActive()) : publicShops(supplierService.getActive())));
             } else if ("find".equals(action)) {
-                int id = Integer.parseInt(req.getParameter("id"));
+                int id = parseIdParam(req.getParameter("id"), resp);
+                if (id < 0) return;
                 Supplier s = supplierService.getById(id);
                 if (s == null || (!admin && !s.isActive())) {
                     resp.setStatus(404);
                     resp.getWriter().write("{\"error\":\"Fournisseur non trouvé\"}");
                 } else {
-                    resp.getWriter().write(JsonUtil.toJson(admin ? s : publicShop(s)));
+                    resp.getWriter().write(JsonUtil.toJson(admin ? safeShop(s) : publicShop(s)));
                 }
             } else {
                 resp.getWriter().write(JsonUtil.toJson(admin
-                    ? supplierService.getAll() : publicShops(supplierService.getActive())));
+                    ? safeShops(supplierService.getAll()) : publicShops(supplierService.getActive())));
             }
         } catch (Exception e) {
             resp.setStatus(500);
@@ -65,6 +67,31 @@ public class SupplierServlet extends HttpServlet {
         java.util.List<java.util.Map<String, Object>> out = new java.util.ArrayList<>();
         if (list != null) for (Supplier s : list) out.add(publicShop(s));
         return out;
+    }
+
+    /** Vue admin : fiche complète SANS le hash du mot de passe (jamais exposé). */
+    private static Supplier safeShop(Supplier s) {
+        if (s == null) return null;
+        s.setPasswordHash(null);
+        return s;
+    }
+
+    private static java.util.List<Supplier> safeShops(java.util.List<Supplier> list) {
+        if (list != null) for (Supplier s : list) safeShop(s);
+        return list;
+    }
+
+    /** Parse un id de query : 400 au lieu de 500 si invalide. */
+    private int parseIdParam(String raw, HttpServletResponse resp) throws IOException {
+        try {
+            int id = Integer.parseInt(raw);
+            if (id <= 0) throw new NumberFormatException("id");
+            return id;
+        } catch (Exception e) {
+            resp.setStatus(400);
+            resp.getWriter().write("{\"error\":\"Identifiant invalide\"}");
+            return -1;
+        }
     }
 
     @Override

@@ -41,8 +41,9 @@ public class DeliveryZoneDAO {
             ps.setInt(3, dz.getFee());
             ps.setBoolean(4, dz.isActive());
             ps.executeUpdate();
-            ResultSet keys = ps.getGeneratedKeys();
+            try (ResultSet keys = ps.getGeneratedKeys()) {
             if (keys.next()) return keys.getInt(1);
+            }
             return 0;
         }
     }

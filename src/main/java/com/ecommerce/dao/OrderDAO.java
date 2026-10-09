@@ -47,7 +47,8 @@ public class OrderDAO {
                 // Generate order number: CMD-2026-XXXXX
                 String orderNumber = generateOrderNumber(conn);
 
-                PreparedStatement psOrder = conn.prepareStatement(sqlOrder, Statement.RETURN_GENERATED_KEYS);
+                int orderId;
+                try (PreparedStatement psOrder = conn.prepareStatement(sqlOrder, Statement.RETURN_GENERATED_KEYS)) {
                 psOrder.setString(1, orderNumber);
                 psOrder.setString(2, order.getFullname());
                 psOrder.setString(3, order.getPhone());
@@ -71,16 +72,18 @@ public class OrderDAO {
                 }
                 psOrder.executeUpdate();
 
-                ResultSet keys = psOrder.getGeneratedKeys();
-                int orderId = 0;
+                try (ResultSet keys = psOrder.getGeneratedKeys()) {
+                orderId = 0;
                 if (keys.next()) orderId = keys.getInt(1);
+                }
+                }
 
                 order.setOrderNumber(orderNumber);
 
                 if (order.getItems() != null) {
-                    PreparedStatement psItem = conn.prepareStatement(sqlItem);
-                    String sqlDecrement = "UPDATE products SET stock = stock - ? WHERE id = ? AND stock >= ?";
-                    PreparedStatement psDec = conn.prepareStatement(sqlDecrement);
+                    try (PreparedStatement psItem = conn.prepareStatement(sqlItem);
+                         PreparedStatement psDec = conn.prepareStatement(
+                             "UPDATE products SET stock = stock - ? WHERE id = ? AND stock >= ?")) {
                     for (OrderItem item : order.getItems()) {
                         psItem.setInt(1, orderId);
                         psItem.setInt(2, item.getProductId());
@@ -142,6 +145,7 @@ public class OrderDAO {
                         } catch (Exception ignored) {}
                     }
                     psItem.executeBatch();
+                    }
                 }
 
                 // Ligne paiement EN_ATTENTE, atomique avec la commande (Phase 11).
@@ -193,16 +197,18 @@ public class OrderDAO {
         int year = java.util.Calendar.getInstance().get(java.util.Calendar.YEAR);
         String prefix = "CMD-" + year + "-";
         String sql = "SELECT MAX(order_number) FROM orders WHERE order_number LIKE ?";
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setString(1, prefix + "%");
-        ResultSet rs = ps.executeQuery();
-        int seq = 1;
-        if (rs.next() && rs.getString(1) != null) {
-            String last = rs.getString(1);
-            String numPart = last.substring(prefix.length());
-            try { seq = Integer.parseInt(numPart) + 1; } catch (NumberFormatException ignored) {}
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, prefix + "%");
+            try (ResultSet rs = ps.executeQuery()) {
+                int seq = 1;
+                if (rs.next() && rs.getString(1) != null) {
+                    String last = rs.getString(1);
+                    String numPart = last.substring(prefix.length());
+                    try { seq = Integer.parseInt(numPart) + 1; } catch (NumberFormatException ignored) {}
+                }
+                return prefix + String.format("%06d", seq);
+            }
         }
-        return prefix + String.format("%06d", seq);
     }
 
     public List<Order> findAll() throws SQLException {
@@ -222,16 +228,16 @@ public class OrderDAO {
         // product_name snapshot prioritaire, nom actuel en repli (lignes pré-migration)
         String sqlItems = "SELECT oi.*, p.name AS current_name FROM order_items oi LEFT JOIN products p ON p.id = oi.product_id WHERE oi.order_id = ?";
 
-        try (Connection conn = DBConnection.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement(sqlOrder);
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sqlOrder)) {
             ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
+            try (ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
                 order = mapRow(rs);
                 List<OrderItem> items = new ArrayList<>();
-                PreparedStatement psItems = conn.prepareStatement(sqlItems);
+                try (PreparedStatement psItems = conn.prepareStatement(sqlItems)) {
                 psItems.setInt(1, id);
-                ResultSet rsItems = psItems.executeQuery();
+                try (ResultSet rsItems = psItems.executeQuery()) {
                 while (rsItems.next()) {
                     OrderItem item = new OrderItem();
                     item.setId(rsItems.getInt("id"));
@@ -245,7 +251,10 @@ public class OrderDAO {
                     item.setUnitPrice(rsItems.getInt("unit_price"));
                     items.add(item);
                 }
+                }
+                }
                 order.setItems(items);
+            }
             }
         }
         return order;

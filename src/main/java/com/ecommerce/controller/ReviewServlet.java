@@ -25,7 +25,8 @@ public class ReviewServlet extends HttpServlet {
         try {
             String action = req.getParameter("action");
             if ("product".equals(action)) {
-                int productId = Integer.parseInt(req.getParameter("productId"));
+                int productId = parseIdParam(req.getParameter("productId"), resp);
+                if (productId < 0) return;
                 resp.getWriter().write(JsonUtil.toJson(reviewDAO.findByProduct(productId)));
             } else if ("pending".equals(action)) {
                 // File de modération : admin uniquement.
@@ -52,18 +53,25 @@ public class ReviewServlet extends HttpServlet {
             String line;
             while ((line = reader.readLine()) != null) sb.append(line);
             Map<String, Object> body = JsonUtil.fromJson(sb.toString(), Map.class);
+            if (body == null) {
+                resp.setStatus(400);
+                resp.getWriter().write("{\"error\":\"Corps JSON requis\"}");
+                return;
+            }
 
             Review r = new Review();
-            r.setProductId(((Number) body.get("productId")).intValue());
-            r.setFullname((String) body.get("fullname"));
-            int rating = ((Number) body.get("rating")).intValue();
+            int productId = parseBodyId(body, resp);
+            if (productId < 0) return;
+            r.setProductId(productId);
+            r.setFullname(body.get("fullname") == null ? null : String.valueOf(body.get("fullname")));
+            int rating = parseRating(body.get("rating"));
             if (rating < 1 || rating > 5) {
                 resp.setStatus(400);
                 resp.getWriter().write("{\"error\":\"Note invalide (1 à 5)\"}");
                 return;
             }
             r.setRating(rating);
-            r.setComment((String) body.get("comment"));
+            r.setComment(body.get("comment") == null ? null : String.valueOf(body.get("comment")));
             // Phase 23 : produit inexistant => 404 (la FK levait un 500).
             if (new com.ecommerce.dao.ProductDAO().findById(r.getProductId()) == null) {
                 resp.setStatus(404);
@@ -100,8 +108,9 @@ public class ReviewServlet extends HttpServlet {
             while ((line = reader.readLine()) != null) sb.append(line);
             Map<String, Object> body = JsonUtil.fromJson(sb.toString(), Map.class);
 
-            int id = ((Number) body.get("id")).intValue();
-            String action = (String) body.get("action");
+            int id = parseBodyId(body, resp);
+            if (id < 0) return;
+            String action = body.get("action") == null ? null : String.valueOf(body.get("action"));
             if ("approve".equals(action)) {
                 reviewDAO.approve(id);
                 try {
@@ -143,5 +152,41 @@ public class ReviewServlet extends HttpServlet {
             resp.setStatus(500);
             com.ecommerce.util.ApiResponse.internalError(resp);
         }
+    }
+
+    /** Parse un id de query : 400 au lieu de 500 si invalide. */
+    private int parseIdParam(String raw, HttpServletResponse resp) throws IOException {
+        try {
+            int id = Integer.parseInt(raw);
+            if (id <= 0) throw new NumberFormatException("id");
+            return id;
+        } catch (Exception e) {
+            resp.setStatus(400);
+            resp.getWriter().write("{\"error\":\"Identifiant invalide\"}");
+            return -1;
+        }
+    }
+
+    /** Parse un id de corps JSON (Number ou String) : 400 si absent/invalide. */
+    private int parseBodyId(Map<String, Object> body, HttpServletResponse resp) throws IOException {
+        Object o = body == null ? null : body.get("id");
+        int id = -1;
+        if (o instanceof Number) id = ((Number) o).intValue();
+        else if (o != null) {
+            try { id = Integer.parseInt(String.valueOf(o).trim()); } catch (NumberFormatException ignored) {}
+        }
+        if (id <= 0) {
+            resp.setStatus(400);
+            resp.getWriter().write("{\"error\":\"Identifiant invalide\"}");
+            return -1;
+        }
+        return id;
+    }
+
+    /** Note 1-5 tolérante (Number ou String), -1 si illisible. */
+    private int parseRating(Object o) {
+        if (o instanceof Number) return ((Number) o).intValue();
+        if (o == null) return -1;
+        try { return Integer.parseInt(String.valueOf(o).trim()); } catch (NumberFormatException e) { return -1; }
     }
 }

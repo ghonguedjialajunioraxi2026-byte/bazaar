@@ -514,7 +514,7 @@ $('auth-form').addEventListener('submit', async e => {
     const val = id => (document.getElementById(id) || {}).value ? document.getElementById(id).value.trim() : '';
     if (currentMode === 'login') {
       const res = await fetch(API + '/login', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: val('f-email'), password: document.getElementById('f-password').value }) });
+        body: JSON.stringify({ email: val('f-email'), password: val('f-password') }) });
       const data = await res.json();
       if (!res.ok || !data.success) throw new Error(data.message || 'Incorrect credentials');
       if (data.requiresVerification) {
@@ -528,7 +528,7 @@ $('auth-form').addEventListener('submit', async e => {
     }
     if (currentMode === 'register') {
       const body = { name: val('f-name'), email: val('f-email'),
-        password: document.getElementById('f-password').value };
+        password: val('f-password') };
       const res = await fetch(API + '/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
       const data = await res.json();
       if (!res.ok || !data.success) throw new Error(data.message || 'Signup failed');
@@ -554,8 +554,8 @@ $('auth-form').addEventListener('submit', async e => {
       return;
     }
     if (currentMode === 'reset') {
-      const p1 = document.getElementById('f-password').value;
-      const p2 = document.getElementById('f-password2').value;
+      const p1 = val('f-password');
+      const p2 = val('f-password2');
       if (p1 !== p2) throw new Error('Passwords do not match.');
     }
     showInfo(SUPPORT_HTML);
