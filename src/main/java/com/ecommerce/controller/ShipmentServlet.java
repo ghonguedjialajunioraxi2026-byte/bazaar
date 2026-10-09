@@ -220,7 +220,14 @@ public class ShipmentServlet extends HttpServlet {
                 ApiResponse.fail(resp, 404, ErrorCodes.RESOURCE_NOT_FOUND, "Route inconnue");
                 return;
             }
-            int shipmentId = Integer.parseInt(parts[0]);
+            int shipmentId;
+            try {
+                shipmentId = Integer.parseInt(parts[0]);
+                if (shipmentId <= 0) throw new NumberFormatException("id");
+            } catch (NumberFormatException e) {
+                ApiResponse.fail(resp, 400, ErrorCodes.VALIDATION_ERROR, "Identifiant invalide");
+                return;
+            }
             Map<String, Object> body = readBody(req);
             Integer supplierId = supplierIdOf(req);
             boolean admin = supplierId == null && adminIdOf(req) > 0;

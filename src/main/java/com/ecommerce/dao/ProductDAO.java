@@ -70,13 +70,14 @@ public class ProductDAO {
     }
 
     private String buildBaseQueryPublic() {
-        // Accueil : TOUS les produits, toutes catégories, sans filtre de statut.
-        // (Le filtre status cassait l'accueil quand la colonne n'existe pas encore en base.)
+        // Accueil : produits visibles uniquement (ni INACTIVE/supprimés par le
+        // vendeur, ni PENDING/REJECTED en attente de modération). Même règle
+        // que SeoServlet.isPublicProduct (ACTIVE ou APPROVED).
         return "SELECT p.*, c.name AS category_name, s.name AS supplier_name, s.phone AS supplier_phone, s.logo AS supplier_logo "
              + "FROM products p "
              + "LEFT JOIN categories c ON p.category_id = c.id "
              + "LEFT JOIN suppliers s ON p.supplier_id = s.id "
-             + "WHERE 1=1 ";
+             + "WHERE p.status IN ('ACTIVE','APPROVED') ";
     }
 
     public List<Product> findAll() throws SQLException {

@@ -15,6 +15,13 @@ target/
 secrets/
 credentials/
 backups/
+*.sql.gz
+*.bak
+*.dump
+# IDE et OS.
+.idea/
+.vscode/
+.DS_Store
 # Uploads utilisateurs (dossier webapp legacy + copies locales).
 src/main/webapp/uploads/
 ~/mboa-style-uploads/

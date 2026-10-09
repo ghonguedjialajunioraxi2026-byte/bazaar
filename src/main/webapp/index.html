@@ -1214,23 +1214,10 @@ tailwind.config = {
 let PRODUCTS = [];
 let CATEGORIES = [];
 
-// Catalogue de secours : affiché sur l'accueil quand l'API est injoignable
-// (fichier ouvert en direct, backend éteint, base vide...). L'accueil n'est
-// ainsi JAMAIS vide. Dès que /api/products répond, les vraies données l'écrasent.
-const FALLBACK_PRODUCTS = [
-  {id:1,name:'Nike Air Max 90',slug:'nike-air-max-90',reference:'NK-AM90-BLK',category:'Chaussures',brand:'Nike',price:45000,oldPrice:55000,discount:18,rating:4.7,reviews:128,image:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&h=500&fit=crop',gallery:['https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&h=500&fit=crop'],description:'Sneakers iconiques Nike Air Max 90. Confort exceptionnel et style streetwear.',stock:15,badge:'Populaire',colors:['Noir','Blanc'],sizes:['40','41','42','43','44'],supplierId:1,supplierName:'SneakerHub CM'},
-  {id:2,name:'Samsung Galaxy A54 5G',slug:'samsung-galaxy-a54',reference:'SG-A54-128',category:'Téléphones & Tablettes',brand:'Samsung',price:185000,oldPrice:210000,discount:12,rating:4.5,reviews:89,image:'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500&h=500&fit=crop',gallery:['https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500&h=500&fit=crop'],description:'Smartphone Samsung Galaxy A54 5G. Écran Super AMOLED 6.4", 128 Go.',stock:8,badge:'Promo',colors:['Noir','Violet'],sizes:[],supplierId:2,supplierName:'TechStore Douala'},
-  {id:3,name:'Casque Sony WH-1000XM4',slug:'sony-wh-1000xm4',reference:'SN-WH1000',category:'Électronique & High-Tech',brand:'Sony',price:125000,oldPrice:160000,discount:22,rating:4.9,reviews:210,image:'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&h=500&fit=crop',gallery:['https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&h=500&fit=crop'],description:'Casque Bluetooth à réduction de bruit active. Autonomie 30h.',stock:12,badge:'Nouveau',colors:['Noir'],sizes:[],supplierId:2,supplierName:'TechStore Douala'},
-  {id:4,name:'Robe wax élégante',slug:'robe-wax-elegante',reference:'AF-WAX-ELG',category:'Mode & Vêtements',brand:'AfroChic',price:18000,oldPrice:25000,discount:28,rating:4.6,reviews:67,image:'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500&h=500&fit=crop',gallery:['https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500&h=500&fit=crop'],description:'Robe en tissu wax authentique, coupe moderne et élégante.',stock:20,badge:'Promo',colors:['Multicolore'],sizes:['S','M','L','XL'],supplierId:3,supplierName:'Mode Africaine Yaoundé'},
-  {id:5,name:'Montre Fossil Grant',slug:'montre-fossil-grant',reference:'FG-GRANT-SV',category:'Montres',brand:'Fossil',price:65000,oldPrice:80000,discount:19,rating:4.4,reviews:45,image:'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&h=500&fit=crop',gallery:['https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&h=500&fit=crop'],description:'Montre chronographe Fossil Grant en acier inoxydable.',stock:10,badge:'Populaire',colors:['Argent'],sizes:[],supplierId:1,supplierName:'SneakerHub CM'},
-  {id:6,name:'iPhone 13 128 Go',slug:'iphone-13-128',reference:'AP-IP13-128',category:'Téléphones & Tablettes',brand:'Apple',price:320000,oldPrice:380000,discount:16,rating:4.8,reviews:156,image:'https://images.unsplash.com/photo-1591337676887-a217a6970a8a?w=500&h=500&fit=crop',gallery:['https://images.unsplash.com/photo-1591337676887-a217a6970a8a?w=500&h=500&fit=crop'],description:'iPhone 13 reconditionné grade A. Écran Super Retina XDR.',stock:5,badge:'Promo',colors:['Minuit','Bleu'],sizes:[],supplierId:2,supplierName:'TechStore Douala'},
-  {id:7,name:'Sac à main cuir premium',slug:'sac-main-cuir',reference:'LX-SAC-CUI',category:'Sacs & Maroquinerie',brand:'LuxeCM',price:28000,oldPrice:35000,discount:20,rating:4.3,reviews:38,image:'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500&h=500&fit=crop',gallery:['https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500&h=500&fit=crop'],description:'Sac à main en cuir véritable, finitions soignées.',stock:14,badge:'Nouveau',colors:['Noir','Marron'],sizes:[],supplierId:3,supplierName:'Mode Africaine Yaoundé'},
-  {id:8,name:'Crème hydratante Nivea',slug:'nivea-soft-creme',reference:'NV-SOFT-200',category:'Beauté & Santé',brand:'Nivea',price:3500,oldPrice:4500,discount:22,rating:4.5,reviews:92,image:'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=500&h=500&fit=crop',gallery:['https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=500&h=500&fit=crop'],description:'Crème hydratante Nivea Soft. Texture légère, absorption rapide.',stock:50,badge:'Populaire',colors:[],sizes:[],supplierId:4,supplierName:'BeautyBox CM'},
-  {id:9,name:'Adidas Ultraboost 22',slug:'adidas-ultraboost-22',reference:'AD-UB22-BLK',category:'Chaussures',brand:'Adidas',price:52000,oldPrice:65000,discount:20,rating:4.7,reviews:74,image:'https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=500&h=500&fit=crop',gallery:['https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=500&h=500&fit=crop'],description:'Running Adidas Ultraboost. Semelle Boost ultra-confortable.',stock:11,badge:'Promo',colors:['Noir','Blanc'],sizes:['40','41','42','43','44'],supplierId:1,supplierName:'SneakerHub CM'},
-  {id:10,name:'Parfum Dior Sauvage 100ml',slug:'dior-sauvage-100ml',reference:'DR-SAV-100',category:'Beauté & Santé',brand:'Dior',price:75000,oldPrice:95000,discount:21,rating:4.9,reviews:134,image:'https://images.unsplash.com/photo-1541643600914-78b084683601?w=500&h=500&fit=crop',gallery:['https://images.unsplash.com/photo-1541643600914-78b084683601?w=500&h=500&fit=crop'],description:'Eau de toilette Dior Sauvage. Notes fraîches et boisées.',stock:7,badge:'Populaire',colors:[],sizes:['100ml'],supplierId:4,supplierName:'BeautyBox CM'},
-  {id:11,name:'Enceinte JBL Flip 6',slug:'jbl-flip-6',reference:'JB-FLIP6-BK',category:'Électronique & High-Tech',brand:'JBL',price:45000,oldPrice:55000,discount:18,rating:4.6,reviews:88,image:'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=500&h=500&fit=crop',gallery:['https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=500&h=500&fit=crop'],description:'Enceinte Bluetooth portable JBL Flip 6. Étanche IP67.',stock:18,badge:'Nouveau',colors:['Noir','Bleu'],sizes:[],supplierId:2,supplierName:'TechStore Douala'},
-  {id:12,name:'Polo Lacoste classique',slug:'polo-lacoste',reference:'LC-POLO-CL',category:'Mode & Vêtements',brand:'Lacoste',price:22000,oldPrice:28000,discount:21,rating:4.4,reviews:56,image:'https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?w=500&h=500&fit=crop',gallery:['https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?w=500&h=500&fit=crop'],description:'Polo Lacoste classique en coton piqué.',stock:25,badge:'',colors:['Blanc','Noir','Bleu marine'],sizes:['S','M','L','XL','XXL'],supplierId:3,supplierName:'Mode Africaine Yaoundé'}
-];
+// Lancement public : AUCUN produit fictif intégré. Quand l'API est
+// injoignable, la boutique reste vide (états « Aucun produit » prévus) :
+// on n'affiche jamais de faux catalogue avec de faux prix/stocks.
+const FALLBACK_PRODUCTS = [];
 
 // Image de secours quand un fichier uploadé a été perdu (ex. redeploy ayant
 // effacé le dossier webapp) : les futurs uploads sont persistants (UploadServlet).
@@ -1288,16 +1275,16 @@ async function loadProducts() {
         apiReached = true;
         const data = await res.json();
         const list = (Array.isArray(data) ? data : []).map(mapProduct);
-        if (list.length) { PRODUCTS = list; return; }
+        if (list.length) { PRODUCTS = list; pruneStaleLocalData(); return; }
       }
     } catch(e) { /* essai URL suivante */ }
   }
   try {
-    const res = await fetch('/api/products');
+    const res = await fetch(apiBase() + '/api/products');
     if (res.ok) {
       apiReached = true;
       const list = (await res.json()).map(mapProduct);
-      if (list.length) { PRODUCTS = list; return; }
+      if (list.length) { PRODUCTS = list; pruneStaleLocalData(); return; }
     }
   } catch(e) { console.error('Erreur chargement produits', e); }
   // Secours : catalogue intégré UNIQUEMENT si l'API est injoignable.
@@ -1306,6 +1293,9 @@ async function loadProducts() {
     console.warn('API produits injoignable -> catalogue de secours affiché');
     PRODUCTS = FALLBACK_PRODUCTS.slice();
   }
+  // L'API a répondu : les favoris/panier pointant vers des produits
+  // disparus sont purgés (badge à jour, jamais de chiffre figé).
+  if (apiReached) pruneStaleLocalData();
 }
 
 /* Cache court (5 min) des données publiques quasi-statiques : catégories.
@@ -1333,7 +1323,7 @@ async function loadCategories() {
     } catch(e) { /* suivante */ }
   }
   try {
-    const res = await fetch('/api/categories/tree?activeOnly=true');
+    const res = await fetch(apiBase() + '/api/categories/tree?activeOnly=true');
     if (res.ok) {
       CAT_TREE = await res.json();
       CATEGORIES = flattenCatTree(CAT_TREE);
@@ -1444,6 +1434,27 @@ function saveCart() {
 function saveFavs() {
   localStorage.setItem(accountKey('camshop_favs'), JSON.stringify(favorites));
   updateFavUI();
+}
+
+// Purge les données locales devenues orphelines (produit supprimé ou
+// catalogue remis à zéro côté serveur) : le badge favoris/panier reflète
+// alors le catalogue réel au lieu d'un chiffre figé. Appelé uniquement
+// quand l'API a répondu (jamais sur panne réseau : on ne vide rien).
+function pruneStaleLocalData() {
+  if (!Array.isArray(PRODUCTS)) return;
+  const valid = new Set(PRODUCTS.map(p => p.id));
+  const favKept = favorites.filter(id => valid.has(id));
+  if (favKept.length !== favorites.length) {
+    favorites = favKept;
+    try { localStorage.setItem(accountKey('camshop_favs'), JSON.stringify(favorites)); } catch (e) {}
+  }
+  const cartKept = (Array.isArray(cart) ? cart : []).filter(c => c && valid.has(c.id));
+  if (cartKept.length !== (cart || []).length) {
+    cart = cartKept;
+    try { localStorage.setItem(accountKey('camshop_cart'), JSON.stringify(cart)); } catch (e) {}
+  }
+  try { updateFavUI(); } catch (e) {}
+  try { updateCartUI(); } catch (e) {}
 }
 
 function showToast(msg, icon = 'success') {
@@ -2832,7 +2843,7 @@ async function loadModalReviews(productId) {
   if (!box) return;
   box.innerHTML = '<div class="flex justify-center py-4"><span class="ms-spinner"></span></div>';
   try {
-    const res = await fetch('/api/reviews?action=product&productId=' + productId);
+    const res = await fetch(apiBase() + '/api/reviews?action=product&productId=' + productId);
     const list = res.ok ? await res.json() : [];
     if (!list.length) {
       box.innerHTML = '<div class="ms-empty !p-6"><p class="font-semibold text-sm mb-1">Aucun avis pour le moment.</p><p class="text-xs">Soyez le premier à donner votre avis ci-dessous.</p></div>';
@@ -2859,7 +2870,7 @@ async function submitReview(e) {
   const comment = document.getElementById('review-comment').value.trim();
   if (!name || !comment) { showToast('Nom et avis requis', 'error'); return false; }
   try {
-    const res = await fetch('/api/reviews', {
+    const res = await fetch(apiBase() + '/api/reviews', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ productId: currentProductId, fullname: name, rating, comment })
     });
@@ -3256,8 +3267,10 @@ function toggleFavorite(id) {
 
 function updateFavUI() {
   const badge = document.getElementById('fav-count');
-  badge.textContent = favorites.length;
-  badge.classList.toggle('hidden', favorites.length === 0);
+  if (badge) {
+    badge.textContent = favorites.length;
+    badge.classList.toggle('hidden', favorites.length === 0);
+  }
   const badgeM = document.getElementById('fav-count-mobile');
   if (badgeM) {
     badgeM.textContent = favorites.length;

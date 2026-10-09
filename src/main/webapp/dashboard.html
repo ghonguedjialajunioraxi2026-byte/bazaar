@@ -713,7 +713,7 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(1
 // =====================================================================
 // STATE
 // =====================================================================
-const API = '';
+const API = (window.location.pathname.includes('/mboa-style') ? '/mboa-style' : '');
 let token = localStorage.getItem('admin_token') || '';
 let products = [], categories = [], orders = [], promotions = [];
 let dashboard = {};
@@ -921,9 +921,9 @@ async function loadPpStatements() {
 async function ppStatementStatus(statementId) {
   try {
     const d = await api('/api/admin/pawapay/statements/status?statementId=' + encodeURIComponent(statementId));
-    alert('Relevé : ' + ((d && d.status) || (d && d.data && d.data.status) || '?'));
+    notifyMsg('Relevé : ' + ((d && d.status) || (d && d.data && d.data.status) || '?'), 'info');
     loadPpStatements();
-  } catch (e) { alert('Réconciliation impossible.'); }
+  } catch (e) { notifyMsg('Réconciliation impossible.'); }
 }
 async function ppRequestStatement() {
   const body = {
@@ -934,13 +934,13 @@ async function ppRequestStatement() {
     endDate: document.getElementById('ppStEnd').value.trim(),
     compressed: false
   };
-  if (!body.startDate || !body.endDate) { alert('Plage RFC3339 requise (ex : 2026-09-01T00:00:00Z). Max 31 jours.'); return; }
+  if (!body.startDate || !body.endDate) { notifyMsg('Plage RFC3339 requise (ex : 2026-09-01T00:00:00Z). Max 31 jours.'); return; }
   if (!confirm('Demander un relevé PawaPay ' + body.country + '/' + body.currency + ' ?')) return;
   try {
     const res = await api('/api/admin/pawapay/statements', { method: 'POST', body: JSON.stringify(body) });
-    alert('Relevé : ' + ((res && res.statement && res.statement.status) || 'demandé'));
+    notifyMsg('Relevé : ' + ((res && res.statement && res.statement.status) || 'demandé'), 'success');
     loadPpStatements();
-  } catch (e) { alert('Demande impossible (vérifiez wallet + callback HTTPS + plage ≤ 31 j).'); }
+  } catch (e) { notifyMsg('Demande impossible (vérifiez wallet + callback HTTPS + plage ≤ 31 j).'); }
 }
 async function loadPpToolkit() {
   ppLoading('ppToolkit');
@@ -2077,10 +2077,10 @@ async function resolveCategoryRequest(id, approved) {
   if (!confirm(approved ? 'Créer cette catégorie ?' : 'Refuser cette demande ?')) return;
   try {
     await api('/api/admin/product/validate', { method: 'POST', body: JSON.stringify({ categoryRequestId: id, approved, note }) });
-    alert(approved ? 'Catégorie créée' : 'Demande refusée');
+    notifyMsg(approved ? 'Catégorie créée' : 'Demande refusée', 'success');
     loadCategoryRequests();
     loadCategories();
-  } catch (e) { alert('Opération impossible.'); }
+  } catch (e) { notifyMsg('Opération impossible.'); }
 }
 
 function catCardHTML(c, depth) {
@@ -2675,7 +2675,7 @@ function applyRoleUI() {
   }
 }
 
-/** Confirmation Design System (jamais de confirm()/alert() natifs ici). */
+/** Confirmation Design System (modale maison + toast notifyMsg, jamais d'alert() natif). */
 function confirmAction(title, text, confirmLabel, onConfirm, danger) {
   openModal(`
     <div class="p-6">
@@ -2943,17 +2943,17 @@ async function processPayout(orderId) {
   if (!confirm('Déclencher le versement PawaPay de la commande #' + orderId + ' ?')) return;
   try {
     const res = await api('/api/admin/payouts/process', { method: 'POST', body: JSON.stringify({ orderId }) });
-    alert('Versement : ' + ((res && res.payout && res.payout.status) || 'demandé') + ((res && res.duplicate) ? ' (déjà existant)' : ''));
+    notifyMsg('Versement : ' + ((res && res.payout && res.payout.status) || 'demandé') + ((res && res.duplicate) ? ' (déjà existant)' : ''), 'success');
     loadPayouts();
-  } catch (e) { alert('Versement bloqué ou impossible.'); }
+  } catch (e) { notifyMsg('Versement bloqué ou impossible.'); }
 }
 async function cancelPayout(orderId) {
   if (!confirm('Annuler le versement EN FILE de la commande #' + orderId + ' côté PawaPay ? (impossible si déjà exécuté)')) return;
   try {
     const res = await api('/api/admin/payouts/cancel', { method: 'POST', body: JSON.stringify({ orderId }) });
-    alert('Annulation : ' + ((res && res.status) || 'acceptée') + ' (' + ((res && res.failureCode) || '') + ')');
+    notifyMsg('Annulation : ' + ((res && res.status) || 'acceptée') + ' (' + ((res && res.failureCode) || '') + ')', 'success');
     loadPayouts();
-  } catch (e) { alert('Annulation impossible (plus en file ou déjà exécuté).'); }
+  } catch (e) { notifyMsg('Annulation impossible (plus en file ou déjà exécuté).'); }
 }
 async function processBulkPayouts() {
   const raw = (document.getElementById('bulkOrderIds').value || '').trim();
@@ -3001,17 +3001,17 @@ async function requestRefund(orderId) {
   if (!confirm('Déclencher le remboursement PawaPay de la commande #' + orderId + ' ?')) return;
   try {
     const res = await api('/api/admin/refunds/request', { method: 'POST', body: JSON.stringify({ orderId }) });
-    alert('Remboursement : ' + ((res && res.refund && res.refund.status) || 'demandé'));
+    notifyMsg('Remboursement : ' + ((res && res.refund && res.refund.status) || 'demandé'), 'success');
     loadRefunds();
-  } catch (e) { alert('Remboursement impossible.'); }
+  } catch (e) { notifyMsg('Remboursement impossible.'); }
 }
 async function cancelRefund(orderId) {
   if (!confirm('Annuler le remboursement EN FILE de la commande #' + orderId + ' côté PawaPay ? (impossible si déjà exécuté)')) return;
   try {
     const res = await api('/api/admin/refunds/cancel', { method: 'POST', body: JSON.stringify({ orderId }) });
-    alert('Annulation : ' + ((res && res.status) || 'acceptée') + ' (' + ((res && res.failureCode) || '') + ')');
+    notifyMsg('Annulation : ' + ((res && res.status) || 'acceptée') + ' (' + ((res && res.failureCode) || '') + ')', 'success');
     loadRefunds();
-  } catch (e) { alert('Annulation impossible (plus en file ou déjà exécuté).'); }
+  } catch (e) { notifyMsg('Annulation impossible (plus en file ou déjà exécuté).'); }
 }
 async function loadDisputes() {
   const box = document.getElementById('disputesTable');
@@ -3045,9 +3045,9 @@ async function resolveDispute(orderId, decision) {
   if (note === null) return;
   try {
     await api('/api/admin/disputes/resolve', { method: 'POST', body: JSON.stringify({ orderId, decision, note }) });
-    alert(decision === 'REFUND' ? 'Remboursement déclenché.' : 'Litige rejeté.');
+    notifyMsg(decision === 'REFUND' ? 'Remboursement déclenché.' : 'Litige rejeté.', 'success');
     loadDisputes();
-  } catch (e) { alert('Résolution impossible.'); }
+  } catch (e) { notifyMsg('Résolution impossible.'); }
 }
 function payGoto(p) { payPage = Math.max(1, p); loadPayments(); }
 function renderPayPagination(total) {

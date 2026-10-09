@@ -50,12 +50,33 @@ public class DeliveryZoneServlet extends HttpServlet {
             String line;
             while ((line = reader.readLine()) != null) sb.append(line);
             Map<String, Object> body = JsonUtil.fromJson(sb.toString(), Map.class);
+            if (body == null) {
+                resp.setStatus(400);
+                resp.getWriter().write("{\"error\":\"Corps JSON requis\"}");
+                return;
+            }
 
             DeliveryZone dz = new DeliveryZone();
-            dz.setCity((String) body.get("city"));
-            dz.setZone((String) body.get("zone"));
+            String city = body.get("city") == null ? null : String.valueOf(body.get("city")).trim();
+            String zone = body.get("zone") == null ? null : String.valueOf(body.get("zone")).trim();
+            if (city == null || city.isEmpty() || city.length() > 60
+                    || zone == null || zone.isEmpty() || zone.length() > 80) {
+                resp.setStatus(400);
+                resp.getWriter().write("{\"error\":\"Ville et zone requises (max 60/80 caractères)\"}");
+                return;
+            }
+            if (!(body.get("fee") instanceof Number) || ((Number) body.get("fee")).intValue() < 0
+                    || ((Number) body.get("fee")).intValue() > 100000) {
+                resp.setStatus(400);
+                resp.getWriter().write("{\"error\":\"Frais de livraison invalides (0 à 100000)\"}");
+                return;
+            }
+            dz.setCity(city);
+            dz.setZone(zone);
             dz.setFee(((Number) body.get("fee")).intValue());
-            dz.setActive(body.get("active") == null || (Boolean) body.get("active"));
+            Object active = body.get("active");
+            dz.setActive(active == null || Boolean.TRUE.equals(active)
+                || "true".equalsIgnoreCase(String.valueOf(active)));
 
             int id = deliveryDAO.create(dz);
             resp.getWriter().write("{\"id\":" + id + ",\"success\":true}");
@@ -76,13 +97,45 @@ public class DeliveryZoneServlet extends HttpServlet {
             String line;
             while ((line = reader.readLine()) != null) sb.append(line);
             Map<String, Object> body = JsonUtil.fromJson(sb.toString(), Map.class);
+            if (body == null) {
+                resp.setStatus(400);
+                resp.getWriter().write("{\"error\":\"Corps JSON requis\"}");
+                return;
+            }
+            Object rawId = body.get("id");
+            int dzId = -1;
+            if (rawId instanceof Number) dzId = ((Number) rawId).intValue();
+            else if (rawId != null) {
+                try { dzId = Integer.parseInt(String.valueOf(rawId).trim()); } catch (NumberFormatException ignored) {}
+            }
+            if (dzId <= 0) {
+                resp.setStatus(400);
+                resp.getWriter().write("{\"error\":\"Identifiant invalide\"}");
+                return;
+            }
 
             DeliveryZone dz = new DeliveryZone();
-            dz.setId(((Number) body.get("id")).intValue());
-            dz.setCity((String) body.get("city"));
-            dz.setZone((String) body.get("zone"));
+            dz.setId(dzId);
+            String city = body.get("city") == null ? null : String.valueOf(body.get("city")).trim();
+            String zone = body.get("zone") == null ? null : String.valueOf(body.get("zone")).trim();
+            if (city == null || city.isEmpty() || city.length() > 60
+                    || zone == null || zone.isEmpty() || zone.length() > 80) {
+                resp.setStatus(400);
+                resp.getWriter().write("{\"error\":\"Ville et zone requises (max 60/80 caractères)\"}");
+                return;
+            }
+            if (!(body.get("fee") instanceof Number) || ((Number) body.get("fee")).intValue() < 0
+                    || ((Number) body.get("fee")).intValue() > 100000) {
+                resp.setStatus(400);
+                resp.getWriter().write("{\"error\":\"Frais de livraison invalides (0 à 100000)\"}");
+                return;
+            }
+            dz.setCity(city);
+            dz.setZone(zone);
             dz.setFee(((Number) body.get("fee")).intValue());
-            dz.setActive(body.get("active") == null || (Boolean) body.get("active"));
+            Object active = body.get("active");
+            dz.setActive(active == null || Boolean.TRUE.equals(active)
+                || "true".equalsIgnoreCase(String.valueOf(active)));
 
             deliveryDAO.update(dz);
             resp.getWriter().write("{\"success\":true}");
@@ -99,7 +152,15 @@ public class DeliveryZoneServlet extends HttpServlet {
         try {
             if (com.ecommerce.util.AdminRole.requireAction(req, resp,
                     com.ecommerce.util.AdminRole.DESTRUCTIVE) <= 0) return;
-            int id = Integer.parseInt(req.getParameter("id"));
+            int id;
+            try {
+                id = Integer.parseInt(req.getParameter("id"));
+                if (id <= 0) throw new NumberFormatException("id");
+            } catch (Exception e) {
+                resp.setStatus(400);
+                resp.getWriter().write("{\"error\":\"Identifiant invalide\"}");
+                return;
+            }
             deliveryDAO.delete(id);
             resp.getWriter().write("{\"success\":true}");
         } catch (Exception e) {

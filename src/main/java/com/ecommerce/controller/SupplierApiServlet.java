@@ -530,6 +530,9 @@ public class SupplierApiServlet extends HttpServlet {
                     while ((line = reader.readLine()) != null) sb.append(line);
                     Map<String, Object> body = JsonUtil.fromJson(sb.toString(), Map.class);
                     logo = str(body.get("logo"));
+                    if (logo != null && !isSafeImageUrl(logo)) {
+                        write(resp, err("URL de logo invalide"), 400); return;
+                    }
                 }
                 if (logo == null || logo.isEmpty()) { write(resp, err("Logo manquant"), 400); return; }
                 supplierService.updateLogo(supplierId, logo);
@@ -719,6 +722,23 @@ public class SupplierApiServlet extends HttpServlet {
     }
 
     private int parseInt(String s) { try { return Integer.parseInt(s); } catch (Exception e) { return 0; } }
+
+    /** N'accepte que les images servies en http(s) ou les chemins internes (cf. ProductImageServlet). */
+    static boolean isSafeImageUrl(String url) {
+        if (url == null) return false;
+        String u = url.trim();
+        if (u.isEmpty() || u.length() > 500) return false;
+        String low = u.toLowerCase();
+        if (low.contains("<") || low.contains(">") || low.contains("\"")
+                || low.contains(" ") || low.contains("\\")) return false;
+        if (low.contains("javascript:") || low.contains("data:")
+                || low.contains("vbscript:")) return false;
+        if (u.startsWith("/")) return !u.startsWith("//");
+        if (low.contains("://")) {
+            return low.startsWith("http://") || low.startsWith("https://");
+        }
+        return true;
+    }
     private int parseNum(String s, int def) { try { if (s == null) return def; return Integer.parseInt(s); } catch (Exception e) { return def; } }
     private Integer optInt(String s) { if (s == null || s.isEmpty()) return null; try { return Integer.parseInt(s); } catch (Exception e) { return null; } }
     private int num(Object o) { if (o == null) return 0; if (o instanceof Number) return ((Number) o).intValue(); try { return (int) Double.parseDouble(o.toString()); } catch (Exception e) { return 0; } }

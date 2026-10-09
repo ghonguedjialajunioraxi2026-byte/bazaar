@@ -321,7 +321,7 @@
    ces modes affichent un message de contact support (aucun
    appel fictif).
    ============================================================ */
-const API = '/api/supplier';
+const API = ((window.location.pathname.includes('/mboa-style') ? '/mboa-style' : '')) + '/api/supplier';
 let GOOGLE_CLIENT_ID = '748209712105-k04jfq3re9gvc1scmfj6djr9vg2uhfd7.apps.googleusercontent.com';
 fetch(API + '/google-client-id').then(r => r.ok ? r.json() : null).then(d => {
   if (d && d.clientId) GOOGLE_CLIENT_ID = d.clientId;

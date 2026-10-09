@@ -31,7 +31,15 @@ public class PromotionServlet extends HttpServlet {
                 if (com.ecommerce.util.AdminAuth.requireAdmin(req, resp) <= 0) return;
                 resp.getWriter().write(JsonUtil.toJson(promotionDAO.findAll()));
             } else if ("byProduct".equals(action)) {
-                int productId = Integer.parseInt(req.getParameter("productId"));
+                int productId;
+                try {
+                    productId = Integer.parseInt(req.getParameter("productId"));
+                    if (productId <= 0) throw new NumberFormatException("productId");
+                } catch (Exception e) {
+                    resp.setStatus(400);
+                    resp.getWriter().write("{\"error\":\"Identifiant produit invalide\"}");
+                    return;
+                }
                 Promotion p = promotionDAO.findByProductId(productId);
                 resp.getWriter().write(JsonUtil.toJson(p));
             } else {
@@ -56,8 +64,23 @@ public class PromotionServlet extends HttpServlet {
             String line;
             while ((line = reader.readLine()) != null) sb.append(line);
             Map<String, Object> body = JsonUtil.fromJson(sb.toString(), Map.class);
+            if (body == null) {
+                resp.setStatus(400);
+                resp.getWriter().write("{\"error\":\"Corps JSON requis\"}");
+                return;
+            }
 
             Promotion p = new Promotion();
+            if (!(body.get("productId") instanceof Number) || ((Number) body.get("productId")).intValue() <= 0) {
+                resp.setStatus(400);
+                resp.getWriter().write("{\"error\":\"Identifiant produit invalide\"}");
+                return;
+            }
+            if (!(body.get("promoPrice") instanceof Number) || ((Number) body.get("promoPrice")).intValue() < 0) {
+                resp.setStatus(400);
+                resp.getWriter().write("{\"error\":\"Prix promotionnel invalide\"}");
+                return;
+            }
             p.setProductId(((Number) body.get("productId")).intValue());
             p.setPromoPrice(((Number) body.get("promoPrice")).intValue());
             p.setPromoPercent(body.get("promoPercent") != null ? ((Number) body.get("promoPercent")).intValue() : 0);
@@ -85,6 +108,21 @@ public class PromotionServlet extends HttpServlet {
             String line;
             while ((line = reader.readLine()) != null) sb.append(line);
             Map<String, Object> body = JsonUtil.fromJson(sb.toString(), Map.class);
+            if (body == null) {
+                resp.setStatus(400);
+                resp.getWriter().write("{\"error\":\"Corps JSON requis\"}");
+                return;
+            }
+            if (!(body.get("id") instanceof Number) || ((Number) body.get("id")).intValue() <= 0) {
+                resp.setStatus(400);
+                resp.getWriter().write("{\"error\":\"Identifiant invalide\"}");
+                return;
+            }
+            if (!(body.get("promoPrice") instanceof Number) || ((Number) body.get("promoPrice")).intValue() < 0) {
+                resp.setStatus(400);
+                resp.getWriter().write("{\"error\":\"Prix promotionnel invalide\"}");
+                return;
+            }
 
             Promotion p = new Promotion();
             p.setId(((Number) body.get("id")).intValue());

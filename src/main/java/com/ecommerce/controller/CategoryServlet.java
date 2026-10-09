@@ -97,12 +97,28 @@ public class CategoryServlet extends HttpServlet {
                 return;
             }
             if (parts.length == 2 && "children".equals(parts[1])) {
-                int id = Integer.parseInt(parts[0]);
+                int id;
+                try {
+                    id = Integer.parseInt(parts[0]);
+                    if (id <= 0) throw new NumberFormatException("id");
+                } catch (NumberFormatException e) {
+                    resp.setStatus(400);
+                    resp.getWriter().write("{\"error\":\"Identifiant invalide\"}");
+                    return;
+                }
                 resp.getWriter().write(JsonUtil.toJson(categoryService.getChildren(id)));
                 return;
             }
             if (parts.length == 2 && "breadcrumb".equals(parts[1])) {
-                int id = Integer.parseInt(parts[0]);
+                int id;
+                try {
+                    id = Integer.parseInt(parts[0]);
+                    if (id <= 0) throw new NumberFormatException("id");
+                } catch (NumberFormatException e) {
+                    resp.setStatus(400);
+                    resp.getWriter().write("{\"error\":\"Identifiant invalide\"}");
+                    return;
+                }
                 resp.getWriter().write(JsonUtil.toJson(categoryService.getBreadcrumb(id)));
                 return;
             }

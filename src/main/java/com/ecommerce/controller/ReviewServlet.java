@@ -63,7 +63,13 @@ public class ReviewServlet extends HttpServlet {
             int productId = parseBodyId(body, resp);
             if (productId < 0) return;
             r.setProductId(productId);
-            r.setFullname(body.get("fullname") == null ? null : String.valueOf(body.get("fullname")));
+            String fullname = body.get("fullname") == null ? null : String.valueOf(body.get("fullname")).trim();
+            if (fullname == null || fullname.isEmpty() || fullname.length() > 120) {
+                resp.setStatus(400);
+                resp.getWriter().write("{\"error\":\"Nom requis (max 120 caractères)\"}");
+                return;
+            }
+            r.setFullname(fullname);
             int rating = parseRating(body.get("rating"));
             if (rating < 1 || rating > 5) {
                 resp.setStatus(400);
@@ -71,7 +77,13 @@ public class ReviewServlet extends HttpServlet {
                 return;
             }
             r.setRating(rating);
-            r.setComment(body.get("comment") == null ? null : String.valueOf(body.get("comment")));
+            String comment = body.get("comment") == null ? null : String.valueOf(body.get("comment")).trim();
+            if (comment == null || comment.isEmpty() || comment.length() > 2000) {
+                resp.setStatus(400);
+                resp.getWriter().write("{\"error\":\"Avis requis (max 2000 caractères)\"}");
+                return;
+            }
+            r.setComment(comment);
             // Phase 23 : produit inexistant => 404 (la FK levait un 500).
             if (new com.ecommerce.dao.ProductDAO().findById(r.getProductId()) == null) {
                 resp.setStatus(404);

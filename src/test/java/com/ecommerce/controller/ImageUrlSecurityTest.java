@@ -31,4 +31,15 @@ class ImageUrlSecurityTest {
         assertFalse(ProductImageServlet.isSafeImageUrl(null));
         assertFalse(ProductImageServlet.isSafeImageUrl("   "));
     }
+
+    @Test
+    void logoFournisseurMemePolitique() {
+        // PUT /api/supplier/logo (JSON) applique la même politique anti-XSS.
+        assertTrue(SupplierApiServlet.isSafeImageUrl("https://cdn.example.com/logo.png"));
+        assertTrue(SupplierApiServlet.isSafeImageUrl("/uploads/logos/shop.jpg"));
+        assertFalse(SupplierApiServlet.isSafeImageUrl("javascript:alert(1)"));
+        assertFalse(SupplierApiServlet.isSafeImageUrl("data:image/png;base64,AAA"));
+        assertFalse(SupplierApiServlet.isSafeImageUrl("//evil.example/logo.png"));
+        assertFalse(SupplierApiServlet.isSafeImageUrl(null));
+    }
 }
