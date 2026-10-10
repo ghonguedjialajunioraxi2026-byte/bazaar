@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: bazaar
+    runtime: docker
+    plan: starter
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    envVars:
+      - key: DB_URL
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: APP_BASE_URL
+        sync: false
+      - key: MBOA_UPLOADS_DIR
+        value: /var/lib/mboa-style/uploads
+      - key: PAYMENT_PROVIDER
+        value: MANUAL
+    disk:
+      name: bazaar-uploads
+      mountPath: /var/lib/mboa-style/uploads
+      sizeGB: 1
